@@ -3,7 +3,7 @@
     "name": "pw-tv-app-v2",
     "slug": "pw-tv-app-v2",
     "version": "1.0.0",
-    "orientation": "portrait",
+    "orientation": "landscape",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
