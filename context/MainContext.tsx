@@ -8,13 +8,15 @@ import {
   ReactNode,
   useEffect
 } from "react";
-import { BatchDetails, BatchType, Order } from "../types/types";
+import { BatchDetails, BatchType, Order, Subject, TopicType } from "../types/types";
 
 type GlobalContextType = {
   addModalOpen: boolean;
   setAddModalOpen: Dispatch<SetStateAction<boolean>>;
   subscribedBatches: BatchType[] | null;
   setSubscribedBatches: Dispatch<SetStateAction<BatchType[] | null>>;
+  topicList: TopicType[] | null;
+  setTopicList: Dispatch<SetStateAction<TopicType[] | null>>;
   selectedBatch: BatchType | null;
   setSelectedBatch: Dispatch<SetStateAction<BatchType | null>>;
   batchDetails: BatchDetails | null;
@@ -26,6 +28,10 @@ type GlobalContextType = {
   headers: any;
   orders: Order[] | null;
   setOrders: Dispatch<SetStateAction<Order[] | null>>;
+  selectedSubject: Subject | null;
+  setSelectedSubject: Dispatch<SetStateAction<Subject[] | null>>;
+  selectedChapter: TopicType | null;
+  setSelectedChapter: Dispatch<SetStateAction<TopicType | null>>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -33,6 +39,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setAddModalOpen: () => { },
   subscribedBatches: null,
   setSubscribedBatches: () => { },
+  topicList: null,
+  setTopicList: () => { },
   selectedBatch: null,
   setSelectedBatch: () => { },
   batchDetails: null,
@@ -43,28 +51,42 @@ const GlobalContext = createContext<GlobalContextType>({
   setMainNavigation: () => { },
   headers: { },
   orders: null,
-  setOrders: () => { }
+  setOrders: () => { },
+  selectedSubject: null,
+  setSelectedSubject: () => { },
+  selectedChapter: null,
+  setSelectedChapter: () => { },
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
+
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
   const [subscribedBatches, setSubscribedBatches] = useState<BatchType[] | null>(null);
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [selectedBatch, setSelectedBatch] = useState<BatchType | null>(null);
-  const [batchDetails, setBatchDetails] = useState<BatchDetails | null>(null);
+  
+  const [selectedSubject, setSelectedSubject] = useState<Subject|null>(null);
   const [selectSubjectSlug, setSelectSubjectSlug] = useState<string | null>(null);
+
+  const [selectedChapter, setSelectedChapter] = useState<TopicType | null>(null);
+
+  const [batchDetails, setBatchDetails] = useState<BatchDetails | null>(null);
   const [mainNavigation, setMainNavigation] = useState<any>(null);
 
+  const [topicList, setTopicList] = useState<TopicType[] | null>(null);
+  const [showLoadMore, setShowLoadMore] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  
   const headers = {
-    // Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDczNjk4MzAuODk4LCJkYXRhIjp7Il9pZCI6IjVlY2QzNGZhYjU4NWYxMjUyZTc4MmJiNiIsInVzZXJuYW1lIjoiODQyMDMxMDEyNSIsImZpcnN0TmFtZSI6IlNheWFrIiwibGFzdE5hbWUiOiJTYXJrYXIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJzYXlha3NhcmthcjczQGdtYWlsLmNvbSIsInJvbGVzIjpbIjViMjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsInR5cGUiOiJVU0VSIn0sImlhdCI6MTcwNjc2NTAzMH0.BC2hePPB0jKRwoxcTkLO7feCFGeZAVcpCvwVh6XwMr8"
-    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgwMjQ1MDEuNDk2LCJkYXRhIjp7Il9pZCI6IjVlY2QzNGZhYjU4NWYxMjUyZTc4MmJiNiIsInVzZXJuYW1lIjoiODQyMDMxMDEyNSIsImZpcnN0TmFtZSI6IlNheWFrIiwibGFzdE5hbWUiOiJTYXJrYXIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJzYXlha3NhcmthcjczQGdtYWlsLmNvbSIsInJvbGVzIjpbIjViMjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsInR5cGUiOiJVU0VSIn0sImlhdCI6MTcwNzQxOTcwMX0.rtS1huRRryErj0TKmMqO9H1jUl6kBmQu53lSJA3ShS8"
+    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgwOTU4MDQuMzMzLCJkYXRhIjp7Il9pZCI6IjVlY2QzNGZhYjU4NWYxMjUyZTc4MmJiNiIsInVzZXJuYW1lIjoiODQyMDMxMDEyNSIsImZpcnN0TmFtZSI6IlNheWFrIiwibGFzdE5hbWUiOiJTYXJrYXIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJzYXlha3NhcmthcjczQGdtYWlsLmNvbSIsInJvbGVzIjpbIjViMjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsInR5cGUiOiJVU0VSIn0sImlhdCI6MTcwNzQ5MTAwNH0.CxGrjGsWZJvOgd9yGUhF0Zznn7k-Vo22hnvOTVzJT_o"
   }
 
   const getPaidBatches = async  () => {
     try{
       const res = await axios.get("https://api.penpencil.co/v3/batches/all-purchased-batches", {headers});
       setSubscribedBatches(res.data.data);
-      setSelectedBatch(res.data.data[0]);
+      // setSelectedBatch(res.data.data[0]);
     }
     catch(err){
       console.log("error:", err);
@@ -76,7 +98,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       const res = await axios.get("https://api.penpencil.co/v2/orders/myPurchaseOrders?page=1&limit=50&status=ALL", {headers});
       setOrders(res.data.data.data);
       
-      // setSelectedBatch(res.data.data[0]);
     }
     catch(err){
       console.log("error:", err);
@@ -86,22 +107,54 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const getBatchDetails = async  () => {
     try{
       const res = await axios.get(`https://api.penpencil.co/v3/batches/${selectedBatch?.batch._id}/details`, {headers});
-      // console.log("Res: ", res.data.data)
       setBatchDetails(res.data.data)
+
+      batchDetails && setSelectedSubject( batchDetails.subjects ? batchDetails.subjects[0] : null);
     }
     catch(err){
       console.log("errorr:", err);
     }
   }
 
+  const getChaptersData = async  () => {
+    // console.log("running: ", selectSubjectSlug, batchDetails?.slug, currentPage);
+    
+    try{      
+      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentPage}`, {headers});
+      setTopicList((prev) => (prev != null ? [...prev, ...res.data.data] : res.data.data));
+      // if(res.data.data.length<=0){
+      //   setShowLoadMore(false);
+      // }
+    }
+    catch(err){
+      console.log("error:", err);
+    }
+  }
+
   useEffect(()=>{
-    // getPaidBatches();
+    getPaidBatches();
     getPaidBatchesWithDetails();
   }, [])
 
   useEffect(()=>{
     getBatchDetails();
   }, [selectedBatch])
+
+  useEffect(()=>{
+    console.log("getting chapters data");
+    setTopicList(null);
+    getChaptersData();
+  }, [selectedSubject])
+
+  useEffect(()=>{
+    console.log("--------------------")
+    console.log("batch: ", selectedBatch?.batch?.name);
+    console.log("subject: ", selectedSubject?.subject);
+    console.log("slug: ", selectSubjectSlug);
+    console.log("chapter: ", selectedChapter?.name);
+    console.log("--------------------")
+    
+  }, [selectedBatch, selectedSubject, selectSubjectSlug, selectedChapter])
 
   return (
     <GlobalContext.Provider
@@ -110,10 +163,13 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         subscribedBatches, setSubscribedBatches,
         selectedBatch, setSelectedBatch,
         batchDetails, setBatchDetails,
+        topicList, setTopicList,
         selectSubjectSlug, setSelectSubjectSlug,
         mainNavigation, setMainNavigation,
         headers,
-        orders, setOrders
+        orders, setOrders,
+        selectedSubject, setSelectedSubject,
+        selectedChapter, setSelectedChapter
       } as GlobalContextType}>
       {children}
     </GlobalContext.Provider>

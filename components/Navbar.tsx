@@ -1,10 +1,12 @@
 /// <reference types="nativewind/types" />
 import { useState } from 'react';
 import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { useGlobalContext } from '../context/MainContext';
 
 export default function Navbar() {
 
   const [isOnline, setIsOnline] = useState<boolean>(true);
+  
 
   return (
     <View className=" flex-row justify-between items-center p-4">
@@ -20,6 +22,8 @@ export default function Navbar() {
             <Image source={require('../assets/pw-logo.png')} className='w-10 h-10' width={10} height={10} />
             <Text className='text-white font-medium text-xl ml-4'>Physics Wallah</Text>
         </Pressable>
+
+        
 
         <View className=' -ml-20 rounded-xl flex-row bg-[#0d0d0d] border-[1px] border-white/5'>
             <Pressable
