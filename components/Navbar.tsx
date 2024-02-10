@@ -55,6 +55,9 @@ export default function Navbar() {
           radius: 1000,
           foreground: true
         }}
+        onPress={()=>{
+          mainNavigation.navigate('Login');
+        }}
         className='flex-row justify-center overflow-hidden rounded-full items-center'>
         <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
       </Pressable>

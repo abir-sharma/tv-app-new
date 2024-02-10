@@ -24,9 +24,9 @@ export default function Recent() {
                     foreground: true
                 }}
                 onPress={()=>{
-
+                
                 }}
-                className='bg-white/10 rounded-2xl h-52 w-72 overflow-hidden'>
+                className='bg-white/10 rounded-lg h-52 w-72 overflow-hidden'>
                     <View className="w-full h-40 overflow-hidden">
                         {order?.thumbnailImageLink && <Image
                             className=' w-full h-full object-cover rounded-lg ' 
