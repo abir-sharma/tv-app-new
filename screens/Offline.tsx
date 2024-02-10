@@ -13,7 +13,7 @@ export const Offline = () => {
 
   // states
   const [directoryListing, setDirectoryListing] = useState<any>([]);
-  const [currentDirectory, setCurrentDirectory] = useState<any>('http://192.168.1.6:6969/');
+  const [currentDirectory, setCurrentDirectory] = useState<any>('http://192.168.1.3:6969/');
   const [pdfOpen, setPdfOpen] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState('');
