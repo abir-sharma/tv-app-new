@@ -1,12 +1,12 @@
-/// <reference types="nativewind/types" />
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FlatList, Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { TopicType, VideoType } from '../types/types';
 import { useGlobalContext } from '../context/MainContext';
 
 export default function Chapters() {
 
-  const { directoryLevel, setDirectoryLevel, topicList, setSelectedChapter, selectedChapter, offlineChapters, setOfflineCurrentDirectory, setOfflineSelectedChapter } = useGlobalContext();
+  const { topicList, setSelectedChapter, selectedChapter } = useGlobalContext();
+
 
   const renderItem = ({ item }: any) => (
     <Pressable
@@ -28,15 +28,15 @@ export default function Chapters() {
       <Text className='text-white text-sm'>{item.name}</Text>
     </Pressable>
   );
-
   return (
     <View className=" flex-col justify-between items-center p-4">
       <Text className='text-white font-medium text-center w-full text-lg'>CHAPTERS</Text>
       <View className='bg-white/5 rounded-xl overflow-hidden mt-5 w-full'>
         {/* <Text style={styles.subjectText}>Physics</Text> */}
         <FlatList
-          data={offlineChapters}
+          data={topicList}
           renderItem={renderItem}
+          keyExtractor={(item: TopicType) => item._id}
           numColumns={1}
         // contentContainerStyle={styles.container}
         // onEndReached={()=>{loadMore && getPaidBatches()}}

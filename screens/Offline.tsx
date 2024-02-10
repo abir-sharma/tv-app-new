@@ -6,9 +6,9 @@ import Pdf from 'react-native-pdf';
 import { useNavigation } from '@react-navigation/native';
 import Navbar from '../components/Navbar';
 import { NetworkInfo } from 'react-native-network-info';
-import Batches from '../components/Offline/OfflineBatches';
 import { useGlobalContext } from '../context/MainContext';
 import { ItemType } from '../types/types';
+import OfflineBatches from '../components/Offline/OfflineBatches';
 // import Video from 'react-native-video';
 
 
@@ -249,7 +249,7 @@ export const Offline = () => {
         </TouchableOpacity>
         <Text style={{ marginLeft: 10 }} className='text-white'>Current Directory: {offlineCurrentDirectory}</Text>
       </View>
-      <Batches />
+      <OfflineBatches />
       {/* <FlatList
         data={directoryListing}
         renderItem={({ item }) => (

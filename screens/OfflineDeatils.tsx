@@ -14,6 +14,7 @@ import { VideoComponent } from '../components/Options/VideoComponent';
 import { NoteComponent } from '../components/Options/NoteComponent';
 import { OfflineVideoComponent } from '../components/Offline/OfflineVideoComponent';
 import { OfflineNoteComponent } from '../components/Offline/OfflineNoteComponent';
+import OfflineChapters from '../components/Offline/OfflineChapters';
 
 export default function OfflineDetails({ navigation }: any) {
 
@@ -106,7 +107,7 @@ export default function OfflineDetails({ navigation }: any) {
       <View className='flex-1 flex-row'>
 
         <View className='flex-1 '>
-          <Chapters />
+          <OfflineChapters />
         </View>
         <ScrollView className=' flex-[3] pt-5'>
           {offlineSelectedSection == 0 && <OfflineNoteComponent noteList={offlineDpp} />}

@@ -1,13 +1,12 @@
 /// <reference types="nativewind/types" />
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FlatList, Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
-import { ItemType, TopicType, VideoType } from '../../types/types';
+import { TopicType, VideoType } from '../../types/types';
 import { useGlobalContext } from '../../context/MainContext';
 
 export default function OfflineChapters() {
 
-  const { setDirectoryLevel, setOfflineCurrentDirectory, topicList, setSelectedChapter } = useGlobalContext();
-
+  const { directoryLevel, setDirectoryLevel, offlineChapters, setOfflineCurrentDirectory, setOfflineSelectedChapter } = useGlobalContext();
 
   const renderItem = ({ item }: any) => (
     <Pressable
@@ -20,10 +19,10 @@ export default function OfflineChapters() {
         foreground: true
       }}
       onPress={() => {
-        setSelectedChapter(item.id);
-        setDirectoryLevel(3);
+        setOfflineSelectedChapter(item.id);
         setOfflineCurrentDirectory(item.path);
-        console.log("Chapter selected: ", item.name);
+        setDirectoryLevel(3);
+        console.log("Chapter selected: ", item);
       }}
     >
       <Text className='text-white text-sm'>{item.name}</Text>
@@ -36,9 +35,8 @@ export default function OfflineChapters() {
       <View className='bg-white/5 rounded-xl overflow-hidden mt-5 w-full'>
         {/* <Text style={styles.subjectText}>Physics</Text> */}
         <FlatList
-          data={topicList}
+          data={offlineChapters}
           renderItem={renderItem}
-          keyExtractor={(item: any) => item.id}
           numColumns={1}
         // contentContainerStyle={styles.container}
         // onEndReached={()=>{loadMore && getPaidBatches()}}
