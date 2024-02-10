@@ -20,7 +20,7 @@ export const VideoComponent = ({videoList, setVideoList, loadMore, getPaidBatche
   const renderGridItem = ({ item }: any) => (
     <Pressable
         style={{flex: 1/4}}
-        className='flex-1 m-2 overflow-hidden rounded-3xl'
+        className=' m-2 overflow-hidden rounded-3xl'
         android_ripple={{
             color: "rgba(255,255,255,0.2)",
             borderless: false,
