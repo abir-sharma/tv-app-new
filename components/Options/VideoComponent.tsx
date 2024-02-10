@@ -20,7 +20,7 @@ export const VideoComponent = ({videoList, setVideoList, loadMore, getPaidBatche
   const renderGridItem = ({ item }: any) => (
     <Pressable
         style={{flex: 1/4}}
-        className=' m-2 overflow-hidden rounded-3xl'
+        className=' m-2 overflow-hidden rounded-3xl bg-white/5'
         android_ripple={{
             color: "rgba(255,255,255,0.2)",
             borderless: false,
@@ -35,14 +35,14 @@ export const VideoComponent = ({videoList, setVideoList, loadMore, getPaidBatche
           lectureDetails: item.videoDetails,
         });
         }}>
-        <View>
+        <View >
             <View>
                 {item?.videoDetails?.image && <Image
                     style={{width: '100%', height: 135, objectFit: 'cover', borderRadius: 20, }}
                     source={{uri: `${item?.videoDetails?.image}`}}
                 />}
             </View>
-            <View style={{padding: 10}}>
+            <View className='p-2'>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Text className='text-white text-[10px]'>{moment(item.date).format("MMM Do YY")}</Text>
                     <Text className='text-white text-[10px]'>{item?.videoDetails?.duration}</Text>

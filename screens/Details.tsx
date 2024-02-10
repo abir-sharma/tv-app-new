@@ -10,6 +10,7 @@ import { NoteType, VideoType } from '../types/types';
 import Chapters from '../components/Chapters';
 import axios from 'axios';
 import { VideoComponent } from '../components/Options/VideoComponent';
+import { NoteComponent } from '../components/Options/NoteComponent';
 
 export default function Details({navigation}: any) {
     
@@ -106,8 +107,11 @@ export default function Details({navigation}: any) {
               <Chapters/>
             </View>
 
-            <ScrollView className=' flex-[3]'>
+            <ScrollView className=' flex-[3] pt-5'>
               {selectedMenu==0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreVideos}/>}
+              {selectedMenu==1 && <NoteComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreNotes}/>}
+              {selectedMenu==3 && <NoteComponent noteList={dppNoteList} setNoteList={setDppNoteList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreDppNotes}/>}
+              {selectedMenu==4 && <VideoComponent videoList={dppVideoList} setVideoList={setDppVideoList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreDppVideos}/>}
             </ScrollView>
 
         </View>
