@@ -66,14 +66,14 @@ export default function Batches() {
                     setSelectedBatch(order);
                     mainNavigation?.navigate('Details');
                 }}
-                className='bg-white/10 rounded-2xl h-52 w-72 overflow-hidden'>
-                    <View className="w-full h-40 bg-white/40 overflow-hidden">
+                className='bg-white/10 rounded-lg h-52 w-72 overflow-hidden'>
+                    <View className="w-full h-40 overflow-hidden">
                         {
                         orders?.map((item)=>{
                             if(item.itemName === order.batch.name){
                                 console.log("matched ", item.itemName, order.batch.name, item.thumbnailImageLink);
                                 
-                                return item.thumbnailImageLink && <Image style={{width: '100%', height: 170, objectFit: 'cover', borderRadius: 5}} source={{uri: `${item?.thumbnailImageLink}`}} />
+                                return item.thumbnailImageLink && <Image className=' w-full h-full object-cover rounded-lg ' source={{uri: `${item?.thumbnailImageLink}`}} />
                             }
 
                         })

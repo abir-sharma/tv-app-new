@@ -11,7 +11,7 @@ export default function Recent() {
   return (
     <View className='w-[95%] mx-auto'>
     <Text className='text-white text-lg font-medium ml-5 mt-2'>Recent Learning</Text>
-    <View className='bg-white/5 p-5 rounded-3xl  my-5 flex-none overflow-hidden'>
+    <View className='bg-white/5 p-5 rounded-lg  my-5 flex-none overflow-hidden'>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
             {orders?.map((order)=>(
                 <Pressable
@@ -27,9 +27,9 @@ export default function Recent() {
 
                 }}
                 className='bg-white/10 rounded-2xl h-52 w-72 overflow-hidden'>
-                    <View className="w-full h-40 bg-white overflow-hidden">
+                    <View className="w-full h-40 overflow-hidden">
                         {order?.thumbnailImageLink && <Image
-                            style={{width: '100%', height: 170, objectFit: 'cover', borderRadius: 5}}
+                            className=' w-full h-full object-cover rounded-lg ' 
                             source={{uri: `${order?.thumbnailImageLink}`}}
                         />}
                     </View>
