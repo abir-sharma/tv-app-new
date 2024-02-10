@@ -2,12 +2,12 @@ import React from 'react'
 import { Video } from 'expo-av'
 import { View } from 'react-native'
 
-const MP4Player = ({ route }: any) => {
+const MP4Player = ({route}: any) => {
   const uri = route?.params?.videoUrl;
   console.log('Video URI', uri);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       <Video
         source={{ uri: uri }}
         rate={1.0}

@@ -1,17 +1,17 @@
 /// <reference types="nativewind/types" />
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { FlatList, Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
-import { TopicType, VideoType } from '../types/types';
-import { useGlobalContext } from '../context/MainContext';
+import { ItemType, TopicType, VideoType } from '../../types/types';
+import { useGlobalContext } from '../../context/MainContext';
 
-export default function Chapters() {
+export default function OfflineChapters() {
 
-  const { directoryLevel, setDirectoryLevel, topicList, setSelectedChapter, selectedChapter, offlineChapters, setOfflineCurrentDirectory, setOfflineSelectedChapter } = useGlobalContext();
+  const { setDirectoryLevel, setOfflineCurrentDirectory, topicList, setSelectedChapter } = useGlobalContext();
+
 
   const renderItem = ({ item }: any) => (
     <Pressable
-      key={item._id}
-      className={`py-4 px-4 overflow-hidden rounded-lg ${selectedChapter?._id === item._id && 'bg-[#8E89BA]'}`}
+      className='py-4 px-4 overflow-hidden rounded-lg'
       hasTVPreferredFocus={true}
       android_ripple={{
         color: "rgba(255,255,255,0.5)",
@@ -20,9 +20,10 @@ export default function Chapters() {
         foreground: true
       }}
       onPress={() => {
-        setSelectedChapter(item);
+        setSelectedChapter(item.id);
+        setDirectoryLevel(3);
+        setOfflineCurrentDirectory(item.path);
         console.log("Chapter selected: ", item.name);
-
       }}
     >
       <Text className='text-white text-sm'>{item.name}</Text>
@@ -35,8 +36,9 @@ export default function Chapters() {
       <View className='bg-white/5 rounded-xl overflow-hidden mt-5 w-full'>
         {/* <Text style={styles.subjectText}>Physics</Text> */}
         <FlatList
-          data={offlineChapters}
+          data={topicList}
           renderItem={renderItem}
+          keyExtractor={(item: any) => item.id}
           numColumns={1}
         // contentContainerStyle={styles.container}
         // onEndReached={()=>{loadMore && getPaidBatches()}}

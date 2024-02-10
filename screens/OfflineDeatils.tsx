@@ -9,12 +9,15 @@ import { useGlobalContext } from '../context/MainContext';
 import { NoteType, VideoType } from '../types/types';
 import Chapters from '../components/Chapters';
 import axios from 'axios';
+import OfflineNavbarDetails from '../components/Offline/OfflineNavbarDetails';
 import { VideoComponent } from '../components/Options/VideoComponent';
 import { NoteComponent } from '../components/Options/NoteComponent';
+import { OfflineVideoComponent } from '../components/Offline/OfflineVideoComponent';
+import { OfflineNoteComponent } from '../components/Offline/OfflineNoteComponent';
 
-export default function Details({ navigation }: any) {
+export default function OfflineDetails({ navigation }: any) {
 
-  const { setMainNavigation, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, topicList } = useGlobalContext();
+  const { offlineLectures, offlineNotes, offlineDpp, offlineDppPdf, offlineDppVideos, setMainNavigation, offlineSelectedSection, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, topicList } = useGlobalContext();
 
   const [contentType, setContentType] = useState<string>('videos');
   const [selectedMenu, setSelectedMenu] = useState<number>(0);
@@ -30,30 +33,29 @@ export default function Details({ navigation }: any) {
   const [showLoadMoreDppNotes, setShowLoadMoreDppNotes] = useState<boolean>(true);
   const [showLoadMoreDppVideos, setShowLoadMoreDppVideos] = useState<boolean>(true);
 
-  useEffect(() => {
-    setVideoList(null);
-    setNoteList(null);
-    setDppNoteList(null);
-    setDppVideoList(null);
-    setCurrentPage(1);
-    setShowLoadMoreVideos(true);
-    setShowLoadMoreNotes(true);
-    setShowLoadMoreDppNotes(true);
-    setShowLoadMoreDppVideos(true);
+  // useEffect(() => {
+  //   setVideoList(null);
+  //   setNoteList(null);
+  //   setDppNoteList(null);
+  //   setDppVideoList(null);
+  //   setCurrentPage(1);
+  //   setShowLoadMoreVideos(true);
+  //   setShowLoadMoreNotes(true);
+  //   setShowLoadMoreDppNotes(true);
+  //   setShowLoadMoreDppVideos(true);
+  // }, [batchDetails, selectSubjectSlug, selectedSubject, selectedBatch])
 
-  }, [batchDetails, selectSubjectSlug, selectedSubject, selectedBatch])
+  // useEffect(() => {
+  //   navigation.setOptions({ headerShown: false });
+  //   setMainNavigation(navigation);
+  // }, [])
 
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-    setMainNavigation(navigation);
-  }, [])
-
-  const getDetails = async () => {
+  const getPaidBatches = async () => {
 
     console.log("req:", batchDetails?.slug, selectSubjectSlug, currentPage, contentType, selectedChapter?.slug, selectedMenu);
     try {
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/contents?page=${currentPage}&contentType=${contentType}&tag=${selectedChapter?.slug}`, { headers });
-      // console.log("gg:", res.data.data);
+      console.log("gg:", res.data.data);
 
       // setCurrentPage(prev=>prev+1)
       if (selectedMenu === 0) {
@@ -91,40 +93,30 @@ export default function Details({ navigation }: any) {
     }
   }
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    getDetails();
+  //   getPaidBatches();
 
-  }, [selectedChapter, currentPage, selectedMenu])
+  // }, [selectedChapter, currentPage, selectedMenu])
 
   return (
     <View className="bg-[#1A1A1A] flex-1">
-      <NavbarDetails selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} setContentType={setContentType} setCurrentPage={setCurrentPage} />
+      <OfflineNavbarDetails />
 
       <View className='flex-1 flex-row'>
 
         <View className='flex-1 '>
           <Chapters />
         </View>
-
         <ScrollView className=' flex-[3] pt-5'>
-          <View>
-            {selectedMenu == 0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreVideos} />}
-            {selectedMenu == 1 && <NoteComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreNotes} />}
-            {selectedMenu == 3 && <NoteComponent noteList={dppNoteList} setNoteList={setDppNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreDppNotes} />}
-            {selectedMenu == 4 && <VideoComponent videoList={dppVideoList} setVideoList={setDppVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreDppVideos} />}
-          </View>
+          {offlineSelectedSection == 0 && <OfflineNoteComponent noteList={offlineDpp} />}
+          {offlineSelectedSection == 1 && <OfflineNoteComponent noteList={offlineDppPdf} />}
+          {offlineSelectedSection == 2 && <OfflineVideoComponent videoList={offlineDppVideos} />}
+          {offlineSelectedSection == 3 && <OfflineVideoComponent videoList={offlineLectures} />}
+          {offlineSelectedSection == 4 && <OfflineNoteComponent noteList={offlineNotes} />}
         </ScrollView>
 
       </View>
-
-      {/* <ScrollView className=' flex-[3] pt-5'>
-          {selectedMenu == 0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreVideos} />}
-          {selectedMenu == 1 && <NoteComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreNotes} />}
-          {selectedMenu == 3 && <NoteComponent noteList={dppNoteList} setNoteList={setDppNoteList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreDppNotes} />}
-          {selectedMenu == 4 && <VideoComponent videoList={dppVideoList} setVideoList={setDppVideoList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreDppVideos} />}
-        </ScrollView> */}
-
     </View>
   );
 }

@@ -5,38 +5,209 @@ import cheerio from 'cheerio';
 import Pdf from 'react-native-pdf';
 import { useNavigation } from '@react-navigation/native';
 import Navbar from '../components/Navbar';
+import { NetworkInfo } from 'react-native-network-info';
+import Batches from '../components/Offline/OfflineBatches';
+import { useGlobalContext } from '../context/MainContext';
+import { ItemType } from '../types/types';
 // import Video from 'react-native-video';
 
 
 export const Offline = () => {
-  const navigation = useNavigation();
 
-  // states
-  const [directoryListing, setDirectoryListing] = useState<any>([]);
-  const [currentDirectory, setCurrentDirectory] = useState<any>('http://192.168.1.3:6969/');
+  const { setDirectoryLevel, setOfflineSections, setOfflineSelectedSubject, setOfflineSelectedSection, setOfflineSelectedChapter, setOfflineLectures, setOfflineDpp, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, offlineSelectedSection, directoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, setOfflineBatches, setOfflineSubjects, setOfflineChapters } = useGlobalContext();
+  const [ipAddress, setIpAddress] = useState("");
   const [pdfOpen, setPdfOpen] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
+  // const [batches, setBatches] = useState<string[]>([]);
+
+  const navigation = useNavigation();
+
 
   useEffect(() => {
-    fetchDirectoryListing(currentDirectory);
-  }, [currentDirectory]);
+
+    // const fetchIPAddress = async () => {
+    //   NetworkInfo.getIPAddress()
+    //     .then((res) => {
+    //       console.log("IP", res)
+    //       // setIpAddress(res);
+    //       setOfflineCurrentDirectory(`http://${res}:6969/`)
+    //     })
+    //     .catch((err) => console.log("error while fetching IP.", err))
+    // }
+    // fetchIPAddress();
+    fetchDirectoryListing(offlineCurrentDirectory);
+  }, [offlineCurrentDirectory, directoryLevel]);
+
+
+  const fetchBatches = async () => {
+    let directoryItems: any[] = await fetchListing();
+    directoryItems = directoryItems.filter((item) => item.name.startsWith('PW'));
+    const batchNames: ItemType[] = [];
+    directoryItems.map((item, index) => {
+      batchNames.push({
+        name: item.name.slice(3, -1).trim(),
+        path: offlineCurrentDirectory + item.link,
+        id: index,
+      })
+    })
+    setOfflineBatches(batchNames);
+  }
+
+  const fetchSubjects = async () => {
+    let directoryItems: any[] = await fetchListing();
+    const subjectNames: ItemType[] = [];
+    directoryItems.map((item, index) => {
+      subjectNames.push({
+        name: item.name.slice(0, -1).trim(),
+        path: offlineCurrentDirectory + item.link,
+        id: index,
+      })
+    })
+    setOfflineSubjects(subjectNames);
+    setOfflineSelectedSubject(0);
+    setDirectoryLevel(2);
+    setOfflineCurrentDirectory(subjectNames[0].path);
+  }
+
+  const fetchChapters = async () => {
+    let directoryItems: any[] = await fetchListing();
+    const chapterNames: ItemType[] = [];
+    directoryItems.map((item, index) => {
+      chapterNames.push({
+        name: item.name.slice(0, -1).trim(),
+        path: offlineCurrentDirectory + item.link,
+        id: index,
+      })
+    })
+    setOfflineChapters(chapterNames);
+    setOfflineSelectedChapter(0);
+    setDirectoryLevel(3);
+    setOfflineCurrentDirectory(chapterNames[0].path);
+    // console.log("Chapter Names:  ", chapterNames);
+  }
+
+  const fetchSections = async () => {
+    let directoryItems: any[] = await fetchListing();
+    const sectionData: ItemType[] = [];
+    directoryItems.map((item, index) => {
+      sectionData.push({
+        name: item.name.slice(0, -1).trim(),
+        path: offlineCurrentDirectory + item.link,
+        id: index,
+      })
+    })
+    setOfflineSections(sectionData);
+    setOfflineSelectedSection(3);
+    setDirectoryLevel(4);
+    setOfflineCurrentDirectory(sectionData[3].path);
+  }
+
+  const fetchLectures = async () => {
+    let directoryItems: any[] = await fetchListing();
+    const lecturesData: ItemType[] = [];
+    directoryItems.map((item, index) => {
+      lecturesData.push({
+        name: item.name.trim(),
+        path: offlineCurrentDirectory + item.link,
+        id: index,
+      })
+    })
+    setOfflineLectures(lecturesData);
+    // console.log("Lectures Data:  ", lecturesData);
+  }
+  const fetchNotes = async () => {
+    let directoryItems: any[] = await fetchListing();
+    const notesData: ItemType[] = [];
+    directoryItems.map((item, index) => {
+      notesData.push({
+        name: item.name.trim(),
+        path: offlineCurrentDirectory + item.link,
+        id: index,
+      })
+    })
+    setOfflineNotes(notesData);
+    // console.log("Notes Data:  ", notesData);
+  }
+  const fetchDpp = async () => {
+    let directoryItems: any[] = await fetchListing();
+    const dppData: ItemType[] = [];
+    directoryItems.map((item, index) => {
+      dppData.push({
+        name: item.name.trim(),
+        path: offlineCurrentDirectory + item.link,
+        id: index,
+      })
+    })
+    setOfflineDpp(dppData);
+    // console.log("DPP Data:  ", dppData);
+  }
+  const fetchDppPdf = async () => {
+    let directoryItems: any[] = await fetchListing();
+    const dppPdfData: ItemType[] = [];
+    directoryItems.map((item, index) => {
+      dppPdfData.push({
+        name: item.name.trim(),
+        path: offlineCurrentDirectory + item.link,
+        id: index,
+      })
+    })
+    setOfflineDppPdf(dppPdfData);
+    // console.log("DPP PDF Data:  ", dppPdfData);
+  }
+  const fetchDppVideos = async () => {
+    let directoryItems: any[] = await fetchListing();
+    const dppVideosData: ItemType[] = [];
+    directoryItems.map((item, index) => {
+      dppVideosData.push({
+        name: item.name.trim(),
+        path: offlineCurrentDirectory + item.link,
+        id: index,
+      })
+    })
+    setOfflineDppVideos(dppVideosData);
+    // console.log("DPP Videos Data:  ", dppVideosData);
+  }
+
+  const fetchListing = async () => {
+    console.log("Current Directory : ", offlineCurrentDirectory);
+    const response = await axios.get(offlineCurrentDirectory);
+    const directoryHtml = response.data;
+    const $ = cheerio.load(directoryHtml);
+    let directoryItems = $('ul li a')
+      .map((index, element) => ({
+        name: $(element).text(),
+        link: $(element).attr('href')
+      }))
+      .get();
+    directoryItems = directoryItems.filter((item) => !item.name.startsWith('.'))
+    return directoryItems;
+  }
 
   const fetchDirectoryListing = async (directoryUrl: string) => {
     try {
-      const response = await axios.get(directoryUrl);
-      const directoryHtml = response.data;
-
-      const $ = cheerio.load(directoryHtml);
-
-      const directoryItems = $('ul li a')
-        .map((index, element) => ({
-          name: $(element).text(),
-          link: $(element).attr('href')
-        }))
-        .get();
-      setDirectoryListing(directoryItems);
+      if (directoryLevel === 0) {
+        await fetchBatches();
+      } else if (directoryLevel === 1) {
+        await fetchSubjects();
+      } else if (directoryLevel === 2) {
+        await fetchChapters();
+      } else if (directoryLevel === 3) {
+        await fetchSections();
+      } else if (directoryLevel === 4) {
+        if (offlineSelectedSection == 0) {
+          await fetchDpp();
+        } else if (offlineSelectedSection == 1) {
+          await fetchDppPdf();
+        } else if (offlineSelectedSection == 2) {
+          await fetchDppVideos();
+        } else if (offlineSelectedSection == 3) {
+          await fetchLectures();
+        } else {
+          await fetchNotes();
+        }
+      }
     } catch (error) {
       console.error('Error fetching directory listing:', error);
     }
@@ -45,27 +216,27 @@ export const Offline = () => {
   const handleDirectoryItemPress = (link: string) => {
     if (link.endsWith('.pdf')) {
       // @ts-expect-error
-      navigation.navigate('PDFViewer', { pdfUrl: currentDirectory + link });
+      navigation.navigate('PDFViewer', { pdfUrl: offlineCurrentDirectory + link });
     } else if (link.endsWith('.mp4')) {
       console.log('.mp4');
       // @ts-expect-error
-      navigation.navigate('MP4Player', { videoUrl: currentDirectory + link });
+      navigation.navigate('MP4Player', { videoUrl: offlineCurrentDirectory + link });
       // setVideoOpen(true);
       // setVideoUrl(link);
     } else {
       // Navigate to the selected directory
-      const newDirectoryUrl = currentDirectory + link;
-      setCurrentDirectory(newDirectoryUrl);
+      const newDirectoryUrl = offlineCurrentDirectory + link;
+      setOfflineCurrentDirectory(newDirectoryUrl);
     }
   };
 
   const handleBackPress = () => {
     // Navigate back to the parent directory
-    const segments = currentDirectory.split('/');
+    const segments = offlineCurrentDirectory.split('/');
     segments.pop(); // Remove the last segment (current directory)
     segments.pop(); // Remove the previous segment (directory name)
     const parentDirectoryUrl = segments.join('/') + '/';
-    setCurrentDirectory(parentDirectoryUrl);
+    setOfflineCurrentDirectory(parentDirectoryUrl);
   };
 
 
@@ -76,9 +247,10 @@ export const Offline = () => {
         <TouchableOpacity onPress={handleBackPress}>
           <Text style={{ color: 'yellow', marginRight: 20 }}>Back</Text>
         </TouchableOpacity>
-        <Text style={{ marginLeft: 10 }} className='text-white'>Current Directory: {currentDirectory}</Text>
+        <Text style={{ marginLeft: 10 }} className='text-white'>Current Directory: {offlineCurrentDirectory}</Text>
       </View>
-      <FlatList
+      <Batches />
+      {/* <FlatList
         data={directoryListing}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => handleDirectoryItemPress(item.link)}>
@@ -86,7 +258,7 @@ export const Offline = () => {
           </TouchableOpacity>
         )}
         keyExtractor={(item, index) => index.toString()}
-      />
+      /> */}
       {/* <WebView
         source={{ uri: 'https://bamlab.github.io/react-tv-space-navigation/' }}
         style={{ flex: 1 }}
