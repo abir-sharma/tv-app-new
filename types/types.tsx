@@ -6,6 +6,7 @@ export type BatchInfoType = {
 }
 
 export type BatchType = {
+    thumbnail?: string;
     batch: BatchInfoType;
     isPaid: boolean;
     mahapackBatch: string | null;

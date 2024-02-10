@@ -48,12 +48,12 @@ export default function Details({navigation}: any) {
     setMainNavigation(navigation);
   }, [])
 
-  const getPaidBatches = async  () => {
+  const getDetails = async  () => {
 
     console.log("req:", batchDetails?.slug, selectSubjectSlug, currentPage, contentType, selectedChapter?.slug, selectedMenu);
     try{        
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/contents?page=${currentPage}&contentType=${contentType}&tag=${selectedChapter?.slug}`, {headers});
-      console.log("gg:", res.data.data);
+      // console.log("gg:", res.data.data);
       
       // setCurrentPage(prev=>prev+1)
       if(selectedMenu===0){
@@ -93,7 +93,7 @@ export default function Details({navigation}: any) {
 
   useEffect(()=>{
 
-    getPaidBatches();
+    getDetails();
     
   }, [selectedChapter, currentPage, selectedMenu])
 
@@ -108,10 +108,12 @@ export default function Details({navigation}: any) {
             </View>
 
             <ScrollView className=' flex-[3] pt-5'>
-              {selectedMenu==0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreVideos}/>}
-              {selectedMenu==1 && <NoteComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreNotes}/>}
-              {selectedMenu==3 && <NoteComponent noteList={dppNoteList} setNoteList={setDppNoteList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreDppNotes}/>}
-              {selectedMenu==4 && <VideoComponent videoList={dppVideoList} setVideoList={setDppVideoList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreDppVideos}/>}
+              <View>
+              {selectedMenu==0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreVideos}/>}
+              {selectedMenu==1 && <NoteComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreNotes}/>}
+              {selectedMenu==3 && <NoteComponent noteList={dppNoteList} setNoteList={setDppNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreDppNotes}/>}
+              {selectedMenu==4 && <VideoComponent videoList={dppVideoList} setVideoList={setDppVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreDppVideos}/>}
+              </View>
             </ScrollView>
 
         </View>

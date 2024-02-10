@@ -1,14 +1,53 @@
 /// <reference types="nativewind/types" />
 
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 export default function Batches() {
 
-    const {orders, setOrders, mainNavigation, subscribedBatches, setSelectedBatch} = useGlobalContext();
+    const {orders, setOrders, mainNavigation, subscribedBatches, setSubscribedBatches, setSelectedBatch, headers} = useGlobalContext();
     // const navigation = useNavigation();
+
+    // const getThumbnails = async () => {
+    //     try {
+    //         subscribedBatches?.map(async (batch, index) => {
+    //             try {
+    //                 const res = await axios.get(`https://api.penpencil.co/v3/batches/${batch.batch._id}/details`, { headers });
+    //                 let thumbnailLink = res.data.data.previewImage.baseUrl + res.data.data.previewImage.key;
+    //                 console.log("link:", thumbnailLink);
+    //                 setSubscribedBatches(
+    //                     // Find the batch and update the thumbnail
+    //                     subscribedBatches?.map((item) => {
+    //                         if (item.batch._id === batch.batch._id) {
+    //                             return {
+    //                                 ...item,
+    //                                 thumbnail: thumbnailLink,
+    //                             };
+    //                         }
+    //                         return item;
+    //                     })
+    //                 )
+                    
+                    
+    //             } catch (err) {
+    //                 console.log("error:", err);
+    //                 // You might want to handle errors here or return some default value
+    //                 throw err; // Propagate the error
+    //             }
+    //         });
+    //     } catch (error) {
+    //         console.error('Error in getThumbnails:', error);
+    //     }
+    // };
+    
+    // useEffect(() => {
+    //     if(subscribedBatches && !subscribedBatches[subscribedBatches?.length-1]?.thumbnail){
+    //         getThumbnails();
+    //     }
+    // }, [])
 
   return (
     <View className='bg-white/5 p-5 w-[95%] rounded-3xl mx-auto my-5 flex-none overflow-hidden'>
@@ -29,10 +68,16 @@ export default function Batches() {
                 }}
                 className='bg-white/10 rounded-2xl h-52 w-72 overflow-hidden'>
                     <View className="w-full h-40 bg-white/40 overflow-hidden">
-                        {/* {order?.thumbnailImageLink && <Image
-                            style={{width: '100%', height: 170, objectFit: 'cover', borderRadius: 5}}
-                            source={{uri: `${order?.thumbnailImageLink}`}}
-                        />} */}
+                        {
+                        orders?.map((item)=>{
+                            if(item.itemName === order.batch.name){
+                                console.log("matched ", item.itemName, order.batch.name, item.thumbnailImageLink);
+                                
+                                return item.thumbnailImageLink && <Image style={{width: '100%', height: 170, objectFit: 'cover', borderRadius: 5}} source={{uri: `${item?.thumbnailImageLink}`}} />
+                            }
+
+                        })
+                        }
                     </View>
                     <View className='p-2 relative px-5'>
                         <Text className='text-white text-xs font-medium'>{order.batch.name}</Text>

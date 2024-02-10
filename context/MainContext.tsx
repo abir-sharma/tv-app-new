@@ -81,6 +81,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [showLoadMore, setShowLoadMore] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isOnline, setIsOnline] = useState<boolean>(true);
+  
 
 
   const headers = {
@@ -91,7 +92,13 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     try {
       const res = await axios.get("https://api.penpencil.co/v3/batches/all-purchased-batches", { headers });
       setSubscribedBatches(res.data.data);
-      // setSelectedBatch(res.data.data[0]);
+      setSelectedBatch(res.data.data[0]);
+      setSelectSubjectSlug(res.data.data[0].subjects[0].slug);
+      setSelectedSubject(res.data.data[0].subjects[0]);
+      
+
+      
+      getChaptersData();
     }
     catch (err) {
       console.log("error:", err);
@@ -130,6 +137,9 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       // if(res.data.data.length<=0){
       //   setShowLoadMore(false);
       // }
+      console.log("Setting selected chapter", res.data.data[0].name);
+      
+      setSelectedChapter(res.data.data[0]);
     }
     catch (err) {
       console.log("error:", err);
@@ -151,15 +161,14 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     getChaptersData();
   }, [selectedSubject])
 
-  useEffect(() => {
-    console.log("--------------------")
-    console.log("batch: ", selectedBatch?.batch?.name);
-    console.log("subject: ", selectedSubject?.subject);
-    console.log("slug: ", selectSubjectSlug);
-    console.log("chapter: ", selectedChapter?.name);
-    console.log("--------------------")
 
-  }, [selectedBatch, selectedSubject, selectSubjectSlug, selectedChapter])
+  useEffect(() => {
+    batchDetails && setSelectSubjectSlug(batchDetails?.subjects[1]?.slug);
+    batchDetails && setSelectedSubject(batchDetails?.subjects[1]);
+    // console.log("Subject setting", batchDetails?.subjects[1]?.subject);
+    
+
+  }, [batchDetails])
 
   return (
     <GlobalContext.Provider

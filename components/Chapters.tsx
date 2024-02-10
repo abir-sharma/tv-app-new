@@ -6,12 +6,13 @@ import { useGlobalContext } from '../context/MainContext';
 
 export default function Chapters() {
 
-  const {topicList, setSelectedChapter} = useGlobalContext();
+  const {topicList, setSelectedChapter, selectedChapter} = useGlobalContext();
   
 
   const renderItem = ({ item }:any) => (
     <Pressable
-        className='py-4 px-4 overflow-hidden rounded-lg'
+        key={item._id}
+        className={`py-4 px-4 overflow-hidden rounded-lg ${selectedChapter?._id===item._id && 'bg-[#8E89BA]'}`}
         hasTVPreferredFocus={true}
         android_ripple={{
             color: "rgba(255,255,255,0.5)",
