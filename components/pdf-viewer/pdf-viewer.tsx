@@ -9,16 +9,16 @@ import Pdf from 'react-native-pdf';
 import Constants from 'expo-constants';
 // const statusBarHeight = Constants.statusBarHeight;
 
-export default function PDFViewer({route}: any) {
+export default function PDFViewer({ route }: any) {
   let pdfUrl = route?.params?.pdfUrl;
   console.log("PDF URL: ", pdfUrl);
 
   return (
     <View>
-      {/* <Pdf trustAllCerts={false} style={{ 
-        height: windowHeight, 
-        width: windowWidth, 
-      }} source={{uri: pdfUrl, cache: true }} /> */}
+      {/* <Pdf trustAllCerts={false} style={{
+        height: windowHeight,
+        width: windowWidth,
+      }} source={{ uri: pdfUrl, cache: true }} /> */}
     </View>
   );
 }

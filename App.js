@@ -1,10 +1,12 @@
 import Providers from './utils/Providers';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './screens/Home'
 import Details from './screens/Details'
 import Videos from './screens/Videos'
-import PDFViewer from './components/pdf-viewer/pdf-viewer'
+import PDFViewer from './components/pdf-viewer/pdf-viewer';
+import MP4Player from './components/mp4-player/mp4-player';
+import { Offline } from './screens/Offline';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,13 +15,15 @@ export default function App() {
   return (
     <Providers>
       <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
-        <Stack.Screen name="Details" component={Details} options={{headerShown: false}}/>
-        <Stack.Screen name="Videos" component={Videos} options={{headerShown: false}} />
-        {/* <Stack.Screen name="PDFViewer" component={PDFViewer} options={{headerShown: false}} /> */}
-      </Stack.Navigator>
-    </NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
+          <Stack.Screen name="Videos" component={Videos} options={{ headerShown: false }} />
+          <Stack.Screen name="PDFViewer" component={PDFViewer} options={{ headerShown: false }} />
+          <Stack.Screen name="Offline" component={Offline} options={{ headerShown: false }} />
+          <Stack.Screen name="MP4Player" component={MP4Player} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Providers>
   );
 }
