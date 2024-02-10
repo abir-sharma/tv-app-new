@@ -9,6 +9,7 @@ import { useGlobalContext } from '../context/MainContext';
 import { NoteType, VideoType } from '../types/types';
 import Chapters from '../components/Chapters';
 import axios from 'axios';
+import { VideoComponent } from '../components/Options/VideoComponent';
 
 export default function Details({navigation}: any) {
     
@@ -106,8 +107,7 @@ export default function Details({navigation}: any) {
             </View>
 
             <ScrollView className=' flex-[3]'>
-                {selectedMenu==0 && <Text className='text-white'>{JSON.stringify(topicList)}</Text>}
-                {selectedMenu==0 && <Text className='text-white'>{JSON.stringify(videoList)}</Text>}
+              {selectedMenu==0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreVideos}/>}
             </ScrollView>
 
         </View>
