@@ -9,6 +9,7 @@ import axios from 'axios';
 // import ApiRoutes from '../../../config/api.config';A
 import { Video, ResizeMode } from 'expo-av';
 import { cookieSplitter } from './cookie-splitter';
+import { useGlobalContext } from '../../context/MainContext';
 
 export default function VideoPlayer(props: any) {
   const [spinner, setSpinner] = useState<any>();
@@ -17,6 +18,7 @@ export default function VideoPlayer(props: any) {
   const playerRef = useRef(null);
   const [renderVideo, setRenderVideo] = useState<boolean>(false);
   const [noVideoAvailable, setNoVideoAvailable] = useState<boolean>(false);
+  const { headers } = useGlobalContext();
   // console.log("###### --->", props?.lectureDetails);
 
   useEffect(() => {
@@ -65,18 +67,16 @@ export default function VideoPlayer(props: any) {
   }
 
   async function sendAnalyticsData(uri: string) {
-    const headers = {
+    const newHeaders = {
       'Content-Type': 'application/json',
-      // Authorization: `Bearer ${await AsyncStorage.getItem('token')}`,
-      // Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDczNjk4MzAuODk4LCJkYXRhIjp7Il9pZCI6IjVlY2QzNGZhYjU4NWYxMjUyZTc4MmJiNiIsInVzZXJuYW1lIjoiODQyMDMxMDEyNSIsImZpcnN0TmFtZSI6IlNheWFrIiwibGFzdE5hbWUiOiJTYXJrYXIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJzYXlha3NhcmthcjczQGdtYWlsLmNvbSIsInJvbGVzIjpbIjViMjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsInR5cGUiOiJVU0VSIn0sImlhdCI6MTcwNjc2NTAzMH0.BC2hePPB0jKRwoxcTkLO7feCFGeZAVcpCvwVh6XwMr8",
-      Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDc3NDkzMTYuNDU2LCJkYXRhIjp7Il9pZCI6IjVlY2QzNGZhYjU4NWYxMjUyZTc4MmJiNiIsInVzZXJuYW1lIjoiODQyMDMxMDEyNSIsImZpcnN0TmFtZSI6IlNheWFrIiwibGFzdE5hbWUiOiJTYXJrYXIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJzYXlha3NhcmthcjczQGdtYWlsLmNvbSIsInJvbGVzIjpbIjViMjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsInR5cGUiOiJVU0VSIn0sImlhdCI6MTcwNzE0NDUxNn0.RPE5gvodX6441YbQmZsPCpq_agaoEWnqviQbw0fw_9M",
+      Authorization: headers.Authorization,
       'Client-Type': 'WEB',
     };
     const data = {
       url: uri,
     };
     console.log('uri --->', uri);
-    axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers })
+    axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers: newHeaders })
       .then((response) => {
         setCookieParams(cookieSplitter(response.data.data));
         setRenderVideo(true);
@@ -87,7 +87,7 @@ export default function VideoPlayer(props: any) {
   }
 
   return (
-    <View style={{ minHeight: '100%' }}>
+    <View style={{ minHeight: '100%' }} className='bg-[#1A1A1A]'>
       <ActivityIndicator style={{ display: spinner ? 'flex' : 'none', marginTop: 100 }} size="small" color="#5a4bda" animating={spinner} />
       {
         noVideoAvailable &&
