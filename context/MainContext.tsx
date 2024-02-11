@@ -31,7 +31,6 @@ type GlobalContextType = {
   setMainNavigation: Dispatch<SetStateAction<any>>;
   headers: any;
   setHeaders: Dispatch<SetStateAction<any>>;
-  baseDirectoryLocation: string;
   orders: Order[] | null;
   setOrders: Dispatch<SetStateAction<Order[] | null>>;
   selectedSubject: Subject | null;
@@ -93,7 +92,6 @@ const GlobalContext = createContext<GlobalContextType>({
   setMainNavigation: () => { },
   headers: {},
   setHeaders: () => { },
-  baseDirectoryLocation: "http://192.168.1.13:6969/Desktop",
   orders: null,
   setOrders: () => { },
   selectedSubject: null,
