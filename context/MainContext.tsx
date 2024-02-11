@@ -9,6 +9,8 @@ import {
   useEffect
 } from "react";
 import { BatchDetails, BatchType, Order, Subject, TopicType, ItemType } from "../types/types";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from "@react-navigation/native";
 
 
 type GlobalContextType = {
@@ -27,6 +29,7 @@ type GlobalContextType = {
   mainNavigation: any;
   setMainNavigation: Dispatch<SetStateAction<any>>;
   headers: any;
+  setHeaders: Dispatch<SetStateAction<any>>;
   baseDirectoryLocation: string;
   orders: Order[] | null;
   setOrders: Dispatch<SetStateAction<Order[] | null>>;
@@ -86,7 +89,8 @@ const GlobalContext = createContext<GlobalContextType>({
   mainNavigation: null,
   setMainNavigation: () => { },
   headers: {},
-  baseDirectoryLocation: "http://192.168.110.38:6969/Desktop",
+  setHeaders: () => { },
+  baseDirectoryLocation: "http://192.168.1.13:6969/Desktop",
   orders: null,
   setOrders: () => { },
   selectedSubject: null,
@@ -169,9 +173,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const baseDirectoryLocation = "http://192.168.110.38:6969/Desktop";
 
-  const headers = {
-    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgwOTU4MDQuMzMzLCJkYXRhIjp7Il9pZCI6IjVlY2QzNGZhYjU4NWYxMjUyZTc4MmJiNiIsInVzZXJuYW1lIjoiODQyMDMxMDEyNSIsImZpcnN0TmFtZSI6IlNheWFrIiwibGFzdE5hbWUiOiJTYXJrYXIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJzYXlha3NhcmthcjczQGdtYWlsLmNvbSIsInJvbGVzIjpbIjViMjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsInR5cGUiOiJVU0VSIn0sImlhdCI6MTcwNzQ5MTAwNH0.CxGrjGsWZJvOgd9yGUhF0Zznn7k-Vo22hnvOTVzJT_o"
-  }
+  const [headers, setHeaders] = useState<any>(null)
 
   const getPaidBatches = async () => {
     try {
@@ -180,8 +182,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       setSelectedBatch(res.data.data[0]);
       setSelectSubjectSlug(res.data.data[0].subjects[0].slug);
       setSelectedSubject(res.data.data[0].subjects[0]);
-
-
 
       getChaptersData();
     }
@@ -231,10 +231,13 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
   }
 
+
   useEffect(() => {
     getPaidBatches();
     getPaidBatchesWithDetails();
-  }, [])
+  }, [headers])
+
+
 
   useEffect(() => {
     getBatchDetails();
@@ -265,7 +268,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         topicList, setTopicList,
         selectSubjectSlug, setSelectSubjectSlug,
         mainNavigation, setMainNavigation,
-        headers, baseDirectoryLocation,
+        headers, setHeaders,
+        baseDirectoryLocation,
         orders, setOrders,
         selectedSubject, setSelectedSubject,
         selectedChapter, setSelectedChapter,

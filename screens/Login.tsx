@@ -1,17 +1,134 @@
 /// <reference types="nativewind/types" />
 
-import { View, Text, Image, TextInput, Pressable, TouchableOpacity } from 'react-native';
-import { useEffect } from 'react';
+import { View, Text, Image, TextInput, Pressable, TouchableOpacity, Alert, TouchableHighlight } from 'react-native';
+import { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Login({navigation}: any) {
     
-  const {setMainNavigation} = useGlobalContext();
+  const {setMainNavigation, headers, setHeaders} = useGlobalContext();
+  const [phone, setPhone] = useState<string>("");
+  const [otpSent, setOtpSent] = useState<boolean>(false);
+  const [otp, setOtp] = useState<string>("");
+  const [newUser, setNewUser] = useState<boolean>(false);
+  const [name, setName] = useState<string>("");
   
   useEffect(()=>{
     navigation.setOptions({headerShown: false});
     setMainNavigation(navigation);
   }, [])
+
+  const handleTextChange = (newText: string) => {
+    if(newText.length > 10) return;
+    else setPhone(newText);
+  }
+  const handleOTPChange = (newText: string) => {
+    setOtp(newText);
+  }
+  const handleNameChange = (newText: string) => {
+    setName(newText);
+  }
+
+  const handleSentOTP = async () => {
+    if(phone.length!==10){
+        Alert.alert("Please enter a valid mobile number");
+    }
+
+    try{
+      const res = await axios.post("https://api.penpencil.co/v1/users/get-otp?smsType=0", {
+        username: phone,
+        countryCode: "+91",
+        organizationId: "5eb393ee95fab7468a79d189"
+      })
+
+      console.log("success", res.data);
+      
+      if(res.data.success){
+        setOtpSent(true);
+      }
+      
+
+    }
+    catch(err){
+        console.log(err);
+        setNewUser(true);
+
+    }
+    
+  }
+
+  const handleVerifyOTP = async () => {
+    if(otp.length<=0){
+      Alert.alert("Please enter a valid OTP");
+      return;
+    }
+    try{
+      const res = await axios.post("https://api.penpencil.co/v3/oauth/token", {
+        username: phone,
+        otp: otp,
+        client_id: "system-admin",
+        client_secret: "KjPXuAVfC5xbmgreETNMaL7z",
+        grant_type: "password",
+        organizationId: "5eb393ee95fab7468a79d189",
+        latitude: 0,
+        longitude: 0
+      })
+
+      console.log("success: ", res.data.data);
+      
+
+      if(res.data.success){
+        setHeaders({
+          "Authorization": `Bearer ${res.data.data.access_token}`
+        })
+        AsyncStorage.setItem("token", res.data.data.access_token);
+        navigation.navigate('Home');
+      }
+    }
+    catch(err){
+        console.log(err);
+    }
+  }
+
+  const handleRegisterUser = async () => {
+    if(phone.length!==10){
+        Alert.alert("Please enter a valid mobile number");
+    }
+    if(name.length<=0){
+      Alert.alert("Please enter a valid name");
+    }
+
+    const nameArray = name.split(' ');
+    const firstName = nameArray.shift(); // Remove and return the first element
+    const lastName = nameArray.join(' '); // Join the rest with space
+
+    console.log(firstName, " ---- ", lastName);
+    
+
+    try{
+      const res = await axios.post("https://api.penpencil.co/v1/users/register/5eb393ee95fab7468a79d189", {
+        mobile: phone,
+        countryCode: "+91",
+        firstName: firstName,
+        lastName: lastName
+    })
+
+      console.log("success", res.data);
+      
+      if(res.data.success){
+        setOtpSent(true);
+        setNewUser(false);
+      }
+      
+
+    }
+    catch(err){
+        console.log(err);
+    }
+  }
 
   return (
     <View className="bg-[#1A1A1A] w-full flex-1 items-center justify-center">
@@ -26,9 +143,23 @@ export default function Login({navigation}: any) {
                     <Image source={require('../assets/india.png')} className='w-6 h-6' width={10} height={10} />
                     <Text className="text-white text-lg font-semibold mx-2" > +91 </Text>
                 </View>
-                <TextInput hasTVPreferredFocus={true} onFocus={(e)=>{console.log("Focused")}}
-            className='w-full text-white text-lg' placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Mobile No.' />
+                <TextInput hasTVPreferredFocus={true} value={phone} onChangeText={newText => {handleTextChange(newText)}} onFocus={(e)=>{console.log("Focused")}}
+            className='w-full text-white text-lg' autoFocus={true} placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Mobile No.' />
             </TouchableOpacity>
+
+            {newUser && <TouchableOpacity  className='bg-black w-80 h-12 mt-3 flex-row rounded-md px-4 items-center justify-start'>
+                
+                <TextInput hasTVPreferredFocus={true} value={name} onChangeText={newText => {handleNameChange(newText)}} 
+            className='w-full text-white text-lg' autoFocus={true} placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Name' />
+            </TouchableOpacity>}
+
+            {otpSent && <TouchableOpacity  className='bg-black w-80 h-12 mt-3 flex-row rounded-md px-4 items-center justify-start'>
+                
+                <TextInput hasTVPreferredFocus={true} value={otp} onChangeText={newText => {handleOTPChange(newText)}} 
+            className='w-full text-white text-lg' autoFocus={true} placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Correct OTP' />
+            </TouchableOpacity>}
+
+            
             <Pressable
             android_ripple={{
                 color: "rgba(255,255,255,0.2)",
@@ -36,8 +167,13 @@ export default function Login({navigation}: any) {
                 radius: 1000,
                 foreground: true
               }}
+            
+            onPress={()=>{
+              newUser ? handleRegisterUser() :  
+              otpSent ? handleVerifyOTP() : handleSentOTP()
+            }}
             className='bg-black w-80 h-12 overflow-hidden mt-3 flex-row rounded-full px-4 items-center justify-start'>
-                <Text className='text-white/60 text-center w-full text-base'>Get OTP</Text>
+                <Text className='text-white/60 text-center w-full text-base'>{newUser? "Register" : otpSent? "Verify OTP" : "Get OTP"}</Text>
             </Pressable>
         </View>
     </View>
