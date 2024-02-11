@@ -9,6 +9,12 @@ import {
   useEffect
 } from "react";
 import { BatchDetails, BatchType, Order, Subject, TopicType, ItemType } from "../types/types";
+import NetworkInfo from 'react-native-network-info';
+import publicIP from 'react-native-public-ip';
+import { useNetInfoInstance, useNetInfo } from "@react-native-community/netinfo";
+
+import * as Network from 'expo-network';
+
 
 
 type GlobalContextType = {
@@ -86,7 +92,7 @@ const GlobalContext = createContext<GlobalContextType>({
   mainNavigation: null,
   setMainNavigation: () => { },
   headers: {},
-  baseDirectoryLocation: "http://192.168.110.38:6969/Desktop",
+  baseDirectoryLocation: "http://192.168.1.16:6969/Desktop",
   orders: null,
   setOrders: () => { },
   selectedSubject: null,
@@ -97,7 +103,7 @@ const GlobalContext = createContext<GlobalContextType>({
   setIsOnline: () => { },
   directoryLevel: 0,
   setDirectoryLevel: () => { },
-  offlineCurrentDirectory: "http://192.168.110.38:6969/Desktop/",
+  offlineCurrentDirectory: "http://192.168.1.16:6969/Desktop/",
   setOfflineCurrentDirectory: () => { },
   offlineDirectoryListings: [],
   setOfflineDirectoryListings: () => { },
@@ -151,7 +157,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
-  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.110.38:6969/Desktop/");
+  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.1.16:6969/Desktop/");
   const [offlineDirectoryListings, setOfflineDirectoryListings] = useState<any>([]);
   const [offlineBatches, setOfflineBatches] = useState<ItemType[]>([]);
   const [offlineSelectedBatch, setOfflineSelectedBatch] = useState<number>(0);
@@ -167,10 +173,33 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [offlineDppVideos, setOfflineDppVideos] = useState<ItemType[]>([]);
   const [offlineSelectedSection, setOfflineSelectedSection] = useState<number>(3);
 
-  const baseDirectoryLocation = "http://192.168.110.38:6969/Desktop";
+  const baseDirectoryLocation = "http://192.168.1.16:6969/Desktop";
+
+
+  // publicIP()
+  //   .then(ip => {
+  //     console.log(ip);
+  //     // '47.122.71.234'
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //     // 'Unable to get IP address.'
+  //   });
+  // useNetInfo.
+  //   .then((res) => console.log("IP Address : ", res))
+  //   .catch((err) => console.log("Error while fetching IP address!!"));
+  // NetworkInfo.NetworkInfo.getIPV4Address()
+  //   .then((res) => console.log("IP Address : ", res))
+  // .catch((err) => console.log("Error while fetching IP address!!"));
+
+  const getIP = async () => {
+    const ip = await Network.getIpAddressAsync();
+    console.log("IP Address: ", ip);
+  }
+  getIP();
 
   const headers = {
-    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgwOTU4MDQuMzMzLCJkYXRhIjp7Il9pZCI6IjVlY2QzNGZhYjU4NWYxMjUyZTc4MmJiNiIsInVzZXJuYW1lIjoiODQyMDMxMDEyNSIsImZpcnN0TmFtZSI6IlNheWFrIiwibGFzdE5hbWUiOiJTYXJrYXIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJzYXlha3NhcmthcjczQGdtYWlsLmNvbSIsInJvbGVzIjpbIjViMjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsInR5cGUiOiJVU0VSIn0sImlhdCI6MTcwNzQ5MTAwNH0.CxGrjGsWZJvOgd9yGUhF0Zznn7k-Vo22hnvOTVzJT_o"
+    Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgyNDk2OTAuNTY1LCJkYXRhIjp7Il9pZCI6IjVlY2QzNGZhYjU4NWYxMjUyZTc4MmJiNiIsInVzZXJuYW1lIjoiODQyMDMxMDEyNSIsImZpcnN0TmFtZSI6IlNheWFrIiwibGFzdE5hbWUiOiJTYXJrYXIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJzYXlha3NhcmthcjczQGdtYWlsLmNvbSIsInJvbGVzIjpbIjViMjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsInR5cGUiOiJVU0VSIn0sImlhdCI6MTcwNzY0NDg5MH0.5V9kSheBlEk_jb_2Ea4S17G6QT3YVzskfBuLZRo-KSE"
   }
 
   const getPaidBatches = async () => {

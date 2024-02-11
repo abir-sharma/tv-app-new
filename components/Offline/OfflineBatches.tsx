@@ -6,7 +6,7 @@ import { useGlobalContext } from '../../context/MainContext';
 
 export default function OfflineBatches(params: any) {
 
-    const { baseDirectoryLocation, setDirectoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, offlineBatches } = useGlobalContext();
+    const { setDirectoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, offlineBatches } = useGlobalContext();
     const { mainNavigation } = useGlobalContext();
 
     return (

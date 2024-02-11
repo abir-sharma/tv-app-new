@@ -6,11 +6,11 @@ import { useGlobalContext } from '../../context/MainContext';
 
 export default function OfflineChapters() {
 
-  const { directoryLevel, setDirectoryLevel, offlineChapters, setOfflineCurrentDirectory, setOfflineSelectedChapter } = useGlobalContext();
+  const { directoryLevel, offlineSelectedChapter, setDirectoryLevel, offlineChapters, setOfflineCurrentDirectory, setOfflineSelectedChapter } = useGlobalContext();
 
   const renderItem = ({ item }: any) => (
     <Pressable
-      className='py-4 px-4 overflow-hidden rounded-lg'
+      className={`py-4 px-4 overflow-hidden rounded-lg ${offlineSelectedChapter === item.id && 'bg-[#8E89BA]'}`}
       hasTVPreferredFocus={true}
       android_ripple={{
         color: "rgba(255,255,255,0.5)",
