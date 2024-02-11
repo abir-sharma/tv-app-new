@@ -34,10 +34,10 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
       }}>
       <View >
         <View>
-          {/* {item?.videoDetails?.image && <Image
+          {item?.thumbnail && <Image
             style={{ width: '100%', height: 135, objectFit: 'cover', borderRadius: 20, }}
-            source={{ uri: `${item?.videoDetails?.image}` }}
-          />} */}
+            source={{ uri: `${item?.thumbnail}` }}
+          />}
         </View>
         <View className='p-2'>
           {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>

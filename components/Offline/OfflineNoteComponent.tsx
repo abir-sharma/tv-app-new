@@ -36,12 +36,12 @@ export const OfflineNoteComponent = ({ noteList }: NotePropType) => {
         navigation.navigate('PDFViewer', { pdfUrl: item?.path });
       }}>
       <View>
-        {/* <View>
-                {item?.videoDetails?.image && <Image
-                    style={{width: '100%', height: 170, objectFit: 'cover', borderRadius: 5}}
-                    source={{uri: `${item?.videoDetails?.image}`}}
-                />}
-            </View> */}
+        <View>
+          {item?.thumbnail && <Image
+            style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+            source={{ uri: `${item?.thumbnail}` }}
+          />}
+        </View>
         <View style={{ padding: 16 }}>
           <Text className='text-sm text-white font-medium my-2'>{item?.name?.length >= 60 ? `${item?.name?.substring(0, 60)}...` : item?.name}</Text>
           <View className='bg-white/5 rounded-xl flex-row justify-between items-center px-3 py-2 mt-3' >

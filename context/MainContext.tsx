@@ -8,7 +8,7 @@ import {
   ReactNode,
   useEffect
 } from "react";
-import { BatchDetails, BatchType, Order, Subject, TopicType, ItemType } from "../types/types";
+import { BatchDetails, BatchType, Order, Subject, TopicType, ItemType, ItemType2 } from "../types/types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 
@@ -61,16 +61,16 @@ type GlobalContextType = {
   setOfflineSelectedChapter: Dispatch<SetStateAction<number>>;
   offlineSections: ItemType[];
   setOfflineSections: Dispatch<SetStateAction<ItemType[]>>;
-  offlineLectures: ItemType[];
-  setOfflineLectures: Dispatch<SetStateAction<ItemType[]>>;
-  offlineNotes: ItemType[];
-  setOfflineNotes: Dispatch<SetStateAction<ItemType[]>>;
-  offlineDpp: ItemType[];
-  setOfflineDpp: Dispatch<SetStateAction<ItemType[]>>;
-  offlineDppPdf: ItemType[];
-  setOfflineDppPdf: Dispatch<SetStateAction<ItemType[]>>;
-  offlineDppVideos: ItemType[];
-  setOfflineDppVideos: Dispatch<SetStateAction<ItemType[]>>;
+  offlineLectures: ItemType2[];
+  setOfflineLectures: Dispatch<SetStateAction<ItemType2[]>>;
+  offlineNotes: ItemType2[];
+  setOfflineNotes: Dispatch<SetStateAction<ItemType2[]>>;
+  offlineDpp: ItemType2[];
+  setOfflineDpp: Dispatch<SetStateAction<ItemType2[]>>;
+  offlineDppPdf: ItemType2[];
+  setOfflineDppPdf: Dispatch<SetStateAction<ItemType2[]>>;
+  offlineDppVideos: ItemType2[];
+  setOfflineDppVideos: Dispatch<SetStateAction<ItemType2[]>>;
   offlineSelectedSection: number;
   setOfflineSelectedSection: Dispatch<SetStateAction<number>>;
 }
@@ -167,36 +167,14 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [offlineChapters, setOfflineChapters] = useState<ItemType[]>([]);
   const [offlineSelectedChapter, setOfflineSelectedChapter] = useState<number>(0);
   const [offlineSections, setOfflineSections] = useState<ItemType[]>([]);
-  const [offlineLectures, setOfflineLectures] = useState<ItemType[]>([]);
-  const [offlineNotes, setOfflineNotes] = useState<ItemType[]>([]);
-  const [offlineDpp, setOfflineDpp] = useState<ItemType[]>([]);
-  const [offlineDppPdf, setOfflineDppPdf] = useState<ItemType[]>([]);
-  const [offlineDppVideos, setOfflineDppVideos] = useState<ItemType[]>([]);
+  const [offlineLectures, setOfflineLectures] = useState<ItemType2[]>([]);
+  const [offlineNotes, setOfflineNotes] = useState<ItemType2[]>([]);
+  const [offlineDpp, setOfflineDpp] = useState<ItemType2[]>([]);
+  const [offlineDppPdf, setOfflineDppPdf] = useState<ItemType2[]>([]);
+  const [offlineDppVideos, setOfflineDppVideos] = useState<ItemType2[]>([]);
   const [offlineSelectedSection, setOfflineSelectedSection] = useState<number>(3);
   const [showIpInput, setShowIpInput] = useState<boolean>(true);
 
-
-  // publicIP()
-  //   .then(ip => {
-  //     console.log(ip);
-  //     // '47.122.71.234'
-  //   })
-  //   .catch(error => {
-  //     console.log(error);
-  //     // 'Unable to get IP address.'
-  //   });
-  // useNetInfo.
-  //   .then((res) => console.log("IP Address : ", res))
-  //   .catch((err) => console.log("Error while fetching IP address!!"));
-  // NetworkInfo.NetworkInfo.getIPV4Address()
-  //   .then((res) => console.log("IP Address : ", res))
-  // .catch((err) => console.log("Error while fetching IP address!!"));
-
-  // const getIP = async () => {
-  //   const ip = await Network.getIpAddressAsync();
-  //   console.log("IP Address: ", ip);
-  // }
-  // getIP();
 
   const [headers, setHeaders] = useState<any>(null)
 

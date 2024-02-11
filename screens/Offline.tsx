@@ -5,9 +5,8 @@ import cheerio from 'cheerio';
 import Pdf from 'react-native-pdf';
 import { useNavigation } from '@react-navigation/native';
 import Navbar from '../components/Navbar';
-import { NetworkInfo } from 'react-native-network-info';
 import { useGlobalContext } from '../context/MainContext';
-import { ItemType } from '../types/types';
+import { ItemType, ItemType2 } from '../types/types';
 import OfflineBatches from '../components/Offline/OfflineBatches';
 // import Video from 'react-native-video';
 
@@ -112,14 +111,16 @@ export const Offline = () => {
   const fetchLectures = async () => {
     console.log("fetch Lectures");
     let directoryItems: any[] = await fetchListing();
-    const lecturesData: ItemType[] = [];
+    const lecturesData: ItemType2[] = [];
     directoryItems.map((item, index) => {
       lecturesData.push({
-        name: item.name.trim(),
+        name: item.name.slice(0, -4).trim(),
         path: offlineCurrentDirectory + item.link,
         id: index,
+        thumbnail: offlineCurrentDirectory + item.link.slice(0, -4) + '.png'
       })
     })
+    console.log(lecturesData)
     setOfflineLectures(lecturesData);
     // console.log("Lectures Data:  ", lecturesData);
   }
@@ -127,12 +128,13 @@ export const Offline = () => {
     console.log("fetch Notes");
 
     let directoryItems: any[] = await fetchListing();
-    const notesData: ItemType[] = [];
+    const notesData: ItemType2[] = [];
     directoryItems.map((item, index) => {
       notesData.push({
-        name: item.name.trim(),
+        name: item.name.slice(0, -4).trim(),
         path: offlineCurrentDirectory + item.link,
         id: index,
+        thumbnail: offlineCurrentDirectory + item.link.slice(0, -4) + '.png'
       })
     })
     setOfflineNotes(notesData);
@@ -142,12 +144,13 @@ export const Offline = () => {
     console.log("fetch Dpp");
 
     let directoryItems: any[] = await fetchListing();
-    const dppData: ItemType[] = [];
+    const dppData: ItemType2[] = [];
     directoryItems.map((item, index) => {
       dppData.push({
-        name: item.name.trim(),
+        name: item.name.slice(0, -4).trim(),
         path: offlineCurrentDirectory + item.link,
         id: index,
+        thumbnail: offlineCurrentDirectory + item.link.slice(0, -4) + '.png'
       })
     })
     setOfflineDpp(dppData);
@@ -157,12 +160,13 @@ export const Offline = () => {
     console.log("fetch Dpp Pdf");
 
     let directoryItems: any[] = await fetchListing();
-    const dppPdfData: ItemType[] = [];
+    const dppPdfData: ItemType2[] = [];
     directoryItems.map((item, index) => {
       dppPdfData.push({
-        name: item.name.trim(),
+        name: item.name.slice(0, -4).trim(),
         path: offlineCurrentDirectory + item.link,
         id: index,
+        thumbnail: offlineCurrentDirectory + item.link.slice(0, -4) + '.png'
       })
     })
     setOfflineDppPdf(dppPdfData);
@@ -171,12 +175,13 @@ export const Offline = () => {
   const fetchDppVideos = async () => {
     console.log("fetch Dpp Videos");
     let directoryItems: any[] = await fetchListing();
-    const dppVideosData: ItemType[] = [];
+    const dppVideosData: ItemType2[] = [];
     directoryItems.map((item, index) => {
       dppVideosData.push({
-        name: item.name.trim(),
+        name: item.name.slice(0, -4).trim(),
         path: offlineCurrentDirectory + item.link,
         id: index,
+        thumbnail: offlineCurrentDirectory + item.name.slice(0, -4) + '.png'
       })
     })
     setOfflineDppVideos(dppVideosData);

@@ -269,6 +269,12 @@ export type ItemType = {
   id: number
   path: string,
 }
+export type ItemType2 = {
+  name: string,
+  id: number
+  path: string,
+  thumbnail: string,
+}
 
 type HomeworkItem = {
   _id: string;
