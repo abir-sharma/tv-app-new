@@ -154,7 +154,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
-  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.16:6969/Desktop/");
+  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.1.16:6969/Desktop/");
   const [offlineDirectoryListings, setOfflineDirectoryListings] = useState<any>([]);
   const [offlineBatches, setOfflineBatches] = useState<ItemType[]>([]);
   const [offlineSelectedBatch, setOfflineSelectedBatch] = useState<number>(0);
