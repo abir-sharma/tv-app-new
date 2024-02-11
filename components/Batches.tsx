@@ -70,9 +70,7 @@ export default function Batches() {
                     <View className="w-full h-40 overflow-hidden">
                         {
                         orders?.map((item)=>{
-                            if(item.itemName === order.batch.name){
-                                console.log("matched ", item.itemName, order.batch.name, item.thumbnailImageLink);
-                                
+                            if(item.itemName === order.batch.name){                                
                                 return item.thumbnailImageLink && <Image className=' w-full h-full object-cover rounded-lg ' source={{uri: `${item?.thumbnailImageLink}`}} />
                             }
 

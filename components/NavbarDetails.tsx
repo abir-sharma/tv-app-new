@@ -4,6 +4,8 @@ import { Image, Text, Pressable, View, Modal, TouchableWithoutFeedback, FlatList
 import { useGlobalContext } from '../context/MainContext';
 import { NoteType, VideoType } from '../types/types';
 import styles from './NavbarDetails.style'
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 type PropType = {
@@ -16,7 +18,23 @@ type PropType = {
 export default function NavbarDetails({selectedMenu, setSelectedMenu, setContentType, setCurrentPage}: PropType) {
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const {setSelectedSubject, batchDetails, mainNavigation, selectedSubject, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter} = useGlobalContext();
+  const {setSelectedSubject, batchDetails, mainNavigation, selectedSubject, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter, headers, setHeaders} = useGlobalContext();
+
+  const handleLogout = async () => {
+   
+
+    try{
+      const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", {headers})
+      if(res.data.success){
+        mainNavigation.navigate('Login');
+        AsyncStorage.clear();
+        setHeaders(null);
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
 
   const handleDropdownPress = () => {
     setIsDropdownVisible(prev=>!prev);
@@ -149,8 +167,10 @@ export default function NavbarDetails({selectedMenu, setSelectedMenu, setContent
             radius: 1000,
             foreground: true
         }}
+        onPress={handleLogout}
         className='flex-row justify-center overflow-hidden rounded-full items-center'>
-            <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
+            {/* <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} /> */}
+            <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text>
         </Pressable>
     </View>
   );

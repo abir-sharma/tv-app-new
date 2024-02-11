@@ -2,14 +2,28 @@
 import { useEffect, useState } from 'react';
 import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function Navbar() {
 
-  const { mainNavigation, isOnline, setIsOnline } = useGlobalContext();
+  const { mainNavigation, isOnline, setIsOnline, headers, setHeaders } = useGlobalContext();
 
-  useEffect(() => {
+  const handleLogout = async () => {
+   
 
-  })
+    try{
+      const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", {headers})
+      if(res.data.success){
+        mainNavigation.navigate('Login');
+        AsyncStorage.clear();
+        setHeaders(null);
+      }
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
 
   return (
     <View className=" flex-row justify-between items-center p-4">
@@ -48,6 +62,7 @@ export default function Navbar() {
           <Text className='text-white'>Offline</Text>
         </Pressable>
       </View>
+      
       <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
@@ -55,11 +70,10 @@ export default function Navbar() {
           radius: 1000,
           foreground: true
         }}
-        onPress={()=>{
-          mainNavigation.navigate('Login');
-        }}
+        onPress={handleLogout}
         className='flex-row justify-center overflow-hidden rounded-full items-center'>
-        <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
+        {/* <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} /> */}
+        <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text>
       </Pressable>
     </View>
   );
