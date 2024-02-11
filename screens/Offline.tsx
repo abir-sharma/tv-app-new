@@ -38,10 +38,11 @@ export const Offline = () => {
     // }
     // fetchIPAddress();
     fetchDirectoryListing(offlineCurrentDirectory);
-  }, [offlineCurrentDirectory, directoryLevel]);
+  }, [offlineCurrentDirectory]);
 
 
   const fetchBatches = async () => {
+    console.log("fetch Batches");
     let directoryItems: any[] = await fetchListing();
     directoryItems = directoryItems.filter((item) => item.name.startsWith('PW'));
     const batchNames: ItemType[] = [];
@@ -56,6 +57,7 @@ export const Offline = () => {
   }
 
   const fetchSubjects = async () => {
+    console.log("fetch Subjects");
     let directoryItems: any[] = await fetchListing();
     const subjectNames: ItemType[] = [];
     directoryItems.map((item, index) => {
@@ -68,10 +70,12 @@ export const Offline = () => {
     setOfflineSubjects(subjectNames);
     setOfflineSelectedSubject(0);
     setDirectoryLevel(2);
-    setOfflineCurrentDirectory(subjectNames[0].path);
+    setOfflineCurrentDirectory(subjectNames[0]?.path);
   }
 
   const fetchChapters = async () => {
+    console.log("fetch Chapters");
+
     let directoryItems: any[] = await fetchListing();
     const chapterNames: ItemType[] = [];
     directoryItems.map((item, index) => {
@@ -84,11 +88,12 @@ export const Offline = () => {
     setOfflineChapters(chapterNames);
     setOfflineSelectedChapter(0);
     setDirectoryLevel(3);
-    setOfflineCurrentDirectory(chapterNames[0].path);
+    setOfflineCurrentDirectory(chapterNames[0]?.path);
     // console.log("Chapter Names:  ", chapterNames);
   }
 
   const fetchSections = async () => {
+    console.log("fetch Sections");
     let directoryItems: any[] = await fetchListing();
     const sectionData: ItemType[] = [];
     directoryItems.map((item, index) => {
@@ -101,10 +106,11 @@ export const Offline = () => {
     setOfflineSections(sectionData);
     setOfflineSelectedSection(3);
     setDirectoryLevel(4);
-    setOfflineCurrentDirectory(sectionData[3].path);
+    setOfflineCurrentDirectory(sectionData[3]?.path);
   }
 
   const fetchLectures = async () => {
+    console.log("fetch Lectures");
     let directoryItems: any[] = await fetchListing();
     const lecturesData: ItemType[] = [];
     directoryItems.map((item, index) => {
@@ -118,6 +124,8 @@ export const Offline = () => {
     // console.log("Lectures Data:  ", lecturesData);
   }
   const fetchNotes = async () => {
+    console.log("fetch Notes");
+
     let directoryItems: any[] = await fetchListing();
     const notesData: ItemType[] = [];
     directoryItems.map((item, index) => {
@@ -131,6 +139,8 @@ export const Offline = () => {
     // console.log("Notes Data:  ", notesData);
   }
   const fetchDpp = async () => {
+    console.log("fetch Dpp");
+
     let directoryItems: any[] = await fetchListing();
     const dppData: ItemType[] = [];
     directoryItems.map((item, index) => {
@@ -144,6 +154,8 @@ export const Offline = () => {
     // console.log("DPP Data:  ", dppData);
   }
   const fetchDppPdf = async () => {
+    console.log("fetch Dpp Pdf");
+
     let directoryItems: any[] = await fetchListing();
     const dppPdfData: ItemType[] = [];
     directoryItems.map((item, index) => {
@@ -157,6 +169,7 @@ export const Offline = () => {
     // console.log("DPP PDF Data:  ", dppPdfData);
   }
   const fetchDppVideos = async () => {
+    console.log("fetch Dpp Videos");
     let directoryItems: any[] = await fetchListing();
     const dppVideosData: ItemType[] = [];
     directoryItems.map((item, index) => {

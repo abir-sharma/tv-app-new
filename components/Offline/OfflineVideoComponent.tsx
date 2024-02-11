@@ -30,7 +30,7 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
       hasTVPreferredFocus
       onPress={() => {
         //@ts-expect-error
-        navigation.navigate('MP4Player', { videoUrl: item.path });
+        navigation.navigate('MP4Player', { videoUrl: item?.path });
       }}>
       <View >
         <View>

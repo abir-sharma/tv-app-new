@@ -86,7 +86,7 @@ const GlobalContext = createContext<GlobalContextType>({
   mainNavigation: null,
   setMainNavigation: () => { },
   headers: {},
-  baseDirectoryLocation: "http://192.168.1.13:6969/Desktop",
+  baseDirectoryLocation: "http://192.168.110.38:6969/Desktop",
   orders: null,
   setOrders: () => { },
   selectedSubject: null,
@@ -97,7 +97,7 @@ const GlobalContext = createContext<GlobalContextType>({
   setIsOnline: () => { },
   directoryLevel: 0,
   setDirectoryLevel: () => { },
-  offlineCurrentDirectory: "http://192.168.1.13:6969/Desktop/",
+  offlineCurrentDirectory: "http://192.168.110.38:6969/Desktop/",
   setOfflineCurrentDirectory: () => { },
   offlineDirectoryListings: [],
   setOfflineDirectoryListings: () => { },
@@ -148,10 +148,10 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [showLoadMore, setShowLoadMore] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isOnline, setIsOnline] = useState<boolean>(true);
-  
+
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
-  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.1.13:6969/Desktop/");
+  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.110.38:6969/Desktop/");
   const [offlineDirectoryListings, setOfflineDirectoryListings] = useState<any>([]);
   const [offlineBatches, setOfflineBatches] = useState<ItemType[]>([]);
   const [offlineSelectedBatch, setOfflineSelectedBatch] = useState<number>(0);
@@ -167,7 +167,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [offlineDppVideos, setOfflineDppVideos] = useState<ItemType[]>([]);
   const [offlineSelectedSection, setOfflineSelectedSection] = useState<number>(3);
 
-  const baseDirectoryLocation = "http://192.168.1.13:6969/Desktop";
+  const baseDirectoryLocation = "http://192.168.110.38:6969/Desktop";
 
   const headers = {
     Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDgwOTU4MDQuMzMzLCJkYXRhIjp7Il9pZCI6IjVlY2QzNGZhYjU4NWYxMjUyZTc4MmJiNiIsInVzZXJuYW1lIjoiODQyMDMxMDEyNSIsImZpcnN0TmFtZSI6IlNheWFrIiwibGFzdE5hbWUiOiJTYXJrYXIiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJzYXlha3NhcmthcjczQGdtYWlsLmNvbSIsInJvbGVzIjpbIjViMjdiZDk2NTg0MmY5NTBhNzc4YzZlZiJdLCJjb3VudHJ5R3JvdXAiOiJJTiIsInR5cGUiOiJVU0VSIn0sImlhdCI6MTcwNzQ5MTAwNH0.CxGrjGsWZJvOgd9yGUhF0Zznn7k-Vo22hnvOTVzJT_o"
@@ -180,9 +180,9 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       setSelectedBatch(res.data.data[0]);
       setSelectSubjectSlug(res.data.data[0].subjects[0].slug);
       setSelectedSubject(res.data.data[0].subjects[0]);
-      
 
-      
+
+
       getChaptersData();
     }
     catch (err) {
@@ -223,7 +223,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       //   setShowLoadMore(false);
       // }
       console.log("Setting selected chapter", res.data.data[0].name);
-      
+
       setSelectedChapter(res.data.data[0]);
     }
     catch (err) {
@@ -251,7 +251,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     batchDetails && setSelectSubjectSlug(batchDetails?.subjects[1]?.slug);
     batchDetails && setSelectedSubject(batchDetails?.subjects[1]);
     // console.log("Subject setting", batchDetails?.subjects[1]?.subject);
-    
+
 
   }, [batchDetails])
 

@@ -20,8 +20,8 @@ export default function OfflineChapters() {
       }}
       onPress={() => {
         setOfflineSelectedChapter(item.id);
-        setOfflineCurrentDirectory(item.path);
         setDirectoryLevel(3);
+        setOfflineCurrentDirectory(item?.path);
         console.log("Chapter selected: ", item);
       }}
     >

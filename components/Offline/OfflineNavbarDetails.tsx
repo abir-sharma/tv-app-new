@@ -18,7 +18,7 @@ export default function OfflineNavbarDetails() {
       onPress={() => {
         setOfflineSelectedSubject(item.id);
         setDirectoryLevel(2);
-        setOfflineCurrentDirectory(item.path);
+        setOfflineCurrentDirectory(item?.path);
         setIsDropdownVisible(false);
       }}
     >
@@ -117,7 +117,7 @@ export default function OfflineNavbarDetails() {
             console.log(offlineSections);
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[4].path);
+              setOfflineCurrentDirectory(offlineSections[4]?.path);
               setOfflineSelectedSection(4);
             }
           }}>
@@ -137,7 +137,7 @@ export default function OfflineNavbarDetails() {
             console.log(offlineSections);
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[0].path);
+              setOfflineCurrentDirectory(offlineSections[0]?.path);
               setOfflineSelectedSection(0);
             }
           }}
@@ -158,7 +158,7 @@ export default function OfflineNavbarDetails() {
             console.log(offlineSections);
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[1].path);
+              setOfflineCurrentDirectory(offlineSections[1]?.path);
               setOfflineSelectedSection(1);
             }
           }}
@@ -180,7 +180,7 @@ export default function OfflineNavbarDetails() {
             console.log(offlineSections);
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[2].path);
+              setOfflineCurrentDirectory(offlineSections[2]?.path);
               setOfflineSelectedSection(2);
             }
           }}
