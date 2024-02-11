@@ -13,6 +13,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 
 
+
 type GlobalContextType = {
   addModalOpen: boolean;
   setAddModalOpen: Dispatch<SetStateAction<boolean>>;
@@ -39,6 +40,8 @@ type GlobalContextType = {
   setSelectedChapter: Dispatch<SetStateAction<TopicType | null>>;
   isOnline: boolean;
   setIsOnline: Dispatch<SetStateAction<boolean>>;
+  showIpInput: boolean;
+  setShowIpInput: Dispatch<SetStateAction<boolean>>;
   directoryLevel: number;
   setDirectoryLevel: Dispatch<SetStateAction<number>>;
   offlineCurrentDirectory: string;
@@ -99,9 +102,11 @@ const GlobalContext = createContext<GlobalContextType>({
   setSelectedChapter: () => { },
   isOnline: true,
   setIsOnline: () => { },
+  showIpInput: true,
+  setShowIpInput: () => { },
   directoryLevel: 0,
   setDirectoryLevel: () => { },
-  offlineCurrentDirectory: "http://192.168.110.38:6969/Desktop/",
+  offlineCurrentDirectory: "http://192.168.1.16:6969/Desktop/",
   setOfflineCurrentDirectory: () => { },
   offlineDirectoryListings: [],
   setOfflineDirectoryListings: () => { },
@@ -155,7 +160,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
-  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.110.38:6969/Desktop/");
+  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.1.16:6969/Desktop/");
   const [offlineDirectoryListings, setOfflineDirectoryListings] = useState<any>([]);
   const [offlineBatches, setOfflineBatches] = useState<ItemType[]>([]);
   const [offlineSelectedBatch, setOfflineSelectedBatch] = useState<number>(0);
@@ -170,8 +175,30 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [offlineDppPdf, setOfflineDppPdf] = useState<ItemType[]>([]);
   const [offlineDppVideos, setOfflineDppVideos] = useState<ItemType[]>([]);
   const [offlineSelectedSection, setOfflineSelectedSection] = useState<number>(3);
+  const [showIpInput, setShowIpInput] = useState<boolean>(true);
 
-  const baseDirectoryLocation = "http://192.168.110.38:6969/Desktop";
+
+  // publicIP()
+  //   .then(ip => {
+  //     console.log(ip);
+  //     // '47.122.71.234'
+  //   })
+  //   .catch(error => {
+  //     console.log(error);
+  //     // 'Unable to get IP address.'
+  //   });
+  // useNetInfo.
+  //   .then((res) => console.log("IP Address : ", res))
+  //   .catch((err) => console.log("Error while fetching IP address!!"));
+  // NetworkInfo.NetworkInfo.getIPV4Address()
+  //   .then((res) => console.log("IP Address : ", res))
+  // .catch((err) => console.log("Error while fetching IP address!!"));
+
+  // const getIP = async () => {
+  //   const ip = await Network.getIpAddressAsync();
+  //   console.log("IP Address: ", ip);
+  // }
+  // getIP();
 
   const [headers, setHeaders] = useState<any>(null)
 
@@ -269,7 +296,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         selectSubjectSlug, setSelectSubjectSlug,
         mainNavigation, setMainNavigation,
         headers, setHeaders,
-        baseDirectoryLocation,
         orders, setOrders,
         selectedSubject, setSelectedSubject,
         selectedChapter, setSelectedChapter,
@@ -290,6 +316,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         offlineDppPdf, setOfflineDppPdf,
         offlineDppVideos, setOfflineDppVideos,
         offlineSelectedSection, setOfflineSelectedSection,
+        showIpInput, setShowIpInput,
       } as GlobalContextType}>
       {children}
     </GlobalContext.Provider>

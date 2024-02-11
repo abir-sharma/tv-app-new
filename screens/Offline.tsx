@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button, ToastAndroid } from 'react-native';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import Pdf from 'react-native-pdf';
@@ -14,7 +14,7 @@ import OfflineBatches from '../components/Offline/OfflineBatches';
 
 export const Offline = () => {
 
-  const { setDirectoryLevel, setOfflineSections, setOfflineSelectedSubject, setOfflineSelectedSection, setOfflineSelectedChapter, setOfflineLectures, setOfflineDpp, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, offlineSelectedSection, directoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, setOfflineBatches, setOfflineSubjects, setOfflineChapters } = useGlobalContext();
+  const { setDirectoryLevel, showIpInput, setShowIpInput, setOfflineSections, setOfflineSelectedSubject, setOfflineSelectedSection, setOfflineSelectedChapter, setOfflineLectures, setOfflineDpp, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, offlineSelectedSection, directoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, setOfflineBatches, setOfflineSubjects, setOfflineChapters } = useGlobalContext();
   const [ipAddress, setIpAddress] = useState("");
   const [pdfOpen, setPdfOpen] = useState(false);
   const [videoOpen, setVideoOpen] = useState(false);
@@ -185,17 +185,25 @@ export const Offline = () => {
 
   const fetchListing = async () => {
     console.log("Current Directory : ", offlineCurrentDirectory);
-    const response = await axios.get(offlineCurrentDirectory);
-    const directoryHtml = response.data;
-    const $ = cheerio.load(directoryHtml);
-    let directoryItems = $('ul li a')
-      .map((index, element) => ({
-        name: $(element).text(),
-        link: $(element).attr('href')
-      }))
-      .get();
-    directoryItems = directoryItems.filter((item) => !item.name.startsWith('.'))
-    return directoryItems;
+    try {
+      const response = await axios.get(offlineCurrentDirectory);
+      const directoryHtml = response.data;
+      const $ = cheerio.load(directoryHtml);
+      let directoryItems = $('ul li a')
+        .map((index, element) => ({
+          name: $(element).text(),
+          link: $(element).attr('href')
+        }))
+        .get();
+      directoryItems = directoryItems.filter((item) => !item.name.startsWith('.'))
+      setShowIpInput(false);
+      return directoryItems;
+
+    } catch (err: any) {
+      console.log("error while fetching directory items", err);
+      setShowIpInput(true);
+      return [];
+    }
   }
 
   const fetchDirectoryListing = async (directoryUrl: string) => {
@@ -252,15 +260,41 @@ export const Offline = () => {
     setOfflineCurrentDirectory(parentDirectoryUrl);
   };
 
+  function isIPAddress(input: any) {
+    console.log("Check Input : ", input);
+    // Regular expression to match IPv4 address format
+    const ipv4Pattern = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
+
+    // Regular expression to match IPv6 address format
+    const ipv6Pattern = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
+
+    // Check if input matches either IPv4 or IPv6 pattern
+    return ipv4Pattern.test(input) || ipv6Pattern.test(input);
+  }
+
+  const handleIPChange = () => {
+    console.log("Hi");
+    if (!isIPAddress(ipAddress)) {
+      ToastAndroid.showWithGravity(
+        'Enter an IP adress in correct format',
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+      return;
+    }
+    setOfflineCurrentDirectory(`http://${ipAddress}:6969/Desktop/`);
+  }
 
   return (
     <View style={{ flex: 1 }} className='bg-[#1A1A1A]'>
       <Navbar />
-      <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10 }}>
-        <TouchableOpacity onPress={handleBackPress}>
+      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
+        {/* <TouchableOpacity onPress={handleBackPress}>
           <Text style={{ color: 'yellow', marginRight: 20 }}>Back</Text>
         </TouchableOpacity>
-        <Text style={{ marginLeft: 10 }} className='text-white'>Current Directory: {offlineCurrentDirectory}</Text>
+        <Text style={{ marginLeft: 10 }} className='text-white'>Current Directory: {offlineCurrentDirectory}</Text> */}
+        {showIpInput && <TextInput placeholder='Enter Ip' className='' onChangeText={(text) => { setIpAddress(text) }} style={{ backgroundColor: 'white', width: 200, marginRight: 20, padding: 4, }} />}
+        {showIpInput && <Button title='Submit' color="#8E89BA" onPress={() => { console.log("HiHi"); handleIPChange() }} />}
       </View>
       <OfflineBatches />
       {/* <FlatList
