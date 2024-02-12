@@ -15,10 +15,10 @@ export default function PDFViewer({ route }: any) {
 
   return (
     <View>
-      {/* <Pdf trustAllCerts={false} style={{
+      <Pdf trustAllCerts={false} style={{
         height: windowHeight,
         width: windowWidth,
-      }} source={{ uri: pdfUrl, cache: true }} /> */}
+      }} source={{ uri: pdfUrl, cache: true }} />
     </View>
   );
 }
