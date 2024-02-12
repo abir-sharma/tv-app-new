@@ -61,7 +61,7 @@ export default function NavbarDetails({selectedMenu, setSelectedMenu, setContent
         <Pressable
         hasTVPreferredFocus={true}
         android_ripple={{
-            color: "rgba(255,255,255,0.2)",
+            color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
             foreground: true
@@ -115,7 +115,7 @@ export default function NavbarDetails({selectedMenu, setSelectedMenu, setContent
         <View className='bg-white/10 rounded-xl flex-row gap-x-5 py-2 pr-5' >
             <Pressable hasTVPreferredFocus={true}
                 android_ripple={{
-                    color: "rgba(255,255,255,0.2)",
+                    color: "rgba(255,255,255,0.4)",
                     borderless: false,
                     radius: 1000,
                     foreground: true
@@ -124,7 +124,7 @@ export default function NavbarDetails({selectedMenu, setSelectedMenu, setContent
             </Pressable>
             <Pressable hasTVPreferredFocus={true}
                 android_ripple={{
-                    color: "rgba(255,255,255,0.2)",
+                    color: "rgba(255,255,255,0.4)",
                     borderless: false,
                     radius: 1000,
                     foreground: true
@@ -133,7 +133,7 @@ export default function NavbarDetails({selectedMenu, setSelectedMenu, setContent
             </Pressable>
             <Pressable hasTVPreferredFocus={true}
                 android_ripple={{
-                    color: "rgba(255,255,255,0.2)",
+                    color: "rgba(255,255,255,0.4)",
                     borderless: false,
                     radius: 1000,
                     foreground: true
@@ -142,7 +142,7 @@ export default function NavbarDetails({selectedMenu, setSelectedMenu, setContent
             </Pressable>
             <Pressable hasTVPreferredFocus={true}
                 android_ripple={{
-                    color: "rgba(255,255,255,0.2)",
+                    color: "rgba(255,255,255,0.4)",
                     borderless: false,
                     radius: 1000,
                     foreground: true
@@ -150,7 +150,7 @@ export default function NavbarDetails({selectedMenu, setSelectedMenu, setContent
               <Text className="font-normal text-sm text-white">DPP PDF</Text>
             </Pressable>
             <Pressable android_ripple={{
-                    color: "rgba(255,255,255,0.2)",
+                    color: "rgba(255,255,255,0.4)",
                     borderless: false,
                     radius: 1000,
                     foreground: true

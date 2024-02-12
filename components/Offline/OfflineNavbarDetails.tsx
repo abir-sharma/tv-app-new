@@ -33,7 +33,7 @@ export default function OfflineNavbarDetails() {
       <Pressable
         hasTVPreferredFocus={true}
         android_ripple={{
-          color: "rgba(255,255,255,0.2)",
+          color: "rgba(255,255,255,0.4)",
           borderless: false,
           radius: 1000,
           foreground: true
@@ -85,7 +85,7 @@ export default function OfflineNavbarDetails() {
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
-            color: "rgba(255,255,255,0.2)",
+            color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
             foreground: true
@@ -106,7 +106,7 @@ export default function OfflineNavbarDetails() {
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
-            color: "rgba(255,255,255,0.2)",
+            color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
             foreground: true
@@ -126,7 +126,7 @@ export default function OfflineNavbarDetails() {
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
-            color: "rgba(255,255,255,0.2)",
+            color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
             foreground: true
@@ -147,7 +147,7 @@ export default function OfflineNavbarDetails() {
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
-            color: "rgba(255,255,255,0.2)",
+            color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
             foreground: true
@@ -168,7 +168,7 @@ export default function OfflineNavbarDetails() {
         <Pressable
           android_ripple={
             {
-              color: "rgba(255,255,255,0.2)",
+              color: "rgba(255,255,255,0.4)",
               borderless: false,
               radius: 1000,
               foreground: true

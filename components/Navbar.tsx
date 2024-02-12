@@ -54,7 +54,7 @@ export default function Navbar() {
           <Text className='text-white'>Online</Text>
         </Pressable>
         <Pressable android_ripple={{
-          color: "rgba(255,255,255,0.2)",
+          color: "rgba(255,255,255,0.4)",
           borderless: false,
           radius: 1000,
           foreground: true

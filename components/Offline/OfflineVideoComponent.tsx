@@ -22,7 +22,7 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
       style={{ flex: 1 / 4 }}
       className=' m-2 overflow-hidden rounded-3xl bg-white/5'
       android_ripple={{
-        color: "rgba(255,255,255,0.2)",
+        color: "rgba(255,255,255,0.4)",
         borderless: false,
         radius: 1000,
         foreground: true
