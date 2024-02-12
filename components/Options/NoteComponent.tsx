@@ -31,7 +31,7 @@ export const NoteComponent = ({noteList, setNoteList, loadMore, getPaidBatches}:
         foreground: true
       }}
       hasTVPreferredFocus onPress={()=>{
-        console.log("Go to PDF Viewer", item.homeworkIds[0].attachmentIds[0].baseUrl + item.homeworkIds[0].attachmentIds[0].key);
+        // console.log("Go to PDF Viewer", item.homeworkIds[0].attachmentIds[0].baseUrl + item.homeworkIds[0].attachmentIds[0].key);
         // @ts-expect-error
         navigation.navigate('PDFViewer', {
           pdfUrl: item?.homeworkIds[0]?.attachmentIds[0]?.baseUrl + item?.homeworkIds[0]?.attachmentIds[0]?.key
