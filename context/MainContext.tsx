@@ -47,8 +47,8 @@ type GlobalContextType = {
   setOfflineCurrentDirectory: Dispatch<SetStateAction<string>>;
   offlineDirectoryListings: any;
   setOfflineDirectoryListings: Dispatch<SetStateAction<any>>;
-  offlineBatches: ItemType[];
-  setOfflineBatches: Dispatch<SetStateAction<ItemType[]>>;
+  offlineBatches: ItemType2[];
+  setOfflineBatches: Dispatch<SetStateAction<ItemType2[]>>;
   offlineSelectedBatch: number;
   setOfflineSelectedBatch: Dispatch<SetStateAction<number>>;
   offlineSubjects: ItemType[];
@@ -160,7 +160,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
   const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.1.16:6969/Desktop/");
   const [offlineDirectoryListings, setOfflineDirectoryListings] = useState<any>([]);
-  const [offlineBatches, setOfflineBatches] = useState<ItemType[]>([]);
+  const [offlineBatches, setOfflineBatches] = useState<ItemType2[]>([]);
   const [offlineSelectedBatch, setOfflineSelectedBatch] = useState<number>(0);
   const [offlineSubjects, setOfflineSubjects] = useState<ItemType[]>([]);
   const [offlineSelectedSubject, setOfflineSelectedSubject] = useState<number>(0);

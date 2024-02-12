@@ -4,6 +4,8 @@ import { ItemType, NoteType, VideoType } from '../../types/types';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { useGlobalContext } from '../../context/MainContext';
+// @ts-expect-error
+import defaultIcon from '../../assets/icon.png';
 
 type NotePropType = {
   noteList: ItemType[] | null,
@@ -37,9 +39,12 @@ export const OfflineNoteComponent = ({ noteList }: NotePropType) => {
       }}>
       <View>
         <View>
-          {item?.thumbnail && <Image
+          {item.defaultThumbnail ? <Image
             style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
             source={{ uri: `${item?.thumbnail}` }}
+          /> : <Image
+            style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+            source={defaultIcon}
           />}
         </View>
         <View style={{ padding: 16 }}>

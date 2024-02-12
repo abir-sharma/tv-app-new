@@ -274,6 +274,7 @@ export type ItemType2 = {
   id: number
   path: string,
   thumbnail: string,
+  defaultThumbnail: boolean,
 }
 
 type HomeworkItem = {

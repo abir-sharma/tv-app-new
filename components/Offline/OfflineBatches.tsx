@@ -1,8 +1,10 @@
 /// <reference types="nativewind/types" />
 
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
+// @ts-expect-error
+import defaultIcon from '../../assets/icon.png';
 
 export default function OfflineBatches(params: any) {
 
@@ -30,12 +32,19 @@ export default function OfflineBatches(params: any) {
                         }}
                         className='bg-white/10 rounded-2xl h-52 w-72 overflow-hidden'
                     >
-                        <View className="w-full h-40 bg-white/40 overflow-hidden">
-                            {/* {order?.thumbnailImageLink && <Image
-                            style={{width: '100%', height: 170, objectFit: 'cover', borderRadius: 5}}
-                            source={{uri: `${order?.thumbnailImageLink}`}}
-                        />} */}
-                        </View>
+                        {batch?.thumbnail && <View className="w-full h-40 bg-white/40 overflow-hidden">
+                            {/* <Image
+                                style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+                                source={{ uri: `${batch?.thumbnail}` }}
+                            /> */}
+                            {batch.defaultThumbnail ? <Image
+                                style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+                                source={{ uri: `${batch?.thumbnail}` }}
+                            /> : <Image
+                                style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+                                source={defaultIcon}
+                            />}
+                        </View>}
                         <View className='p-2 relative px-5'>
                             <Text className='text-white text-xs font-medium'>{batch.name}</Text>
                             <Text className='text-white text-xs font-light'>Starts On <Text className='text-white text-xs font-medium'>14th Feb 2023</Text></Text>

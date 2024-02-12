@@ -4,6 +4,8 @@ import { ItemType, VideoType } from '../../types/types';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { useGlobalContext } from '../../context/MainContext';
+// @ts-expect-error
+import defaultIcon from '../../assets/icon.png';
 
 type VideoPropType = {
   videoList: ItemType[] | null,
@@ -34,9 +36,12 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
       }}>
       <View >
         <View>
-          {item?.thumbnail && <Image
-            style={{ width: '100%', height: 135, objectFit: 'cover', borderRadius: 20, }}
+          {item.defaultThumbnail ? <Image
+            style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
             source={{ uri: `${item?.thumbnail}` }}
+          /> : <Image
+            style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+            source={defaultIcon}
           />}
         </View>
         <View className='p-2'>
