@@ -8,6 +8,7 @@ import Navbar from '../components/Navbar';
 import { useGlobalContext } from '../context/MainContext';
 import { ItemType, ItemType2 } from '../types/types';
 import OfflineBatches from '../components/Offline/OfflineBatches';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // import Video from 'react-native-video';
 
 
@@ -36,6 +37,7 @@ export const Offline = () => {
     //     .catch((err) => console.log("error while fetching IP.", err))
     // }
     // fetchIPAddress();
+
     fetchDirectoryListing(offlineCurrentDirectory);
   }, [offlineCurrentDirectory]);
 
@@ -329,6 +331,7 @@ export const Offline = () => {
       return;
     }
     setOfflineCurrentDirectory(`http://${ipAddress}:6969/Desktop/`);
+    AsyncStorage.setItem("iP", ipAddress);
     fetchBatches();
   }
 
