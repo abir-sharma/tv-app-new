@@ -11,6 +11,7 @@ import Chapters from '../components/Chapters';
 import axios from 'axios';
 import { VideoComponent } from '../components/Options/VideoComponent';
 import { NoteComponent } from '../components/Options/NoteComponent';
+import { DppComponent } from '../components/Options/DppComponent';
 
 export default function Details({ navigation }: any) {
 
@@ -111,6 +112,7 @@ export default function Details({ navigation }: any) {
           <View>
             {selectedMenu == 0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreVideos} />}
             {selectedMenu == 1 && <NoteComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreNotes} />}
+            {selectedMenu == 2 && <DppComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreNotes} />}
             {selectedMenu == 3 && <NoteComponent noteList={dppNoteList} setNoteList={setDppNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreDppNotes} />}
             {selectedMenu == 4 && <VideoComponent videoList={dppVideoList} setVideoList={setDppVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreDppVideos} />}
           </View>

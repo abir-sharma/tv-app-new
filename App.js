@@ -5,6 +5,7 @@ import Home from './screens/Home'
 import Login from './screens/Login'
 import Details from './screens/Details'
 import Videos from './screens/Videos'
+import Tests from './screens/Tests'
 import PDFViewer from './components/pdf-viewer/pdf-viewer';
 import MP4Player from './components/mp4-player/mp4-player';
 import { Offline } from './screens/Offline';
@@ -22,6 +23,7 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
           <Stack.Screen name="Videos" component={Videos} options={{ headerShown: false }} />
+          <Stack.Screen name="Tests" component={Tests} options={{ headerShown: false }} />
           <Stack.Screen name="PDFViewer" component={PDFViewer} options={{ headerShown: false }} />
           <Stack.Screen name="Offline" component={Offline} options={{ headerShown: false }} />
           <Stack.Screen name="OfflineDetails" component={OfflineDetails} options={{ headerShown: false }} />
