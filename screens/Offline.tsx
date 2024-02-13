@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button, ToastAndroid, Pressable } from 'react-native';
 import axios from 'axios';
 import cheerio from 'cheerio';
@@ -354,6 +354,8 @@ export const Offline = () => {
     fetchBatches();
   }
 
+  const ipInputRef = useRef<TextInput>(null);
+
   return (
     <View style={{ flex: 1 }} className='bg-[#1A1A1A]'>
       <Navbar />
@@ -362,11 +364,21 @@ export const Offline = () => {
           <Text style={{ color: 'yellow', marginRight: 20 }}>Back</Text>
         </TouchableOpacity>
         <Text style={{ marginLeft: 10 }} className='text-white'>Current Directory: {offlineCurrentDirectory}</Text> */}
-        {showIpInput && <TextInput autoFocus={true} placeholder='Enter Ip' className=' rounded-lg pl-4 overflow-hidden ' onChangeText={(text) => { setIpAddress(text) }} style={{ backgroundColor: 'white', width: 200, marginRight: 20, padding: 4, }} />}
+        {showIpInput && <Pressable
+        android_ripple={{
+          color: "rgba(255,255,255,0.4)",
+          borderless: false,
+          radius: 1000,
+          foreground: true
+        }}
+        className=' mr-5 overflow-hidden rounded-lg '
+        onPress={() => ipInputRef.current?.focus()}
+
+        ><TextInput ref={ipInputRef} autoFocus={true} placeholder='Enter Ip' className=' text-white bg-[#0d0d0d] rounded-lg p-2 px-4 w-64 overflow-hidden' placeholderTextColor={"#00000"} onChangeText={(text) => { setIpAddress(text) }} /></Pressable>}
         {showIpInput &&
           <Pressable
             android_ripple={{
-              color: "rgba(255,255,255,0.4)",
+              color: "rgba(2505,255,255,0.8)",
               borderless: false,
               radius: 1000,
               foreground: true

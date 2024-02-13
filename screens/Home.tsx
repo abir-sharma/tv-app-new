@@ -7,6 +7,7 @@ import Recent from '../components/Recent';
 import { useEffect } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default function Home({ navigation }: any) {
 
@@ -17,7 +18,13 @@ export default function Home({ navigation }: any) {
       setHeaders({
         Authorization: `Bearer ${await AsyncStorage.getItem("token")}`
       })
-      console.log("already logged in");
+      try{
+        const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", {Authorization: `Bearer ${await AsyncStorage.getItem("token")}`});        
+      }catch(err){
+        // console.log("error token check: ", err);
+        await AsyncStorage.removeItem("token");
+        mainNavigation.navigate('Login')
+      }
       mainNavigation.navigate('Home')
     }
     else {

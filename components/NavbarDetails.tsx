@@ -43,6 +43,12 @@ export default function NavbarDetails({selectedMenu, setSelectedMenu, setContent
 
   const renderItem = ({ item }:any) => (
     <Pressable
+    android_ripple={{
+      color: "rgba(255,255,255,0.4)",
+      borderless: false,
+      radius: 1000,
+      foreground: true
+  }}
       style={styles.dropdownItem}
       onPress={() => {
         setSelectedSubject(item);
