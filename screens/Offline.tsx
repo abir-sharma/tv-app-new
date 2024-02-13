@@ -66,7 +66,7 @@ export const Offline = () => {
           name: item.name.slice(3, -1).trim(),
           path: offlineCurrentDirectory + item.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -1) + '.png' : '../assets/icon.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -1) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -145,7 +145,7 @@ export const Offline = () => {
           name: item.name.slice(0, -4).trim(),
           path: offlineCurrentDirectory + item.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/icon.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -165,7 +165,7 @@ export const Offline = () => {
           name: item.name.slice(0, -4).trim(),
           path: offlineCurrentDirectory + item.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/icon.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -185,7 +185,7 @@ export const Offline = () => {
           name: item.name.slice(0, -4).trim(),
           path: offlineCurrentDirectory + item.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/icon.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -205,7 +205,7 @@ export const Offline = () => {
           name: item.name.slice(0, -4).trim(),
           path: offlineCurrentDirectory + item.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/icon.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -224,7 +224,7 @@ export const Offline = () => {
           name: item.name.slice(0, -4).trim(),
           path: offlineCurrentDirectory + item.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/icon.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }

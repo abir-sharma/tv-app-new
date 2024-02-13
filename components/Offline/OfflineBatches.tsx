@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
-import defaultIcon from '../../assets/default.jpg';
+import defaultIcon from '../../assets/TV.png';
 
 export default function OfflineBatches(params: any) {
 
@@ -30,18 +30,18 @@ export default function OfflineBatches(params: any) {
                             setDirectoryLevel(1);
                             mainNavigation?.navigate('OfflineDetails');
                         }}
-                        className='bg-white/10 rounded-2xl h-52 w-72 overflow-hidden'
+                        className='bg-white/10 rounded-xl h-52 w-72 overflow-hidden'
                     >
-                        {batch?.thumbnail && <View className="w-full h-40 bg-white/40 overflow-hidden">
+                        {batch?.thumbnail && <View className="w-full h-40 bg-white/10 overflow-hidden">
                             {/* <Image
                                 style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
                                 source={{ uri: `${batch?.thumbnail}` }}
                             /> */}
                             {batch.defaultThumbnail ? <Image
-                                style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+                                style={{ width: '100%', height: 168, objectFit: 'cover', borderRadius: 5 }}
                                 source={{ uri: `${batch?.thumbnail}` }}
                             /> : <Image
-                                style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+                                style={{ width: '100%', height: 168, objectFit: 'cover', borderRadius: 5 }}
                                 source={defaultIcon}
                             />}
                         </View>}

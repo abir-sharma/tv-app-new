@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
-import defaultIcon from '../../assets/default.jpg';
+import defaultIcon from '../../assets/TV.png';
 
 type NotePropType = {
   noteList: ItemType[] | null,
@@ -25,7 +25,7 @@ export const OfflineNoteComponent = ({ noteList }: NotePropType) => {
   const renderGridItem = ({ item }: any) => (
     <Pressable
       style={{ flex: 1 / 4 }}
-      className=' m-1 overflow-hidden rounded-3xl bg-white/5'
+      className=' m-1 overflow-hidden rounded-xl bg-white/5'
       android_ripple={{
         color: "rgba(255,255,255,0.4)",
         borderless: false,
@@ -40,14 +40,14 @@ export const OfflineNoteComponent = ({ noteList }: NotePropType) => {
       <View>
         <View>
           {item.defaultThumbnail ? <Image
-            style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+            style={{ width: '100%', height: 142, objectFit: 'cover', borderRadius: 5 }}
             source={{ uri: `${item?.thumbnail}` }}
           /> : <Image
-            style={{ width: '100%', height: 160, objectFit: 'contain', borderRadius: 5 }}
+            style={{ width: '100%', height: 142, objectFit: 'contain', borderRadius: 5 }}
             source={defaultIcon}
           />}
         </View>
-        <View style={{ padding: 16 }}>
+        <View style={{ padding: 16, paddingTop: 0 }}>
           <Text className='text-sm text-white font-medium my-2'>{item?.name?.length >= 60 ? `${item?.name?.substring(0, 60)}...` : item?.name}</Text>
           <View className='bg-white/5 rounded-xl flex-row justify-between items-center px-3 py-2 mt-3' >
             <TouchableOpacity onPress={() => {

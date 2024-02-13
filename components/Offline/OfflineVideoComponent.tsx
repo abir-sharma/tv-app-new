@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
-import defaultIcon from '../../assets/default.jpg';
+import defaultIcon from '../../assets/TV.png';
 
 type VideoPropType = {
   videoList: ItemType[] | null,
@@ -22,7 +22,7 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
   const renderGridItem = ({ item }: any) => (
     <Pressable
       style={{ flex: 1 / 4 }}
-      className=' m-2 overflow-hidden rounded-3xl bg-white/5'
+      className=' m-2 overflow-hidden rounded-xl bg-white/5'
       android_ripple={{
         color: "rgba(255,255,255,0.4)",
         borderless: false,
@@ -37,10 +37,10 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
       <View >
         <View>
           {item.defaultThumbnail ? <Image
-            style={{ width: '100%', height: 160, objectFit: 'contain', borderRadius: 5 }}
+            style={{ width: '100%', height: 142, objectFit: 'contain', borderRadius: 5 }}
             source={{ uri: `${item?.thumbnail}` }}
           /> : <Image
-            style={{ width: '100%', height: 160, objectFit: 'contain', borderRadius: 5 }}
+            style={{ width: '100%', height: 142, objectFit: 'contain', borderRadius: 5 }}
             source={defaultIcon}
           />}
         </View>

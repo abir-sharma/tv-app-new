@@ -158,7 +158,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
-  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.16.1.16:6969/Desktop/");
+  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.1.16:6969/Desktop/");
   const [offlineDirectoryListings, setOfflineDirectoryListings] = useState<any>([]);
   const [offlineBatches, setOfflineBatches] = useState<ItemType2[]>([]);
   const [offlineSelectedBatch, setOfflineSelectedBatch] = useState<number>(0);
@@ -182,7 +182,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     const getIP = async () => {
       try {
         const ip = await AsyncStorage.getItem("iP")
-        // setOfflineCurrentDirectory(`http://${ip}:6969/Desktop/`);
+        setOfflineCurrentDirectory(`http://${ip}:6969/Desktop/`);
       } catch (err) {
         console.log("Error while fetchin Ip from local storage : ", err)
       }
