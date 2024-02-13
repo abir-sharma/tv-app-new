@@ -9,6 +9,8 @@ import { useGlobalContext } from '../context/MainContext';
 import { ItemType, ItemType2 } from '../types/types';
 import OfflineBatches from '../components/Offline/OfflineBatches';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import analytics from '@react-native-firebase/analytics';
+
 // import Video from 'react-native-video';
 
 
@@ -249,6 +251,12 @@ export const Offline = () => {
 
     } catch (err: any) {
       console.log("error while fetching directory items", err);
+      // await analytics().logEvent("Axios Error: ", { err })
+      ToastAndroid.showWithGravity(
+        err.message,
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
       setShowIpInput(true);
       return [];
     }
@@ -322,6 +330,11 @@ export const Offline = () => {
 
   const handleIPChange = () => {
     console.log("Hi");
+    ToastAndroid.showWithGravity(
+      'Checking Ip',
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
     if (!isIPAddress(ipAddress)) {
       ToastAndroid.showWithGravity(
         'Enter an IP adress in correct format',
@@ -330,6 +343,12 @@ export const Offline = () => {
       );
       return;
     }
+    console.log(`http://${ipAddress}:6969/Desktop/`)
+    ToastAndroid.showWithGravity(
+      'Ip checked!!',
+      ToastAndroid.SHORT,
+      ToastAndroid.CENTER,
+    );
     setOfflineCurrentDirectory(`http://${ipAddress}:6969/Desktop/`);
     AsyncStorage.setItem("iP", ipAddress);
     fetchBatches();
@@ -353,14 +372,25 @@ export const Offline = () => {
               foreground: true
             }}
 
-            onPress={() => {
-              console.log("HiHi"); handleIPChange()
-            }}
+            // onPress={() => {
+            //   handleIPChange()
+            // }}
             className='bg-[#8E89BA] w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
-            <Text className='text-white text-center w-full text-base'>Enter IP</Text>
+            <TouchableOpacity onPress={() => {
+              console.log("Hi");
+              handleIPChange()
+            }}
+            >
+
+              <Text className='text-white text-center w-full text-base'>Enter IP</Text>
+            </TouchableOpacity>
           </Pressable>}
 
       </View>
+      {/* 
+      <TouchableOpacity onPress={() => console.log("Hiiiiiiii")}>
+        Testing
+      </TouchableOpacity> */}
       <OfflineBatches />
       {/* <FlatList
         data={directoryListing}

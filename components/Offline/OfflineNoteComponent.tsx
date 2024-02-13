@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
-import defaultIcon from '../../assets/icon.png';
+import defaultIcon from '../../assets/default.jpg';
 
 type NotePropType = {
   noteList: ItemType[] | null,
@@ -43,7 +43,7 @@ export const OfflineNoteComponent = ({ noteList }: NotePropType) => {
             style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
             source={{ uri: `${item?.thumbnail}` }}
           /> : <Image
-            style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+            style={{ width: '100%', height: 160, objectFit: 'contain', borderRadius: 5 }}
             source={defaultIcon}
           />}
         </View>

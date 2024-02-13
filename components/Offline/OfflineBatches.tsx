@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
-import defaultIcon from '../../assets/icon.png';
+import defaultIcon from '../../assets/default.jpg';
 
 export default function OfflineBatches(params: any) {
 
