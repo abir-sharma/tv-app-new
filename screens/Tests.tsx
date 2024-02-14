@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, Image, Pressable } from 'react-native'
 import { useGlobalContext } from '../context/MainContext'
 
-const Tests = ({ route }: any) => {
+const Tests = ({ navigation, route }: any) => {
     const { testData } = useGlobalContext();
+
 
     const [totalQuestions, setTotalQuestions] = useState<number>(0);
     const [currentQuestion, setCurrentQuestion] = useState<any>();
@@ -42,7 +43,12 @@ const Tests = ({ route }: any) => {
                             borderless: false,
                             radius: 1000,
                             foreground: true
-                        }} className='bg-[#5A4BDA] rounded-xl px-5 py-2 ml-4 overflow-hidden'>
+                        }}
+                        className='bg-[#5A4BDA] rounded-xl px-5 py-2 ml-4 overflow-hidden'
+                        onPress={() => {
+                            navigation.navigate('TestSolutions')
+                        }}
+                    >
                         <Text className='text-white text-lg'>Submit Test</Text>
                     </Pressable>
                 </View>
@@ -55,47 +61,52 @@ const Tests = ({ route }: any) => {
                     <View className='bg-[#8E89BA] px-4 py-2 rounded-lg'>
                         <Text className='text-white text-center'>{2}</Text>
                     </View>
-                    <View className='bg-white/10 w-[2px] h-full mx-3'></View>
-                    <View className='bg-white/10 px-4 py-2 mr-3 rounded-lg'>
-                        <Text className='text-white text-center'>{"Marks"} <Text className='text-green-500'> +4 </Text> <Text className='text-red-500'> -1 </Text> </Text>
-                    </View>
-                    <View className='bg-white/10 px-4 py-2 mr-auto rounded-lg'>
-                        <Text className='text-white text-center'>{"Type: Single"} </Text>
+                    <View className='flex flex-row mt-4'>
+                        <View className='bg-[#8E89BA] px-4 py-2 rounded-lg'>
+                            <Text className='text-white text-center'>{2}</Text>
+                        </View>
+                        <View className='bg-white/10 w-[2px] h-full mx-3'></View>
+                        <View className='bg-white/10 px-4 py-2 mr-3 rounded-lg'>
+                            <Text className='text-white text-center'>{"Marks"} <Text className='text-green-500'> +4 </Text> <Text className='text-red-500'> -1 </Text> </Text>
+                        </View>
+                        <View className='bg-white/10 px-4 py-2 mr-auto rounded-lg'>
+                            <Text className='text-white text-center'>{"Type: Single"} </Text>
+                        </View>
                     </View>
                 </View>
-            </View>
-            <View className='flex-1 flex-row w-full rounded-xl mt-10 gap-x-5'>
-                <View className='flex-[3] h-[380]'>
-                    <View className='flex-1 bg-white/5 rounded-xl'>
+                <View className='flex-1 flex-row w-full rounded-xl mt-10 gap-x-5'>
+                    <View className='flex-[3] h-[380]'>
+                        <View className='flex-1 bg-white/5 rounded-xl'>
 
+                        </View>
+                        <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 1000,
+                                foreground: true
+                            }} className='bg-[#A79EEB] rounded-xl px-5 mr-auto mt-2 py-2 overflow-hidden'>
+                            <Text className='text-white text-lg'>Previous</Text>
+                        </Pressable>
                     </View>
-                    <Pressable
-                        hasTVPreferredFocus={true}
-                        android_ripple={{
-                            color: "rgba(255,255,255,0.5)",
-                            borderless: false,
-                            radius: 1000,
-                            foreground: true
-                        }} className='bg-[#A79EEB] rounded-xl px-5 mr-auto mt-2 py-2 overflow-hidden'>
-                        <Text className='text-white text-lg'>Previous</Text>
-                    </Pressable>
-                </View>
-                <View className='flex-[2] rounded-xl items-start justify-start px-5 py-3'>
-                    <Text className='text-white text-lg text-center'>Options:</Text>
-                    <View className='gap-y-2 mt-5 w-full'>
-                        <View className='bg-white/5 px-5 py-5 rounded-lg'>
-                            <Text className='text-white'> {"a.    "} <Text className='text-white'> {" 5,7 "} </Text></Text>
-                        </View>
-                        <View className='bg-white/5 px-5 py-5 rounded-lg'>
-                            <Text className='text-white'> {"b.    "} <Text className='text-white'> {" 7,5 "} </Text></Text>
-                        </View>
-                        <View className='bg-white/5 px-5 py-5 rounded-lg'>
-                            <Text className='text-white'> {"c.    "} <Text className='text-white'> {" 2,3 "} </Text></Text>
-                        </View>
-                        <View className='bg-white/5 px-5 py-5 rounded-lg'>
-                            <Text className='text-white'> {"d.    "} <Text className='text-white'> {" 5,3 "} </Text></Text>
-                        </View>
+                    <View className='flex-[2] rounded-xl items-start justify-start px-5 py-3'>
+                        <Text className='text-white text-lg text-center'>Options:</Text>
+                        <View className='gap-y-2 mt-5 w-full'>
+                            <View className='bg-white/5 px-5 py-5 rounded-lg'>
+                                <Text className='text-white'> {"a.    "} <Text className='text-white'> {" 5,7 "} </Text></Text>
+                            </View>
+                            <View className='bg-white/5 px-5 py-5 rounded-lg'>
+                                <Text className='text-white'> {"b.    "} <Text className='text-white'> {" 7,5 "} </Text></Text>
+                            </View>
+                            <View className='bg-white/5 px-5 py-5 rounded-lg'>
+                                <Text className='text-white'> {"c.    "} <Text className='text-white'> {" 2,3 "} </Text></Text>
+                            </View>
+                            <View className='bg-white/5 px-5 py-5 rounded-lg'>
+                                <Text className='text-white'> {"d.    "} <Text className='text-white'> {" 5,3 "} </Text></Text>
+                            </View>
 
+                        </View>
                     </View>
                 </View>
             </View>
