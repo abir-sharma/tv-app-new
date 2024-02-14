@@ -117,32 +117,32 @@ export default function VideoPlayer(props: any) {
     <View style={{ minHeight: '100%' }} className='bg-[#1A1A1A]'>
       <View className='absolute bottom-2 left-2 z-[2] flex-row'>
       <Pressable 
-      android_ripple={{
-                    color: "rgba(255,255,255,0.5)",
-                    borderless: false,
-                    radius: 1000,
-                    foreground: true
-                }}
-      onPress={()=>{skipBackward()}} className='bg-black/40 overflow-hidden rounded-xl px-3 py-1'>
-        <Text className='text-white text-lg font-medium'>{"<<"}</Text>
-      </Pressable>
-      <Pressable 
-      android_ripple={{
-                    color: "rgba(255,255,255,0.5)",
-                    borderless: false,
-                    radius: 1000,
-                    foreground: true
-                }}
-      onPress={()=>{isPlaying? pauseVideo(): playVideo()}} className='bg-black/40 overflow-hidden rounded-xl ml-2 px-3 py-1'>
-        <Text className='text-white text-lg font-medium'>{isPlaying? "Pause": "Play"}</Text>
-      </Pressable>
-      <Pressable 
-      android_ripple={{
-                    color: "rgba(255,255,255,0.5)",
-                    borderless: false,
-                    radius: 1000,
-                    foreground: true
-                }}
+        android_ripple={{
+            color: "rgba(255,255,255,0.5)",
+            borderless: false,
+            radius: 1000,
+            foreground: true
+        }}
+        onPress={()=>{skipBackward()}} className='bg-black/40 overflow-hidden rounded-xl px-3 py-1'>
+          <Text className='text-white text-lg font-medium'>{"<<"}</Text>
+        </Pressable>
+        <Pressable 
+        android_ripple={{
+            color: "rgba(255,255,255,0.5)",
+            borderless: false,
+            radius: 1000,
+            foreground: true
+        }}
+        onPress={()=>{isPlaying? pauseVideo(): playVideo()}} className='bg-black/40 overflow-hidden rounded-xl ml-2 px-3 py-1'>
+          <Text className='text-white text-lg font-medium'>{isPlaying? "Pause": "Play"}</Text>
+        </Pressable>
+        <Pressable 
+        android_ripple={{
+            color: "rgba(255,255,255,0.5)",
+            borderless: false,
+            radius: 1000,
+            foreground: true
+        }}
       onPress={()=>{skipForward()}} className='bg-black/40 overflow-hidden rounded-xl ml-2 px-3 py-1'>
         <Text className='text-white text-lg font-medium'>{">>"}</Text>
       </Pressable>
