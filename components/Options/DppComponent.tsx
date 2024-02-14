@@ -15,7 +15,7 @@ type DPPPropType = {
 
 export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }: DPPPropType) => {
 
-  const { mainNavigation, batchDetails, setSelectedDpp, headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
+  const { mainNavigation, setTestData, batchDetails, setSelectedDpp, headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
   const navigation = useNavigation();
 
   const [dppList, setDppList] = useState<QuizItemType[]>([]);
@@ -31,6 +31,7 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
       const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, options);
       const list: any[] = [];
       const data = res.data.data;
+      // console.log("DPP List: ", data);
       setDppList(data);
     }
     catch (err) {
@@ -40,6 +41,22 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
   useEffect(() => {
     getDPP();
   }, [])
+
+  const handleDppClick = async (item: any) => {
+    console.log("Selected quiz", item);
+    setSelectedDpp(item);
+    try {
+      const options = {
+        headers
+      }
+      const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Start&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`, options);
+      console.log("Data recieved!!");
+      setTestData(res.data.data);
+      mainNavigation.navigate('Tests');
+    } catch (err: any) {
+      console.log("Error while starting test!!", err?.response);
+    }
+  }
 
 
   const renderGridItem = ({ item }: any) => (
@@ -53,11 +70,7 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
         foreground: true
       }}
       hasTVPreferredFocus
-      onPress={() => {
-        mainNavigation.navigate('Tests');
-        setSelectedDpp(item);
-        console.log(item);
-      }}>
+      onPress={() => { handleDppClick(item) }}>
       <View className='w-full h-full flex-row justify-between items-center px-5'>
         <View>
           <Text className='text-white font-medium text-lg'>{item.test.name}</Text>

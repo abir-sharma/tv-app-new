@@ -75,6 +75,8 @@ type GlobalContextType = {
   setOfflineDppVideos: Dispatch<SetStateAction<ItemType2[]>>;
   offlineSelectedSection: number;
   setOfflineSelectedSection: Dispatch<SetStateAction<number>>;
+  testData: any | null;
+  setTestData: Dispatch<SetStateAction<any | null>>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -138,6 +140,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setOfflineDppVideos: () => { },
   offlineSelectedSection: 3,
   setOfflineSelectedSection: () => { },
+  testData: null,
+  setTestData: () => { },
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
@@ -160,6 +164,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [selectedDpp, setSelectedDpp] = useState<QuizItemType | null>(null);
+  const [testData, setTestData] = useState<any>(null);
 
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
@@ -296,6 +301,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         selectedSubject, setSelectedSubject,
         selectedChapter, setSelectedChapter,
         isOnline, setIsOnline,
+        testData, setTestData,
         directoryLevel, setDirectoryLevel,
         offlineCurrentDirectory, setOfflineCurrentDirectory,
         offlineDirectoryListings, setOfflineDirectoryListings,
