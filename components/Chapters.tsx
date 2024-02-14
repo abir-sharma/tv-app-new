@@ -21,7 +21,7 @@ export default function Chapters() {
       }}
       onPress={() => {
         setSelectedChapter(item);
-        console.log("Chapter selected: ", item.name);
+        console.log("Chapter selected: ", item._id);
 
       }}
     >

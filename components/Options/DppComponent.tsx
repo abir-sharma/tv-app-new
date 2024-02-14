@@ -1,35 +1,50 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Pressable } from 'react-native';
-import { NoteType, VideoType } from '../../types/types';
+import { NoteType, QuizItemType, VideoType } from '../../types/types';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { useGlobalContext } from '../../context/MainContext';
+import axios from 'axios';
 
 type DPPPropType = {
-    noteList: NoteType[] | null,
-    setNoteList: Dispatch<SetStateAction<NoteType[] | null>>,
-    loadMore: boolean,
-    getPaidBatches: any
+  noteList: NoteType[] | null,
+  setNoteList: Dispatch<SetStateAction<NoteType[] | null>>,
+  loadMore: boolean,
+  getPaidBatches: any
 }
 
-export const DppComponent = ({noteList, setNoteList, loadMore, getPaidBatches}: DPPPropType) => {
+export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }: DPPPropType) => {
 
-  const {mainNavigation, batchDetails} = useGlobalContext();
+  const { mainNavigation, batchDetails, setSelectedDpp, headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
   const navigation = useNavigation();
 
-  const getDPP = async () => {
-    try{
+  const [dppList, setDppList] = useState<QuizItemType[]>([]);
 
+  const getDPP = async () => {
+    try {
+      const options = {
+        headers
+      }
+      console.log(selectedBatch);
+      console.log(selectedSubject);
+      console.log(selectedChapter);
+      const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, options);
+      const list: any[] = [];
+      const data = res.data.data;
+      setDppList(data);
     }
-    catch(err){
-        console.log("Error in getDPP:", err);   
+    catch (err) {
+      console.log("Error in getDPP:", err);
     }
   }
-  
+  useEffect(() => {
+    getDPP();
+  }, [])
+
 
   const renderGridItem = ({ item }: any) => (
     <Pressable
-      style={{flex: 1/4}}
+      style={{ flex: 1 / 4 }}
       className=' my-1 mr-5 overflow-hidden h-20 rounded-xl bg-white/5'
       android_ripple={{
         color: "rgba(255,255,255,0.4)",
@@ -38,46 +53,30 @@ export const DppComponent = ({noteList, setNoteList, loadMore, getPaidBatches}: 
         foreground: true
       }}
       hasTVPreferredFocus
-      onPress={()=>{
+      onPress={() => {
         mainNavigation.navigate('Tests');
-        }}>
-        <View className='w-full h-full flex-row justify-between items-center px-5'>
-            <View>
-                <Text className='text-white font-medium text-lg'>{"Basic Maths & Calculus : DPP 01  (MCQ Quiz)"}</Text>
-                <View className='flex-row'><Image source={require('../../assets/noteIcon.png')} className='w-5 h-5 mr-2' width={10} height={10} /><Text className='text-white font-normal text-sm'>{"10 Questions  |  40 Marks"}</Text></View>
-            </View>
-            <Image source={require('../../assets/goto.png')} className='w-10 h-10' width={10} height={10} />
+        setSelectedDpp(item);
+        console.log(item);
+      }}>
+      <View className='w-full h-full flex-row justify-between items-center px-5'>
+        <View>
+          <Text className='text-white font-medium text-lg'>{item.test.name}</Text>
+          <View className='flex-row'><Image source={require('../../assets/noteIcon.png')} className='w-5 h-5 mr-2' width={10} height={10} /><Text className='text-white font-normal text-sm'>{`${item.test.totalQuestions} Questions  |  ${item.test.totalMarks} Marks`}</Text></View>
         </View>
-        </Pressable>
-    );
-
-    const dppList = [
-        {
-            _id: "1",
-            title: "Basic Maths & Calculus : DPP 01  (MCQ Quiz)",
-            date: "2022-09-01"
-        },
-        {
-            _id: "2",
-            title: "Basic Maths & Calculus : DPP 02  (MCQ Quiz)",
-            date: "2022-09-01"
-        },
-        {
-            _id: "3",
-            title: "Basic Maths & Calculus : DPP 01  (MCQ Quiz)",
-            date: "2022-09-01"
-        }
-    ]
+        <Image source={require('../../assets/goto.png')} className='w-10 h-10' width={10} height={10} />
+      </View>
+    </Pressable>
+  );
 
   return (
     <View className='pt-5'>
       <FlatList
         data={dppList}
         renderItem={renderGridItem}
-        keyExtractor={(item:any) => item._id}
+        keyExtractor={(item: any) => item.test._id}
         numColumns={1}
-        // onEndReached={()=>{loadMore && getPaidBatches()}}
-        // contentContainerStyle={styles.container}
+      // onEndReached={()=>{loadMore && getPaidBatches()}}
+      // contentContainerStyle={styles.container}
       />
     </View>
   );

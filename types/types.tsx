@@ -298,3 +298,22 @@ export type NoteType = {
   dRoomId: string;
   isBatchDoubtEnabled: boolean;
 };
+
+
+export type QuizItemType = {
+  "test": {
+    "_id": string,
+    "displayOrder": number,
+    "name": string,
+    "totalMarks": number,
+    "totalQuestions": number,
+    "maxDuration": number,
+    "createdAt": string
+  },
+  "testStudentMapping": {},
+  "isPurchased": boolean,
+  "tag": string,
+  "isFree": boolean,
+  "scheduleId": string,
+  "contentId": string
+};

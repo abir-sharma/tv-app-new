@@ -8,7 +8,7 @@ import {
   ReactNode,
   useEffect
 } from "react";
-import { BatchDetails, BatchType, Order, Subject, TopicType, ItemType, ItemType2 } from "../types/types";
+import { BatchDetails, BatchType, Order, Subject, TopicType, ItemType, ItemType2, QuizItemType } from "../types/types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 
@@ -21,6 +21,8 @@ type GlobalContextType = {
   setSubscribedBatches: Dispatch<SetStateAction<BatchType[] | null>>;
   topicList: TopicType[] | null;
   setTopicList: Dispatch<SetStateAction<TopicType[] | null>>;
+  selectedDpp: QuizItemType | null;
+  setSelectedDpp: Dispatch<SetStateAction<QuizItemType | null>>;
   selectedBatch: BatchType | null;
   setSelectedBatch: Dispatch<SetStateAction<BatchType | null>>;
   batchDetails: BatchDetails | null;
@@ -82,6 +84,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setSubscribedBatches: () => { },
   topicList: null,
   setTopicList: () => { },
+  selectedDpp: null,
+  setSelectedDpp: () => { },
   selectedBatch: null,
   setSelectedBatch: () => { },
   batchDetails: null,
@@ -104,7 +108,7 @@ const GlobalContext = createContext<GlobalContextType>({
   setShowIpInput: () => { },
   directoryLevel: 0,
   setDirectoryLevel: () => { },
-  offlineCurrentDirectory: "http://192.168.1.16:6969/Desktop/",
+  offlineCurrentDirectory: "http://192.168.1.16:6969/Batches/",
   setOfflineCurrentDirectory: () => { },
   offlineDirectoryListings: [],
   setOfflineDirectoryListings: () => { },
@@ -155,10 +159,11 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [showLoadMore, setShowLoadMore] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isOnline, setIsOnline] = useState<boolean>(true);
+  const [selectedDpp, setSelectedDpp] = useState<QuizItemType | null>(null);
 
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
-  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.1.16:6969/Desktop/");
+  const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.1.16:6969/Batches/");
   const [offlineDirectoryListings, setOfflineDirectoryListings] = useState<any>([]);
   const [offlineBatches, setOfflineBatches] = useState<ItemType2[]>([]);
   const [offlineSelectedBatch, setOfflineSelectedBatch] = useState<number>(0);
@@ -173,7 +178,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [offlineDppPdf, setOfflineDppPdf] = useState<ItemType2[]>([]);
   const [offlineDppVideos, setOfflineDppVideos] = useState<ItemType2[]>([]);
   const [offlineSelectedSection, setOfflineSelectedSection] = useState<number>(3);
-  const [showIpInput, setShowIpInput] = useState<boolean>(true);
+  const [showIpInput, setShowIpInput] = useState<boolean>(false);
 
 
   const [headers, setHeaders] = useState<any>(null)
@@ -182,9 +187,11 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     const getIP = async () => {
       try {
         const ip = await AsyncStorage.getItem("iP")
-        setOfflineCurrentDirectory(`http://${ip}:6969/Desktop/`);
+        setOfflineCurrentDirectory(`http://${ip}/Batches/`);
+        const response = await axios.get(`http://${ip}/Batches/`)
       } catch (err) {
         console.log("Error while fetchin Ip from local storage : ", err)
+        setShowIpInput(true);
       }
     };
     getIP();
@@ -285,6 +292,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         mainNavigation, setMainNavigation,
         headers, setHeaders,
         orders, setOrders,
+        selectedDpp, setSelectedDpp,
         selectedSubject, setSelectedSubject,
         selectedChapter, setSelectedChapter,
         isOnline, setIsOnline,

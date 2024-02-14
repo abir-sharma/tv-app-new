@@ -14,6 +14,8 @@ import analytics from '@react-native-firebase/analytics';
 // import Video from 'react-native-video';
 
 
+//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDg1MTIwOTEuMzExLCJkYXRhIjp7Il9pZCI6IjY1YTEyMmE1OWI5YmFkMmZmMGM0ODUwYyIsInVzZXJuYW1lIjoiODE0NjU3MDQyMSIsImZpcnN0TmFtZSI6IkFyeWFuIiwibGFzdE5hbWUiOiJTaW5nbGEiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwidHlwZSI6IlVTRVIifSwiaWF0IjoxNzA3OTA3MjkxfQ.CzSyuj5MBhbHds1iR0hevz-7QObu6YXI2WDZ746emr
+
 export const Offline = () => {
 
   const { setDirectoryLevel, showIpInput, setShowIpInput, setOfflineSections, setOfflineSelectedSubject, setOfflineSelectedSection, setOfflineSelectedChapter, setOfflineLectures, setOfflineDpp, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, offlineSelectedSection, directoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, setOfflineBatches, setOfflineSubjects, setOfflineChapters } = useGlobalContext();
@@ -22,26 +24,22 @@ export const Offline = () => {
   const [videoOpen, setVideoOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
+  // const [showIpInput, setShowIpInput] = useState(false);
   // const [batches, setBatches] = useState<string[]>([]);
 
   const navigation = useNavigation();
 
 
   useEffect(() => {
-
-    // const fetchIPAddress = async () => {
-    //   NetworkInfo.getIPAddress()
-    //     .then((res) => {
-    //       console.log("IP", res)
-    //       // setIpAddress(res);
-    //       setOfflineCurrentDirectory(`http://${res}:6969/`)
-    //     })
-    //     .catch((err) => console.log("error while fetching IP.", err))
-    // }
-    // fetchIPAddress();
-
+    const getToken = async () => {
+      console.log(await AsyncStorage.getItem("token"));
+    }
+    getToken();
     fetchDirectoryListing(offlineCurrentDirectory);
   }, [offlineCurrentDirectory]);
+
+
+
 
 
   const isThumbnailAvailable = (directoryItems: any[], toFind: string) => {
@@ -316,23 +314,19 @@ export const Offline = () => {
 
   function isIPAddress(input: any) {
     console.log("Check Input : ", input);
-    // Regular expression to match IPv4 address format
-    const ipv4Pattern = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
 
-    // Regular expression to match IPv6 address format
-    const ipv6Pattern = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
+    // Regular expression to match IPv4 address format with optional port number
+    const ipv4Pattern = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?::[0-9]{1,5})?$/;
+
+    // Regular expression to match IPv6 address format with optional port number
+    const ipv6Pattern = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}(?::[0-9]{1,5})?$/;
 
     // Check if input matches either IPv4 or IPv6 pattern
     return ipv4Pattern.test(input) || ipv6Pattern.test(input);
   }
 
+
   const handleIPChange = () => {
-    console.log("Hi");
-    ToastAndroid.showWithGravity(
-      'Checking Ip',
-      ToastAndroid.SHORT,
-      ToastAndroid.CENTER,
-    );
     if (!isIPAddress(ipAddress)) {
       ToastAndroid.showWithGravity(
         'Enter an IP adress in correct format',
@@ -341,13 +335,8 @@ export const Offline = () => {
       );
       return;
     }
-    console.log(`http://${ipAddress}:6969/Desktop/`)
-    ToastAndroid.showWithGravity(
-      'Ip checked!!',
-      ToastAndroid.SHORT,
-      ToastAndroid.CENTER,
-    );
-    setOfflineCurrentDirectory(`http://${ipAddress}:6969/Desktop/`);
+    console.log(`http://${ipAddress}/Batches/`)
+    setOfflineCurrentDirectory(`http://${ipAddress}/Batches/`);
     AsyncStorage.setItem("iP", ipAddress);
     fetchBatches();
   }
@@ -358,10 +347,6 @@ export const Offline = () => {
     <View style={{ flex: 1 }} className='bg-[#1A1A1A]'>
       <Navbar />
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-        {/* <TouchableOpacity onPress={handleBackPress}>
-          <Text style={{ color: 'yellow', marginRight: 20 }}>Back</Text>
-        </TouchableOpacity>
-        <Text style={{ marginLeft: 10 }} className='text-white'>Current Directory: {offlineCurrentDirectory}</Text> */}
         {showIpInput && <Pressable
           android_ripple={{
             color: "rgba(255,255,255,0.4)",
@@ -381,21 +366,19 @@ export const Offline = () => {
               radius: 1000,
               foreground: true
             }}
-
-            // onPress={() => {
-            //   handleIPChange()
-            // }}
-            className='bg-[#8E89BA] w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
-            <TouchableOpacity onPress={() => {
-              console.log("Hi");
+            onPress={() => {
+              ToastAndroid.showWithGravity(
+                'Ip Submitted!!',
+                ToastAndroid.SHORT,
+                ToastAndroid.CENTER,
+              );
               handleIPChange()
             }}
-            >
-
-              <Text className='text-white text-center w-full text-base'>Enter IP</Text>
-            </TouchableOpacity>
-          </Pressable>}
-
+            className='bg-[#8E89BA] w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'
+          >
+            <Text className='text-white text-center w-full text-base'>Enter IP</Text>
+          </Pressable>
+        }
       </View>
       {/* 
       <TouchableOpacity onPress={() => console.log("Hiiiiiiii")}>

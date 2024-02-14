@@ -15,12 +15,13 @@ export default function Home({ navigation }: any) {
 
   const handleLogin = async () => {
     if (await AsyncStorage.getItem("token")) {
+      console.log(await AsyncStorage.getItem("token"));
       setHeaders({
         Authorization: `Bearer ${await AsyncStorage.getItem("token")}`
       })
-      try{
-        const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", {Authorization: `Bearer ${await AsyncStorage.getItem("token")}`});        
-      }catch(err){
+      try {
+        const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", { Authorization: `Bearer ${await AsyncStorage.getItem("token")}` });
+      } catch (err) {
         // console.log("error token check: ", err);
         await AsyncStorage.removeItem("token");
         mainNavigation.navigate('Login')

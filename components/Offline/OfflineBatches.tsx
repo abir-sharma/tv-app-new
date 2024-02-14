@@ -5,11 +5,18 @@ import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
 import defaultIcon from '../../assets/TV.png';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function OfflineBatches(params: any) {
 
     const { setDirectoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, offlineBatches } = useGlobalContext();
     const { mainNavigation } = useGlobalContext();
+
+    const getToken = async () => {
+        console.log("Hi");
+        console.log(await AsyncStorage.getItem("token"));
+    }
 
     return (
         <View className='bg-white/5 p-5 w-[95%] rounded-3xl mx-auto my-5 flex-none overflow-hidden'>
@@ -26,6 +33,7 @@ export default function OfflineBatches(params: any) {
                         }}
                         onPress={() => {
                             console.log(batch?.path);
+                            getToken();
                             setOfflineCurrentDirectory(batch?.path);
                             setDirectoryLevel(1);
                             mainNavigation?.navigate('OfflineDetails');
