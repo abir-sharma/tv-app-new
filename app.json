@@ -19,7 +19,6 @@
     },
     "android": {
       "package": "com.sayak02.pwtvappv2",
-      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -33,11 +32,6 @@
         "projectId": "74f57a78-7057-434e-8173-22ac81e672fa"
       }
     },
-    "plugins": [
-      "@react-native-firebase/app",
-      "@react-native-firebase/auth",
-      "@react-native-firebase/crashlytics"
-    ],
     "owner": "physicswallah"
   }
 }
