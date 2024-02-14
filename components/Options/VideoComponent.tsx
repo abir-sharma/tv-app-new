@@ -4,6 +4,7 @@ import { VideoType } from '../../types/types';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import { useGlobalContext } from '../../context/MainContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type VideoPropType = {
     videoList: VideoType[] | null,
@@ -16,6 +17,18 @@ export const VideoComponent = ({videoList, setVideoList, loadMore, getPaidBatche
 
   const {mainNavigation, batchDetails} = useGlobalContext();  
   const navigation = useNavigation();
+
+  const saveToRecentVideos = (item: VideoType) => {
+    AsyncStorage.getItem('recentVideos').then((value)=>{
+      if(value){
+        let recentVideos = JSON.parse(value);
+        let newRecentVideos = [...recentVideos, item];
+        AsyncStorage.setItem('recentVideos', JSON.stringify(newRecentVideos));
+      }else{
+        AsyncStorage.setItem('recentVideos', JSON.stringify([item]));
+      }
+    });
+  }
 
   const renderGridItem = ({ item }: any) => (
     <Pressable
@@ -34,6 +47,7 @@ export const VideoComponent = ({videoList, setVideoList, loadMore, getPaidBatche
         navigation.navigate("Videos", {
           lectureDetails: item.videoDetails,
         });
+        saveToRecentVideos(item);
         }}>
         <View >
             <View>

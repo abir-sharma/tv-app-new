@@ -1,21 +1,34 @@
 /// <reference types="nativewind/types" />
 
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { VideoType } from '../types/types';
+import moment from 'moment';
 
 export default function Recent() {
 
-    const {orders, setOrders} = useGlobalContext();
+    const {orders, setOrders, mainNavigation} = useGlobalContext();
+    const [recentVideos, setRecentVideos] = useState<VideoType[]|null>(null);
+
+    useEffect(()=>{
+        AsyncStorage.getItem('recentVideos').then((value)=>{
+            if(value){
+                setRecentVideos(JSON.parse(value));
+            }
+        });
+    },[])
+    
 
   return (
     <View className='w-[95%] mx-auto'>
     <Text className='text-white text-lg font-medium ml-5 mt-2'>Recent Learning</Text>
     <View className='bg-white/5 p-5 rounded-lg  my-5 flex-none overflow-hidden'>
         <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
-            {orders?.map((order)=>(
+            {recentVideos?.map((order)=>(
                 <Pressable
-                key={order.orderId}
+                key={order._id}
                 hasTVPreferredFocus={true}
                 android_ripple={{
                     color: "rgba(255,255,255,0.5)",
@@ -23,21 +36,27 @@ export default function Recent() {
                     radius: 1000,
                     foreground: true
                 }}
-                onPress={()=>{
-                
+                onPress={async()=>{
+                    mainNavigation.navigate("Videos", {
+                        lectureDetails: order.videoDetails,
+                    });
                 }}
                 className='bg-white/10 rounded-lg h-52 w-72 overflow-hidden'>
-                    <View className="w-full h-40 overflow-hidden">
-                        {order?.thumbnailImageLink && <Image
-                            className=' w-full h-full object-cover rounded-lg ' 
-                            source={{uri: `${order?.thumbnailImageLink}`}}
+                    <View >
+                    <View>
+                        {order?.videoDetails?.image && <Image
+                            style={{width: '100%', height: 135, objectFit: 'cover', borderRadius: 10, }}
+                            source={{uri: `${order?.videoDetails?.image}`}}
                         />}
                     </View>
-                    <View className='p-2 relative px-5'>
-                        <Text className='text-white text-xs font-medium'>{order.itemName}</Text>
-                        <Text className='text-white text-xs font-light'>Starts On <Text className='text-white text-xs font-medium'>14th Feb 2023</Text></Text>
-                        <Text className='text-white text-[10px] font-medium absolute right-2 top-1.5 rounded-md bg-black/50 px-2 py-1'>{"Hindi"}</Text>
+                    <View className='p-2'>
+                        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                            <Text className='text-white text-[10px]'>{moment(order.date).format("MMM Do YY")}</Text>
+                            <Text className='text-white text-[10px]'>{order?.videoDetails?.duration}</Text>
+                        </View>
+                        <Text className='text-xs text-white font-medium my-2'>{order?.videoDetails?.name?.length >= 60? `${order?.videoDetails?.name?.substring(0,60)}...`: order?.videoDetails?.name}</Text>
                     </View>
+                </View>
 
                 </Pressable>
             ))}
