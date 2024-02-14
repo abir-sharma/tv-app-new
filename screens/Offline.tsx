@@ -248,12 +248,10 @@ export const Offline = () => {
       directoryItems = directoryItems.filter((item) => !item.name.startsWith('.'))
       setShowIpInput(false);
       return directoryItems;
-
     } catch (err: any) {
       console.log("error while fetching directory items", err);
-      // await analytics().logEvent("Axios Error: ", { err })
       ToastAndroid.showWithGravity(
-        err.message,
+        err.response.message,
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
@@ -365,14 +363,14 @@ export const Offline = () => {
         </TouchableOpacity>
         <Text style={{ marginLeft: 10 }} className='text-white'>Current Directory: {offlineCurrentDirectory}</Text> */}
         {showIpInput && <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.4)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        className=' mr-5 overflow-hidden rounded-lg '
-        onPress={() => ipInputRef.current?.focus()}
+          android_ripple={{
+            color: "rgba(255,255,255,0.4)",
+            borderless: false,
+            radius: 1000,
+            foreground: true
+          }}
+          className=' mr-5 overflow-hidden rounded-lg '
+          onPress={() => ipInputRef.current?.focus()}
 
         ><TextInput ref={ipInputRef} autoFocus={true} placeholder='Enter Ip' className=' text-white bg-[#0d0d0d] rounded-lg p-2 px-4 w-64 overflow-hidden' placeholderTextColor={"#00000"} onChangeText={(text) => { setIpAddress(text) }} /></Pressable>}
         {showIpInput &&

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyC40KUnZYRT4k5Jisaa9seOLoJTBnbeQ4k</string>
+	<key>GCM_SENDER_ID</key>
+	<string>706331087457</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.sayak02.pwtvappv2</string>
+	<key>PROJECT_ID</key>
+	<string>tv-app-crashlytics-d0251</string>
+	<key>STORAGE_BUCKET</key>
+	<string>tv-app-crashlytics-d0251.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:706331087457:ios:4520c36334babc628d9020</string>
+</dict>
+</plist>

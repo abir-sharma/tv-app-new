@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.sayak02.pwtvappv2"
     },
     "android": {
       "package": "com.sayak02.pwtvappv2",
@@ -32,6 +33,10 @@
         "projectId": "74f57a78-7057-434e-8173-22ac81e672fa"
       }
     },
+    "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/crashlytics"
+    ],
     "owner": "physicswallah"
   }
 }
