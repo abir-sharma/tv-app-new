@@ -196,12 +196,14 @@ const Tests = ({ navigation, route }: any) => {
                 </View>
                 <View className='flex justify-between mt-10' style={{ display: 'flex', flexDirection: 'row' }}>
                     <View className='flex flex-col w-7/12 '>
-                        <View className='h-[340] bg-white/5 rounded-xl'>
-                            {/* <Image
-                                source={{ uri: currentQuestion?.imageIds?.en?.baseUrl + currentQuestion?.imageIds?.en?.key }}
-                                width={200}
-                                className='w-40'
-                            /> */}
+                        <View className='h-[340] bg-white/5 rounded-xl items-center'>
+                            <Image
+                                source={{ uri: `${currentQuestion?.imageIds?.en?.baseUrl}${currentQuestion?.imageIds?.en?.key}` }}
+                                width={700}
+                                height={340}
+                                resizeMode='contain'
+                                className='rounded-xl overflow-hidden'
+                            />
                         </View>
                     </View>
                     <View className='flex flex-col w-5/12 rounded-xl px-8'>

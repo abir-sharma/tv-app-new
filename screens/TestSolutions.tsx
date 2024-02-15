@@ -204,7 +204,6 @@ const TestSolutions = ({ route }: any) => {
                                         <Text className=' text-lg text-white font-medium '>{question?.question?.questionNumber}</Text>
                                     </View>
                                 )
-
                             )
                         }
                     </View>
@@ -254,11 +253,12 @@ const TestSolutions = ({ route }: any) => {
                 </View>
                 <View className='flex-[3] h-[550]'>
                     <View className='flex-1 bg-white/5 rounded-xl p-5'>
-                        <View className='h-24 bg-white w-full rounded-lg'>
+                        <View className='h-[220] bg-white/5 w-full rounded-lg items-center justify-center'>
                             <Image
                                 source={{ uri: `${currentQuestion?.question?.imageIds?.en?.baseUrl}${currentQuestion?.question?.imageIds?.en?.key}` }}
-                                width={600}
-                                height={90}
+                                width={1000}
+                                height={220}
+                                resizeMode='contain'
                                 alt='Question'
                             />
                         </View>
