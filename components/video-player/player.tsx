@@ -13,7 +13,7 @@ import { useGlobalContext } from '../../context/MainContext';
 
 export default function VideoPlayer(props: any) {
 
-  const {mainNavigation} = useGlobalContext();
+  const { mainNavigation } = useGlobalContext();
   const playerRef = useRef(null);
   const [spinner, setSpinner] = useState<any>();
   const [src, setSrc] = useState<any>(undefined);
@@ -67,18 +67,18 @@ export default function VideoPlayer(props: any) {
     (playerRef.current as Video | null)?.pauseAsync();
   }
 
-  const skipForward = (skipTime:number) => {
-        (playerRef.current as Video | null)?.getStatusAsync().then((status) => {
-          const newPosition = Math.max((status as any).positionMillis + skipTime, 0);
-          (playerRef.current as Video | null)?.setPositionAsync(newPosition);
-        });
-    };
+  const skipForward = (skipTime: number) => {
+    (playerRef.current as Video | null)?.getStatusAsync().then((status) => {
+      const newPosition = Math.max((status as any).positionMillis + skipTime, 0);
+      (playerRef.current as Video | null)?.setPositionAsync(newPosition);
+    });
+  };
 
-    const skipBackward = (skipTime:number) => {
-      (playerRef.current as Video | null)?.getStatusAsync().then((status) => {
-        const newPosition = Math.min((status as any).positionMillis - skipTime, (status as any).durationMillis);
-        (playerRef.current as Video | null)?.setPositionAsync(newPosition);
-      });
+  const skipBackward = (skipTime: number) => {
+    (playerRef.current as Video | null)?.getStatusAsync().then((status) => {
+      const newPosition = Math.min((status as any).positionMillis - skipTime, (status as any).durationMillis);
+      (playerRef.current as Video | null)?.setPositionAsync(newPosition);
+    });
   };
 
   function convertMPDToM3U8(mpdUrl: string) {
@@ -119,79 +119,79 @@ export default function VideoPlayer(props: any) {
 
   return (
     <View style={{ minHeight: '100%' }} className='bg-[#1A1A1A] h-full'>
-      <Pressable 
+      <Pressable
         android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
+          color: "rgba(255,255,255,0.5)",
+          borderless: false,
+          radius: 1000,
+          foreground: true
         }}
-        onPress={()=>{mainNavigation.goBack()}} className='bg-black/40 overflow-hidden rounded-xl px-3 z-[2] py-1 absolute top-2 left-2'>
-          <Text className='text-white text-lg font-medium'>{"Back"}</Text>
-        </Pressable>
-        <Pressable 
+        onPress={() => { mainNavigation.goBack() }} className='bg-black/40 overflow-hidden rounded-xl px-3 z-[2] py-1 absolute top-2 left-2'>
+        <Text className='text-white text-lg font-medium'>{"Back"}</Text>
+      </Pressable>
+      <Pressable
         android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
+          color: "rgba(255,255,255,0.5)",
+          borderless: false,
+          radius: 1000,
+          foreground: true
         }}
-        onPress={()=>{setShowControls(prev=>!prev)}} className='bg-black/80 overflow-hidden rounded-xl px-3 py-1 absolute bottom-2 z-[2] left-2'>
-          <Text className='text-white text-lg font-medium'>{showControls? "Hide Controls": "Show Controls"}</Text>
-        </Pressable>
+        onPress={() => { setShowControls(prev => !prev) }} className='bg-black/80 overflow-hidden rounded-xl px-3 py-1 absolute bottom-2 z-[2] left-2'>
+        <Text className='text-white text-lg font-medium'>{showControls ? "Hide Controls" : "Show Controls"}</Text>
+      </Pressable>
       {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-row items-center justify-center'>
-      <View className='flex-row bg-black/50 rounded-xl p-2'>
-      <Pressable 
-        android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-        }}
-        onPress={()=>{skipBackward(60000)}} className='bg-black/90 overflow-hidden rounded-xl px-3 py-1.5'>
-          <Text className='text-white text-base font-medium'>{"-60s"}</Text>
-        </Pressable>
-      <Pressable 
-        android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-        }}
-        onPress={()=>{skipBackward(10000)}} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1.5'>
-          <Text className='text-white text-base font-medium'>{"-10s"}</Text>
-        </Pressable>
-        <Pressable 
-        android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-        }}
-        onPress={()=>{isPlaying? pauseVideo(): playVideo()}} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1'>
-          <Text className='text-white text-lg font-medium'>{isPlaying? "Pause": "Play"}</Text>
-        </Pressable>
-        <Pressable 
-        android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-        }}
-      onPress={()=>{skipForward(10000)}} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1.5'>
-        <Text className='text-white text-base font-medium'>{"+10s"}</Text>
-      </Pressable>
-      <Pressable 
-        android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-        }}
-      onPress={()=>{skipForward(60000)}} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1.5'>
-        <Text className='text-white text-base font-medium'>{"+60s"}</Text>
-      </Pressable>
-      </View>
+        <View className='flex-row bg-black/50 rounded-xl p-2'>
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.5)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+            onPress={() => { skipBackward(60000) }} className='bg-black/90 overflow-hidden rounded-xl px-3 py-1.5'>
+            <Text className='text-white text-base font-medium'>{"-60s"}</Text>
+          </Pressable>
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.5)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+            onPress={() => { skipBackward(10000) }} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1.5'>
+            <Text className='text-white text-base font-medium'>{"-10s"}</Text>
+          </Pressable>
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.5)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+            onPress={() => { isPlaying ? pauseVideo() : playVideo() }} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1'>
+            <Text className='text-white text-lg font-medium'>{isPlaying ? "Pause" : "Play"}</Text>
+          </Pressable>
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.5)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+            onPress={() => { skipForward(10000) }} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1.5'>
+            <Text className='text-white text-base font-medium'>{"+10s"}</Text>
+          </Pressable>
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.5)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+            onPress={() => { skipForward(60000) }} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1.5'>
+            <Text className='text-white text-base font-medium'>{"+60s"}</Text>
+          </Pressable>
+        </View>
       </View>}
       <ActivityIndicator style={{ display: spinner ? 'flex' : 'none', marginTop: 100 }} size="small" color="#5a4bda" animating={spinner} />
       {

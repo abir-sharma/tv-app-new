@@ -24,9 +24,9 @@ export default function Home({ navigation }: any) {
       } catch (err) {
         // console.log("error token check: ", err);
         await AsyncStorage.removeItem("token");
-        mainNavigation.navigate('Login')
+        mainNavigation?.navigate('Login')
       }
-      mainNavigation.navigate('Home')
+      mainNavigation?.navigate('Home')
     }
     else {
       console.log("not logged in");
