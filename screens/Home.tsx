@@ -38,6 +38,10 @@ export default function Home({ navigation }: any) {
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
     setMainNavigation(navigation);
+    // const logToken = async () => {
+    //   console.log(await AsyncStorage.getItem("token"));
+    // }
+    // logToken();
     handleLogin();
     // AsyncStorage.clear();
   }, [])

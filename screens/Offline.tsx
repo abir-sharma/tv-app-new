@@ -249,7 +249,7 @@ export const Offline = () => {
     } catch (err: any) {
       console.log("error while fetching directory items", err);
       ToastAndroid.showWithGravity(
-        err.response.message,
+        err,
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );

@@ -77,6 +77,10 @@ type GlobalContextType = {
   setOfflineSelectedSection: Dispatch<SetStateAction<number>>;
   testData: any | null;
   setTestData: Dispatch<SetStateAction<any | null>>;
+  testSections: any | null;
+  setTestSections: Dispatch<SetStateAction<any | null>>;
+  selectedTestMapping: any | null;
+  setSelectedTestMapping: Dispatch<SetStateAction<any | null>>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -142,6 +146,10 @@ const GlobalContext = createContext<GlobalContextType>({
   setOfflineSelectedSection: () => { },
   testData: null,
   setTestData: () => { },
+  testSections: null,
+  setTestSections: () => { },
+  selectedTestMapping: null,
+  setSelectedTestMapping: () => { },
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
@@ -165,6 +173,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [selectedDpp, setSelectedDpp] = useState<QuizItemType | null>(null);
   const [testData, setTestData] = useState<any>(null);
+  const [testSections, setTestSections] = useState<any>(null);
+  const [selectedTestMapping, setSelectedTestMapping] = useState<any>(null);
 
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
@@ -302,7 +312,9 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         selectedChapter, setSelectedChapter,
         isOnline, setIsOnline,
         testData, setTestData,
+        testSections, setTestSections,
         directoryLevel, setDirectoryLevel,
+        selectedTestMapping, setSelectedTestMapping,
         offlineCurrentDirectory, setOfflineCurrentDirectory,
         offlineDirectoryListings, setOfflineDirectoryListings,
         offlineBatches, setOfflineBatches,

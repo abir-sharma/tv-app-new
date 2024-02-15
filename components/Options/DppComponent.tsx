@@ -15,7 +15,7 @@ type DPPPropType = {
 
 export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }: DPPPropType) => {
 
-  const { mainNavigation, setTestData, batchDetails, setSelectedDpp, headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
+  const { mainNavigation, setTestData, selectedTestMapping, setSelectedTestMapping, batchDetails, setTestSections, setSelectedDpp, headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
   const navigation = useNavigation();
 
   const [dppList, setDppList] = useState<QuizItemType[]>([]);
@@ -28,10 +28,12 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
       console.log(selectedBatch);
       console.log(selectedSubject);
       console.log(selectedChapter);
+      console.log(headers);
+      console.log("ALL DPP TEST LINK: ", `https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`)
       const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, options);
       const list: any[] = [];
       const data = res.data.data;
-      // console.log("DPP List: ", data);
+      console.log("DPP List: ", data);
       setDppList(data);
     }
     catch (err) {
@@ -49,12 +51,31 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
       const options = {
         headers
       }
+      console.log(headers)
+      console.log(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Start&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`)
       const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Start&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`, options);
-      console.log("Data recieved!!");
+      console.log("Test Started", res.data);
       setTestData(res.data.data);
+      setTestSections(res.data.data.sections)
+      setSelectedTestMapping(res.data.data.testStudentMapping._id);
       mainNavigation.navigate('Tests');
     } catch (err: any) {
       console.log("Error while starting test!!", err?.response);
+      if (err.response.data.error.message === "Test is not in start state") {
+        try {
+          const options = {
+            headers
+          };
+          console.log("Restart Link: ", `https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Restart`);
+          const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Restart`, options);
+          console.log("Test Resumed: ", res.data);
+          setTestData(res.data.data);
+          setTestSections(res.data.data.sections)
+          mainNavigation.navigate('Tests');
+        } catch (err) {
+
+        }
+      }
     }
   }
 

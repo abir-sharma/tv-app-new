@@ -1,116 +1,293 @@
-import React from 'react'
-import { View, Text, Image, Pressable, ScrollView } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { View, Text, Image, Pressable, ScrollView, ToastAndroid, TouchableOpacity } from 'react-native'
+import { useGlobalContext } from '../context/MainContext';
+import { useNavigation } from '@react-navigation/native';
+import axios, { all } from 'axios';
 
-const TestSolutions = ({route}: any) => {
+const TestSolutions = ({ route }: any) => {
 
-  return (
-    <View className='bg-[#1A1A1A] min-h-screen p-5'>
-        <View className='flex-row justify-between items-center'>
-            <View>
-                <View className='flex-row'>
-                    <Image source={require('../assets/back.png')} className='w-8 h-8' width={10} height={10} />
+    const { headers, selectedTestMapping } = useGlobalContext();
+    const [solutionData, setSolutionData] = useState<any>();
+    const [originalSolutionData, setOriginalSolutionData] = useState<any>();
+    const [questionsData, setQuestionsData] = useState<any>();
+    const [originalQuestionData, setOriginalQuestionData] = useState<any>();
+    const [currentQuestion, setCurrentQuestion] = useState<any>();
+    const [correctAnswers, setCorrectAnswers] = useState<any>();
+    const [incorrectAnswers, setIncorrectAnswers] = useState<any>();
+    const [skippedAnswers, setSkippedAnswers] = useState<any>();
+    const [correctOptions, setCorrectOptions] = useState<any>();
+    const [markedOptions, setMarkedOptions] = useState<any>();
+    const [selectedFilter, setSelectedFilter] = useState<any>('all');
+    const navigation = useNavigation();
+    useEffect(() => {
+        fetchSolutionData();
+    }, [])
+
+    const fetchSolutionData = async () => {
+        try {
+            const options = {
+                headers
+            }
+            const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/preview-test`, options);
+            console.log("Test Solution Data: ", res.data.data.questions)
+            setQuestionsData(res.data.data.questions);
+            setOriginalQuestionData([...res.data.data.questions]);
+            setSolutionData(res.data.data);
+            setCurrentQuestion(res.data.data.questions[0]);
+            console.log("DING DING", res.data.data.questions[0].question.solutions);
+            setCorrectOptions(res.data.data.questions[0].question.solutions);
+            setMarkedOptions(res.data.data.questions[0].yourResult.markedSolutions);
+            const questions = res.data.data.questions;
+            const correct = [];
+            const incorrect = [];
+            const skipped = [];
+            for (let i = 0; i < questions.length; i++) {
+                const question = questions[i];
+                if (question.yourResult.status === "WRONG") {
+                    incorrect.push(question.question.questionNumber);
+                } else if (question.yourResult.status === "CORRECT") {
+                    correct.push(question.question.questionNumber);
+                } else {
+                    skipped.push(question.question.questionNumber);
+                }
+            }
+        } catch (err: any) {
+            console.log("Errow while fetching Solution Data: ", err.response);
+        }
+    }
+
+    const handleFilter = (filter: string) => {
+        const allData = [...originalQuestionData];
+        if (filter === 'all') {
+            setQuestionsData(allData)
+        } else if (filter === 'correct') {
+            const data = allData.filter((question: any) => question.yourResult.status === "CORRECT")
+            setCurrentQuestion(data[0]);
+            setQuestionsData(data)
+        } else if (filter === 'incorrect') {
+            const data = allData.filter((question: any) => question.yourResult.status === "WRONG")
+            setCurrentQuestion(data[0]);
+            setQuestionsData(data)
+        } else {
+            const data = allData.filter((question: any) => question.yourResult.status === "UnAttempted")
+            setCurrentQuestion(data[0]);
+            setQuestionsData(data)
+        }
+    }
+
+    const handleNextClick = () => {
+        const curr = questionsData.indexOf(currentQuestion);
+        if (curr < questionsData.length - 1) {
+            setCurrentQuestion(questionsData[curr + 1]);
+            setCorrectOptions(questionsData[curr + 1].question.solutions);
+            setMarkedOptions(questionsData[curr + 1].yourResult.markedSolutions);
+        } else {
+            ToastAndroid.showWithGravity(
+                "No next Question!!",
+                ToastAndroid.SHORT,
+                ToastAndroid.TOP,
+            );
+            return;
+        }
+    };
+
+
+    const handlePreviousClick = () => {
+        const curr = questionsData.indexOf(currentQuestion);
+        if (curr > 0) {
+            setCurrentQuestion(questionsData[curr - 1]);
+            setCorrectOptions(questionsData[curr - 1].question.solutions);
+            setMarkedOptions(questionsData[curr - 1].yourResult.markedSolutions);
+        } else {
+            ToastAndroid.showWithGravity(
+                "No Previous Question",
+                ToastAndroid.SHORT,
+                ToastAndroid.TOP,
+            );
+            return;
+        }
+    }
+
+
+    return (
+        <View className='bg-[#1A1A1A] min-h-screen p-5'>
+            <View className='flex-row justify-between items-center'>
+                <View>
+                    <TouchableOpacity onPress={() => {
+                        // @ts-expect-error
+                        navigation.navigate('Home')
+                    }}>
+                        <View className='flex-row'>
+                            <Image source={require('../assets/back.png')} className='w-8 h-8' width={10} height={10} />
+                        </View>
+                    </TouchableOpacity>
                 </View>
-            </View>
-            <Text className='text-white text-xl font-medium' >PRACTICE TEST ALPHA</Text>
-            <Pressable
-                android_ripple={{
-                color: "rgba(255,255,255,0.5)",
-                borderless: false,
-                radius: 1000,
-                foreground: true
-                }}
-                className='flex-row justify-center overflow-hidden rounded-full items-center'>
-                <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
-                {/* <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text> */}
-            </Pressable>
-        </View>
-        
-        <View className='flex-1 flex-row w-full rounded-xl mt-5 gap-x-5'>
-        <View className='flex-[2] rounded-xl items-start justify-start px-5 py-0'>
-                <Text className='text-white text-sm ml-auto text-center'>Video solution for Question 1</Text>
-                <View className='h-52 bg-gray-600 rounded-lg w-full mt-1'></View>
-                <View className='flex-row mt-3 gap-x-2'>
-                    <Text className='text-[#5A4BDA] text-base bg-[#DEDAFF] px-5 py-1 text-center rounded flex-1'>All</Text>
-                    <Text className='text-white text-base px-5 py-1 text-center rounded flex-1'>Incorrect</Text>
-                    <Text className='text-white text-base px-5 py-1 text-center rounded flex-1'>Correct</Text>
-                    <Text className='text-white text-base px-5 py-1 text-center rounded flex-1'>Skipped</Text>
-                </View>
-                {/* <ScrollView> */}
-                <View className='flex-row flex-wrap py-4 gap-2'>
-                    <View className='w-16 h-16 bg-white/10 rounded items-center justify-center'><Text className=' text-lg text-white font-medium '>{"01"}</Text></View>
-                    <View className='w-16 h-16 bg-[#8E89BA] rounded items-center justify-center'><Text className=' text-lg text-white font-medium '>{"02"}</Text></View>
-                    <View className='w-16 h-16 bg-white/10 rounded items-center justify-center'><Text className=' text-lg text-white font-medium '>{"03"}</Text></View>
-                    <View className='w-16 h-16 bg-white/10 rounded items-center justify-center'><Text className=' text-lg text-white font-medium '>{"04"}</Text></View>
-                    <View className='w-16 h-16 bg-white/10 rounded items-center justify-center'><Text className=' text-lg text-white font-medium '>{"05"}</Text></View>
-                    <View className='w-16 h-16 bg-white/10 rounded items-center justify-center'><Text className=' text-lg text-white font-medium '>{"06"}</Text></View>
-                    <View className='w-16 h-16 bg-white/10 rounded items-center justify-center'><Text className=' text-lg text-white font-medium '>{"07"}</Text></View>
-                    <View className='w-16 h-16 bg-white/10 rounded items-center justify-center'><Text className=' text-lg text-white font-medium '>{"08"}</Text></View>
-                    <View className='w-16 h-16 bg-white/10 rounded items-center justify-center'><Text className=' text-lg text-white font-medium '>{"09"}</Text></View>
-                    <View className='w-16 h-16 bg-white/10 rounded items-center justify-center'><Text className=' text-lg text-white font-medium '>{"10"}</Text></View>
-                </View>
-                {/* </ScrollView> */}
-                <View className='flex-row mt-3 justify-between items-center '>
-                    <View className='flex-row flex-1 items-center justify-start gap-x-2'>
-                        <View className='w-2 h-2 rounded-full bg-green-500'></View>
-                        <Text className='text-white text-base text-center'>Correct</Text>
-                    </View>
-                    <View className='flex-row flex-1 items-center justify-start gap-x-2'>
-                        <View className='w-2 h-2 rounded-full bg-red-500'></View>
-                        <Text className='text-white text-base text-center'>Incorrect</Text>
-                    </View>
-                    <View className='flex-row flex-1 items-center justify-start gap-x-2'>
-                        <View className='w-2 h-2 rounded-full bg-gray-400'></View>
-                        <Text className='text-white text-base text-center'>Skipped</Text>
-                    </View>
-                </View>
-                <View className=' flex-row justify-between items-center mt-5 w-full'>
+                <Text className='text-white text-xl font-medium' >{solutionData?.test?.name}</Text>
                 <Pressable
-                hasTVPreferredFocus={true}
-                android_ripple={{
-                    color: "rgba(255,255,255,0.5)",
-                    borderless: false,
-                    radius: 1000,
-                    foreground: true
-                }}className='bg-[#A79EEB] rounded-xl w-40 text-center items-center py-2 overflow-hidden'>
-                    <Text className='text-white text-lg'>Previous</Text>
+                    android_ripple={{
+                        color: "rgba(255,255,255,0.5)",
+                        borderless: false,
+                        radius: 1000,
+                        foreground: true
+                    }}
+                    className='flex-row justify-center overflow-hidden rounded-full items-center'>
+                    <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
+                    {/* <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text> */}
                 </Pressable>
-                <Pressable
-                hasTVPreferredFocus={true}
-                android_ripple={{
-                    color: "rgba(255,255,255,0.5)",
-                    borderless: false,
-                    radius: 1000,
-                    foreground: true
-                }}className='bg-[#A79EEB] rounded-xl w-40 text-center items-center py-2 overflow-hidden'>
-                    <Text className='text-white text-lg'>Next</Text>
-                </Pressable>
-                </View>
             </View>
-            <View className='flex-[3] h-[550]'>
-                <View className='flex-1 bg-white/5 rounded-xl p-5'>
-                    <View className='h-24 bg-white w-full rounded-lg'></View>
-                <View className='gap-y-2 mt-5 w-[60%]'>
-                    <View className='bg-white/5 px-5 py-5 rounded-lg'>
-                        <Text className='text-white'> {"a.    "} <Text className='text-white'> {" 5,7 "} </Text></Text>
-                    </View>
-                    <View className='bg-white/5 px-5 py-5 rounded-lg'>
-                        <Text className='text-white'> {"b.    "} <Text className='text-white'> {" 7,5 "} </Text></Text>
-                    </View>
-                    <View className='bg-white/5 px-5 py-5 rounded-lg'>
-                        <Text className='text-white'> {"c.    "} <Text className='text-white'> {" 2,3 "} </Text></Text>
-                    </View>
-                    <View className='bg-white/5 px-5 py-5 rounded-lg'>
-                        <Text className='text-white'> {"d.    "} <Text className='text-white'> {" 5,3 "} </Text></Text>
-                    </View>
 
+            <View className='flex-1 flex-row w-full rounded-xl mt-5 gap-x-5'>
+                <View className='flex-[2] rounded-xl items-start justify-start px-5 py-0'>
+                    <Text className='text-white text-sm ml-auto text-center'>Video solution for Question {currentQuestion?.question?.questionNumber}</Text>
+                    <View className='h-52 bg-gray-600 rounded-lg w-full mt-1'></View>
+                    <View className='flex-row mt-3 gap-x-2'>
+                        <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 1000,
+                                foreground: true
+                            }}
+                            onPress={() => { setSelectedFilter('all'); handleFilter('all'); }}
+                            className={`overflow-hidden ${selectedFilter === 'all' ? 'bg-[#DEDAFF]' : ''} px-5 py-1 text-center flex-1 rounded`}
+                        >
+                            <Text className={`overflow-hidden ${selectedFilter === 'all' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>All</Text>
+                        </Pressable>
+                        <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 1000,
+                                foreground: true
+                            }}
+                            onPress={() => { setSelectedFilter('incorrect'); handleFilter('incorrect') }}
+                            className={`overflow-hidden ${selectedFilter === 'incorrect' ? 'bg-[#DEDAFF]' : ''} px-5 py-1 text-center flex-1 rounded`}
+
+                        >
+                            <Text className={`overflow-hidden ${selectedFilter === 'incorrect' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>Incorrect</Text>
+                        </Pressable>
+                        <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 1000,
+                                foreground: true
+                            }}
+                            onPress={() => { setSelectedFilter('correct'); handleFilter('correct') }}
+                            className={`overflow-hidden ${selectedFilter === 'correct' ? 'bg-[#DEDAFF]' : ''} px-5 py-1 text-center flex-1 rounded`}
+                        >
+                            <Text className={`overflow-hidden ${selectedFilter === 'correct' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>Correct</Text>
+                        </Pressable>
+                        <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 1000,
+                                foreground: true
+                            }}
+                            onPress={() => { setSelectedFilter('skipped'); handleFilter('skipped') }}
+                            className={`overflow-hidden ${selectedFilter === 'skipped' ? 'bg-[#DEDAFF]' : ''} px-5 py-1 text-center flex-1 rounded`}
+                        >
+                            <Text className={`overflow-hidden ${selectedFilter === 'skipped' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>Skipped</Text>
+                        </Pressable>
+                    </View>
+                    {/* <ScrollView> */}
+                    <View className='flex-row flex-wrap py-4 gap-2 overflow-scroll'>
+                        {
+                            questionsData && questionsData.map(
+                                (question: any) => (
+                                    <View className={`w-16 h-16 bg-white/10 rounded items-center justify-center ${currentQuestion?.question?.questionNumber === question?.question?.questionNumber ? 'bg-[#8E89BA]' : ''}`}>
+                                        <Text className=' text-lg text-white font-medium '>{question?.question?.questionNumber}</Text>
+                                    </View>
+                                )
+
+                            )
+                        }
+                    </View>
+                    {/* </ScrollView> */}
+                    <View className='flex-row mt-3 justify-between items-center '>
+                        <View className='flex-row flex-1 items-center justify-start gap-x-2'>
+                            <View className='w-2 h-2 rounded-full bg-green-400'></View>
+                            <Text className='text-white text-base text-center'>Correct</Text>
+                        </View>
+                        <View className='flex-row flex-1 items-center justify-start gap-x-2'>
+                            <View className='w-2 h-2 rounded-full bg-red-400'></View>
+                            <Text className='text-white text-base text-center'>Incorrect</Text>
+                        </View>
+                        <View className='flex-row flex-1 items-center justify-start gap-x-2'>
+                            <View className='w-2 h-2 rounded-full bg-gray-400'></View>
+                            <Text className='text-white text-base text-center'>Skipped</Text>
+                        </View>
+                    </View>
+                    <View className=' flex-row justify-between items-center mt-5 w-full'>
+                        <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 1000,
+                                foreground: true
+                            }}
+                            onPress={() => handlePreviousClick()}
+                            className='bg-[#A79EEB] rounded-xl w-40 text-center items-center py-2 overflow-hidden'
+                        >
+                            <Text className='text-white text-lg'>Previous</Text>
+                        </Pressable>
+                        <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 1000,
+                                foreground: true
+                            }}
+                            onPress={() => handleNextClick()}
+                            className='bg-[#A79EEB] rounded-xl w-40 text-center items-center py-2 overflow-hidden'
+                        >
+                            <Text className='text-white text-lg'>Next</Text>
+                        </Pressable>
+                    </View>
                 </View>
+                <View className='flex-[3] h-[550]'>
+                    <View className='flex-1 bg-white/5 rounded-xl p-5'>
+                        <View className='h-24 bg-white w-full rounded-lg'>
+                            <Image
+                                source={{ uri: `${currentQuestion?.question?.imageIds?.en?.baseUrl}${currentQuestion?.question?.imageIds?.en?.key}` }}
+                                width={600}
+                                height={90}
+                                alt='Question'
+                            />
+                        </View>
+                        <View className='gap-y-2 mt-5 w-[60%]'>
+                            {currentQuestion?.question?.options && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${markedOptions?.includes(currentQuestion?.question?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'bg-green-400' : ''}`}>
+                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.question?.options[0]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
+                            </View>}
+                            {currentQuestion?.question?.options && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${markedOptions?.includes(currentQuestion?.question?.options[1]?._id) ? correctOptions?.includes(currentQuestion?.question?.options[1]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.question?.options[1]?._id) ? 'bg-green-400' : ''}`}>
+                                <Text className='text-white font-bold'> {"b.    "}{currentQuestion?.question?.options[1]?.texts?.en}</Text>
+                                <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[1]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[1]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[1]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
+                            </View>}
+                            {currentQuestion?.question?.options && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${markedOptions?.includes(currentQuestion?.question?.options[2]?._id) ? correctOptions?.includes(currentQuestion?.question?.options[2]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.question?.options[2]?._id) ? 'bg-green-400' : ''}`}>
+                                <Text className='text-white font-bold'> {"c.    "}{currentQuestion?.question?.options[2]?.texts?.en}</Text>
+                                <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[2]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[2]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[2]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
+                            </View>}
+                            {currentQuestion?.question?.options && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${markedOptions?.includes(currentQuestion?.question?.options[3]?._id) ? correctOptions?.includes(currentQuestion?.question?.options[3]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.question?.options[3]?._id) ? 'bg-green-400' : ''}`}>
+                                <Text className='text-white font-bold'> {"d.    "}{currentQuestion?.question?.options[3]?.texts?.en}</Text>
+                                <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[3]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
+                            </View>}
+
+                        </View>
+                    </View>
                 </View>
+
+
             </View>
-            
-            
         </View>
-    </View>
-  )
+    )
 }
 
 export default TestSolutions
