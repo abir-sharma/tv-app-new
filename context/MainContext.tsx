@@ -81,6 +81,8 @@ type GlobalContextType = {
   setTestSections: Dispatch<SetStateAction<any | null>>;
   selectedTestMapping: any | null;
   setSelectedTestMapping: Dispatch<SetStateAction<any | null>>;
+  recentVideoLoad: boolean;
+  setRecentVideoLoad: Dispatch<SetStateAction<boolean>>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -150,6 +152,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setTestSections: () => { },
   selectedTestMapping: null,
   setSelectedTestMapping: () => { },
+  recentVideoLoad: false,
+  setRecentVideoLoad: () => { },
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
@@ -176,6 +180,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [testSections, setTestSections] = useState<any>(null);
   const [selectedTestMapping, setSelectedTestMapping] = useState<any>(null);
 
+  const [recentVideoLoad, setRecentVideoLoad] = useState<boolean>(false);
+
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
   const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.1.16:6969/Batches/");
@@ -194,6 +200,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [offlineDppVideos, setOfflineDppVideos] = useState<ItemType2[]>([]);
   const [offlineSelectedSection, setOfflineSelectedSection] = useState<number>(3);
   const [showIpInput, setShowIpInput] = useState<boolean>(false);
+
 
 
   const [headers, setHeaders] = useState<any>(null)
@@ -331,6 +338,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         offlineDppVideos, setOfflineDppVideos,
         offlineSelectedSection, setOfflineSelectedSection,
         showIpInput, setShowIpInput,
+        recentVideoLoad, setRecentVideoLoad
       } as GlobalContextType}>
       {children}
     </GlobalContext.Provider>

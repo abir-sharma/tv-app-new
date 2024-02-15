@@ -18,7 +18,7 @@ type PropType = {
 export default function NavbarDetails({ selectedMenu, setSelectedMenu, setContentType, setCurrentPage }: PropType) {
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const { setSelectedSubject, batchDetails, mainNavigation, selectedSubject, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter, headers, setHeaders } = useGlobalContext();
+  const { setSelectedSubject, batchDetails, mainNavigation, selectedSubject, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter, headers, setHeaders } = useGlobalContext();
 
   const handleLogout = async () => {
 
@@ -75,6 +75,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         }}
         onPress={() => {
           mainNavigation.navigate('Home');
+          setRecentVideoLoad(prev => !prev);
           setSelectedBatch(null);
           setSelectSubjectSlug(null);
           setSelectedSubject(null);

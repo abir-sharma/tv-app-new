@@ -9,16 +9,18 @@ import moment from 'moment';
 
 export default function Recent() {
 
-    const {orders, setOrders, mainNavigation} = useGlobalContext();
+    const {orders, setOrders, mainNavigation, recentVideoLoad} = useGlobalContext();
     const [recentVideos, setRecentVideos] = useState<VideoType[]|null>(null);
 
     useEffect(()=>{
+        console.log("loading recent videos from local");
+        
         AsyncStorage.getItem('recentVideos').then((value)=>{
             if(value){
                 setRecentVideos(JSON.parse(value));
             }
         });
-    },[])
+    },[recentVideoLoad])
     
 
   return (
