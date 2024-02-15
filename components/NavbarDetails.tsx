@@ -22,13 +22,13 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
 
   const handleLogout = async () => {
 
-
+    mainNavigation.navigate('Login');
+    AsyncStorage.clear();
+    setHeaders(null);
     try {
       const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", { headers })
       if (res.data.success) {
-        mainNavigation.navigate('Login');
-        AsyncStorage.clear();
-        setHeaders(null);
+        
       }
     }
     catch (err) {

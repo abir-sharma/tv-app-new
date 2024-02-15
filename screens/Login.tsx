@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 
-import { View, Text, Image, TextInput, Pressable, TouchableOpacity, Alert, TouchableHighlight } from 'react-native';
+import { View, Text, Image, TextInput, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
@@ -12,9 +12,28 @@ export default function Login({ navigation }: any) {
   const { setMainNavigation, headers, setHeaders } = useGlobalContext();
   const [phone, setPhone] = useState<string>("");
   const [otpSent, setOtpSent] = useState<boolean>(false);
+  const [otpReSent, setOtpReSent] = useState<boolean>(false);
   const [otp, setOtp] = useState<string>("");
   const [newUser, setNewUser] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
+  const [otpTimer, setOtpTimer] = useState<number>(30);
+
+  //Use effect counter that will update a state and count till 30 sec
+  useEffect(() => {
+    if (otpReSent || otpSent) {
+      const interval = setInterval(() => {
+        setOtpTimer((prev) => {
+          if (prev === 0) {
+            setOtpReSent(false);
+            // return 30;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [otpReSent, otpSent]);
+
 
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
@@ -34,7 +53,13 @@ export default function Login({ navigation }: any) {
 
   const handleSentOTP = async () => {
     if (phone.length !== 10) {
-      Alert.alert("Please enter a valid mobile number");
+      // Alert.alert("Please enter a valid mobile number");
+      ToastAndroid.showWithGravity(
+        "Enter a Valid Mobile Number",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
+      return
     }
 
     try {
@@ -62,7 +87,12 @@ export default function Login({ navigation }: any) {
 
   const handleVerifyOTP = async () => {
     if (otp.length <= 0) {
-      Alert.alert("Please enter a valid OTP");
+      // Alert.alert("Please enter a valid OTP");
+      ToastAndroid.showWithGravity(
+        "Please enter a valid OTP",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
       return;
     }
     try {
@@ -84,12 +114,18 @@ export default function Login({ navigation }: any) {
         setHeaders({
           "Authorization": `Bearer ${res.data.data.access_token}`
         })
-        AsyncStorage.setItem("token", res.data.data.access_token);
+        await AsyncStorage.setItem("token", res.data.data.access_token);
         navigation.navigate('Home');
       }
     }
     catch (err) {
       console.log(err);
+      // Alert.alert("Please enter a valid OTP");
+      ToastAndroid.showWithGravity(
+        "Please enter a correct OTP",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
     }
   }
 
@@ -187,10 +223,27 @@ export default function Login({ navigation }: any) {
             className='w-full text-white text-lg' autoFocus={true} placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Correct OTP' />
         </Pressable>}
 
+        {otpSent && <Pressable
+        android_ripple={{
+          color: "rgba(255,255,255,0.4)",
+          borderless: false,
+          radius: 1000,
+          foreground: true
+        }}
+        disabled={otpTimer>0}
+        onPress={() => {
+          handleSentOTP()
+          setOtpTimer(30);
+          setOtpReSent(true);
+        }} className='mt-2 px-4 rounded-full overflow-hidden'>
+
+          <Text className='w-full text-purple-300 text-base '>Resend OTP {otpTimer>0 && ("in " + otpTimer + "s")}</Text>
+        </Pressable>}
+
 
         <Pressable
           android_ripple={{
-            color: "rgba(255,255,255,0.2)",
+            color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
             foreground: true
@@ -200,7 +253,7 @@ export default function Login({ navigation }: any) {
             newUser ? handleRegisterUser() :
               otpSent ? handleVerifyOTP() : handleSentOTP()
           }}
-          className='bg-[#000000] w-80 h-12 overflow-hidden mt-3 flex-row rounded-full px-4 items-center justify-start'>
+          className='bg-black w-80 h-12 overflow-hidden mt-3 flex-row rounded-full px-4 items-center justify-start'>
           <Text className='text-white/60 text-center w-full text-base'>{newUser ? "Register" : otpSent ? "Verify OTP" : "Get OTP"}</Text>
         </Pressable>
       </View>

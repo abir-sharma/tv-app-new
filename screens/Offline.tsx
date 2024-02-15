@@ -374,7 +374,7 @@ export const Offline = () => {
               );
               handleIPChange()
             }}
-            className='bg-[#8E89BA] w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'
+            className='bg-white/10 w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'
           >
             <Text className='text-white text-center w-full text-base'>Enter IP</Text>
           </Pressable>

@@ -13,11 +13,11 @@ export default function Navbar() {
    
 
     try{
+      mainNavigation.navigate('Login');
+      AsyncStorage.clear();
+      setHeaders(null);
       const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", {headers})
       if(res.data.success){
-        mainNavigation.navigate('Login');
-        AsyncStorage.clear();
-        setHeaders(null);
       }
     }
     catch(err){
