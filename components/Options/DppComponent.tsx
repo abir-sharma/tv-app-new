@@ -70,7 +70,8 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
           const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Restart`, options);
           console.log("Test Resumed: ", res.data);
           setTestData(res.data.data);
-          setTestSections(res.data.data.sections)
+          setTestSections(res.data.data.sections);
+          setSelectedTestMapping(res.data.data.testStudentMapping._id);
           mainNavigation.navigate('Tests');
         } catch (err) {
 

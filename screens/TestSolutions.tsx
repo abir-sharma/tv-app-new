@@ -256,7 +256,7 @@ const TestSolutions = ({ route }: any) => {
                         <View className='h-[220] bg-white/5 w-full rounded-lg items-center justify-center'>
                             <Image
                                 source={{ uri: `${currentQuestion?.question?.imageIds?.en?.baseUrl}${currentQuestion?.question?.imageIds?.en?.key}` }}
-                                width={1000}
+                                width={600}
                                 height={220}
                                 resizeMode='contain'
                                 alt='Question'

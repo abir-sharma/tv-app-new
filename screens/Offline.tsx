@@ -357,7 +357,7 @@ export const Offline = () => {
           className=' mr-5 overflow-hidden rounded-lg '
           onPress={() => ipInputRef.current?.focus()}
 
-        ><TextInput ref={ipInputRef} autoFocus={true} placeholder='Enter Ip' className=' text-white bg-[#0d0d0d] rounded-lg p-2 px-4 w-64 overflow-hidden' placeholderTextColor={"#00000"} onChangeText={(text) => { setIpAddress(text) }} /></Pressable>}
+        ><TextInput ref={ipInputRef} autoFocus={true} placeholder='Enter Ip' className=' text-white bg-[#0d0d0d] rounded-lg p-2 px-4 w-64 overflow-hidden' placeholderTextColor={"rgb(0,0,0)"} onChangeText={(text) => { setIpAddress(text) }} /></Pressable>}
         {showIpInput &&
           <Pressable
             android_ripple={{
