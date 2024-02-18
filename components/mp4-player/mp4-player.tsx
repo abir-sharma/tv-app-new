@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Video, ResizeMode } from 'expo-av'
-import { Text, View, ActivityIndicator, Pressable } from 'react-native'
+import { Text, View, ActivityIndicator, Pressable, Image } from 'react-native'
 import { useGlobalContext } from '../../context/MainContext';
 
 const MP4Player = ({ route }: any) => {
@@ -11,6 +11,8 @@ const MP4Player = ({ route }: any) => {
 
   const [showLoader, setShowLoader] = useState<boolean>(true);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const [isActive, setIsActive] = useState<boolean>(true);
+
   const playerRef = useRef(null);
 
 
@@ -40,8 +42,13 @@ const MP4Player = ({ route }: any) => {
     });
   };
 
+  useEffect(() => {
+    const interval = setInterval(() => setShowControls(false), 10000);
+    return () => clearInterval(interval)
+  }, [isActive]);
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: '#000000' }}>
       {showLoader && <View
         style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
         className='bg-white/10 '
@@ -55,8 +62,14 @@ const MP4Player = ({ route }: any) => {
           radius: 1000,
           foreground: true
         }}
-        onPress={() => { mainNavigation.goBack() }} className='bg-black/40 overflow-hidden rounded-xl px-3 z-[2] py-1 absolute top-2 left-2'>
-        <Text className='text-white text-lg font-medium'>{"Back"}</Text>
+        onPress={() => { mainNavigation.goBack() }} className='bg-black/40 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2'
+      >
+        <Image
+          source={require('../../assets/exit.png')}
+          width={30}
+          height={30}
+          className='h-[30] w-[30]'
+        />
       </Pressable>
       <Pressable
         android_ripple={{
@@ -65,7 +78,8 @@ const MP4Player = ({ route }: any) => {
           radius: 1000,
           foreground: true
         }}
-        onPress={() => { setShowControls(prev => !prev) }} className='bg-black/80 overflow-hidden rounded-xl px-3 py-1 absolute bottom-2 z-[2] left-2'>
+
+        onPress={() => { setIsActive(!isActive); setShowControls(prev => !prev) }} className='bg-black/80 overflow-hidden rounded-xl px-3 py-1 absolute bottom-2 z-[2] left-2'>
         <Text className='text-white text-lg font-medium'>{showControls ? "Hide Controls" : "Show Controls"}</Text>
       </Pressable>
       {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-row items-center justify-center'>
@@ -77,8 +91,13 @@ const MP4Player = ({ route }: any) => {
               radius: 1000,
               foreground: true
             }}
-            onPress={() => { skipBackward(60000) }} className='bg-black/90 overflow-hidden rounded-xl px-3 py-1.5'>
-            <Text className='text-white text-base font-medium'>{"-60s"}</Text>
+            onPress={() => { setIsActive(!isActive); skipBackward(30000) }} className='bg-black/90 overflow-hidden rounded-full p-2'>
+            <Image
+              source={require('../../assets/30b.png')}
+              width={30}
+              height={30}
+              className='h-[30] w-[30]'
+            />
           </Pressable>
           <Pressable
             android_ripple={{
@@ -87,8 +106,13 @@ const MP4Player = ({ route }: any) => {
               radius: 1000,
               foreground: true
             }}
-            onPress={() => { skipBackward(10000) }} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1.5'>
-            <Text className='text-white text-base font-medium'>{"-10s"}</Text>
+            onPress={() => { setIsActive(!isActive); skipBackward(10000) }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'>
+            <Image
+              source={require('../../assets/10b.png')}
+              width={30}
+              height={30}
+              className='h-[30] w-[30]'
+            />
           </Pressable>
           <Pressable
             android_ripple={{
@@ -97,8 +121,13 @@ const MP4Player = ({ route }: any) => {
               radius: 1000,
               foreground: true
             }}
-            onPress={() => { isPlaying ? pauseVideo() : playVideo() }} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1'>
-            <Text className='text-white text-lg font-medium'>{isPlaying ? "Pause" : "Play"}</Text>
+            onPress={() => { setIsActive(!isActive); isPlaying ? pauseVideo() : playVideo() }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'>
+            <Image
+              source={isPlaying ? require('../../assets/pause.png') : require('../../assets/play.png')}
+              width={30}
+              height={30}
+              className='h-[30] w-[30]'
+            />
           </Pressable>
           <Pressable
             android_ripple={{
@@ -107,8 +136,14 @@ const MP4Player = ({ route }: any) => {
               radius: 1000,
               foreground: true
             }}
-            onPress={() => { skipForward(10000) }} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1.5'>
-            <Text className='text-white text-base font-medium'>{"+10s"}</Text>
+            onPress={() => { setIsActive(!isActive); skipForward(10000) }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'
+          >
+            <Image
+              source={require('../../assets/10f.png')}
+              width={30}
+              height={30}
+              className='h-[30] w-[30]'
+            />
           </Pressable>
           <Pressable
             android_ripple={{
@@ -117,8 +152,13 @@ const MP4Player = ({ route }: any) => {
               radius: 1000,
               foreground: true
             }}
-            onPress={() => { skipForward(60000) }} className='bg-black/90 overflow-hidden rounded-xl ml-2 px-3 py-1.5'>
-            <Text className='text-white text-base font-medium'>{"+60s"}</Text>
+            onPress={() => { setIsActive(!isActive); skipForward(30000) }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'>
+            <Image
+              source={require('../../assets/30f.png')}
+              width={30}
+              height={30}
+              className='h-[30] w-[30]'
+            />
           </Pressable>
         </View>
       </View>}
@@ -131,7 +171,7 @@ const MP4Player = ({ route }: any) => {
         shouldPlay
         ref={playerRef}
         isLooping
-        style={{ width: '100%', height: '100%' }}
+        style={{ width: '100%', height: '100%', backgroundColor: '#000000' }}
         useNativeControls
         resizeMode={ResizeMode.CONTAIN}
         onLoadStart={() => {

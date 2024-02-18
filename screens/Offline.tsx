@@ -1,29 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button, ToastAndroid, Pressable, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, ToastAndroid, Pressable, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import cheerio from 'cheerio';
-import Pdf from 'react-native-pdf';
 import { useNavigation } from '@react-navigation/native';
 import Navbar from '../components/Navbar';
 import { useGlobalContext } from '../context/MainContext';
 import { ItemType, ItemType2 } from '../types/types';
 import OfflineBatches from '../components/Offline/OfflineBatches';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import analytics from '@react-native-firebase/analytics';
-
-// import Video from 'react-native-video';
-
-
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDg1MTIwOTEuMzExLCJkYXRhIjp7Il9pZCI6IjY1YTEyMmE1OWI5YmFkMmZmMGM0ODUwYyIsInVzZXJuYW1lIjoiODE0NjU3MDQyMSIsImZpcnN0TmFtZSI6IkFyeWFuIiwibGFzdE5hbWUiOiJTaW5nbGEiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwidHlwZSI6IlVTRVIifSwiaWF0IjoxNzA3OTA3MjkxfQ.CzSyuj5MBhbHds1iR0hevz-7QObu6YXI2WDZ746emr
 
 export const Offline = () => {
 
   const { setDirectoryLevel, showIpInput, setShowIpInput, setOfflineSections, setOfflineSelectedSubject, setOfflineSelectedSection, setOfflineSelectedChapter, setOfflineLectures, setOfflineDpp, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, offlineSelectedSection, directoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, setOfflineBatches, setOfflineSubjects, setOfflineChapters } = useGlobalContext();
   const [ipAddress, setIpAddress] = useState("");
-  const [pdfOpen, setPdfOpen] = useState(false);
-  const [videoOpen, setVideoOpen] = useState(false);
-  const [pdfUrl, setPdfUrl] = useState('');
-  const [videoUrl, setVideoUrl] = useState('');
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
   // const [showIpInput, setShowIpInput] = useState(false);
@@ -263,24 +252,24 @@ export const Offline = () => {
   const fetchDirectoryListing = async (directoryUrl: string) => {
     try {
       if (directoryLevel === 0) {
-        await fetchBatches();
+        fetchBatches();
       } else if (directoryLevel === 1) {
-        await fetchSubjects();
+        fetchSubjects();
       } else if (directoryLevel === 2) {
-        await fetchChapters();
+        fetchChapters();
       } else if (directoryLevel === 3) {
-        await fetchSections();
+        fetchSections();
       } else if (directoryLevel === 4) {
         if (offlineSelectedSection == 0) {
-          await fetchDpp();
+          fetchDpp();
         } else if (offlineSelectedSection == 1) {
-          await fetchDppPdf();
+          fetchDppPdf();
         } else if (offlineSelectedSection == 2) {
-          await fetchDppVideos();
+          fetchDppVideos();
         } else if (offlineSelectedSection == 3) {
-          await fetchLectures();
+          fetchLectures();
         } else {
-          await fetchNotes();
+          fetchNotes();
         }
       }
     } catch (error) {
@@ -305,14 +294,6 @@ export const Offline = () => {
     }
   };
 
-  const handleBackPress = () => {
-    // Navigate back to the parent directory
-    const segments = offlineCurrentDirectory.split('/');
-    segments.pop(); // Remove the last segment (current directory)
-    segments.pop(); // Remove the previous segment (directory name)
-    const parentDirectoryUrl = segments.join('/') + '/';
-    setOfflineCurrentDirectory(parentDirectoryUrl);
-  };
 
   function isIPAddress(input: any) {
     console.log("Check Input : ", input);

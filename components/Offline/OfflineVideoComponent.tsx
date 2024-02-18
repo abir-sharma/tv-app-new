@@ -72,7 +72,6 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
           return 0; // Names are equal
         })}
         renderItem={renderGridItem}
-        keyExtractor={(item: any) => item.id}
         numColumns={4}
       // contentContainerStyle={styles.container}
       />

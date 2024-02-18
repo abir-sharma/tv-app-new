@@ -284,8 +284,8 @@ const TestSolutions = ({ route }: any) => {
                     <View className='flex-row flex-wrap py-4 gap-2 overflow-scroll'>
                         {
                             questionsData && questionsData.map(
-                                (question: any) => (
-                                    <View className={`w-16 h-16 bg-white/10 rounded items-center justify-center ${currentQuestion?.question?.questionNumber === question?.question?.questionNumber ? 'bg-[#8E89BA]' : ''}`}>
+                                (question: any, index: number) => (
+                                    <View key={index} className={`w-16 h-16 bg-white/10 rounded items-center justify-center ${currentQuestion?.question?.questionNumber === question?.question?.questionNumber ? 'bg-[#8E89BA]' : ''}`}>
                                         <Text className=' text-lg text-white font-medium '>{question?.question?.questionNumber}</Text>
                                     </View>
                                 )

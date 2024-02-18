@@ -52,9 +52,9 @@ export default function Batches() {
     return (
         <View className='bg-white/5 p-5 w-[95%] rounded-3xl mx-auto my-5 flex-none overflow-hidden'>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
-                {subscribedBatches?.map((order) => (
+                {subscribedBatches?.map((order, index) => (
                     <Pressable
-                        key={order.batch._id}
+                        key={index}
                         hasTVPreferredFocus={true}
                         android_ripple={{
                             color: "rgba(255,255,255,0.5)",
@@ -70,9 +70,9 @@ export default function Batches() {
                         className='bg-white/10 rounded-lg h-52 w-72 overflow-hidden'>
                         <View className="w-full h-40 overflow-hidden">
                             {
-                                orders?.map((item) => {
+                                orders?.map((item, index) => {
                                     if (item.itemName === order.batch.name) {
-                                        return item.thumbnailImageLink && <Image className=' w-full h-full object-cover rounded-lg ' source={{ uri: `${item?.thumbnailImageLink}` }} />
+                                        return item.thumbnailImageLink && <Image key={index} className=' w-full h-full object-cover rounded-lg ' source={{ uri: `${item?.thumbnailImageLink}` }} />
                                     }
 
                                 })

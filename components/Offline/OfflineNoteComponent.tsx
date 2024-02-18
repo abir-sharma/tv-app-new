@@ -90,7 +90,6 @@ export const OfflineNoteComponent = ({ noteList }: NotePropType) => {
           return 0; // Names are equal
         })}
         renderItem={renderGridItem}
-        keyExtractor={(item: any) => item.id}
         numColumns={4}
       // onEndReached={() => { loadMore && getPaidBatches() }}
       // contentContainerStyle={styles.container}
