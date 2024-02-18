@@ -59,7 +59,18 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
     <View>
       {/* <Text style={styles.subjectText}>Physics</Text> */}
       <FlatList
-        data={videoList}
+        data={videoList?.sort((a, b) => {
+          const nameA = a.name.toUpperCase(); // Ignore case
+          const nameB = b.name.toUpperCase();
+
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0; // Names are equal
+        })}
         renderItem={renderGridItem}
         keyExtractor={(item: any) => item.id}
         numColumns={4}

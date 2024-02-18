@@ -30,7 +30,7 @@ export default function Chapters() {
   return (
     <View className=" flex-col justify-between items-center p-4">
       <Text className='text-white font-medium text-center w-full text-lg'>CHAPTERS</Text>
-      <View className='bg-white/5 rounded-xl overflow-hidden mt-5 w-full'>
+      <View className='bg-white/5 rounded-xl overflow-hidden mt-5 h-[510] w-full'>
         {/* <Text style={styles.subjectText}>Physics</Text> */}
         <FlatList
           data={topicList}

@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 import { useState } from 'react';
-import { Image, Text, Pressable, View, Modal, TouchableWithoutFeedback, FlatList, TouchableOpacity } from 'react-native';
+import { Image, Text, Pressable, View, Modal, TouchableWithoutFeedback, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
 import { NoteType, VideoType } from '../types/types';
 import styles from './NavbarDetails.style'
@@ -28,7 +28,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
     try {
       const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", { headers })
       if (res.data.success) {
-        
+
       }
     }
     catch (err) {
@@ -108,7 +108,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         >
           <Pressable onPress={() => setIsDropdownVisible(false)}>
             <View style={{ flex: 1 }}>
-              <View className='bg-[#444444] max-h-[200] overflow-hidden w-[20%] rounded-lg absolute top-[70] left-[130] z-[2]'>
+              <View className='bg-[#444444] max-h-[200] overflow-scroll w-[20%] rounded-lg absolute top-[70] left-[130] z-[2]'>
                 <FlatList
                   data={batchDetails?.subjects.slice(1)}
                   renderItem={renderItem}

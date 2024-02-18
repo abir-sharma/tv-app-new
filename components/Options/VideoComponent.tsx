@@ -71,7 +71,18 @@ export const VideoComponent = ({ videoList, setVideoList, loadMore, getPaidBatch
     <View>
       {/* <Text style={styles.subjectText}>Physics</Text> */}
       <FlatList
-        data={videoList}
+        data={videoList?.sort((a, b) => {
+          const nameA = a.videoDetails.name.toUpperCase(); // Ignore case
+          const nameB = b.videoDetails.name.toUpperCase();
+
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0; // Names are equal
+        })}
         renderItem={renderGridItem}
         keyExtractor={(item: VideoType) => item._id}
         numColumns={4}

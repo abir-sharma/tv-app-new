@@ -8,7 +8,7 @@ import { cookieSplitter } from '../components/video-player/cookie-splitter';
 
 const TestSolutions = ({ route }: any) => {
 
-    const { headers, selectedTestMapping } = useGlobalContext();
+    const { headers, selectedTestMapping, mainNavigation } = useGlobalContext();
     const [solutionData, setSolutionData] = useState<any>();
     const [originalSolutionData, setOriginalSolutionData] = useState<any>();
     const [questionsData, setQuestionsData] = useState<any>();
@@ -26,7 +26,6 @@ const TestSolutions = ({ route }: any) => {
     const [showLoader, setShowLoader] = useState<boolean>(true);
 
 
-    const navigation = useNavigation();
 
     useEffect(() => {
         fetchSolutionData();
@@ -176,14 +175,22 @@ const TestSolutions = ({ route }: any) => {
             </View>}
             <View className='flex-row justify-between items-center'>
                 <View>
-                    <TouchableOpacity onPress={() => {
-                        // @ts-expect-error
-                        navigation.navigate('Home')
-                    }}>
+                    <Pressable
+                        android_ripple={{
+                            color: "rgba(255,255,255,0.5)",
+                            borderless: false,
+                            radius: 1000,
+                            foreground: true
+                        }}
+                        onPress={() => {
+                            mainNavigation.navigate('Home')
+                        }}
+                        className="overflow-hidden rounded-full p-2"
+                    >
                         <View className='flex-row'>
                             <Image source={require('../assets/back.png')} className='w-8 h-8' width={10} height={10} />
                         </View>
-                    </TouchableOpacity>
+                    </Pressable>
                 </View>
                 <Text className='text-white text-xl font-medium' >{solutionData?.test?.name}</Text>
                 <Pressable
@@ -193,7 +200,7 @@ const TestSolutions = ({ route }: any) => {
                         radius: 1000,
                         foreground: true
                     }}
-                    className='flex-row justify-center overflow-hidden rounded-full items-center'>
+                    className='flex-row justify-center overflow-hidden rounded-full items-center p-2'>
                     <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
                     {/* <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text> */}
                 </Pressable>
