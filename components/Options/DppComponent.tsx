@@ -52,8 +52,8 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
         headers
       }
       console.log(headers)
-      console.log(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Start&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`)
-      const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Start&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`, options);
+      console.log(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`)
+      const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`, options);
       console.log("Test Started", res.data);
       setTestData(res.data.data);
       setTestSections(res.data.data.sections)
@@ -61,22 +61,6 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
       mainNavigation.navigate('Tests');
     } catch (err: any) {
       console.log("Error while starting test!!", err?.response);
-      if (err.response.data.error.message === "Test is not in start state") {
-        try {
-          const options = {
-            headers
-          };
-          console.log("Restart Link: ", `https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Restart`);
-          const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Restart`, options);
-          console.log("Test Resumed: ", res.data);
-          setTestData(res.data.data);
-          setTestSections(res.data.data.sections);
-          setSelectedTestMapping(res.data.data.testStudentMapping._id);
-          mainNavigation.navigate('Tests');
-        } catch (err) {
-
-        }
-      }
     }
   }
 

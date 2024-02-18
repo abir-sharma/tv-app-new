@@ -11,6 +11,7 @@ import PDFViewer from './components/pdf-viewer/pdf-viewer';
 import MP4Player from './components/mp4-player/mp4-player';
 import { Offline } from './screens/Offline';
 import OfflineDetails from './screens/OfflineDeatils';
+import { TestResult } from './screens/TestResult';
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,7 @@ export default function App() {
           <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
           <Stack.Screen name="Videos" component={Videos} options={{ headerShown: false }} />
           <Stack.Screen name="Tests" component={Tests} options={{ headerShown: false }} />
+          <Stack.Screen name="TestResult" component={TestResult} options={{ headerShown: false }} />
           <Stack.Screen name="TestSolutions" component={TestSolutions} options={{ headerShown: false }} />
           <Stack.Screen name="PDFViewer" component={PDFViewer} options={{ headerShown: false }} />
           <Stack.Screen name="Offline" component={Offline} options={{ headerShown: false }} />

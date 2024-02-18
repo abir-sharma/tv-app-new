@@ -3,6 +3,8 @@ import { View, Text, Image, Pressable, ScrollView, ToastAndroid, TouchableOpacit
 import { useGlobalContext } from '../context/MainContext';
 import { useNavigation } from '@react-navigation/native';
 import axios, { all } from 'axios';
+import { ResizeMode, Video } from 'expo-av';
+import { cookieSplitter } from '../components/video-player/cookie-splitter';
 
 const TestSolutions = ({ route }: any) => {
 
@@ -17,8 +19,13 @@ const TestSolutions = ({ route }: any) => {
     const [skippedAnswers, setSkippedAnswers] = useState<any>();
     const [correctOptions, setCorrectOptions] = useState<any>();
     const [markedOptions, setMarkedOptions] = useState<any>();
+    const [renderVideo, setRenderVideo] = useState<boolean>(false);
+
+    const [cookieParams, setCookieParams] = useState<any>(undefined);
     const [selectedFilter, setSelectedFilter] = useState<any>('all');
+
     const navigation = useNavigation();
+
     useEffect(() => {
         fetchSolutionData();
     }, [])
@@ -30,11 +37,13 @@ const TestSolutions = ({ route }: any) => {
             }
             const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/preview-test`, options);
             console.log("Test Solution Data: ", res.data.data.questions)
+            console.log("DING DING");
+            // console.log("DING DING", res.data.data.questions[0].solutionDescription[0].videoDetails.videoUrl);
+            // sendAnalyticsData(res.data.data.questions[0].solutionDescription[0].videoDetails.videoUrl)
             setQuestionsData(res.data.data.questions);
             setOriginalQuestionData([...res.data.data.questions]);
             setSolutionData(res.data.data);
             setCurrentQuestion(res.data.data.questions[0]);
-            console.log("DING DING", res.data.data.questions[0].question.solutions);
             setCorrectOptions(res.data.data.questions[0].question.solutions);
             setMarkedOptions(res.data.data.questions[0].yourResult.markedSolutions);
             const questions = res.data.data.questions;
@@ -60,20 +69,63 @@ const TestSolutions = ({ route }: any) => {
         const allData = [...originalQuestionData];
         if (filter === 'all') {
             setQuestionsData(allData)
+            if (allData.length > 0) {
+                setCurrentQuestion(allData[0]);
+                setCorrectOptions(allData[0].question.solutions);
+                setMarkedOptions(allData[0].yourResult.markedSolutions);
+                // console.log("all section : ", "Marked Solution: ", allData[0].yourResult.markedSolutions, "Correct Solution: ", allData[0].question.solutions)
+            }
         } else if (filter === 'correct') {
             const data = allData.filter((question: any) => question.yourResult.status === "CORRECT")
-            setCurrentQuestion(data[0]);
             setQuestionsData(data)
+            if (data.length > 0) {
+                setCurrentQuestion(data[0]);
+                setCorrectOptions(data[0].question.solutions);
+                setMarkedOptions(data[0].yourResult.markedSolutions);
+                // console.log("Correct section : ", "Marked Solution: ", data[0].yourResult.markedSolutions, "Correct Solution: ", data[0].question.solutions)
+            }
         } else if (filter === 'incorrect') {
             const data = allData.filter((question: any) => question.yourResult.status === "WRONG")
-            setCurrentQuestion(data[0]);
-            setQuestionsData(data)
+            setQuestionsData(data);
+            if (data.length > 0) {
+                setCurrentQuestion(data[0]);
+                setCorrectOptions(data[0].question.solutions);
+                setMarkedOptions(data[0].yourResult.markedSolutions);
+                // console.log("Incorrect section : ", "Marked Solution: ", data[0].yourResult.markedSolutions, "Correct Solution: ", data[0].question.solutions)
+            }
         } else {
             const data = allData.filter((question: any) => question.yourResult.status === "UnAttempted")
-            setCurrentQuestion(data[0]);
-            setQuestionsData(data)
+            setQuestionsData(data);
+            if (data.length > 0) {
+                setCurrentQuestion(data[0]);
+                setCorrectOptions(data[0].question.solutions);
+                setMarkedOptions(data[0].yourResult.markedSolutions);
+                // console.log("Skipped section : ", "Marked Solution: ", data[0].yourResult.markedSolutions, "Correct Solution: ", data[0].question.solutions)
+            }
         }
     }
+
+    async function sendAnalyticsData(uri: string) {
+        console.log("Inside send analytics: ", uri)
+        const newHeaders = {
+            'Content-Type': 'application/json',
+            Authorization: headers.Authorization,
+            'Client-Type': 'WEB',
+        };
+        const data = {
+            url: uri,
+        };
+        console.log('uri --->', uri);
+        axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers: newHeaders })
+            .then((response) => {
+                setCookieParams(cookieSplitter(response.data.data));
+                setRenderVideo(true);
+            })
+            .catch((error) => {
+                console.error('analytics failed --->', error.response.data);
+            });
+    }
+
 
     const handleNextClick = () => {
         const curr = questionsData.indexOf(currentQuestion);
@@ -139,7 +191,22 @@ const TestSolutions = ({ route }: any) => {
             <View className='flex-1 flex-row w-full rounded-xl mt-5 gap-x-5'>
                 <View className='flex-[2] rounded-xl items-start justify-start px-5 py-0'>
                     <Text className='text-white text-sm ml-auto text-center'>Video solution for Question {currentQuestion?.question?.questionNumber}</Text>
-                    <View className='h-52 bg-gray-600 rounded-lg w-full mt-1'></View>
+                    <View className='h-52 bg-gray-600 rounded-lg w-full mt-1'>
+                        {/* {console.log(cookieParams, currentQuestion.question.solutionDescription[0]?.videoDetails?.videoUrl)} */}
+                        {/* {currentQuestion && renderVideo && <Video
+                            useNativeControls
+                            shouldPlay
+                            source={
+                                {
+                                    uri: currentQuestion.question.solutionDescription[0]?.videoDetails?.videoUrl,
+                                    headers: {
+                                        cookie: cookieParams
+                                    }
+                                }
+                            }
+                            resizeMode={ResizeMode.CONTAIN}
+                        />} */}
+                    </View>
                     <View className='flex-row mt-3 gap-x-2'>
                         <Pressable
                             hasTVPreferredFocus={true}

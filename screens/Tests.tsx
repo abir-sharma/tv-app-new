@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, Image, Pressable, ToastAndroid } from 'react-native'
 import { useGlobalContext } from '../context/MainContext'
 import axios from 'axios';
+import { ReviewOrSubmitModal } from '../components/modals/ReviewOrSubmit';
 
 const Tests = ({ navigation, route }: any) => {
     const { testData, testSections, selectedBatch, headers, selectedTestMapping } = useGlobalContext();
@@ -12,6 +13,10 @@ const Tests = ({ navigation, route }: any) => {
     const [selectedAnswers, setSelectedAnswers] = useState<any>([]);
     const [correctOptions, setCorrectOptions] = useState<any>();
     const [markedOptions, setMarkedOptions] = useState<any>([]);
+    const [questionType, setQuestionType] = useState<any>("Single");
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [seconds, setSeconds] = useState(0);
+    const [lastTimeStamp, setLastTimeStamp] = useState(0);
 
 
     useEffect(() => {
@@ -21,6 +26,7 @@ const Tests = ({ navigation, route }: any) => {
             setCurrentQuestion(testData.sections[0]?.questions[0]);
             setCorrectOptions(testData.sections[0]?.questions[0].solutions);
             setMaxTries(testData.sections[0]?.questions[0].solutions.length);
+            setQuestionType(testData.sections[0]?.questions[0].type);
             const response = [];
             for (let i = 0; i < len; i++) {
                 const obj = {
@@ -28,7 +34,7 @@ const Tests = ({ navigation, route }: any) => {
                     "markedSolutionText": "",
                     "status": "UnAttempted",
                     "isBookmarked": false,
-                    "timeTaken": 95,
+                    "timeTaken": 0,
                     "questionId": testData.sections[0]?.questions[i]._id,
                     "notes": ""
                 }
@@ -38,30 +44,46 @@ const Tests = ({ navigation, route }: any) => {
         }
     }, [testData])
 
+    useEffect(() => {
+        let interval = setInterval(() => {
+            setSeconds((prevSeconds) => prevSeconds + 1);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        setMarkedOptions([]);
+        setSelectedAnswers([]);
+        setSeconds(0);
+    }, []);
+
     const handleOptionClick = async (option: any) => {
         const questionType = currentQuestion.type;
         const curr = currentQuestion.questionNumber - 1;
         const id = currentQuestion._id;
-        console.log("marked Answer: ", markedOptions);
-        console.log("Correct Answer: ", correctOptions);
+        // console.log("marked Answer: ", markedOptions);
+        // console.log("Correct Answer: ", correctOptions);
         if (questionType === "Single") {
             if (selectedAnswers.length > 0) {
                 return;
             } else {
                 setSelectedAnswers([option]);
                 setMarkedOptions([option]);
+                const timeDiff = seconds - lastTimeStamp;
                 const obj = {
                     "markedSolutions": [option],
-                    "status": selectedAnswers.length > 0 ? "Attempted" : "UnAttempted",
-                    "timeTaken": 95,
+                    "status": [option].length > 0 ? "Attempted" : "UnAttempted",
+                    "timeTaken": responses[curr].timeTaken + timeDiff,
                     "questionId": currentQuestion._id,
                     "markedSolutionText": "",
                     "isBookmarked": false,
                     "notes": ""
                 }
+                setLastTimeStamp(seconds);
                 const newResponses = responses;
                 newResponses[curr] = obj;
                 setResponses(newResponses);
+                console.log("Final Responses: ", newResponses)
             }
         } else if (questionType === "Multiple") {
             if (selectedAnswers.includes(option)) {
@@ -69,18 +91,21 @@ const Tests = ({ navigation, route }: any) => {
             } else {
                 setSelectedAnswers([...selectedAnswers, option].sort());
                 setMarkedOptions([...selectedAnswers, option].sort());
+                const timeDiff = seconds - lastTimeStamp;
                 const obj = {
                     "markedSolutions": [...selectedAnswers, option].sort(),
                     "status": [...selectedAnswers, option].sort().length > 0 ? "Attempted" : "UnAttempted",
-                    "timeTaken": 95,
+                    "timeTaken": responses[curr].timeTaken + timeDiff,
                     "questionId": currentQuestion._id,
                     "markedSolutionText": "",
                     "isBookmarked": false,
                     "notes": ""
                 }
+                setLastTimeStamp(seconds);
                 const newResponses = responses;
                 newResponses[curr] = obj;
                 setResponses(newResponses);
+                console.log("Final Responses: ", newResponses);
             }
         }
     }
@@ -88,11 +113,26 @@ const Tests = ({ navigation, route }: any) => {
 
     const handleSubmitTest = async () => {
         try {
+            const curr = currentQuestion.questionNumber - 1;
+            const timeDiff = seconds - lastTimeStamp;
+            const obj = {
+                "markedSolutions": selectedAnswers,
+                "status": selectedAnswers.length > 0 ? "Attempted" : "UnAttempted",
+                "timeTaken": responses[curr].timeTaken + timeDiff,
+                "questionId": currentQuestion._id,
+                "markedSolutionText": "",
+                "isBookmarked": false,
+                "notes": ""
+            }
+            setLastTimeStamp(seconds);
+            const newResponses = responses;
+            newResponses[curr] = obj;
+            setResponses(newResponses);
             const options = {
                 headers
             }
             const body = {
-                "questionsResponses": responses,
+                "questionsResponses": newResponses,
                 "lastVisitedQuestionId": currentQuestion?._id,
                 "type": "Submit",
                 "submittedBy": "user",
@@ -101,10 +141,12 @@ const Tests = ({ navigation, route }: any) => {
             console.log("Submit Test Body: ", body);
             console.log(options);
             console.log("Mapping Id: ", selectedTestMapping);
+            console.log("Batch Id: ", selectedBatch);
             console.log(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/submit-test`);
             const res = await axios.post(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/submit-test`, body, options);
             console.log("Submit Test Response: ", res.data);
-            navigation.navigate('TestSolutions')
+            setShowModal(false);
+            navigation.navigate('TestResult')
 
         } catch (err) {
             console.log("Error while submitting test!!", err);
@@ -114,15 +156,17 @@ const Tests = ({ navigation, route }: any) => {
     const handleNextClick = async () => {
         const curr = currentQuestion.questionNumber - 1;
         if (curr < totalQuestions - 1) {
+            const timeDiff = seconds - lastTimeStamp;
             const obj = {
                 "markedSolutions": selectedAnswers,
                 "status": selectedAnswers.length > 0 ? "Attempted" : "UnAttempted",
-                "timeTaken": 95,
+                "timeTaken": responses[curr].timeTaken + timeDiff,
                 "questionId": currentQuestion._id,
                 "markedSolutionText": "",
                 "isBookmarked": false,
                 "notes": ""
             }
+            setLastTimeStamp(seconds);
             const newResponses = responses;
             newResponses[curr] = obj;
             setResponses(newResponses);
@@ -130,12 +174,10 @@ const Tests = ({ navigation, route }: any) => {
             setCurrentQuestion(testData.sections[0]?.questions[curr + 1])
             setCorrectOptions(testData.sections[0]?.questions[curr + 1].solutions);
             setMarkedOptions(responses[curr + 1].markedSolutions);
+            setQuestionType(testData.sections[0]?.questions[curr + 1].type);
+
         } else {
-            ToastAndroid.showWithGravity(
-                "No next Question!!",
-                ToastAndroid.SHORT,
-                ToastAndroid.TOP,
-            );
+            setShowModal(true);
             return;
         }
     }
@@ -143,15 +185,17 @@ const Tests = ({ navigation, route }: any) => {
     const handlePreviousClick = async () => {
         const curr = currentQuestion.questionNumber - 1;
         if (curr > 0) {
+            const timeDiff = seconds - lastTimeStamp;
             const obj = {
                 "markedSolutions": selectedAnswers,
                 "status": selectedAnswers.length > 0 ? "Attempted" : "UnAttempted",
-                "timeTaken": 95,
+                "timeTaken": responses[curr].timeTaken + timeDiff,
                 "questionId": currentQuestion._id,
                 "markedSolutionText": "",
                 "isBookmarked": false,
                 "notes": ""
             }
+            setLastTimeStamp(seconds);
             const newResponses = responses;
             newResponses[curr] = obj;
             setResponses(newResponses);
@@ -159,6 +203,7 @@ const Tests = ({ navigation, route }: any) => {
             setCurrentQuestion(testData.sections[0]?.questions[curr - 1])
             setCorrectOptions(testData.sections[0]?.questions[curr - 1].solutions);
             setMarkedOptions(responses[curr - 1].markedSolutions);
+            setQuestionType(testData.sections[0]?.questions[curr - 1].type);
         } else {
             ToastAndroid.showWithGravity(
                 "No Previous Question",
@@ -173,16 +218,34 @@ const Tests = ({ navigation, route }: any) => {
 
     // }
 
+    const formatTime = () => {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const remainingSeconds = seconds % 60;
+
+        const formattedHours = String(hours).padStart(2, '0');
+        const formattedMinutes = String(minutes).padStart(2, '0');
+        const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+
+        return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    };
+
+
+    const convertTimeToSeconds = (time: any) => {
+        const [hours, minutes, seconds] = time.split(':').map(Number);
+        return hours * 3600 + minutes * 60 + seconds;
+    };
 
 
     return (
         <View className='bg-[#1A1A1A] min-h-screen p-5'>
+            <ReviewOrSubmitModal showModal={showModal} seconds={seconds} setShowModal={setShowModal} responses={responses} handleSubmitTest={handleSubmitTest} />
             <View className='flex-row justify-between items-center'>
                 <View>
                     {testData && <Text className='text-white text-xl font-medium'>{testData?.test?.name}</Text>}
                     <View className='flex-row mt-2'>
                         <Image source={require('../assets/clock.png')} className='w-5 h-5' width={10} height={10} />
-                        <Text className='text-white ml-2'>{"03:18:52"}</Text>
+                        <Text className='text-white ml-2'>{formatTime()}</Text>
                     </View>
                 </View>
                 <View className='flex-row'>
@@ -206,7 +269,8 @@ const Tests = ({ navigation, route }: any) => {
                         }}
                         className='bg-[#5A4BDA] rounded-xl px-5 py-2 ml-4 overflow-hidden'
                         onPress={() => {
-                            handleSubmitTest()
+                            setShowModal(true);
+                            // handleSubmitTest()
                         }}
                     >
                         <Text className='text-white text-lg'>Submit Test</Text>
@@ -243,8 +307,7 @@ const Tests = ({ navigation, route }: any) => {
                     </View>
                     <View className='flex flex-col w-5/12 rounded-xl px-8'>
                         <Text className='text-white text-lg'>Options: </Text>
-                        {console.log("in react componnent: ", markedOptions)}
-                        {currentQuestion && <Pressable
+                        {currentQuestion && questionType === 'Single' && <Pressable
                             hasTVPreferredFocus={true}
                             android_ripple={{
                                 color: "rgba(255,255,255,0.5)",
@@ -252,6 +315,7 @@ const Tests = ({ navigation, route }: any) => {
                                 radius: 2000,
                                 foreground: true
                             }}
+                            //65cdde8fc2f511239983b526
                             onPress={() => { handleOptionClick(currentQuestion?.options[0]?._id) }}
                             className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : '' : ''}`}
                         >
@@ -260,7 +324,24 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'>{markedOptions.length > 0 ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
-                        {currentQuestion && <Pressable
+                        {currentQuestion && questionType === 'Multiple' && <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 2000,
+                                foreground: true
+                            }}
+                            onPress={() => { handleOptionClick(currentQuestion?.options[0]?._id) }}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
+                        >
+                            <View className={`flex flex-row justify-between`}>
+                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[0]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) && correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                            </View>
+                        </Pressable>}
+
+                        {currentQuestion && questionType === 'Single' && <Pressable
                             hasTVPreferredFocus={true}
                             android_ripple={{
                                 color: "rgba(255,255,255,0.5)",
@@ -277,7 +358,23 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'>{markedOptions.length > 0 ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? !correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
-                        {currentQuestion && <Pressable
+                        {currentQuestion && questionType === 'Multiple' && <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 2000,
+                                foreground: true
+                            }}
+                            onPress={() => { handleOptionClick(currentQuestion?.options[1]?._id) }}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
+                        >
+                            <View className={`flex flex-row justify-between`}>
+                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[1]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) && correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? !correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                            </View>
+                        </Pressable>}
+                        {currentQuestion && questionType === 'Single' && <Pressable
                             hasTVPreferredFocus={true}
                             android_ripple={{
                                 color: "rgba(255,255,255,0.5)",
@@ -294,7 +391,23 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'>{markedOptions.length > 0 ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? !correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
-                        {currentQuestion && <Pressable
+                        {currentQuestion && questionType === 'Multiple' && <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 2000,
+                                foreground: true
+                            }}
+                            onPress={() => { handleOptionClick(currentQuestion?.options[2]?._id) }}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
+                        >
+                            <View className={`flex flex-row justify-between`}>
+                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[2]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) && correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? !correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                            </View>
+                        </Pressable>}
+                        {currentQuestion && questionType === 'Single' && <Pressable
                             hasTVPreferredFocus={true}
                             android_ripple={{
                                 color: "rgba(255,255,255,0.5)",
@@ -309,6 +422,22 @@ const Tests = ({ navigation, route }: any) => {
                             <View className={`flex flex-row justify-between `}>
                                 <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[3]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{markedOptions.length > 0 ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                            </View>
+                        </Pressable>}
+                        {currentQuestion && questionType === 'Multiple' && <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 2000,
+                                foreground: true
+                            }}
+                            onPress={() => { handleOptionClick(currentQuestion?.options[3]?._id) }}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
+                        >
+                            <View className={`flex flex-row justify-between`}>
+                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[3]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) && correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
                     </View>

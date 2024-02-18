@@ -77,9 +77,17 @@ export default function Login({ navigation }: any) {
 
 
     }
-    catch (err) {
-      console.log(err);
-      setNewUser(true);
+    catch (err: any) {
+      console.log("Error while sending otp! ", err.res.status);
+      if (err.res.status === 429) {
+        ToastAndroid.showWithGravity(
+          "Too many OTP requests, Please try after sometime",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      } else {
+        setNewUser(true);
+      }
 
     }
 
@@ -179,14 +187,14 @@ export default function Login({ navigation }: any) {
         <Text className="text-white text-2xl font-medium mt-2"> Physics Wallah </Text>
         <Text className="text-white text-sm font-normal mt-6"> Please enter your mobile no. to Login  / Register </Text>
         <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.4)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        onPress={() => phoneInputRef.current?.focus()}
-        className='bg-black w-80 h-12 mt-3 flex-row rounded-md px-4 items-center justify-start overflow-hidden'
+          android_ripple={{
+            color: "rgba(255,255,255,0.4)",
+            borderless: false,
+            radius: 1000,
+            foreground: true
+          }}
+          onPress={() => phoneInputRef.current?.focus()}
+          className='bg-black w-80 h-12 mt-3 flex-row rounded-md px-4 items-center justify-start overflow-hidden'
 
         >
           <View className='flex-row items-center justify-start'>
@@ -195,49 +203,49 @@ export default function Login({ navigation }: any) {
           </View>
           <TextInput ref={phoneInputRef} hasTVPreferredFocus={true} value={phone} onChangeText={newText => { handleTextChange(newText) }} onFocus={(e) => { console.log("Focused") }}
             className='w-full text-white text-lg' autoFocus={true} placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Mobile No.' /></Pressable>
-        
+
 
         {newUser && <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.4)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        onPress={() => nameInputRef.current?.focus()} className='bg-black w-80 overflow-hidden h-12 mt-3 flex-row rounded-md px-4 items-center justify-start'>
+          android_ripple={{
+            color: "rgba(255,255,255,0.4)",
+            borderless: false,
+            radius: 1000,
+            foreground: true
+          }}
+          onPress={() => nameInputRef.current?.focus()} className='bg-black w-80 overflow-hidden h-12 mt-3 flex-row rounded-md px-4 items-center justify-start'>
 
           <TextInput ref={nameInputRef} hasTVPreferredFocus={true} value={name} onChangeText={newText => { handleNameChange(newText) }}
             className='w-full text-white text-lg' autoFocus={true} placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Name' />
         </Pressable>}
 
         {otpSent && <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.4)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        onPress={() => otpInputRef.current?.focus()} className='bg-black w-80 overflow-hidden h-12 mt-3 flex-row rounded-md px-4 items-center justify-start'>
+          android_ripple={{
+            color: "rgba(255,255,255,0.4)",
+            borderless: false,
+            radius: 1000,
+            foreground: true
+          }}
+          onPress={() => otpInputRef.current?.focus()} className='bg-black w-80 overflow-hidden h-12 mt-3 flex-row rounded-md px-4 items-center justify-start'>
 
           <TextInput ref={otpInputRef} hasTVPreferredFocus={true} value={otp} onChangeText={newText => { handleOTPChange(newText) }}
             className='w-full text-white text-lg' autoFocus={true} placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Correct OTP' />
         </Pressable>}
 
         {otpSent && <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.4)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        disabled={otpTimer>0}
-        onPress={() => {
-          handleSentOTP()
-          setOtpTimer(30);
-          setOtpReSent(true);
-        }} className='mt-2 px-4 rounded-full overflow-hidden'>
+          android_ripple={{
+            color: "rgba(255,255,255,0.4)",
+            borderless: false,
+            radius: 1000,
+            foreground: true
+          }}
+          disabled={otpTimer > 0}
+          onPress={() => {
+            handleSentOTP()
+            setOtpTimer(30);
+            setOtpReSent(true);
+          }} className='mt-2 px-4 rounded-full overflow-hidden'>
 
-          <Text className='w-full text-purple-300 text-base '>Resend OTP {otpTimer>0 && ("in " + otpTimer + "s")}</Text>
+          <Text className='w-full text-purple-300 text-base '>Resend OTP {otpTimer > 0 && ("in " + otpTimer + "s")}</Text>
         </Pressable>}
 
 
