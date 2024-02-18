@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 
-import { ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import NavbarDetails from '../components/NavbarDetails';
 import Batches from '../components/Batches';
 import Recent from '../components/Recent';
@@ -15,11 +15,14 @@ import { DppComponent } from '../components/Options/DppComponent';
 
 export default function Details({ navigation }: any) {
 
-  const { setMainNavigation, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, topicList } = useGlobalContext();
+  const { setMainNavigation, dppList, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, topicList } = useGlobalContext();
+
 
   const [contentType, setContentType] = useState<string>('videos');
   const [selectedMenu, setSelectedMenu] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [showLoader, setShowLoader] = useState<boolean>(true);
+
 
   const [videoList, setVideoList] = useState<VideoType[] | null>(null);
   const [noteList, setNoteList] = useState<NoteType[] | null>(null);
@@ -52,11 +55,12 @@ export default function Details({ navigation }: any) {
   const getDetails = async () => {
 
     console.log("req:", batchDetails?.slug, selectSubjectSlug, currentPage, contentType, selectedChapter?.slug, selectedMenu);
+    setShowLoader(true);
     try {
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/contents?page=${currentPage}&contentType=${contentType}&tag=${selectedChapter?.slug}`, { headers });
-      // console.log("gg:", res.data.data);
 
-      // setCurrentPage(prev=>prev+1)
+      const resDpp = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, { headers });
+
       if (selectedMenu === 0) {
         setVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res.data.data] : res.data.data));
         if (res?.data?.data?.length <= 0) {
@@ -68,6 +72,11 @@ export default function Details({ navigation }: any) {
         if (res?.data?.data?.length <= 0) {
           setShowLoadMoreNotes(false);
         }
+      }
+      else if (selectedMenu === 2) {
+        const data = resDpp.data.data;
+        console.log("DPP List: ", data);
+        setDppList(data);
       }
       else if (selectedMenu === 3) {
         setDppNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res.data.data] : res.data.data));
@@ -90,6 +99,7 @@ export default function Details({ navigation }: any) {
     catch (err) {
       console.log("error:", err);
     }
+    setShowLoader(false);
   }
 
   useEffect(() => {
@@ -104,6 +114,12 @@ export default function Details({ navigation }: any) {
 
       <View className='flex-1 flex-row'>
 
+        {showLoader && <View
+          style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          className='bg-white/10 '
+        >
+          <ActivityIndicator color={"#FFFFFF"} size={80} />
+        </View>}
         <View className='flex-1 '>
           <Chapters />
         </View>

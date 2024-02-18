@@ -42,6 +42,12 @@ const MP4Player = ({ route }: any) => {
 
   return (
     <View style={{ flex: 1 }}>
+      {showLoader && <View
+        style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        className='bg-white/10 '
+      >
+        <ActivityIndicator color={"#FFFFFF"} size={80} />
+      </View>}
       <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
@@ -116,9 +122,7 @@ const MP4Player = ({ route }: any) => {
           </Pressable>
         </View>
       </View>}
-      {showLoader && <View style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', backgroundColor: 'white', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator color={"#000000"} size='large' />
-      </View>}
+
       <Video
         source={{ uri: uri }}
         rate={1.0}

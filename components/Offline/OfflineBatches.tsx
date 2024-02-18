@@ -1,7 +1,7 @@
 /// <reference types="nativewind/types" />
 
-import { useContext, useEffect } from 'react';
-import { Image, Pressable, ScrollView, Text, View } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
 import defaultIcon from '../../assets/TV.png';
@@ -12,14 +12,30 @@ export default function OfflineBatches(params: any) {
 
     const { setDirectoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, offlineBatches } = useGlobalContext();
     const { mainNavigation } = useGlobalContext();
+    const [showLoader, setShowLoader] = useState<boolean>(false);
+
+
 
     const getToken = async () => {
         console.log("Hi");
         console.log(await AsyncStorage.getItem("token"));
     }
 
+    useEffect(() => {
+        setShowLoader(true);
+        if (offlineBatches) {
+            setShowLoader(false);
+        }
+    }, [offlineBatches])
+
     return (
         <View className='bg-white/5 p-5 w-[95%] rounded-3xl mx-auto my-5 flex-none overflow-hidden'>
+            {showLoader && <View
+                style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
+                className='bg-white/10 '
+            >
+                <ActivityIndicator color={"#FFFFFF"} size={80} />
+            </View>}
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
                 {offlineBatches?.map((batch: any, index: number) => (
                     <Pressable

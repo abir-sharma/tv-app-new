@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useGlobalContext } from "../context/MainContext"
 import { useEffect, useState } from "react";
-import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 
@@ -9,11 +9,13 @@ import { useNavigation } from "@react-navigation/native";
 export const TestResult = () => {
   const { testData, headers, selectedBatch, mainNavigation, setTestData, setTestSections, setSelectedTestMapping, selectedDpp } = useGlobalContext();
   const [result, setResult] = useState<any>(null);
+  const [showLoader, setShowLoader] = useState<boolean>(false);
 
   const navigation = useNavigation<any>();
 
   const fetchResult = async () => {
     try {
+      setShowLoader(true);
       const testId = testData?.test?._id;
       const batchId = selectedBatch?.batch?._id;
       const options = {
@@ -27,6 +29,7 @@ export const TestResult = () => {
     } catch (err: any) {
       console.log("Error while fetching test result data: ", err.resposne);
     }
+    setShowLoader(false);
   }
 
   const restartQuiz = async () => {
@@ -65,6 +68,12 @@ export const TestResult = () => {
 
   return (
     <View className="bg-[#111111] h-full">
+      {showLoader && <View
+        style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        className='bg-white/10 '
+      >
+        <ActivityIndicator color={"#FFFFFF"} size={80} />
+      </View>}
 
       <View className='flex-row justify-between items-center p-8 pb-0'>
         <View>

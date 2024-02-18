@@ -19,6 +19,8 @@ type GlobalContextType = {
   setAddModalOpen: Dispatch<SetStateAction<boolean>>;
   subscribedBatches: BatchType[] | null;
   setSubscribedBatches: Dispatch<SetStateAction<BatchType[] | null>>;
+  dppList: QuizItemType[] | null;
+  setDppList: Dispatch<SetStateAction<QuizItemType[] | null>>;
   topicList: TopicType[] | null;
   setTopicList: Dispatch<SetStateAction<TopicType[] | null>>;
   selectedDpp: QuizItemType | null;
@@ -90,6 +92,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setAddModalOpen: () => { },
   subscribedBatches: null,
   setSubscribedBatches: () => { },
+  dppList: null,
+  setDppList: () => { },
   topicList: null,
   setTopicList: () => { },
   selectedDpp: null,
@@ -168,6 +172,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const [selectedChapter, setSelectedChapter] = useState<TopicType | null>(null);
 
+  const [dppList, setDppList] = useState<QuizItemType[] | null>(null);
   const [batchDetails, setBatchDetails] = useState<BatchDetails | null>(null);
   const [mainNavigation, setMainNavigation] = useState<any>(null);
 
@@ -310,6 +315,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         selectedBatch, setSelectedBatch,
         batchDetails, setBatchDetails,
         topicList, setTopicList,
+        dppList, setDppList,
         selectSubjectSlug, setSelectSubjectSlug,
         mainNavigation, setMainNavigation,
         headers, setHeaders,

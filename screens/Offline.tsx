@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button, ToastAndroid, Pressable } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button, ToastAndroid, Pressable, ActivityIndicator } from 'react-native';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import Pdf from 'react-native-pdf';
@@ -24,6 +24,8 @@ export const Offline = () => {
   const [videoOpen, setVideoOpen] = useState(false);
   const [pdfUrl, setPdfUrl] = useState('');
   const [videoUrl, setVideoUrl] = useState('');
+  const [showLoader, setShowLoader] = useState<boolean>(false);
+
   // const [showIpInput, setShowIpInput] = useState(false);
   // const [batches, setBatches] = useState<string[]>([]);
 
@@ -346,6 +348,12 @@ export const Offline = () => {
   return (
     <View style={{ flex: 1 }} className='bg-[#1A1A1A]'>
       <Navbar />
+      {showLoader && <View
+        style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        className='bg-white/10 '
+      >
+        <ActivityIndicator color={"#FFFFFF"} size={80} />
+      </View>}
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
         {showIpInput && <Pressable
           android_ripple={{
@@ -380,37 +388,7 @@ export const Offline = () => {
           </Pressable>
         }
       </View>
-      {/* 
-      <TouchableOpacity onPress={() => console.log("Hiiiiiiii")}>
-        Testing
-      </TouchableOpacity> */}
       <OfflineBatches />
-      {/* <FlatList
-        data={directoryListing}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleDirectoryItemPress(item.link)}>
-            <Text style={{ padding: 10, backgroundColor: '#efefef', margin: 7, borderRadius: 5 }}>{item.name}</Text>
-          </TouchableOpacity>
-        )}
-        keyExtractor={(item, index) => index.toString()}
-      /> */}
-      {/* <WebView
-        source={{ uri: 'https://bamlab.github.io/react-tv-space-navigation/' }}
-        style={{ flex: 1 }}
-      /> */}
-
-      {/* {videoOpen && (
-        <View style={{ flex: 1 }}>
-          <TouchableOpacity onPress={() => setVideoOpen(false)}>
-            <Text style={{ color: 'blue' }}>Close Video</Text>
-          </TouchableOpacity>
-          <Video
-            source={{ uri: videoUrl }}
-            style={{ flex: 1 }}
-            controls={true}
-          />
-        </View>
-      )} */}
     </View>
   );
 };

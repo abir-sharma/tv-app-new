@@ -21,6 +21,7 @@ export default function VideoPlayer(props: any) {
   const [renderVideo, setRenderVideo] = useState<boolean>(false);
   const [noVideoAvailable, setNoVideoAvailable] = useState<boolean>(false);
   const { headers } = useGlobalContext();
+  const [showLoader, setShowLoader] = useState<boolean>(true);
   // console.log("###### --->", props?.lectureDetails);
 
   useEffect(() => {
@@ -119,6 +120,12 @@ export default function VideoPlayer(props: any) {
 
   return (
     <View style={{ minHeight: '100%' }} className='bg-[#1A1A1A] h-full'>
+      {showLoader && <View
+        style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        className='bg-white/10 '
+      >
+        <ActivityIndicator color={"#FFFFFF"} size={80} />
+      </View>}
       <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
@@ -226,6 +233,7 @@ export default function VideoPlayer(props: any) {
           onError={(err: any) => console.log('Video Player Error --->', err, `CloundFront-Key-Pair-Id=${cookieParams?.key_pair_id};CloudFront-Policy=${cookieParams?.policy};CloudFront-Signature=${cookieParams?.signature};`)}
           isMuted={false}
           shouldPlay
+          onLoad={() => setShowLoader(false)}
         />
       }
     </View>

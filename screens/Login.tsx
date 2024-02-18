@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 
-import { View, Text, Image, TextInput, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid } from 'react-native';
+import { View, Text, Image, TextInput, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid, ActivityIndicator } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
@@ -17,6 +17,8 @@ export default function Login({ navigation }: any) {
   const [newUser, setNewUser] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
   const [otpTimer, setOtpTimer] = useState<number>(30);
+  const [showLoader, setShowLoader] = useState<boolean>(false);
+
 
   //Use effect counter that will update a state and count till 30 sec
   useEffect(() => {
@@ -62,6 +64,7 @@ export default function Login({ navigation }: any) {
       return
     }
 
+    setShowLoader(true);
     try {
       const res = await axios.post("https://api.penpencil.co/v1/users/get-otp?smsType=0", {
         username: phone,
@@ -90,6 +93,7 @@ export default function Login({ navigation }: any) {
       }
 
     }
+    setShowLoader(false);
 
   }
 
@@ -103,6 +107,7 @@ export default function Login({ navigation }: any) {
       );
       return;
     }
+    setShowLoader(true);
     try {
       const res = await axios.post("https://api.penpencil.co/v3/oauth/token", {
         username: phone,
@@ -135,6 +140,7 @@ export default function Login({ navigation }: any) {
         ToastAndroid.CENTER,
       );
     }
+    setShowLoader(false);
   }
 
   const handleRegisterUser = async () => {
@@ -145,6 +151,7 @@ export default function Login({ navigation }: any) {
       Alert.alert("Please enter a valid name");
     }
 
+    setShowLoader(true);
     const nameArray = name.split(' ');
     const firstName = nameArray.shift(); // Remove and return the first element
     const lastName = nameArray.join(' '); // Join the rest with space
@@ -172,6 +179,7 @@ export default function Login({ navigation }: any) {
     catch (err) {
       console.log(err);
     }
+    setShowLoader(false);
   }
 
   const phoneInputRef = useRef<TextInput>(null);
@@ -180,6 +188,12 @@ export default function Login({ navigation }: any) {
 
   return (
     <View className="bg-[#1A1A1A] w-full flex-1 items-center justify-center">
+      {showLoader && <View
+        style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        className='bg-white/10 '
+      >
+        <ActivityIndicator color={"#FFFFFF"} size={80} />
+      </View>}
       {/* <Image source= {require('../assets/loginBackdrop.png')} className='w-full h-full absolute top-0 left-0 z-0' width={1920} height={1080} /> */}
       <View className='flex-col items-center relative z-[2]'>
         <Image source={require('../assets/pw-logo.png')} className='w-16 h-16' width={10} height={10} />
@@ -258,6 +272,7 @@ export default function Login({ navigation }: any) {
           }}
 
           onPress={() => {
+            setShowLoader(true);
             newUser ? handleRegisterUser() :
               otpSent ? handleVerifyOTP() : handleSentOTP()
           }}

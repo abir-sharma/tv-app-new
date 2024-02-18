@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, Pressable, ScrollView, ToastAndroid, TouchableOpacity } from 'react-native'
+import { View, Text, Image, Pressable, ScrollView, ToastAndroid, TouchableOpacity, ActivityIndicator } from 'react-native'
 import { useGlobalContext } from '../context/MainContext';
 import { useNavigation } from '@react-navigation/native';
 import axios, { all } from 'axios';
@@ -23,6 +23,8 @@ const TestSolutions = ({ route }: any) => {
 
     const [cookieParams, setCookieParams] = useState<any>(undefined);
     const [selectedFilter, setSelectedFilter] = useState<any>('all');
+    const [showLoader, setShowLoader] = useState<boolean>(true);
+
 
     const navigation = useNavigation();
 
@@ -31,6 +33,7 @@ const TestSolutions = ({ route }: any) => {
     }, [])
 
     const fetchSolutionData = async () => {
+        setShowLoader(true);
         try {
             const options = {
                 headers
@@ -63,6 +66,8 @@ const TestSolutions = ({ route }: any) => {
         } catch (err: any) {
             console.log("Errow while fetching Solution Data: ", err.response);
         }
+        setShowLoader(false);
+
     }
 
     const handleFilter = (filter: string) => {
@@ -163,6 +168,12 @@ const TestSolutions = ({ route }: any) => {
 
     return (
         <View className='bg-[#1A1A1A] min-h-screen p-5'>
+            {showLoader && <View
+                style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
+                className='bg-white/10 '
+            >
+                <ActivityIndicator color={"#FFFFFF"} size={80} />
+            </View>}
             <View className='flex-row justify-between items-center'>
                 <View>
                     <TouchableOpacity onPress={() => {

@@ -1,10 +1,10 @@
 /// <reference types="nativewind/types" />
 
-import { View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import Navbar from '../components/Navbar';
 import Batches from '../components/Batches';
 import Recent from '../components/Recent';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';

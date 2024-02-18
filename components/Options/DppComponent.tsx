@@ -1,5 +1,5 @@
 import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import { NoteType, QuizItemType, VideoType } from '../../types/types';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
@@ -15,34 +15,34 @@ type DPPPropType = {
 
 export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }: DPPPropType) => {
 
-  const { mainNavigation, setTestData, selectedTestMapping, setSelectedTestMapping, batchDetails, setTestSections, setSelectedDpp, headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
+  const { mainNavigation, setTestData, dppList, setDppList, selectedTestMapping, setSelectedTestMapping, batchDetails, setTestSections, setSelectedDpp, headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
   const navigation = useNavigation();
 
-  const [dppList, setDppList] = useState<QuizItemType[]>([]);
 
-  const getDPP = async () => {
-    try {
-      const options = {
-        headers
-      }
-      console.log(selectedBatch);
-      console.log(selectedSubject);
-      console.log(selectedChapter);
-      console.log(headers);
-      console.log("ALL DPP TEST LINK: ", `https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`)
-      const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, options);
-      const list: any[] = [];
-      const data = res.data.data;
-      console.log("DPP List: ", data);
-      setDppList(data);
-    }
-    catch (err) {
-      console.log("Error in getDPP:", err);
-    }
-  }
-  useEffect(() => {
-    getDPP();
-  }, [])
+
+  // const getDPP = async () => {
+  //   try {
+  //     const options = {
+  //       headers
+  //     }
+  //     console.log(selectedBatch);
+  //     console.log(selectedSubject);
+  //     console.log(selectedChapter);
+  //     console.log(headers);
+  //     console.log("ALL DPP TEST LINK: ", `https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`)
+  //     const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, options);
+  //     const data = res.data.data;
+  //     console.log("DPP List: ", data);
+  //     setDppList(data);
+  //   }
+  //   catch (err) {
+  //     console.log("Error in getDPP:", err);
+  //   }
+  // }
+  // useEffect(() => {
+  //   getDPP();
+  // }, [])
+
 
   const handleDppClick = async (item: any) => {
     console.log("Selected quiz", item);
@@ -89,14 +89,12 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
 
   return (
     <View className='pt-5'>
-      <FlatList
+      {dppList && <FlatList
         data={dppList}
         renderItem={renderGridItem}
         keyExtractor={(item: any) => item.test._id}
         numColumns={1}
-      // onEndReached={()=>{loadMore && getPaidBatches()}}
-      // contentContainerStyle={styles.container}
-      />
+      />}
     </View>
   );
 };

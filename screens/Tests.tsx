@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, Pressable, ToastAndroid } from 'react-native'
+import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator } from 'react-native'
 import { useGlobalContext } from '../context/MainContext'
 import axios from 'axios';
 import { ReviewOrSubmitModal } from '../components/modals/ReviewOrSubmit';
@@ -17,6 +17,8 @@ const Tests = ({ navigation, route }: any) => {
     const [showModal, setShowModal] = useState<boolean>(false);
     const [seconds, setSeconds] = useState(0);
     const [lastTimeStamp, setLastTimeStamp] = useState(0);
+    const [showLoader, setShowLoader] = useState<boolean>(true);
+
 
 
     useEffect(() => {
@@ -41,6 +43,7 @@ const Tests = ({ navigation, route }: any) => {
                 response.push(obj);
             }
             setResponses(response);
+            setShowLoader(false);
         }
     }, [testData])
 
@@ -61,8 +64,6 @@ const Tests = ({ navigation, route }: any) => {
         const questionType = currentQuestion.type;
         const curr = currentQuestion.questionNumber - 1;
         const id = currentQuestion._id;
-        // console.log("marked Answer: ", markedOptions);
-        // console.log("Correct Answer: ", correctOptions);
         if (questionType === "Single") {
             if (selectedAnswers.length > 0) {
                 return;
@@ -214,10 +215,6 @@ const Tests = ({ navigation, route }: any) => {
         }
     }
 
-    // const handleInstructionClick = async () => {
-
-    // }
-
     const formatTime = () => {
         const hours = Math.floor(seconds / 3600);
         const minutes = Math.floor((seconds % 3600) / 60);
@@ -239,6 +236,12 @@ const Tests = ({ navigation, route }: any) => {
 
     return (
         <View className='bg-[#1A1A1A] min-h-screen p-5'>
+            {showLoader && <View
+                style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
+                className='bg-white/10 '
+            >
+                <ActivityIndicator color={"#FFFFFF"} size={80} />
+            </View>}
             <ReviewOrSubmitModal showModal={showModal} seconds={seconds} setShowModal={setShowModal} responses={responses} handleSubmitTest={handleSubmitTest} />
             <View className='flex-row justify-between items-center'>
                 <View>
