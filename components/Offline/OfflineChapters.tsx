@@ -10,7 +10,7 @@ export default function OfflineChapters() {
 
   const renderItem = ({ item }: any) => (
     <Pressable
-      className={`py-4 px-4 overflow-hidden rounded-lg ${offlineSelectedChapter === item.id && 'bg-[#8E89BA]'}`}
+      className={`py-4 px-4 overflow-hidden rounded-lg ${offlineSelectedChapter === item?.id && 'bg-[#8E89BA]'}`}
       hasTVPreferredFocus={true}
       android_ripple={{
         color: "rgba(255,255,255,0.5)",
@@ -19,13 +19,13 @@ export default function OfflineChapters() {
         foreground: true
       }}
       onPress={() => {
-        setOfflineSelectedChapter(item.id);
+        setOfflineSelectedChapter(item?.id);
         setDirectoryLevel(3);
         setOfflineCurrentDirectory(item?.path);
         console.log("Chapter selected: ", item);
       }}
     >
-      <Text className='text-white text-sm'>{item.name}</Text>
+      <Text className='text-white text-sm'>{item?.name}</Text>
     </Pressable>
   );
 

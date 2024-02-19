@@ -15,33 +15,10 @@ type DPPPropType = {
 
 export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }: DPPPropType) => {
 
-  const { mainNavigation, setTestData, dppList, setDppList, selectedTestMapping, setSelectedTestMapping, batchDetails, setTestSections, setSelectedDpp, headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
+  const { mainNavigation, setLogs, setTestData, dppList, setDppList, selectedTestMapping, setSelectedTestMapping, batchDetails, setTestSections, setSelectedDpp, headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
   const navigation = useNavigation();
 
 
-
-  // const getDPP = async () => {
-  //   try {
-  //     const options = {
-  //       headers
-  //     }
-  //     console.log(selectedBatch);
-  //     console.log(selectedSubject);
-  //     console.log(selectedChapter);
-  //     console.log(headers);
-  //     console.log("ALL DPP TEST LINK: ", `https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`)
-  //     const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, options);
-  //     const data = res.data.data;
-  //     console.log("DPP List: ", data);
-  //     setDppList(data);
-  //   }
-  //   catch (err) {
-  //     console.log("Error in getDPP:", err);
-  //   }
-  // }
-  // useEffect(() => {
-  //   getDPP();
-  // }, [])
 
 
   const handleDppClick = async (item: any) => {
@@ -54,13 +31,14 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
       console.log(headers)
       console.log(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`)
       const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`, options);
-      console.log("Test Started", res.data);
-      setTestData(res.data.data);
-      setTestSections(res.data.data.sections)
-      setSelectedTestMapping(res.data.data.testStudentMapping._id);
+      console.log("Test Started", res?.data);
+      setTestData(res?.data?.data);
+      setTestSections(res?.data?.data?.sections)
+      setSelectedTestMapping(res?.data?.data?.testStudentMapping?._id);
       mainNavigation.navigate('Tests');
     } catch (err: any) {
       console.log("Error while starting test!!", err?.response);
+      setLogs((logs) => [...logs, "Error in START TEST API:" + JSON.stringify(err?.response)]);
     }
   }
 
@@ -79,8 +57,8 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
       onPress={() => { handleDppClick(item) }}>
       <View className='w-full h-full flex-row justify-between items-center px-5'>
         <View>
-          <Text className='text-white font-medium text-lg'>{item.test.name}</Text>
-          <View className='flex-row'><Image source={require('../../assets/noteIcon.png')} className='w-5 h-5 mr-2' width={10} height={10} /><Text className='text-white font-normal text-sm'>{`${item.test.totalQuestions} Questions  |  ${item.test.totalMarks} Marks`}</Text></View>
+          <Text className='text-white font-medium text-lg'>{item?.test?.name}</Text>
+          <View className='flex-row'><Image source={require('../../assets/noteIcon.png')} className='w-5 h-5 mr-2' width={10} height={10} /><Text className='text-white font-normal text-sm'>{`${item?.test?.totalQuestions} Questions  |  ${item?.test?.totalMarks} Marks`}</Text></View>
         </View>
         <Image source={require('../../assets/goto.png')} className='w-10 h-10' width={10} height={10} />
       </View>
@@ -92,7 +70,7 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
       {dppList && <FlatList
         data={dppList}
         renderItem={renderGridItem}
-        keyExtractor={(item: any) => item.test._id}
+        keyExtractor={(item: any) => item?.test?._id}
         numColumns={1}
       />}
     </View>

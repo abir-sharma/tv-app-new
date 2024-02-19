@@ -11,6 +11,7 @@ import {
 import { BatchDetails, BatchType, Order, Subject, TopicType, ItemType, ItemType2, QuizItemType } from "../types/types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
+// import RNFS from 'react-native-fs';
 
 
 
@@ -85,6 +86,8 @@ type GlobalContextType = {
   setSelectedTestMapping: Dispatch<SetStateAction<any | null>>;
   recentVideoLoad: boolean;
   setRecentVideoLoad: Dispatch<SetStateAction<boolean>>;
+  logs: string[];
+  setLogs: Dispatch<SetStateAction<string[]>>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -158,6 +161,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setSelectedTestMapping: () => { },
   recentVideoLoad: false,
   setRecentVideoLoad: () => { },
+  logs: [],
+  setLogs: () => { },
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
@@ -205,10 +210,20 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [offlineDppVideos, setOfflineDppVideos] = useState<ItemType2[]>([]);
   const [offlineSelectedSection, setOfflineSelectedSection] = useState<number>(3);
   const [showIpInput, setShowIpInput] = useState<boolean>(false);
-
+  const [logs, setLogs] = useState<string[]>([]);
 
 
   const [headers, setHeaders] = useState<any>(null)
+
+
+  // useEffect(() => {
+  //   RNFS.writeFile('/test.txt', JSON.stringify(logs), 'utf-8').then((success) => {
+  //     console.log('FILE WRITTEN!');
+  //   }).catch((err) => {
+  //     console.log(err.message);
+  //   });
+  // }, [logs])
+
 
   useEffect(() => {
     const getIP = async () => {
@@ -227,14 +242,15 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const getPaidBatches = async () => {
     try {
       const res = await axios.get("https://api.penpencil.co/v3/batches/all-purchased-batches", { headers });
-      setSubscribedBatches(res.data.data);
-      setSelectedBatch(res.data.data[0]);
-      setSelectSubjectSlug(res.data.data[0].subjects[0].slug);
-      setSelectedSubject(res.data.data[0].subjects[0]);
+      setSubscribedBatches(res?.data?.data);
+      setSelectedBatch(res?.data?.data[0]);
+      setSelectSubjectSlug(res?.data?.data[0]?.subjects[0]?.slug);
+      setSelectedSubject(res?.data?.data[0]?.subjects[0]);
 
       getChaptersData();
     }
-    catch (err) {
+    catch (err: any) {
+      setLogs((logs) => [...logs, "Error in BATCHES API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
       console.log("error:", err);
     }
   }
@@ -242,10 +258,11 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const getPaidBatchesWithDetails = async () => {
     try {
       const res = await axios.get("https://api.penpencil.co/v2/orders/myPurchaseOrders?page=1&limit=50&status=ALL", { headers });
-      setOrders(res.data.data.data);
+      setOrders(res?.data?.data?.data);
 
     }
-    catch (err) {
+    catch (err: any) {
+      setLogs((logs) => [...logs, "Error in ORDERS API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
       console.log("error:", err);
     }
   }
@@ -253,39 +270,34 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const getBatchDetails = async () => {
     try {
       const res = await axios.get(`https://api.penpencil.co/v3/batches/${selectedBatch?.batch._id}/details`, { headers });
-      setBatchDetails(res.data.data)
+      setBatchDetails(res?.data?.data)
 
-      batchDetails && setSelectedSubject(batchDetails.subjects ? batchDetails.subjects[0] : null);
+      batchDetails && setSelectedSubject(batchDetails?.subjects ? batchDetails?.subjects[0] : null);
     }
-    catch (err) {
+    catch (err: any) {
+      setLogs((logs) => [...logs, "Error in BATCH DETAIL API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
       console.log("errorr:", err);
     }
   }
 
   const getChaptersData = async () => {
-    // console.log("running: ", selectSubjectSlug, batchDetails?.slug, currentPage);
 
     try {
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentPage}`, { headers });
-      setTopicList((prev) => (prev != null ? [...prev, ...res.data.data] : res.data.data));
-      // if(res.data.data.length<=0){
-      //   setShowLoadMore(false);
-      // }
-      console.log("Setting selected chapter", res.data.data[0].name);
-
-      setSelectedChapter(res.data.data[0]);
+      setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
+      console.log("Setting selected chapter", res?.data?.data[0]?.name);
+      setSelectedChapter(res?.data?.data[0]);
     }
-    catch (err) {
+    catch (err: any) {
+      setLogs((logs) => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
       console.log("error:", err);
     }
   }
-
 
   useEffect(() => {
     getPaidBatches();
     getPaidBatchesWithDetails();
   }, [headers])
-
 
 
   useEffect(() => {
@@ -344,7 +356,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         offlineDppVideos, setOfflineDppVideos,
         offlineSelectedSection, setOfflineSelectedSection,
         showIpInput, setShowIpInput,
-        recentVideoLoad, setRecentVideoLoad
+        recentVideoLoad, setRecentVideoLoad,
+        logs, setLogs,
       } as GlobalContextType}>
       {children}
     </GlobalContext.Provider>

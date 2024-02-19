@@ -38,32 +38,32 @@ const TestSolutions = ({ route }: any) => {
                 headers
             }
             const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/preview-test`, options);
-            console.log("Test Solution Data: ", res.data.data.questions)
+            console.log("Test Solution Data: ", res?.data?.data?.questions)
             console.log("DING DING");
             // console.log("DING DING", res.data.data.questions[0].solutionDescription[0].videoDetails.videoUrl);
             // sendAnalyticsData(res.data.data.questions[0].solutionDescription[0].videoDetails.videoUrl)
-            setQuestionsData(res.data.data.questions);
-            setOriginalQuestionData([...res.data.data.questions]);
-            setSolutionData(res.data.data);
-            setCurrentQuestion(res.data.data.questions[0]);
-            setCorrectOptions(res.data.data.questions[0].question.solutions);
-            setMarkedOptions(res.data.data.questions[0].yourResult.markedSolutions);
-            const questions = res.data.data.questions;
+            setQuestionsData(res?.data?.data?.questions);
+            setOriginalQuestionData([...res?.data?.data?.questions]);
+            setSolutionData(res?.data?.data);
+            setCurrentQuestion(res?.data?.data?.questions[0]);
+            setCorrectOptions(res?.data?.data?.questions[0]?.question?.solutions);
+            setMarkedOptions(res?.data?.data?.questions[0]?.yourResult?.markedSolutions);
+            const questions = res?.data?.data?.questions;
             const correct = [];
             const incorrect = [];
             const skipped = [];
-            for (let i = 0; i < questions.length; i++) {
+            for (let i = 0; i < questions?.length; i++) {
                 const question = questions[i];
-                if (question.yourResult.status === "WRONG") {
-                    incorrect.push(question.question.questionNumber);
-                } else if (question.yourResult.status === "CORRECT") {
-                    correct.push(question.question.questionNumber);
+                if (question?.yourResult?.status === "WRONG") {
+                    incorrect?.push(question?.question?.questionNumber);
+                } else if (question?.yourResult?.status === "CORRECT") {
+                    correct?.push(question?.question?.questionNumber);
                 } else {
-                    skipped.push(question.question.questionNumber);
+                    skipped?.push(question?.question?.questionNumber);
                 }
             }
         } catch (err: any) {
-            console.log("Errow while fetching Solution Data: ", err.response);
+            console.log("Errow while fetching Solution Data: ", err?.response);
         }
         setShowLoader(false);
 
@@ -73,37 +73,37 @@ const TestSolutions = ({ route }: any) => {
         const allData = [...originalQuestionData];
         if (filter === 'all') {
             setQuestionsData(allData)
-            if (allData.length > 0) {
+            if (allData?.length > 0) {
                 setCurrentQuestion(allData[0]);
-                setCorrectOptions(allData[0].question.solutions);
-                setMarkedOptions(allData[0].yourResult.markedSolutions);
+                setCorrectOptions(allData[0]?.question?.solutions);
+                setMarkedOptions(allData[0]?.yourResult?.markedSolutions);
                 // console.log("all section : ", "Marked Solution: ", allData[0].yourResult.markedSolutions, "Correct Solution: ", allData[0].question.solutions)
             }
         } else if (filter === 'correct') {
-            const data = allData.filter((question: any) => question.yourResult.status === "CORRECT")
+            const data = allData?.filter((question: any) => question?.yourResult?.status === "CORRECT")
             setQuestionsData(data)
-            if (data.length > 0) {
+            if (data?.length > 0) {
                 setCurrentQuestion(data[0]);
-                setCorrectOptions(data[0].question.solutions);
-                setMarkedOptions(data[0].yourResult.markedSolutions);
+                setCorrectOptions(data[0]?.question?.solutions);
+                setMarkedOptions(data[0]?.yourResult?.markedSolutions);
                 // console.log("Correct section : ", "Marked Solution: ", data[0].yourResult.markedSolutions, "Correct Solution: ", data[0].question.solutions)
             }
         } else if (filter === 'incorrect') {
-            const data = allData.filter((question: any) => question.yourResult.status === "WRONG")
+            const data = allData?.filter((question: any) => question?.yourResult?.status === "WRONG")
             setQuestionsData(data);
-            if (data.length > 0) {
+            if (data?.length > 0) {
                 setCurrentQuestion(data[0]);
-                setCorrectOptions(data[0].question.solutions);
-                setMarkedOptions(data[0].yourResult.markedSolutions);
+                setCorrectOptions(data[0]?.question?.solutions);
+                setMarkedOptions(data[0]?.yourResult?.markedSolutions);
                 // console.log("Incorrect section : ", "Marked Solution: ", data[0].yourResult.markedSolutions, "Correct Solution: ", data[0].question.solutions)
             }
         } else {
-            const data = allData.filter((question: any) => question.yourResult.status === "UnAttempted")
+            const data = allData?.filter((question: any) => question?.yourResult?.status === "UnAttempted")
             setQuestionsData(data);
-            if (data.length > 0) {
+            if (data?.length > 0) {
                 setCurrentQuestion(data[0]);
-                setCorrectOptions(data[0].question.solutions);
-                setMarkedOptions(data[0].yourResult.markedSolutions);
+                setCorrectOptions(data[0]?.question?.solutions);
+                setMarkedOptions(data[0]?.yourResult?.markedSolutions);
                 // console.log("Skipped section : ", "Marked Solution: ", data[0].yourResult.markedSolutions, "Correct Solution: ", data[0].question.solutions)
             }
         }
@@ -122,21 +122,21 @@ const TestSolutions = ({ route }: any) => {
         console.log('uri --->', uri);
         axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers: newHeaders })
             .then((response) => {
-                setCookieParams(cookieSplitter(response.data.data));
+                setCookieParams(cookieSplitter(response?.data?.data));
                 setRenderVideo(true);
             })
             .catch((error) => {
-                console.error('analytics failed --->', error.response.data);
+                console.error('analytics failed --->', error?.response?.data);
             });
     }
 
 
     const handleNextClick = () => {
         const curr = questionsData.indexOf(currentQuestion);
-        if (curr < questionsData.length - 1) {
+        if (curr < questionsData?.length - 1) {
             setCurrentQuestion(questionsData[curr + 1]);
-            setCorrectOptions(questionsData[curr + 1].question.solutions);
-            setMarkedOptions(questionsData[curr + 1].yourResult.markedSolutions);
+            setCorrectOptions(questionsData[curr + 1]?.question?.solutions);
+            setMarkedOptions(questionsData[curr + 1]?.yourResult?.markedSolutions);
         } else {
             ToastAndroid.showWithGravity(
                 "No next Question!!",
@@ -149,11 +149,11 @@ const TestSolutions = ({ route }: any) => {
 
 
     const handlePreviousClick = () => {
-        const curr = questionsData.indexOf(currentQuestion);
+        const curr = questionsData?.indexOf(currentQuestion);
         if (curr > 0) {
             setCurrentQuestion(questionsData[curr - 1]);
-            setCorrectOptions(questionsData[curr - 1].question.solutions);
-            setMarkedOptions(questionsData[curr - 1].yourResult.markedSolutions);
+            setCorrectOptions(questionsData[curr - 1]?.question?.solutions);
+            setMarkedOptions(questionsData[curr - 1]?.yourResult?.markedSolutions);
         } else {
             ToastAndroid.showWithGravity(
                 "No Previous Question",
@@ -210,20 +210,6 @@ const TestSolutions = ({ route }: any) => {
                 <View className='flex-[2] rounded-xl items-start justify-start px-5 py-0'>
                     <Text className='text-white text-sm ml-auto text-center'>Video solution for Question {currentQuestion?.question?.questionNumber}</Text>
                     <View className='h-52 bg-gray-600 rounded-lg w-full mt-1'>
-                        {/* {console.log(cookieParams, currentQuestion.question.solutionDescription[0]?.videoDetails?.videoUrl)} */}
-                        {/* {currentQuestion && renderVideo && <Video
-                            useNativeControls
-                            shouldPlay
-                            source={
-                                {
-                                    uri: currentQuestion.question.solutionDescription[0]?.videoDetails?.videoUrl,
-                                    headers: {
-                                        cookie: cookieParams
-                                    }
-                                }
-                            }
-                            resizeMode={ResizeMode.CONTAIN}
-                        />} */}
                     </View>
                     <View className='flex-row mt-3 gap-x-2'>
                         <Pressable
@@ -249,7 +235,6 @@ const TestSolutions = ({ route }: any) => {
                             }}
                             onPress={() => { setSelectedFilter('incorrect'); handleFilter('incorrect') }}
                             className={`overflow-hidden ${selectedFilter === 'incorrect' ? 'bg-[#DEDAFF]' : ''} px-5 py-1 text-center flex-1 rounded`}
-
                         >
                             <Text className={`overflow-hidden ${selectedFilter === 'incorrect' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>Incorrect</Text>
                         </Pressable>
@@ -280,7 +265,6 @@ const TestSolutions = ({ route }: any) => {
                             <Text className={`overflow-hidden ${selectedFilter === 'skipped' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>Skipped</Text>
                         </Pressable>
                     </View>
-                    {/* <ScrollView> */}
                     <View className='flex-row flex-wrap py-4 gap-2 overflow-scroll'>
                         {
                             questionsData && questionsData.map(
@@ -292,7 +276,6 @@ const TestSolutions = ({ route }: any) => {
                             )
                         }
                     </View>
-                    {/* </ScrollView> */}
                     <View className='flex-row mt-3 justify-between items-center '>
                         <View className='flex-row flex-1 items-center justify-start gap-x-2'>
                             <View className='w-2 h-2 rounded-full bg-green-400'></View>
@@ -349,19 +332,19 @@ const TestSolutions = ({ route }: any) => {
                         </View>
                         <View className='gap-y-2 mt-5 w-[60%]'>
                             {currentQuestion?.question?.options && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${markedOptions?.includes(currentQuestion?.question?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'bg-green-400' : ''}`}>
-                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.question?.options[0]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.question?.options[0]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
                             </View>}
                             {currentQuestion?.question?.options && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${markedOptions?.includes(currentQuestion?.question?.options[1]?._id) ? correctOptions?.includes(currentQuestion?.question?.options[1]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.question?.options[1]?._id) ? 'bg-green-400' : ''}`}>
-                                <Text className='text-white font-bold'> {"b.    "}{currentQuestion?.question?.options[1]?.texts?.en}</Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.question?.options[1]?.texts?.en}</Text>
                                 <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[1]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[1]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[1]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
                             </View>}
                             {currentQuestion?.question?.options && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${markedOptions?.includes(currentQuestion?.question?.options[2]?._id) ? correctOptions?.includes(currentQuestion?.question?.options[2]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.question?.options[2]?._id) ? 'bg-green-400' : ''}`}>
-                                <Text className='text-white font-bold'> {"c.    "}{currentQuestion?.question?.options[2]?.texts?.en}</Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.question?.options[2]?.texts?.en}</Text>
                                 <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[2]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[2]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[2]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
                             </View>}
                             {currentQuestion?.question?.options && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${markedOptions?.includes(currentQuestion?.question?.options[3]?._id) ? correctOptions?.includes(currentQuestion?.question?.options[3]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.question?.options[3]?._id) ? 'bg-green-400' : ''}`}>
-                                <Text className='text-white font-bold'> {"d.    "}{currentQuestion?.question?.options[3]?.texts?.en}</Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.question?.options[3]?.texts?.en}</Text>
                                 <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[3]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
                             </View>}
 

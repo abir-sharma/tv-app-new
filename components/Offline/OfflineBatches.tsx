@@ -70,7 +70,7 @@ export default function OfflineBatches(params: any) {
                             />}
                         </View>}
                         <View className='p-2 relative px-5'>
-                            <Text className='text-white text-xs font-medium'>{batch.name}</Text>
+                            <Text className='text-white text-xs font-medium'>{batch?.name}</Text>
                             <Text className='text-white text-xs font-light'>Starts On <Text className='text-white text-xs font-medium'>14th Feb 2023</Text></Text>
                             <Text className='text-white text-[10px] font-medium absolute right-2 top-1.5 rounded-md bg-black/50 px-2 py-1'>{"Hindi"}</Text>
                         </View>

@@ -10,8 +10,8 @@ export default function Chapters() {
 
   const renderItem = ({ item }: any) => (
     <Pressable
-      key={item._id}
-      className={`py-4 px-4 overflow-hidden rounded-lg ${selectedChapter?._id === item._id && 'bg-[#8E89BA]'}`}
+      key={item?._id}
+      className={`py-4 px-4 overflow-hidden rounded-lg ${selectedChapter?._id === item?._id && 'bg-[#8E89BA]'}`}
       hasTVPreferredFocus={true}
       android_ripple={{
         color: "rgba(255,255,255,0.5)",
@@ -21,10 +21,10 @@ export default function Chapters() {
       }}
       onPress={() => {
         setSelectedChapter(item);
-        console.log("Chapter selected: ", item._id);
+        console.log("Chapter selected: ", item?._id);
       }}
     >
-      <Text className='text-white text-sm'>{item.name}</Text>
+      <Text className='text-white text-sm'>{item?.name}</Text>
     </Pressable>
   );
   return (
@@ -35,7 +35,7 @@ export default function Chapters() {
         <FlatList
           data={topicList}
           renderItem={renderItem}
-          keyExtractor={(item: TopicType) => item._id}
+          keyExtractor={(item: TopicType) => item?._id}
           numColumns={1}
         // contentContainerStyle={styles.container}
         // onEndReached={()=>{loadMore && getPaidBatches()}}

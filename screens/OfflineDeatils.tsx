@@ -1,17 +1,9 @@
 /// <reference types="nativewind/types" />
 
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
-import NavbarDetails from '../components/NavbarDetails';
-import Batches from '../components/Batches';
-import Recent from '../components/Recent';
 import { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
-import { NoteType, VideoType } from '../types/types';
-import Chapters from '../components/Chapters';
-import axios from 'axios';
 import OfflineNavbarDetails from '../components/Offline/OfflineNavbarDetails';
-import { VideoComponent } from '../components/Options/VideoComponent';
-import { NoteComponent } from '../components/Options/NoteComponent';
 import { OfflineVideoComponent } from '../components/Offline/OfflineVideoComponent';
 import { OfflineNoteComponent } from '../components/Offline/OfflineNoteComponent';
 import OfflineChapters from '../components/Offline/OfflineChapters';

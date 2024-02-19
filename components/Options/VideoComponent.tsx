@@ -42,10 +42,10 @@ export const VideoComponent = ({ videoList, setVideoList, loadMore, getPaidBatch
       }}
       hasTVPreferredFocus
       onPress={() => {
-        console.log("Go to Video Page", item.videoDetails);
+        console.log("Go to Video Page", item?.videoDetails);
         //@ts-expect-error
         navigation.navigate("Videos", {
-          lectureDetails: item.videoDetails,
+          lectureDetails: item?.videoDetails,
         });
         saveToRecentVideos(item);
       }}>
@@ -58,7 +58,7 @@ export const VideoComponent = ({ videoList, setVideoList, loadMore, getPaidBatch
         </View>
         <View className='p-2'>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text className='text-white text-[10px]'>{moment(item.date).format("MMM Do YY")}</Text>
+            <Text className='text-white text-[10px]'>{moment(item?.date).format("MMM Do YY")}</Text>
             <Text className='text-white text-[10px]'>{item?.videoDetails?.duration}</Text>
           </View>
           <Text className='text-xs text-white font-medium my-2'>{item?.videoDetails?.name?.length >= 60 ? `${item?.videoDetails?.name?.substring(0, 60)}...` : item?.videoDetails?.name}</Text>
@@ -72,8 +72,8 @@ export const VideoComponent = ({ videoList, setVideoList, loadMore, getPaidBatch
       {/* <Text style={styles.subjectText}>Physics</Text> */}
       <FlatList
         data={videoList?.sort((a, b) => {
-          const nameA = a.videoDetails.name.toUpperCase(); // Ignore case
-          const nameB = b.videoDetails.name.toUpperCase();
+          const nameA = a?.videoDetails?.name?.toUpperCase(); // Ignore case
+          const nameB = b?.videoDetails?.name?.toUpperCase();
 
           if (nameA < nameB) {
             return -1;

@@ -112,11 +112,11 @@ export default function VideoPlayer(props: any) {
     console.log('uri --->', uri);
     axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers: newHeaders })
       .then((response) => {
-        setCookieParams(cookieSplitter(response.data.data));
+        setCookieParams(cookieSplitter(response?.data?.data));
         setRenderVideo(true);
       })
       .catch((error) => {
-        console.error('analytics failed --->', error.response.data);
+        console.error('analytics failed --->', error?.response?.data);
       });
   }
 
@@ -250,7 +250,7 @@ export default function VideoPlayer(props: any) {
         </View>
       }
       {
-        !props.lectureDetails?.types &&
+        !props?.lectureDetails?.types &&
         <View style={{ height: '100%' }}>
           <WebView
             style={{ flex: 1 }}

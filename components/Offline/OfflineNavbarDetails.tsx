@@ -16,13 +16,13 @@ export default function OfflineNavbarDetails() {
     <Pressable
       style={styles.dropdownItem}
       onPress={() => {
-        setOfflineSelectedSubject(item.id);
+        setOfflineSelectedSubject(item?.id);
         setDirectoryLevel(2);
         setOfflineCurrentDirectory(item?.path);
         setIsDropdownVisible(false);
       }}
     >
-      <Text className='text-white text-xs'>{item.name}</Text>
+      <Text className='text-white text-xs'>{item?.name}</Text>
     </Pressable>
   );
 
@@ -59,7 +59,7 @@ export default function OfflineNavbarDetails() {
             radius: 1000,
             foreground: true
           }}>
-          {offlineSubjects[offlineSelectedSubject]?.name && <Text className='text-white text-sm'>{(offlineSubjects[offlineSelectedSubject]?.name.length > 20) ? `${offlineSubjects[offlineSelectedSubject].name.substring(0, 20)}...` : offlineSubjects[offlineSelectedSubject].name}</Text>}
+          {offlineSubjects[offlineSelectedSubject]?.name && <Text className='text-white text-sm'>{(offlineSubjects[offlineSelectedSubject]?.name?.length > 20) ? `${offlineSubjects[offlineSelectedSubject]?.name?.substring(0, 20)}...` : offlineSubjects[offlineSelectedSubject]?.name}</Text>}
         </Pressable>
 
         <Modal

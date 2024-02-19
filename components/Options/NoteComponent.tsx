@@ -75,13 +75,13 @@ export const NoteComponent = ({ noteList, setNoteList, loadMore, getPaidBatches 
       {/* <Text style={styles.subjectText}>Physics</Text> */}
       <FlatList
         data={noteList?.sort((a, b) => {
-          const topicA = a.homeworkIds[0]?.topic || ''; // Using empty string if topic is undefined
-          const topicB = b.homeworkIds[0]?.topic || '';
+          const topicA = a?.homeworkIds[0]?.topic || ''; // Using empty string if topic is undefined
+          const topicB = b?.homeworkIds[0]?.topic || '';
 
-          return topicA.localeCompare(topicB); // Using localeCompare for string comparison
+          return topicA?.localeCompare(topicB); // Using localeCompare for string comparison
         })}
         renderItem={renderGridItem}
-        keyExtractor={(item: NoteType) => item._id}
+        keyExtractor={(item: NoteType) => item?._id}
         numColumns={4}
         onEndReached={() => { loadMore && getPaidBatches() }}
       // contentContainerStyle={styles.container}

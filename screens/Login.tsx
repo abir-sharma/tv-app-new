@@ -20,6 +20,10 @@ export default function Login({ navigation }: any) {
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
 
+
+  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDg5NTU5MTguMjQxLCJkYXRhIjp7Il9pZCI6IjYyZTM3OGI0NTEwZjAxMDAxMWI0NDM1OSIsInVzZXJuYW1lIjoiOTk5OTYzMDIwOCIsImZpcnN0TmFtZSI6ImhhcnNoIiwibGFzdE5hbWUiOiJrYXJkYW0iLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJoYXJzaC5rYXJkYW1AZ21haWwuY29tIiwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwidHlwZSI6IlVTRVIifSwiaWF0IjoxNzA4MzUxMTE4fQ.clJBqysaWDecLnI-RsdMhyXNSsLlQ3Y0urNqcsiX834
+
+
   //Use effect counter that will update a state and count till 30 sec
   useEffect(() => {
     if (otpReSent || otpSent) {
@@ -54,7 +58,7 @@ export default function Login({ navigation }: any) {
   }
 
   const handleSentOTP = async () => {
-    if (phone.length !== 10) {
+    if (phone?.length !== 10) {
       // Alert.alert("Please enter a valid mobile number");
       ToastAndroid.showWithGravity(
         "Enter a Valid Mobile Number",
@@ -72,17 +76,17 @@ export default function Login({ navigation }: any) {
         organizationId: "5eb393ee95fab7468a79d189"
       })
 
-      console.log("success", res.data);
+      console.log("success", res?.data);
 
-      if (res.data.success) {
+      if (res?.data?.success) {
         setOtpSent(true);
       }
 
 
     }
     catch (err: any) {
-      console.log("Error while sending otp! ", err.res.status);
-      if (err.res.status === 429) {
+      console.log("Error while sending otp! ", err?.res?.status);
+      if (err?.res?.status === 429) {
         ToastAndroid.showWithGravity(
           "Too many OTP requests, Please try after sometime",
           ToastAndroid.SHORT,
@@ -98,7 +102,7 @@ export default function Login({ navigation }: any) {
   }
 
   const handleVerifyOTP = async () => {
-    if (otp.length <= 0) {
+    if (otp?.length <= 0) {
       // Alert.alert("Please enter a valid OTP");
       ToastAndroid.showWithGravity(
         "Please enter a valid OTP",
@@ -120,14 +124,16 @@ export default function Login({ navigation }: any) {
         longitude: 0
       })
 
-      console.log("success: ", res.data.data);
+      console.log("success: ", res?.data?.data);
 
+      console.log("Token: ", res?.data?.data?.access_token);
 
-      if (res.data.success) {
+      if (res?.data?.success) {
         setHeaders({
-          "Authorization": `Bearer ${res.data.data.access_token}`
+          "Authorization": `Bearer ${res?.data?.data?.access_token}`
         })
-        await AsyncStorage.setItem("token", res.data.data.access_token);
+        await AsyncStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDg5NTU5MTguMjQxLCJkYXRhIjp7Il9pZCI6IjYyZTM3OGI0NTEwZjAxMDAxMWI0NDM1OSIsInVzZXJuYW1lIjoiOTk5OTYzMDIwOCIsImZpcnN0TmFtZSI6ImhhcnNoIiwibGFzdE5hbWUiOiJrYXJkYW0iLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJoYXJzaC5rYXJkYW1AZ21haWwuY29tIiwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwidHlwZSI6IlVTRVIifSwiaWF0IjoxNzA4MzUxMTE4fQ.clJBqysaWDecLnI-RsdMhyXNSsLlQ3Y0urNqcsiX834");
+        // await AsyncStorage.setItem("token", res?.data?.data?.access_token);
         navigation.navigate('Home');
       }
     }
@@ -144,17 +150,17 @@ export default function Login({ navigation }: any) {
   }
 
   const handleRegisterUser = async () => {
-    if (phone.length !== 10) {
+    if (phone?.length !== 10) {
       Alert.alert("Please enter a valid mobile number");
     }
-    if (name.length <= 0) {
+    if (name?.length <= 0) {
       Alert.alert("Please enter a valid name");
     }
 
     setShowLoader(true);
-    const nameArray = name.split(' ');
-    const firstName = nameArray.shift(); // Remove and return the first element
-    const lastName = nameArray.join(' '); // Join the rest with space
+    const nameArray = name?.split(' ');
+    const firstName = nameArray?.shift(); // Remove and return the first element
+    const lastName = nameArray?.join(' '); // Join the rest with space
 
     console.log(firstName, " ---- ", lastName);
 
@@ -167,9 +173,9 @@ export default function Login({ navigation }: any) {
         lastName: lastName
       })
 
-      console.log("success", res.data);
+      console.log("success", res?.data);
 
-      if (res.data.success) {
+      if (res?.data?.success) {
         setOtpSent(true);
         setNewUser(false);
       }

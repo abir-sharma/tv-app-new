@@ -19,16 +19,14 @@ const Tests = ({ navigation, route }: any) => {
     const [lastTimeStamp, setLastTimeStamp] = useState(0);
     const [showLoader, setShowLoader] = useState<boolean>(true);
 
-
-
     useEffect(() => {
-        if (testData && testData.sections && testData.sections[0].questions) {
-            const len = testData.sections[0]?.questions?.length;
-            setTotalQuestions(testData.sections[0]?.questions?.length);
-            setCurrentQuestion(testData.sections[0]?.questions[0]);
-            setCorrectOptions(testData.sections[0]?.questions[0].solutions);
-            setMaxTries(testData.sections[0]?.questions[0].solutions.length);
-            setQuestionType(testData.sections[0]?.questions[0].type);
+        if (testData && testData?.sections && testData?.sections[0]?.questions) {
+            const len = testData?.sections[0]?.questions?.length;
+            setTotalQuestions(testData?.sections[0]?.questions?.length);
+            setCurrentQuestion(testData?.sections[0]?.questions[0]);
+            setCorrectOptions(testData?.sections[0]?.questions[0]?.solutions);
+            setMaxTries(testData?.sections[0]?.questions[0]?.solutions?.length);
+            setQuestionType(testData?.sections[0]?.questions[0]?.type);
             const response = [];
             for (let i = 0; i < len; i++) {
                 const obj = {
@@ -37,10 +35,10 @@ const Tests = ({ navigation, route }: any) => {
                     "status": "UnAttempted",
                     "isBookmarked": false,
                     "timeTaken": 0,
-                    "questionId": testData.sections[0]?.questions[i]._id,
+                    "questionId": testData?.sections[0]?.questions[i]?._id,
                     "notes": ""
                 }
-                response.push(obj);
+                response?.push(obj);
             }
             setResponses(response);
             setShowLoader(false);
@@ -61,11 +59,11 @@ const Tests = ({ navigation, route }: any) => {
     }, []);
 
     const handleOptionClick = async (option: any) => {
-        const questionType = currentQuestion.type;
-        const curr = currentQuestion.questionNumber - 1;
-        const id = currentQuestion._id;
+        const questionType = currentQuestion?.type;
+        const curr = currentQuestion?.questionNumber - 1;
+        const id = currentQuestion?._id;
         if (questionType === "Single") {
-            if (selectedAnswers.length > 0) {
+            if (selectedAnswers?.length > 0) {
                 return;
             } else {
                 setSelectedAnswers([option]);
@@ -73,9 +71,9 @@ const Tests = ({ navigation, route }: any) => {
                 const timeDiff = seconds - lastTimeStamp;
                 const obj = {
                     "markedSolutions": [option],
-                    "status": [option].length > 0 ? "Attempted" : "UnAttempted",
-                    "timeTaken": responses[curr].timeTaken + timeDiff,
-                    "questionId": currentQuestion._id,
+                    "status": [option]?.length > 0 ? "Attempted" : "UnAttempted",
+                    "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                    "questionId": currentQuestion?._id,
                     "markedSolutionText": "",
                     "isBookmarked": false,
                     "notes": ""
@@ -87,17 +85,17 @@ const Tests = ({ navigation, route }: any) => {
                 console.log("Final Responses: ", newResponses)
             }
         } else if (questionType === "Multiple") {
-            if (selectedAnswers.includes(option)) {
+            if (selectedAnswers?.includes(option)) {
                 return;
             } else {
-                setSelectedAnswers([...selectedAnswers, option].sort());
-                setMarkedOptions([...selectedAnswers, option].sort());
+                setSelectedAnswers([...selectedAnswers, option]?.sort());
+                setMarkedOptions([...selectedAnswers, option]?.sort());
                 const timeDiff = seconds - lastTimeStamp;
                 const obj = {
-                    "markedSolutions": [...selectedAnswers, option].sort(),
-                    "status": [...selectedAnswers, option].sort().length > 0 ? "Attempted" : "UnAttempted",
-                    "timeTaken": responses[curr].timeTaken + timeDiff,
-                    "questionId": currentQuestion._id,
+                    "markedSolutions": [...selectedAnswers, option]?.sort(),
+                    "status": [...selectedAnswers, option]?.sort()?.length > 0 ? "Attempted" : "UnAttempted",
+                    "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                    "questionId": currentQuestion?._id,
                     "markedSolutionText": "",
                     "isBookmarked": false,
                     "notes": ""
@@ -114,13 +112,13 @@ const Tests = ({ navigation, route }: any) => {
 
     const handleSubmitTest = async () => {
         try {
-            const curr = currentQuestion.questionNumber - 1;
+            const curr = currentQuestion?.questionNumber - 1;
             const timeDiff = seconds - lastTimeStamp;
             const obj = {
                 "markedSolutions": selectedAnswers,
-                "status": selectedAnswers.length > 0 ? "Attempted" : "UnAttempted",
-                "timeTaken": responses[curr].timeTaken + timeDiff,
-                "questionId": currentQuestion._id,
+                "status": selectedAnswers?.length > 0 ? "Attempted" : "UnAttempted",
+                "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                "questionId": currentQuestion?._id,
                 "markedSolutionText": "",
                 "isBookmarked": false,
                 "notes": ""
@@ -145,7 +143,7 @@ const Tests = ({ navigation, route }: any) => {
             console.log("Batch Id: ", selectedBatch);
             console.log(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/submit-test`);
             const res = await axios.post(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/submit-test`, body, options);
-            console.log("Submit Test Response: ", res.data);
+            console.log("Submit Test Response: ", res?.data);
             setShowModal(false);
             navigation.navigate('TestResult')
 
@@ -155,14 +153,14 @@ const Tests = ({ navigation, route }: any) => {
     }
 
     const handleNextClick = async () => {
-        const curr = currentQuestion.questionNumber - 1;
+        const curr = currentQuestion?.questionNumber - 1;
         if (curr < totalQuestions - 1) {
             const timeDiff = seconds - lastTimeStamp;
             const obj = {
                 "markedSolutions": selectedAnswers,
-                "status": selectedAnswers.length > 0 ? "Attempted" : "UnAttempted",
-                "timeTaken": responses[curr].timeTaken + timeDiff,
-                "questionId": currentQuestion._id,
+                "status": selectedAnswers?.length > 0 ? "Attempted" : "UnAttempted",
+                "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                "questionId": currentQuestion?._id,
                 "markedSolutionText": "",
                 "isBookmarked": false,
                 "notes": ""
@@ -171,11 +169,11 @@ const Tests = ({ navigation, route }: any) => {
             const newResponses = responses;
             newResponses[curr] = obj;
             setResponses(newResponses);
-            setSelectedAnswers(responses[curr + 1].markedSolutions)
-            setCurrentQuestion(testData.sections[0]?.questions[curr + 1])
-            setCorrectOptions(testData.sections[0]?.questions[curr + 1].solutions);
-            setMarkedOptions(responses[curr + 1].markedSolutions);
-            setQuestionType(testData.sections[0]?.questions[curr + 1].type);
+            setSelectedAnswers(responses[curr + 1]?.markedSolutions)
+            setCurrentQuestion(testData?.sections[0]?.questions[curr + 1])
+            setCorrectOptions(testData?.sections[0]?.questions[curr + 1]?.solutions);
+            setMarkedOptions(responses[curr + 1]?.markedSolutions);
+            setQuestionType(testData?.sections[0]?.questions[curr + 1]?.type);
 
         } else {
             setShowModal(true);
@@ -184,14 +182,14 @@ const Tests = ({ navigation, route }: any) => {
     }
 
     const handlePreviousClick = async () => {
-        const curr = currentQuestion.questionNumber - 1;
+        const curr = currentQuestion?.questionNumber - 1;
         if (curr > 0) {
             const timeDiff = seconds - lastTimeStamp;
             const obj = {
                 "markedSolutions": selectedAnswers,
-                "status": selectedAnswers.length > 0 ? "Attempted" : "UnAttempted",
-                "timeTaken": responses[curr].timeTaken + timeDiff,
-                "questionId": currentQuestion._id,
+                "status": selectedAnswers?.length > 0 ? "Attempted" : "UnAttempted",
+                "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                "questionId": currentQuestion?._id,
                 "markedSolutionText": "",
                 "isBookmarked": false,
                 "notes": ""
@@ -200,11 +198,11 @@ const Tests = ({ navigation, route }: any) => {
             const newResponses = responses;
             newResponses[curr] = obj;
             setResponses(newResponses);
-            setSelectedAnswers(responses[curr - 1].markedSolutions)
-            setCurrentQuestion(testData.sections[0]?.questions[curr - 1])
-            setCorrectOptions(testData.sections[0]?.questions[curr - 1].solutions);
-            setMarkedOptions(responses[curr - 1].markedSolutions);
-            setQuestionType(testData.sections[0]?.questions[curr - 1].type);
+            setSelectedAnswers(responses[curr - 1]?.markedSolutions)
+            setCurrentQuestion(testData?.sections[0]?.questions[curr - 1])
+            setCorrectOptions(testData?.sections[0]?.questions[curr - 1]?.solutions);
+            setMarkedOptions(responses[curr - 1]?.markedSolutions);
+            setQuestionType(testData?.sections[0]?.questions[curr - 1]?.type);
         } else {
             ToastAndroid.showWithGravity(
                 "No Previous Question",
@@ -225,12 +223,6 @@ const Tests = ({ navigation, route }: any) => {
         const formattedSeconds = String(remainingSeconds).padStart(2, '0');
 
         return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
-    };
-
-
-    const convertTimeToSeconds = (time: any) => {
-        const [hours, minutes, seconds] = time.split(':').map(Number);
-        return hours * 3600 + minutes * 60 + seconds;
     };
 
 
@@ -282,7 +274,7 @@ const Tests = ({ navigation, route }: any) => {
             </View>
             <View className='mt-10 justify-center'>
                 <View className='bg-white/5 px-4 py-2 mr-auto rounded-lg'>
-                    <Text className='text-white text-center'>{currentQuestion?.topicId.name}</Text>
+                    <Text className='text-white text-center'>{currentQuestion?.topicId?.name}</Text>
                 </View>
                 <View className='flex flex-row mt-4'>
                     <View className='bg-[#8E89BA] px-4 py-2 rounded-lg'>
@@ -320,11 +312,11 @@ const Tests = ({ navigation, route }: any) => {
                             }}
                             //65cdde8fc2f511239983b526
                             onPress={() => { handleOptionClick(currentQuestion?.options[0]?._id) }}
-                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : '' : ''}`}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : '' : ''}`}
                         >
                             <View className={`flex flex-row justify-between`}>
-                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[0]?.texts?.en} </Text>
-                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.options[0]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions?.length > 0 ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
                         {currentQuestion && questionType === 'Multiple' && <Pressable
@@ -336,11 +328,11 @@ const Tests = ({ navigation, route }: any) => {
                                 foreground: true
                             }}
                             onPress={() => { handleOptionClick(currentQuestion?.options[0]?._id) }}
-                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
                         >
                             <View className={`flex flex-row justify-between`}>
-                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[0]?.texts?.en} </Text>
-                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) && correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.options[0]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) && correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
 
@@ -353,12 +345,12 @@ const Tests = ({ navigation, route }: any) => {
                                 foreground: true
                             }}
                             onPress={() => { handleOptionClick(currentQuestion?.options[1]?._id) }}
-                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'bg-green-400' : '' : ''}`}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'bg-green-400' : '' : ''}`}
 
                         >
                             <View className={`flex flex-row justify-between `}>
-                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[1]?.texts?.en} </Text>
-                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? !correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.options[1]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions?.length > 0 ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? !correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
                         {currentQuestion && questionType === 'Multiple' && <Pressable
@@ -370,11 +362,11 @@ const Tests = ({ navigation, route }: any) => {
                                 foreground: true
                             }}
                             onPress={() => { handleOptionClick(currentQuestion?.options[1]?._id) }}
-                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
                         >
                             <View className={`flex flex-row justify-between`}>
-                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[1]?.texts?.en} </Text>
-                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) && correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? !correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.options[1]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) && correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? !correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
                         {currentQuestion && questionType === 'Single' && <Pressable
@@ -386,12 +378,11 @@ const Tests = ({ navigation, route }: any) => {
                                 foreground: true
                             }}
                             onPress={() => { handleOptionClick(currentQuestion?.options[2]?._id) }}
-                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'bg-green-400' : '' : ''}`}
-
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'bg-green-400' : '' : ''}`}
                         >
                             <View className={`flex flex-row justify-between `}>
-                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[2]?.texts?.en} </Text>
-                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? !correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                                <Text className='text-white font-bold'>{currentQuestion?.options[2]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions?.length > 0 ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? !correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
                         {currentQuestion && questionType === 'Multiple' && <Pressable
@@ -403,11 +394,11 @@ const Tests = ({ navigation, route }: any) => {
                                 foreground: true
                             }}
                             onPress={() => { handleOptionClick(currentQuestion?.options[2]?._id) }}
-                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
                         >
                             <View className={`flex flex-row justify-between`}>
-                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[2]?.texts?.en} </Text>
-                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) && correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? !correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.options[2]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) && correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? !correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
                         {currentQuestion && questionType === 'Single' && <Pressable
@@ -419,12 +410,12 @@ const Tests = ({ navigation, route }: any) => {
                                 foreground: true
                             }}
                             onPress={() => { handleOptionClick(currentQuestion?.options[3]?._id) }}
-                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'bg-green-400' : '' : ''}`}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'bg-green-400' : '' : ''}`}
 
                         >
                             <View className={`flex flex-row justify-between `}>
-                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[3]?.texts?.en} </Text>
-                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.options[3]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions?.length > 0 ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
                         {currentQuestion && questionType === 'Multiple' && <Pressable
@@ -436,11 +427,11 @@ const Tests = ({ navigation, route }: any) => {
                                 foreground: true
                             }}
                             onPress={() => { handleOptionClick(currentQuestion?.options[3]?._id) }}
-                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
+                            className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
                         >
                             <View className={`flex flex-row justify-between`}>
-                                <Text className='text-white font-bold'> {"a.    "} {currentQuestion?.options[3]?.texts?.en} </Text>
-                                <Text className='text-white font-bold'>{markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) && correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Correct Answer' : '' : ''} {markedOptions.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
+                                <Text className='text-white font-bold'>  {currentQuestion?.options[3]?.texts?.en} </Text>
+                                <Text className='text-white font-bold'>{markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) && correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
                         </Pressable>}
                     </View>

@@ -42,11 +42,11 @@ export const ReviewOrSubmitModal = (props: any) => {
         </View>
         <View className="bg-[#626060] p-4 flex rounded-xl flex-row justify-between mt-6">
           <Text className=" text-white text-sm">Answered</Text>
-          {responses && <Text className=" text-white text-sm">{responses?.filter((response: any) => response.status === "Attempted")?.length}</Text>}
+          {responses && <Text className=" text-white text-sm">{responses?.filter((response: any) => response?.status === "Attempted")?.length}</Text>}
         </View>
         <View className="bg-[#626060] p-4 flex rounded-xl flex-row justify-between mt-6">
           <Text className=" text-white text-sm">Not Answered</Text>
-          {responses && <Text className=" text-white text-sm">{responses?.filter((response: any) => response.status === "UnAttempted")?.length}</Text>}
+          {responses && <Text className=" text-white text-sm">{responses?.filter((response: any) => response?.status === "UnAttempted")?.length}</Text>}
         </View>
         <View className="items-center my-6">
           <Text className=" text-white text-sm">Are you sure you want to submit the test?</Text>

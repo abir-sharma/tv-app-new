@@ -3,7 +3,7 @@ import { useKeepAwake } from 'expo-keep-awake';
 import { View } from 'react-native'
 import VideoPlayer from '../components/video-player/player'
 
-const Videos = ({route}: any) => {
+const Videos = ({ route }: any) => {
   // console.log(route.params.lectureDetails);
   useKeepAwake();
 

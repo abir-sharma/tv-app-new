@@ -11,7 +11,7 @@ import axios from 'axios';
 
 export default function Home({ navigation }: any) {
 
-  const { setMainNavigation, mainNavigation, headers, setHeaders } = useGlobalContext();
+  const { setMainNavigation, setLogs, mainNavigation, headers, setHeaders } = useGlobalContext();
 
   const handleLogin = async () => {
     if (await AsyncStorage.getItem("token")) {
@@ -21,8 +21,9 @@ export default function Home({ navigation }: any) {
       })
       try {
         const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", { Authorization: `Bearer ${await AsyncStorage.getItem("token")}` });
-      } catch (err) {
+      } catch (err: any) {
         // console.log("error token check: ", err);
+        setLogs((logs) => [...logs, "Error in VERIFY TOKEN API:" + JSON.stringify(err.response)]);
         await AsyncStorage.removeItem("token");
         mainNavigation?.navigate('Login')
       }
@@ -30,6 +31,7 @@ export default function Home({ navigation }: any) {
     }
     else {
       console.log("not logged in");
+
 
       navigation?.navigate('Login')
     }

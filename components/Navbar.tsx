@@ -7,20 +7,21 @@ import axios from 'axios';
 
 export default function Navbar() {
 
-  const { mainNavigation, isOnline, setIsOnline, headers, setHeaders } = useGlobalContext();
+  const { mainNavigation, isOnline, setLogs, setIsOnline, headers, setHeaders } = useGlobalContext();
 
   const handleLogout = async () => {
-   
 
-    try{
+
+    try {
       mainNavigation.navigate('Login');
       AsyncStorage.clear();
       setHeaders(null);
-      const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", {headers})
-      if(res.data.success){
+      const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", { headers })
+      if (res?.data?.success) {
       }
     }
-    catch(err){
+    catch (err: any) {
+      setLogs((logs) => [...logs, "Error in LOGOUT API 2( Navbar component):" + JSON.stringify(err?.response)]);
       console.log(err);
     }
   }
@@ -62,7 +63,7 @@ export default function Navbar() {
           <Text className='text-white'>Offline</Text>
         </Pressable>
       </View>
-      
+
       <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",

@@ -78,8 +78,8 @@ export const OfflineNoteComponent = ({ noteList }: NotePropType) => {
       {/* <Text style={styles.subjectText}>Physics</Text> */}
       <FlatList
         data={noteList?.sort((a, b) => {
-          const nameA = a.name.toUpperCase(); // Ignore case
-          const nameB = b.name.toUpperCase();
+          const nameA = a?.name?.toUpperCase(); // Ignore case
+          const nameB = b?.name?.toUpperCase();
 
           if (nameA < nameB) {
             return -1;

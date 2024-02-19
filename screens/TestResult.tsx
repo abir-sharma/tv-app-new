@@ -22,12 +22,12 @@ export const TestResult = () => {
         headers
       }
       const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${testId}/my-result?batchId=${batchId}&batchScheduleId`, options);
-      const data = res.data.data;
+      const data = res?.data?.data;
       console.log("Test Result Data: ", data);
       setResult(data);
 
     } catch (err: any) {
-      console.log("Error while fetching test result data: ", err.resposne);
+      console.log("Error while fetching test result data: ", err?.resposne);
     }
     setShowLoader(false);
   }
@@ -40,10 +40,10 @@ export const TestResult = () => {
       const item = selectedDpp;
       console.log("Restart Link: ", `https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Reattempt&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`);
       const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Reattempt&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`, options);
-      console.log("Test Reattempt Request: ", res.data);
-      setTestData(res.data.data);
-      setTestSections(res.data.data.sections);
-      setSelectedTestMapping(res.data.data.testStudentMapping._id);
+      console.log("Test Reattempt Request: ", res?.data);
+      setTestData(res?.data?.data);
+      setTestSections(res?.data?.data?.sections);
+      setSelectedTestMapping(res?.data?.data?.testStudentMapping?._id);
       mainNavigation.navigate('Tests');
     } catch (err: any) {
       console.log("Error while restarting Quiz: ", err?.response);
@@ -103,7 +103,6 @@ export const TestResult = () => {
           }}
           className='flex-row justify-center overflow-hidden rounded-full items-center p-2'>
           <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
-          {/* <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text> */}
         </Pressable>
       </View>
       <View className="bg-white/5 p-12 py-8 my-12 w-[80%] self-center rounded-xl">

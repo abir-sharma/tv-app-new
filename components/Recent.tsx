@@ -40,7 +40,7 @@ export default function Recent() {
                             }}
                             onPress={async () => {
                                 mainNavigation.navigate("Videos", {
-                                    lectureDetails: order.videoDetails,
+                                    lectureDetails: order?.videoDetails,
                                 });
                             }}
                             className='bg-white/10 rounded-lg h-52 w-72 overflow-hidden'>
@@ -53,7 +53,7 @@ export default function Recent() {
                                 </View>
                                 <View className='p-2'>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text className='text-white text-[10px]'>{moment(order.date).format("MMM Do YY")}</Text>
+                                        <Text className='text-white text-[10px]'>{moment(order?.date).format("MMM Do YY")}</Text>
                                         <Text className='text-white text-[10px]'>{order?.videoDetails?.duration}</Text>
                                     </View>
                                     <Text className='text-xs text-white font-medium my-2'>{order?.videoDetails?.name?.length >= 60 ? `${order?.videoDetails?.name?.substring(0, 60)}...` : order?.videoDetails?.name}</Text>

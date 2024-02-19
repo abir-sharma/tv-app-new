@@ -18,7 +18,7 @@ type PropType = {
 export default function NavbarDetails({ selectedMenu, setSelectedMenu, setContentType, setCurrentPage }: PropType) {
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const { setSelectedSubject, batchDetails, mainNavigation, selectedSubject, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter, headers, setHeaders } = useGlobalContext();
+  const { setSelectedSubject, setLogs, logs, batchDetails, mainNavigation, selectedSubject, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter, headers, setHeaders } = useGlobalContext();
 
   const handleLogout = async () => {
 
@@ -27,11 +27,12 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
     setHeaders(null);
     try {
       const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", { headers })
-      if (res.data.success) {
+      if (res?.data?.success) {
 
       }
     }
-    catch (err) {
+    catch (err: any) {
+      setLogs((logs) => [...logs, "Error in LOGOUT API:" + JSON.stringify(err?.response)]);
       console.log(err);
     }
   }
@@ -51,19 +52,21 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
       }}
       style={styles.dropdownItem}
       onPress={() => {
-        console.log("Subject iD: ", item._id)
+        console.log("Subject iD: ", item?._id)
         setSelectedSubject(item);
-        setSelectSubjectSlug(item.slug);
+        setSelectSubjectSlug(item?.slug);
         setIsDropdownVisible(false);
       }}
     >
-      <Text className='text-white text-xs'>{item.subject}</Text>
+      <Text className='text-white text-xs'>{item?.subject}</Text>
     </Pressable>
   );
 
 
 
+
   return (
+
     <View className=" flex-row justify-between items-center p-4 bg-white/5">
       <Pressable
         hasTVPreferredFocus={true}
@@ -110,9 +113,9 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             <View style={{ flex: 1 }}>
               <View className='bg-[#444444] max-h-[200] overflow-scroll w-[20%] rounded-lg absolute top-[70] left-[130] z-[2]'>
                 <FlatList
-                  data={batchDetails?.subjects.slice(1)}
+                  data={batchDetails?.subjects?.slice(1)}
                   renderItem={renderItem}
-                  keyExtractor={(item) => item._id}
+                  keyExtractor={(item) => item?._id}
                 />
               </View>
             </View>
@@ -180,6 +183,9 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         {/* <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} /> */}
         <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text>
       </Pressable>
+      {/* <ScrollView className=' w-full h-[100] overflow-auto'>
+          <Text className='text-white flex flex-wrap'>{logs}</Text>
+        </ScrollView> */}
     </View>
   );
 }

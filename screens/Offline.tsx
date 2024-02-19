@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, ToastAndroid, Pressable, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button, ToastAndroid, Pressable } from 'react-native';
 import axios from 'axios';
 import cheerio from 'cheerio';
 import { useNavigation } from '@react-navigation/native';
@@ -9,28 +9,21 @@ import { ItemType, ItemType2 } from '../types/types';
 import OfflineBatches from '../components/Offline/OfflineBatches';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 export const Offline = () => {
 
   const { setDirectoryLevel, showIpInput, setShowIpInput, setOfflineSections, setOfflineSelectedSubject, setOfflineSelectedSection, setOfflineSelectedChapter, setOfflineLectures, setOfflineDpp, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, offlineSelectedSection, directoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, setOfflineBatches, setOfflineSubjects, setOfflineChapters } = useGlobalContext();
   const [ipAddress, setIpAddress] = useState("");
-  const [showLoader, setShowLoader] = useState<boolean>(false);
-
-  // const [showIpInput, setShowIpInput] = useState(false);
-  // const [batches, setBatches] = useState<string[]>([]);
 
   const navigation = useNavigation();
 
 
   useEffect(() => {
-    const getToken = async () => {
-      console.log(await AsyncStorage.getItem("token"));
-    }
-    getToken();
+
+
+
     fetchDirectoryListing(offlineCurrentDirectory);
   }, [offlineCurrentDirectory]);
-
-
-
 
 
   const isThumbnailAvailable = (directoryItems: any[], toFind: string) => {
@@ -46,16 +39,16 @@ export const Offline = () => {
   const fetchBatches = async () => {
     console.log("fetch Batches");
     let directoryItems: any[] = await fetchListing();
-    directoryItems = directoryItems.filter((item) => item.name.startsWith('PW'));
+    directoryItems = directoryItems?.filter((item) => item?.name?.startsWith('PW'));
     const batchNames: ItemType2[] = [];
-    directoryItems.map((item, index) => {
-      if (!item.name.endsWith('.png')) {
-        const checkThumbnail = isThumbnailAvailable(directoryItems, item.link.slice(0, -1) + '.png');
-        batchNames.push({
-          name: item.name.slice(3, -1).trim(),
-          path: offlineCurrentDirectory + item.link,
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, item?.link?.slice(0, -1) + '.png');
+        batchNames?.push({
+          name: item?.name?.slice(3, -1)?.trim(),
+          path: offlineCurrentDirectory + item?.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -1) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -1) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -68,11 +61,11 @@ export const Offline = () => {
     console.log("fetch Subjects");
     let directoryItems: any[] = await fetchListing();
     const subjectNames: ItemType[] = [];
-    directoryItems.map((item, index) => {
-      if (!item.name.endsWith('.png')) {
-        subjectNames.push({
-          name: item.name.slice(0, -1).trim(),
-          path: offlineCurrentDirectory + item.link,
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        subjectNames?.push({
+          name: item?.name?.slice(0, -1)?.trim(),
+          path: offlineCurrentDirectory + item?.link,
           id: index,
         })
       }
@@ -88,11 +81,11 @@ export const Offline = () => {
 
     let directoryItems: any[] = await fetchListing();
     const chapterNames: ItemType[] = [];
-    directoryItems.map((item, index) => {
-      if (!item.name.endsWith('.png')) {
-        chapterNames.push({
-          name: item.name.slice(0, -1).trim(),
-          path: offlineCurrentDirectory + item.link,
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        chapterNames?.push({
+          name: item?.name?.slice(0, -1)?.trim(),
+          path: offlineCurrentDirectory + item?.link,
           id: index,
         })
       }
@@ -108,11 +101,11 @@ export const Offline = () => {
     console.log("fetch Sections");
     let directoryItems: any[] = await fetchListing();
     const sectionData: ItemType[] = [];
-    directoryItems.map((item, index) => {
-      if (!item.name.endsWith('.png')) {
-        sectionData.push({
-          name: item.name.slice(0, -1).trim(),
-          path: offlineCurrentDirectory + item.link,
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        sectionData?.push({
+          name: item?.name?.slice(0, -1)?.trim(),
+          path: offlineCurrentDirectory + item?.link,
           id: index,
         })
       }
@@ -127,14 +120,14 @@ export const Offline = () => {
     console.log("fetch Lectures");
     let directoryItems: any[] = await fetchListing();
     const lecturesData: ItemType2[] = [];
-    directoryItems.map((item, index) => {
-      if (!item.name.endsWith('.png')) {
-        const checkThumbnail = isThumbnailAvailable(directoryItems, item.name.slice(0, -4) + '.png');
-        lecturesData.push({
-          name: item.name.slice(0, -4).trim(),
-          path: offlineCurrentDirectory + item.link,
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, item?.name?.slice(0, -4) + '.png');
+        lecturesData?.push({
+          name: item?.name?.slice(0, -4)?.trim(),
+          path: offlineCurrentDirectory + item?.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -147,14 +140,14 @@ export const Offline = () => {
     console.log("fetch Notes");
     let directoryItems: any[] = await fetchListing();
     const notesData: ItemType2[] = [];
-    directoryItems.map((item, index) => {
-      if (!item.name.endsWith('.png')) {
-        const checkThumbnail = isThumbnailAvailable(directoryItems, item.name.slice(0, -4) + '.png');
-        notesData.push({
-          name: item.name.slice(0, -4).trim(),
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, item?.name?.slice(0, -4) + '.png');
+        notesData?.push({
+          name: item?.name?.slice(0, -4).trim(),
           path: offlineCurrentDirectory + item.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -167,14 +160,14 @@ export const Offline = () => {
 
     let directoryItems: any[] = await fetchListing();
     const dppData: ItemType2[] = [];
-    directoryItems.map((item, index) => {
-      if (!item.name.endsWith('.png')) {
-        const checkThumbnail = isThumbnailAvailable(directoryItems, item.name.slice(0, -4) + '.png');
-        dppData.push({
-          name: item.name.slice(0, -4).trim(),
-          path: offlineCurrentDirectory + item.link,
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, item?.name?.slice(0, -4) + '.png');
+        dppData?.push({
+          name: item?.name?.slice(0, -4)?.trim(),
+          path: offlineCurrentDirectory + item?.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -187,14 +180,14 @@ export const Offline = () => {
 
     let directoryItems: any[] = await fetchListing();
     const dppPdfData: ItemType2[] = [];
-    directoryItems.map((item, index) => {
-      if (!item.name.endsWith('.png')) {
-        const checkThumbnail = isThumbnailAvailable(directoryItems, item.name.slice(0, -4) + '.png');
-        dppPdfData.push({
-          name: item.name.slice(0, -4).trim(),
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, item?.name?.slice(0, -4) + '.png');
+        dppPdfData?.push({
+          name: item?.name?.slice(0, -4)?.trim(),
           path: offlineCurrentDirectory + item.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -206,14 +199,14 @@ export const Offline = () => {
     console.log("fetch Dpp Videos");
     let directoryItems: any[] = await fetchListing();
     const dppVideosData: ItemType2[] = [];
-    directoryItems.map((item, index) => {
-      if (!item.name.endsWith('.png')) {
-        const checkThumbnail = isThumbnailAvailable(directoryItems, item.name.slice(0, -4) + '.png');
-        dppVideosData.push({
-          name: item.name.slice(0, -4).trim(),
-          path: offlineCurrentDirectory + item.link,
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, item?.name?.slice(0, -4) + '.png');
+        dppVideosData?.push({
+          name: item?.name?.slice(0, -4)?.trim(),
+          path: offlineCurrentDirectory + item?.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item.link.slice(0, -4) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : '../assets/TV.png',
           defaultThumbnail: checkThumbnail
         })
       }
@@ -226,7 +219,7 @@ export const Offline = () => {
     console.log("Current Directory : ", offlineCurrentDirectory);
     try {
       const response = await axios.get(offlineCurrentDirectory);
-      const directoryHtml = response.data;
+      const directoryHtml = response?.data;
       const $ = cheerio.load(directoryHtml);
       let directoryItems = $('ul li a')
         .map((index, element) => ({
@@ -234,16 +227,12 @@ export const Offline = () => {
           link: $(element).attr('href')
         }))
         .get();
-      directoryItems = directoryItems.filter((item) => !item.name.startsWith('.'))
+      directoryItems = directoryItems.filter((item) => !item?.name?.startsWith('.'))
       setShowIpInput(false);
       return directoryItems;
+
     } catch (err: any) {
       console.log("error while fetching directory items", err);
-      ToastAndroid.showWithGravity(
-        err,
-        ToastAndroid.SHORT,
-        ToastAndroid.CENTER,
-      );
       setShowIpInput(true);
       return [];
     }
@@ -252,24 +241,24 @@ export const Offline = () => {
   const fetchDirectoryListing = async (directoryUrl: string) => {
     try {
       if (directoryLevel === 0) {
-        fetchBatches();
+        await fetchBatches();
       } else if (directoryLevel === 1) {
-        fetchSubjects();
+        await fetchSubjects();
       } else if (directoryLevel === 2) {
-        fetchChapters();
+        await fetchChapters();
       } else if (directoryLevel === 3) {
-        fetchSections();
+        await fetchSections();
       } else if (directoryLevel === 4) {
         if (offlineSelectedSection == 0) {
-          fetchDpp();
+          await fetchDpp();
         } else if (offlineSelectedSection == 1) {
-          fetchDppPdf();
+          await fetchDppPdf();
         } else if (offlineSelectedSection == 2) {
-          fetchDppVideos();
+          await fetchDppVideos();
         } else if (offlineSelectedSection == 3) {
-          fetchLectures();
+          await fetchLectures();
         } else {
-          fetchNotes();
+          await fetchNotes();
         }
       }
     } catch (error) {
@@ -277,40 +266,22 @@ export const Offline = () => {
     }
   };
 
-  const handleDirectoryItemPress = (link: string) => {
-    if (link.endsWith('.pdf')) {
-      // @ts-expect-error
-      navigation.navigate('PDFViewer', { pdfUrl: offlineCurrentDirectory + link });
-    } else if (link.endsWith('.mp4')) {
-      console.log('.mp4');
-      // @ts-expect-error
-      navigation.navigate('MP4Player', { videoUrl: offlineCurrentDirectory + link });
-      // setVideoOpen(true);
-      // setVideoUrl(link);
-    } else {
-      // Navigate to the selected directory
-      const newDirectoryUrl = offlineCurrentDirectory + link;
-      setOfflineCurrentDirectory(newDirectoryUrl);
-    }
-  };
-
 
   function isIPAddress(input: any) {
     console.log("Check Input : ", input);
+    // Regular expression to match IPv4 address format
+    const ipv4Pattern = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
 
-    // Regular expression to match IPv4 address format with optional port number
-    const ipv4Pattern = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?::[0-9]{1,5})?$/;
-
-    // Regular expression to match IPv6 address format with optional port number
-    const ipv6Pattern = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}(?::[0-9]{1,5})?$/;
+    // Regular expression to match IPv6 address format
+    const ipv6Pattern = /^(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$/;
 
     // Check if input matches either IPv4 or IPv6 pattern
     return ipv4Pattern.test(input) || ipv6Pattern.test(input);
   }
 
-
   const handleIPChange = () => {
-    if (!isIPAddress(ipAddress)) {
+    console.log("Hi");
+    if (!isIPAddress(ipAddress?.split(':')[0])) {
       ToastAndroid.showWithGravity(
         'Enter an IP adress in correct format',
         ToastAndroid.SHORT,
@@ -318,56 +289,32 @@ export const Offline = () => {
       );
       return;
     }
-    console.log(`http://${ipAddress}/Batches/`)
     setOfflineCurrentDirectory(`http://${ipAddress}/Batches/`);
     AsyncStorage.setItem("iP", ipAddress);
     fetchBatches();
   }
 
-  const ipInputRef = useRef<TextInput>(null);
-
   return (
     <View style={{ flex: 1 }} className='bg-[#1A1A1A]'>
       <Navbar />
-      {showLoader && <View
-        style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
-        className='bg-white/10 '
-      >
-        <ActivityIndicator color={"#FFFFFF"} size={80} />
-      </View>}
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-        {showIpInput && <Pressable
-          android_ripple={{
-            color: "rgba(255,255,255,0.4)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-          }}
-          className=' mr-5 overflow-hidden rounded-lg '
-          onPress={() => ipInputRef.current?.focus()}
-
-        ><TextInput ref={ipInputRef} autoFocus={true} placeholder='Enter Ip' className=' text-white bg-[#0d0d0d] rounded-lg p-2 px-4 w-64 overflow-hidden' placeholderTextColor={"rgb(0,0,0)"} onChangeText={(text) => { setIpAddress(text) }} /></Pressable>}
+        {showIpInput && <TextInput autoFocus={true} placeholder='Enter Ip' className=' rounded-lg pl-4 overflow-hidden ' onChangeText={(text) => { setIpAddress(text) }} style={{ backgroundColor: 'white', width: 200, marginRight: 20, padding: 4, }} />}
         {showIpInput &&
           <Pressable
             android_ripple={{
-              color: "rgba(2505,255,255,0.8)",
+              color: "rgba(255,255,255,0.4)",
               borderless: false,
               radius: 1000,
               foreground: true
             }}
+
             onPress={() => {
-              ToastAndroid.showWithGravity(
-                'Ip Submitted!!',
-                ToastAndroid.SHORT,
-                ToastAndroid.CENTER,
-              );
-              handleIPChange()
+              console.log("HiHi"); handleIPChange()
             }}
-            className='bg-white/10 w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'
-          >
+            className='bg-[#8E89BA] w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
             <Text className='text-white text-center w-full text-base'>Enter IP</Text>
-          </Pressable>
-        }
+          </Pressable>}
+
       </View>
       <OfflineBatches />
     </View>

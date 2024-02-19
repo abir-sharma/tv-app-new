@@ -15,7 +15,7 @@ import { DppComponent } from '../components/Options/DppComponent';
 
 export default function Details({ navigation }: any) {
 
-  const { setMainNavigation, dppList, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, topicList } = useGlobalContext();
+  const { setMainNavigation, setLogs, dppList, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, topicList } = useGlobalContext();
 
 
   const [contentType, setContentType] = useState<string>('videos');
@@ -62,30 +62,30 @@ export default function Details({ navigation }: any) {
       const resDpp = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, { headers });
 
       if (selectedMenu === 0) {
-        setVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res.data.data] : res.data.data));
+        setVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
         if (res?.data?.data?.length <= 0) {
           setShowLoadMoreVideos(false);
         }
       }
       else if (selectedMenu === 1) {
-        setNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res.data.data] : res.data.data));
+        setNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
         if (res?.data?.data?.length <= 0) {
           setShowLoadMoreNotes(false);
         }
       }
       else if (selectedMenu === 2) {
-        const data = resDpp.data.data;
+        const data = resDpp?.data?.data;
         console.log("DPP List: ", data);
         setDppList(data);
       }
       else if (selectedMenu === 3) {
-        setDppNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res.data.data] : res.data.data));
+        setDppNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
         if (res?.data?.data?.length <= 0) {
           setShowLoadMoreDppNotes(false);
         }
       }
       else if (selectedMenu === 4) {
-        setDppVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res.data.data] : res.data.data));
+        setDppVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
         if (res?.data?.data?.length <= 0) {
           setShowLoadMoreDppVideos(false);
         }
@@ -96,8 +96,10 @@ export default function Details({ navigation }: any) {
 
 
     }
-    catch (err) {
+    catch (err: any) {
       console.log("error:", err);
+      setLogs((logs) => [...logs, "Error in DETAILS PAGE API:" + JSON.stringify(err?.response)]);
+
     }
     setShowLoader(false);
   }
