@@ -68,8 +68,9 @@ export const VideoComponent = ({ videoList, setVideoList, loadMore, getPaidBatch
   );
 
   return (
-    <View>
+    <View className='pt-5'>
       {/* <Text style={styles.subjectText}>Physics</Text> */}
+      {videoList?.length === 0 && <Text className='text-white text-2xl self-center items-center'>No videos available!!</Text>}
       <FlatList
         data={videoList?.sort((a, b) => {
           const nameA = a?.videoDetails?.name?.toUpperCase(); // Ignore case

@@ -73,6 +73,7 @@ export const NoteComponent = ({ noteList, setNoteList, loadMore, getPaidBatches 
   return (
     <View className='pt-5'>
       {/* <Text style={styles.subjectText}>Physics</Text> */}
+      {noteList?.length === 0 && <Text className='text-white text-2xl self-center items-center' >No notes available!!</Text>}
       <FlatList
         data={noteList?.sort((a, b) => {
           const topicA = a?.homeworkIds[0]?.topic || ''; // Using empty string if topic is undefined

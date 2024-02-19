@@ -67,6 +67,7 @@ export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }
 
   return (
     <View className='pt-5'>
+      {dppList?.length === 0 && <Text className='text-white text-2xl self-center items-center' >No Tests available!!</Text>}
       {dppList && <FlatList
         data={dppList}
         renderItem={renderGridItem}

@@ -79,7 +79,6 @@ const TestSolutions = ({ route }: any) => {
                 setCurrentQuestion(allData[0]);
                 setCorrectOptions(allData[0]?.question?.solutions);
                 setMarkedOptions(allData[0]?.yourResult?.markedSolutions);
-                // console.log("all section : ", "Marked Solution: ", allData[0].yourResult.markedSolutions, "Correct Solution: ", allData[0].question.solutions)
             }
         } else if (filter === 'correct') {
             const data = allData?.filter((question: any) => question?.yourResult?.status === "CORRECT")
@@ -88,7 +87,6 @@ const TestSolutions = ({ route }: any) => {
                 setCurrentQuestion(data[0]);
                 setCorrectOptions(data[0]?.question?.solutions);
                 setMarkedOptions(data[0]?.yourResult?.markedSolutions);
-                // console.log("Correct section : ", "Marked Solution: ", data[0].yourResult.markedSolutions, "Correct Solution: ", data[0].question.solutions)
             }
         } else if (filter === 'incorrect') {
             const data = allData?.filter((question: any) => question?.yourResult?.status === "WRONG")
@@ -97,7 +95,6 @@ const TestSolutions = ({ route }: any) => {
                 setCurrentQuestion(data[0]);
                 setCorrectOptions(data[0]?.question?.solutions);
                 setMarkedOptions(data[0]?.yourResult?.markedSolutions);
-                // console.log("Incorrect section : ", "Marked Solution: ", data[0].yourResult.markedSolutions, "Correct Solution: ", data[0].question.solutions)
             }
         } else {
             const data = allData?.filter((question: any) => question?.yourResult?.status === "UnAttempted")
@@ -106,7 +103,6 @@ const TestSolutions = ({ route }: any) => {
                 setCurrentQuestion(data[0]);
                 setCorrectOptions(data[0]?.question?.solutions);
                 setMarkedOptions(data[0]?.yourResult?.markedSolutions);
-                // console.log("Skipped section : ", "Marked Solution: ", data[0].yourResult.markedSolutions, "Correct Solution: ", data[0].question.solutions)
             }
         }
     }
