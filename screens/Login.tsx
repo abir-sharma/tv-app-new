@@ -132,8 +132,8 @@ export default function Login({ navigation }: any) {
         setHeaders({
           "Authorization": `Bearer ${res?.data?.data?.access_token}`
         })
-        await AsyncStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDg5NTU5MTguMjQxLCJkYXRhIjp7Il9pZCI6IjYyZTM3OGI0NTEwZjAxMDAxMWI0NDM1OSIsInVzZXJuYW1lIjoiOTk5OTYzMDIwOCIsImZpcnN0TmFtZSI6ImhhcnNoIiwibGFzdE5hbWUiOiJrYXJkYW0iLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJoYXJzaC5rYXJkYW1AZ21haWwuY29tIiwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwidHlwZSI6IlVTRVIifSwiaWF0IjoxNzA4MzUxMTE4fQ.clJBqysaWDecLnI-RsdMhyXNSsLlQ3Y0urNqcsiX834");
-        // await AsyncStorage.setItem("token", res?.data?.data?.access_token);
+        // await AsyncStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDg5NTU5MTguMjQxLCJkYXRhIjp7Il9pZCI6IjYyZTM3OGI0NTEwZjAxMDAxMWI0NDM1OSIsInVzZXJuYW1lIjoiOTk5OTYzMDIwOCIsImZpcnN0TmFtZSI6ImhhcnNoIiwibGFzdE5hbWUiOiJrYXJkYW0iLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJoYXJzaC5rYXJkYW1AZ21haWwuY29tIiwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwidHlwZSI6IlVTRVIifSwiaWF0IjoxNzA4MzUxMTE4fQ.clJBqysaWDecLnI-RsdMhyXNSsLlQ3Y0urNqcsiX834");
+        await AsyncStorage.setItem("token", res?.data?.data?.access_token);
         navigation.navigate('Home');
       }
     }
