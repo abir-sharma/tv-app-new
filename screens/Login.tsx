@@ -92,8 +92,16 @@ export default function Login({ navigation }: any) {
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
-      } else {
+      } else if(err?.response?.status === 400){
+        console.log("New user error: ", err?.response?.status);
         setNewUser(true);
+      }
+      else{
+        ToastAndroid.showWithGravity(
+          "OTP not sent something went wrong! Please try again later.",
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
       }
 
     }
@@ -183,7 +191,12 @@ export default function Login({ navigation }: any) {
 
     }
     catch (err) {
-      console.log(err);
+      console.log("err white register", err);
+      ToastAndroid.showWithGravity(
+        "Error while registering please try again later!",
+        ToastAndroid.SHORT,
+        ToastAndroid.CENTER,
+      );
     }
     setShowLoader(false);
   }
