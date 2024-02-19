@@ -111,7 +111,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         >
           <Pressable onPress={() => setIsDropdownVisible(false)}>
             <View style={{ flex: 1 }}>
-              <View className='bg-[#444444] max-h-[200] overflow-scroll w-[20%] rounded-lg absolute top-[70] left-[130] z-[2]'>
+              <View className='bg-[#444444] max-h-[200] overflow-scroll w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
                 <FlatList
                   data={batchDetails?.subjects?.slice(1)}
                   renderItem={renderItem}
