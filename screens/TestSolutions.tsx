@@ -24,6 +24,7 @@ const TestSolutions = ({ route }: any) => {
     const [cookieParams, setCookieParams] = useState<any>(undefined);
     const [selectedFilter, setSelectedFilter] = useState<any>('all');
     const [showLoader, setShowLoader] = useState<boolean>(true);
+    const [questionType, setQuestionType] = useState<string>('Single');
 
 
 
@@ -48,6 +49,7 @@ const TestSolutions = ({ route }: any) => {
             setCurrentQuestion(res?.data?.data?.questions[0]);
             setCorrectOptions(res?.data?.data?.questions[0]?.question?.solutions);
             setMarkedOptions(res?.data?.data?.questions[0]?.yourResult?.markedSolutions);
+            setQuestionType(res?.data?.data?.questions[0]?.question?.type);
             const questions = res?.data?.data?.questions;
             const correct = [];
             const incorrect = [];
@@ -137,6 +139,7 @@ const TestSolutions = ({ route }: any) => {
             setCurrentQuestion(questionsData[curr + 1]);
             setCorrectOptions(questionsData[curr + 1]?.question?.solutions);
             setMarkedOptions(questionsData[curr + 1]?.yourResult?.markedSolutions);
+            setQuestionType(questionsData[curr + 1]?.question?.type);
         } else {
             ToastAndroid.showWithGravity(
                 "No next Question!!",
@@ -154,6 +157,8 @@ const TestSolutions = ({ route }: any) => {
             setCurrentQuestion(questionsData[curr - 1]);
             setCorrectOptions(questionsData[curr - 1]?.question?.solutions);
             setMarkedOptions(questionsData[curr - 1]?.yourResult?.markedSolutions);
+            setQuestionType(questionsData[curr - 1]?.question?.type);
+
         } else {
             ToastAndroid.showWithGravity(
                 "No Previous Question",
@@ -330,7 +335,17 @@ const TestSolutions = ({ route }: any) => {
                                 alt='Question'
                             />
                         </View>
-                        <View className='gap-y-2 mt-5 w-[60%]'>
+                        {questionType === 'Numeric' && <View className='gap-y-2 mt-5 w-[60%]'>
+                            {currentQuestion?.yourResult?.markedSolutionText && currentQuestion?.yourResult?.markedSolutionText !== '' && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${currentQuestion?.question?.solutionText === currentQuestion?.yourResult?.markedSolutionText ? 'bg-green-400' : 'bg-red-400'}`}>
+                                <Text className='text-white font-bold'> {currentQuestion?.yourResult?.markedSolutionText} </Text>
+                                <Text className='text-white font-bold'> {currentQuestion?.question?.solutionText === currentQuestion?.yourResult?.markedSolutionText ? 'Correct Answer (marked by you)' : 'Incorrect Answer (marked by you)'}</Text>
+                            </View>}
+                            {currentQuestion?.question?.solutionText !== currentQuestion?.yourResult?.markedSolutionText && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between bg-green-400`}>
+                                <Text className='text-white font-bold'> {currentQuestion?.question?.solutionText} </Text>
+                                <Text className='text-white font-bold'> Correct Answer </Text>
+                            </View>}
+                        </View>}
+                        {questionType !== 'Numeric' && <View className='gap-y-2 mt-5 w-[60%]'>
                             {currentQuestion?.question?.options && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${markedOptions?.includes(currentQuestion?.question?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'bg-green-400' : ''}`}>
                                 <Text className='text-white font-bold'> {currentQuestion?.question?.options[0]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
@@ -348,7 +363,7 @@ const TestSolutions = ({ route }: any) => {
                                 <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[3]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
                             </View>}
 
-                        </View>
+                        </View>}
                     </View>
                 </View>
 

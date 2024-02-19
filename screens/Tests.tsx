@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator, TextInput } from 'react-native'
 import { useGlobalContext } from '../context/MainContext'
 import axios from 'axios';
 import { ReviewOrSubmitModal } from '../components/modals/ReviewOrSubmit';
@@ -18,6 +18,7 @@ const Tests = ({ navigation, route }: any) => {
     const [seconds, setSeconds] = useState(0);
     const [lastTimeStamp, setLastTimeStamp] = useState(0);
     const [showLoader, setShowLoader] = useState<boolean>(true);
+    const [inputInteger, setInputInteger] = useState<any>(null);
 
     useEffect(() => {
         if (testData && testData?.sections && testData?.sections[0]?.questions) {
@@ -106,6 +107,32 @@ const Tests = ({ navigation, route }: any) => {
                 setResponses(newResponses);
                 console.log("Final Responses: ", newResponses);
             }
+        } else if (questionType === "Numeric") {
+            if (selectedAnswers?.length > 0) {
+                return;
+            } else {
+                setSelectedAnswers([]);
+                const timeDiff = seconds - lastTimeStamp;
+                const obj = {
+                    "markedSolutions": [],
+                    "status": "Attempted",
+                    "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                    "questionId": currentQuestion?._id,
+                    "markedSolutionText": inputInteger,
+                    "isBookmarked": false,
+                    "notes": ""
+                }
+                setLastTimeStamp(seconds);
+                const newResponses = responses;
+                newResponses[curr] = obj;
+                setResponses(newResponses);
+                console.log("Final Responses: ", newResponses);
+                ToastAndroid.showWithGravity(
+                    "Submitted integer value!!",
+                    ToastAndroid.SHORT,
+                    ToastAndroid.TOP,
+                );
+            }
         }
     }
 
@@ -114,14 +141,27 @@ const Tests = ({ navigation, route }: any) => {
         try {
             const curr = currentQuestion?.questionNumber - 1;
             const timeDiff = seconds - lastTimeStamp;
-            const obj = {
-                "markedSolutions": selectedAnswers,
-                "status": selectedAnswers?.length > 0 ? "Attempted" : "UnAttempted",
-                "timeTaken": responses[curr]?.timeTaken + timeDiff,
-                "questionId": currentQuestion?._id,
-                "markedSolutionText": "",
-                "isBookmarked": false,
-                "notes": ""
+            let obj;
+            if (questionType === 'Numeric') {
+                obj = {
+                    "markedSolutions": [],
+                    "status": inputInteger ? "Attempted" : "UnAttempted",
+                    "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                    "questionId": currentQuestion?._id,
+                    "markedSolutionText": inputInteger,
+                    "isBookmarked": false,
+                    "notes": ""
+                }
+            } else {
+                obj = {
+                    "markedSolutions": selectedAnswers,
+                    "status": selectedAnswers?.length > 0 ? "Attempted" : "UnAttempted",
+                    "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                    "questionId": currentQuestion?._id,
+                    "markedSolutionText": "",
+                    "isBookmarked": false,
+                    "notes": ""
+                }
             }
             setLastTimeStamp(seconds);
             const newResponses = responses;
@@ -156,14 +196,27 @@ const Tests = ({ navigation, route }: any) => {
         const curr = currentQuestion?.questionNumber - 1;
         if (curr < totalQuestions - 1) {
             const timeDiff = seconds - lastTimeStamp;
-            const obj = {
-                "markedSolutions": selectedAnswers,
-                "status": selectedAnswers?.length > 0 ? "Attempted" : "UnAttempted",
-                "timeTaken": responses[curr]?.timeTaken + timeDiff,
-                "questionId": currentQuestion?._id,
-                "markedSolutionText": "",
-                "isBookmarked": false,
-                "notes": ""
+            let obj;
+            if (questionType === 'Numeric') {
+                obj = {
+                    "markedSolutions": [],
+                    "status": inputInteger ? "Attempted" : "UnAttempted",
+                    "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                    "questionId": currentQuestion?._id,
+                    "markedSolutionText": inputInteger,
+                    "isBookmarked": false,
+                    "notes": ""
+                }
+            } else {
+                obj = {
+                    "markedSolutions": selectedAnswers,
+                    "status": selectedAnswers?.length > 0 ? "Attempted" : "UnAttempted",
+                    "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                    "questionId": currentQuestion?._id,
+                    "markedSolutionText": "",
+                    "isBookmarked": false,
+                    "notes": ""
+                }
             }
             setLastTimeStamp(seconds);
             const newResponses = responses;
@@ -185,14 +238,27 @@ const Tests = ({ navigation, route }: any) => {
         const curr = currentQuestion?.questionNumber - 1;
         if (curr > 0) {
             const timeDiff = seconds - lastTimeStamp;
-            const obj = {
-                "markedSolutions": selectedAnswers,
-                "status": selectedAnswers?.length > 0 ? "Attempted" : "UnAttempted",
-                "timeTaken": responses[curr]?.timeTaken + timeDiff,
-                "questionId": currentQuestion?._id,
-                "markedSolutionText": "",
-                "isBookmarked": false,
-                "notes": ""
+            let obj;
+            if (questionType === 'Numeric') {
+                obj = {
+                    "markedSolutions": [],
+                    "status": inputInteger ? "Attempted" : "UnAttempted",
+                    "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                    "questionId": currentQuestion?._id,
+                    "markedSolutionText": inputInteger,
+                    "isBookmarked": false,
+                    "notes": ""
+                }
+            } else {
+                obj = {
+                    "markedSolutions": selectedAnswers,
+                    "status": selectedAnswers?.length > 0 ? "Attempted" : "UnAttempted",
+                    "timeTaken": responses[curr]?.timeTaken + timeDiff,
+                    "questionId": currentQuestion?._id,
+                    "markedSolutionText": "",
+                    "isBookmarked": false,
+                    "notes": ""
+                }
             }
             setLastTimeStamp(seconds);
             const newResponses = responses;
@@ -224,6 +290,9 @@ const Tests = ({ navigation, route }: any) => {
 
         return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
     };
+
+
+    const IntegerInputRef = useRef<TextInput>(null);
 
 
     return (
@@ -273,9 +342,9 @@ const Tests = ({ navigation, route }: any) => {
                 </View>
             </View>
             <View className='mt-10 justify-center'>
-                <View className='bg-white/5 px-4 py-2 mr-auto rounded-lg'>
+                {currentQuestion?.topicId?.name && <View className='bg-white/5 px-4 py-2 mr-auto rounded-lg'>
                     <Text className='text-white text-center'>{currentQuestion?.topicId?.name}</Text>
-                </View>
+                </View>}
                 <View className='flex flex-row mt-4'>
                     <View className='bg-[#8E89BA] px-4 py-2 rounded-lg'>
                         <Text className='text-white text-center'>{currentQuestion?.questionNumber}</Text>
@@ -301,7 +370,34 @@ const Tests = ({ navigation, route }: any) => {
                         </View>
                     </View>
                     <View className='flex flex-col w-5/12 rounded-xl px-8'>
-                        <Text className='text-white text-lg'>Options: </Text>
+                        <Text className='text-white text-lg'>{questionType === 'Numeric' ? 'Type your answer:' : 'Options:'}</Text>
+                        {questionType === 'Numeric' && <Pressable
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.4)",
+                                borderless: false,
+                                radius: 1000,
+                                foreground: true
+                            }}
+                            onPress={() => IntegerInputRef.current?.focus()} className='bg-white rounded-lg  overflow-hidden w-[200] my-10 p-2 text-lg self-center'>
+
+                            <TextInput ref={IntegerInputRef} hasTVPreferredFocus={true} value={inputInteger} onChangeText={newText => { setInputInteger(newText) }}
+                                className='text-black bg-white text-base self-center' autoFocus={true} placeholder='Enter an integer' />
+                        </Pressable>}
+                        {questionType === 'Numeric' && <Pressable
+                            hasTVPreferredFocus={true}
+                            android_ripple={{
+                                color: "rgba(255,255,255,0.5)",
+                                borderless: false,
+                                radius: 2000,
+                                foreground: true
+                            }}
+                            onPress={() => { handleOptionClick("") }}
+                            className='mb-8 text-white bg-[#5A4BDA] rounded-xl py-3 px-6 text-center self-center overflow-hidden'
+                        >
+                            <Text className='text-white font-bold'>
+                                Submit
+                            </Text>
+                        </Pressable>}
                         {currentQuestion && questionType === 'Single' && <Pressable
                             hasTVPreferredFocus={true}
                             android_ripple={{
@@ -465,7 +561,7 @@ const Tests = ({ navigation, route }: any) => {
                     </Pressable>
                 </View>
             </View>
-        </View>
+        </View >
     )
 }
 
