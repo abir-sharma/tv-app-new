@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,7 +9,7 @@ import moment from 'moment';
 
 export default function Recent() {
 
-    const { orders, setOrders, mainNavigation, recentVideoLoad } = useGlobalContext();
+    const { mainNavigation, recentVideoLoad } = useGlobalContext();
     const [recentVideos, setRecentVideos] = useState<VideoType[] | null>(null);
 
     useEffect(() => {

@@ -1,8 +1,7 @@
 /// <reference types="nativewind/types" />
 import { useState } from 'react';
-import { Image, Text, Pressable, View, Modal, TouchableWithoutFeedback, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { Image, Text, Pressable, View, Modal, FlatList } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
-import { NoteType, VideoType } from '../types/types';
 import styles from './NavbarDetails.style'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,7 +17,7 @@ type PropType = {
 export default function NavbarDetails({ selectedMenu, setSelectedMenu, setContentType, setCurrentPage }: PropType) {
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const { setSelectedSubject, setLogs, logs, batchDetails, mainNavigation, selectedSubject, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter, headers, setHeaders } = useGlobalContext();
+  const { setSelectedSubject, setLogs, batchDetails, mainNavigation, selectedSubject, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter, headers, setHeaders } = useGlobalContext();
 
   const handleLogout = async () => {
 

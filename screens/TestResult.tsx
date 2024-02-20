@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useGlobalContext } from "../context/MainContext"
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 

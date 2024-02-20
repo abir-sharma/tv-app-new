@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, Pressable, ScrollView, ToastAndroid, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator } from 'react-native'
 import { useGlobalContext } from '../context/MainContext';
-import { useNavigation } from '@react-navigation/native';
-import axios, { all } from 'axios';
-import { ResizeMode, Video } from 'expo-av';
+import axios from 'axios';
 import { cookieSplitter } from '../components/video-player/cookie-splitter';
 
 const TestSolutions = ({ route }: any) => {
 
     const { headers, selectedTestMapping, mainNavigation } = useGlobalContext();
     const [solutionData, setSolutionData] = useState<any>();
-    const [originalSolutionData, setOriginalSolutionData] = useState<any>();
     const [questionsData, setQuestionsData] = useState<any>();
     const [originalQuestionData, setOriginalQuestionData] = useState<any>();
     const [currentQuestion, setCurrentQuestion] = useState<any>();
-    const [correctAnswers, setCorrectAnswers] = useState<any>();
-    const [incorrectAnswers, setIncorrectAnswers] = useState<any>();
-    const [skippedAnswers, setSkippedAnswers] = useState<any>();
     const [correctOptions, setCorrectOptions] = useState<any>();
     const [markedOptions, setMarkedOptions] = useState<any>();
     const [renderVideo, setRenderVideo] = useState<boolean>(false);
@@ -41,8 +35,6 @@ const TestSolutions = ({ route }: any) => {
             const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/preview-test`, options);
             console.log("Test Solution Data: ", res?.data?.data?.questions)
             console.log("DING DING");
-            // console.log("DING DING", res.data.data.questions[0].solutionDescription[0].videoDetails.videoUrl);
-            // sendAnalyticsData(res.data.data.questions[0].solutionDescription[0].videoDetails.videoUrl)
             setQuestionsData(res?.data?.data?.questions);
             setOriginalQuestionData([...res?.data?.data?.questions]);
             setSolutionData(res?.data?.data);

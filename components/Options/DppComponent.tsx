@@ -1,8 +1,6 @@
-import React, { useState, Dispatch, SetStateAction, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
-import { NoteType, QuizItemType, VideoType } from '../../types/types';
-import moment from 'moment';
-import { useNavigation } from '@react-navigation/native';
+import React, { Dispatch, SetStateAction } from 'react';
+import { View, Text, Image, FlatList, Pressable } from 'react-native';
+import { NoteType } from '../../types/types';
 import { useGlobalContext } from '../../context/MainContext';
 import axios from 'axios';
 
@@ -13,11 +11,9 @@ type DPPPropType = {
   getPaidBatches: any
 }
 
-export const DppComponent = ({ noteList, setNoteList, loadMore, getPaidBatches }: DPPPropType) => {
+export const DppComponent = ({ }: DPPPropType) => {
 
-  const { mainNavigation, setLogs, setTestData, dppList, setDppList, selectedTestMapping, setSelectedTestMapping, batchDetails, setTestSections, setSelectedDpp, headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
-  const navigation = useNavigation();
-
+  const { mainNavigation, setLogs, setTestData, dppList, setSelectedTestMapping, setTestSections, setSelectedDpp, headers, selectedBatch, } = useGlobalContext();
 
 
 

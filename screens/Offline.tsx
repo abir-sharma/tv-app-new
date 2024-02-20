@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Modal, TextInput, Button, ToastAndroid, Pressable } from 'react-native';
+import { View, Text, TextInput, ToastAndroid, Pressable } from 'react-native';
 import axios from 'axios';
 import cheerio from 'cheerio';
-import { useNavigation } from '@react-navigation/native';
 import Navbar from '../components/Navbar';
 import { useGlobalContext } from '../context/MainContext';
 import { ItemType, ItemType2 } from '../types/types';
@@ -15,19 +14,12 @@ export const Offline = () => {
   const { setDirectoryLevel, showIpInput, setShowIpInput, setOfflineSections, setOfflineSelectedSubject, setOfflineSelectedSection, setOfflineSelectedChapter, setOfflineLectures, setOfflineDpp, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, offlineSelectedSection, directoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, setOfflineBatches, setOfflineSubjects, setOfflineChapters } = useGlobalContext();
   const [ipAddress, setIpAddress] = useState("");
 
-  const navigation = useNavigation();
-
-
   useEffect(() => {
-
-
-
     fetchDirectoryListing(offlineCurrentDirectory);
   }, [offlineCurrentDirectory]);
 
 
   const isThumbnailAvailable = (directoryItems: any[], toFind: string) => {
-    // console.log("Check area: ", directoryItems, " ::::: \n", `->${toFind}`);
     for (let i = 0; i < directoryItems.length; i++) {
       if (directoryItems[i].name === toFind) {
         return true;

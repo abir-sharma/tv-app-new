@@ -1,17 +1,17 @@
 /// <reference types="nativewind/types" />
 
-import { ActivityIndicator, View } from 'react-native';
+import { View } from 'react-native';
 import Navbar from '../components/Navbar';
 import Batches from '../components/Batches';
 import Recent from '../components/Recent';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 export default function Home({ navigation }: any) {
 
-  const { setMainNavigation, setLogs, mainNavigation, headers, setHeaders } = useGlobalContext();
+  const { setMainNavigation, setLogs, mainNavigation, setHeaders } = useGlobalContext();
 
   const handleLogin = async () => {
     if (await AsyncStorage.getItem("token")) {
@@ -22,7 +22,6 @@ export default function Home({ navigation }: any) {
       try {
         const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", { Authorization: `Bearer ${await AsyncStorage.getItem("token")}` });
       } catch (err: any) {
-        // console.log("error token check: ", err);
         setLogs((logs) => [...logs, "Error in VERIFY TOKEN API:" + JSON.stringify(err.response)]);
         await AsyncStorage.removeItem("token");
         mainNavigation?.navigate('Login')
@@ -40,12 +39,7 @@ export default function Home({ navigation }: any) {
   useEffect(() => {
     navigation.setOptions({ headerShown: false });
     setMainNavigation(navigation);
-    // const logToken = async () => {
-    //   console.log(await AsyncStorage.getItem("token"));
-    // }
-    // logToken();
     handleLogin();
-    // AsyncStorage.clear();
   }, [])
 
   return (

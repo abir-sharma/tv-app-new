@@ -1,12 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { View, Text, Dimensions, Modal, Platform, ActivityIndicator, Pressable, Image } from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, ActivityIndicator, Pressable, Image } from 'react-native'
 import { WebView } from 'react-native-webview';
-import uuid from 'react-native-uuid';
-// import Video from 'react-native-video';
 import styles from './player.style';
 import axios from 'axios';
-// import ApiRoutes from '../../../config/api.config';A
 import { Video, ResizeMode } from 'expo-av';
 import { cookieSplitter } from './cookie-splitter';
 import { useGlobalContext } from '../../context/MainContext';
@@ -24,7 +20,6 @@ export default function VideoPlayer(props: any) {
   const { headers } = useGlobalContext();
   const [showLoader, setShowLoader] = useState<boolean>(true);
   const [isActive, setIsActive] = useState<boolean>(true);
-  // console.log("###### --->", props?.lectureDetails);
 
   useEffect(() => {
     setSpinner(true);

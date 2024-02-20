@@ -1,15 +1,14 @@
 /// <reference types="nativewind/types" />
 import { useState } from 'react';
-import { Image, Text, Pressable, View, Modal, TouchableWithoutFeedback, FlatList, TouchableOpacity } from 'react-native';
+import { Image, Text, Pressable, View, Modal, FlatList } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
-import { NoteType, VideoType } from '../../types/types';
 import styles from './NavbarDetails.style'
 
 
 export default function OfflineNavbarDetails() {
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const { offlineCurrentDirectory, offlineSections, setDirectoryLevel, offlineSelectedSection, setOfflineCurrentDirectory, setOfflineSelectedSection, offlineSubjects, setOfflineSelectedBatch, setOfflineSelectedSubject, offlineSelectedSubject, mainNavigation } = useGlobalContext();
+  const { offlineSections, setDirectoryLevel, offlineSelectedSection, setOfflineCurrentDirectory, setOfflineSelectedSection, offlineSubjects, setOfflineSelectedBatch, setOfflineSelectedSubject, offlineSelectedSubject, mainNavigation } = useGlobalContext();
 
 
   const renderItem = ({ item }: any) => (

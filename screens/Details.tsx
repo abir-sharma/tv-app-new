@@ -2,8 +2,6 @@
 
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import NavbarDetails from '../components/NavbarDetails';
-import Batches from '../components/Batches';
-import Recent from '../components/Recent';
 import { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import { NoteType, VideoType } from '../types/types';
@@ -15,7 +13,7 @@ import { DppComponent } from '../components/Options/DppComponent';
 
 export default function Details({ navigation }: any) {
 
-  const { setMainNavigation, setLogs, dppList, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, topicList } = useGlobalContext();
+  const { setMainNavigation, setLogs, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter } = useGlobalContext();
 
 
   const [contentType, setContentType] = useState<string>('videos');
@@ -137,14 +135,6 @@ export default function Details({ navigation }: any) {
         </ScrollView>
 
       </View>
-
-      {/* <ScrollView className=' flex-[3] pt-5'>
-          {selectedMenu == 0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreVideos} />}
-          {selectedMenu == 1 && <NoteComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreNotes} />}
-          {selectedMenu == 3 && <NoteComponent noteList={dppNoteList} setNoteList={setDppNoteList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreDppNotes} />}
-          {selectedMenu == 4 && <VideoComponent videoList={dppVideoList} setVideoList={setDppVideoList} getPaidBatches={getPaidBatches} loadMore={showLoadMoreDppVideos} />}
-        </ScrollView> */}
-
     </View>
   );
 }

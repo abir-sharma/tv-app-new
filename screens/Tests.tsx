@@ -5,8 +5,7 @@ import axios from 'axios';
 import { ReviewOrSubmitModal } from '../components/modals/ReviewOrSubmit';
 
 const Tests = ({ navigation, route }: any) => {
-    const { testData, testSections, selectedBatch, headers, selectedTestMapping } = useGlobalContext();
-    const [maxTries, setMaxTries] = useState(0);
+    const { testData, selectedBatch, headers, selectedTestMapping } = useGlobalContext();
     const [totalQuestions, setTotalQuestions] = useState<number>(0);
     const [currentQuestion, setCurrentQuestion] = useState<any>();
     const [responses, setResponses] = useState<any>(0);
@@ -26,7 +25,6 @@ const Tests = ({ navigation, route }: any) => {
             setTotalQuestions(testData?.sections[0]?.questions?.length);
             setCurrentQuestion(testData?.sections[0]?.questions[0]);
             setCorrectOptions(testData?.sections[0]?.questions[0]?.solutions);
-            setMaxTries(testData?.sections[0]?.questions[0]?.solutions?.length);
             setQuestionType(testData?.sections[0]?.questions[0]?.type);
             const response = [];
             for (let i = 0; i < len; i++) {
@@ -108,7 +106,7 @@ const Tests = ({ navigation, route }: any) => {
                 console.log("Final Responses: ", newResponses);
             }
         } else if (questionType === "Numeric") {
-            if (selectedAnswers?.length > 0) {
+            if (responses[curr]) {
                 return;
             } else {
                 setSelectedAnswers([]);
@@ -122,6 +120,7 @@ const Tests = ({ navigation, route }: any) => {
                     "isBookmarked": false,
                     "notes": ""
                 }
+                setInputInteger("");
                 setLastTimeStamp(seconds);
                 const newResponses = responses;
                 newResponses[curr] = obj;
@@ -152,6 +151,7 @@ const Tests = ({ navigation, route }: any) => {
                     "isBookmarked": false,
                     "notes": ""
                 }
+                setInputInteger("");
             } else {
                 obj = {
                     "markedSolutions": selectedAnswers,
@@ -207,6 +207,7 @@ const Tests = ({ navigation, route }: any) => {
                     "isBookmarked": false,
                     "notes": ""
                 }
+                setInputInteger("");
             } else {
                 obj = {
                     "markedSolutions": selectedAnswers,
@@ -249,6 +250,7 @@ const Tests = ({ navigation, route }: any) => {
                     "isBookmarked": false,
                     "notes": ""
                 }
+                setInputInteger("");
             } else {
                 obj = {
                     "markedSolutions": selectedAnswers,

@@ -1,26 +1,17 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Pressable } from 'react-native';
-import { ItemType, NoteType, VideoType } from '../../types/types';
-import moment from 'moment';
+import React from 'react';
+import { View, Text, Image, FlatList, TouchableOpacity, Pressable } from 'react-native';
+import { ItemType } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
-import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
 import defaultIcon from '../../assets/TV.png';
 
 type NotePropType = {
   noteList: ItemType[] | null,
-  // setNoteList: Dispatch<SetStateAction<NoteType[] | null>>,
-  // loadMore: boolean,
-  // getPaidBatches: any
 }
 
 export const OfflineNoteComponent = ({ noteList }: NotePropType) => {
 
-  const { mainNavigation, batchDetails } = useGlobalContext();
   const navigation = useNavigation();
-
-  //   console.log("Video List: ", videoList);
-
 
   const renderGridItem = ({ item }: any) => (
     <Pressable
@@ -33,7 +24,6 @@ export const OfflineNoteComponent = ({ noteList }: NotePropType) => {
         foreground: true
       }}
       hasTVPreferredFocus onPress={() => {
-        // console.log("Go to PDF Viewer", item.homeworkIds[0].attachmentIds[0].baseUrl + item.homeworkIds[0].attachmentIds[0].key);
         // @ts-expect-error
         navigation.navigate('PDFViewer', { pdfUrl: item?.path });
       }}>

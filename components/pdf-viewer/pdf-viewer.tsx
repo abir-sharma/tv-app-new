@@ -1,13 +1,10 @@
-import { View, Dimensions, Text, Pressable, ActivityIndicator } from "react-native";
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+import { View, Text, Pressable, ActivityIndicator } from "react-native";
 import Pdf from 'react-native-pdf';
 import { useState } from "react";
 
 export default function PDFViewer({ route }: any) {
 
   let pdfUrl = route?.params?.pdfUrl;
-  // console.log("PDF URL: ", pdfUrl);
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [maxPage, setMaxPage] = useState<number>(1);
@@ -50,10 +47,8 @@ export default function PDFViewer({ route }: any) {
       </View>
       <Pdf
         onLoadComplete={(numberOfPages, filePath) => {
-          // console.log(`number of pages: ${numberOfPages}`);
           setMaxPage(numberOfPages);
           setShowLoader(false);
-
         }}
         page={currentPage}
         enablePaging={true}
@@ -61,7 +56,6 @@ export default function PDFViewer({ route }: any) {
         trustAllCerts={false}
         style={{
           height: "100%",
-          // width: windowWidth,
           backgroundColor: "black"
         }} source={{ uri: pdfUrl, cache: true }} />
     </View>

@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
@@ -10,7 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function OfflineBatches(params: any) {
 
-    const { setDirectoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, offlineBatches } = useGlobalContext();
+    const { setDirectoryLevel, setOfflineCurrentDirectory, offlineBatches } = useGlobalContext();
     const { mainNavigation } = useGlobalContext();
     const [showLoader, setShowLoader] = useState<boolean>(false);
 

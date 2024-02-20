@@ -1,14 +1,11 @@
 /// <reference types="nativewind/types" />
 
-import { useContext, useEffect } from 'react';
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
-import { useNavigation } from '@react-navigation/native';
-import axios from 'axios';
 
 export default function Batches() {
 
-    const { orders, setOrders, mainNavigation, subscribedBatches, setSubscribedBatches, setSelectedBatch, headers } = useGlobalContext();
+    const { orders, mainNavigation, subscribedBatches, setSelectedBatch, } = useGlobalContext();
 
     return (
         <View className='bg-white/5 p-5 w-[95%] rounded-3xl mx-auto my-5 flex-none overflow-hidden'>

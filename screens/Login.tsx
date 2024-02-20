@@ -20,18 +20,12 @@ export default function Login({ navigation }: any) {
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
 
-
-  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDg5NTU5MTguMjQxLCJkYXRhIjp7Il9pZCI6IjYyZTM3OGI0NTEwZjAxMDAxMWI0NDM1OSIsInVzZXJuYW1lIjoiOTk5OTYzMDIwOCIsImZpcnN0TmFtZSI6ImhhcnNoIiwibGFzdE5hbWUiOiJrYXJkYW0iLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJoYXJzaC5rYXJkYW1AZ21haWwuY29tIiwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwidHlwZSI6IlVTRVIifSwiaWF0IjoxNzA4MzUxMTE4fQ.clJBqysaWDecLnI-RsdMhyXNSsLlQ3Y0urNqcsiX834
-
-
-  //Use effect counter that will update a state and count till 30 sec
   useEffect(() => {
     if (otpReSent || otpSent) {
       const interval = setInterval(() => {
         setOtpTimer((prev) => {
           if (prev === 0) {
             setOtpReSent(false);
-            // return 30;
           }
           return prev - 1;
         });
@@ -59,7 +53,6 @@ export default function Login({ navigation }: any) {
 
   const handleSentOTP = async () => {
     if (phone?.length !== 10) {
-      // Alert.alert("Please enter a valid mobile number");
       ToastAndroid.showWithGravity(
         "Enter a Valid Mobile Number",
         ToastAndroid.SHORT,
@@ -92,11 +85,11 @@ export default function Login({ navigation }: any) {
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
-      } else if(err?.response?.status === 400){
+      } else if (err?.response?.status === 400) {
         console.log("New user error: ", err?.response?.status);
         setNewUser(true);
       }
-      else{
+      else {
         ToastAndroid.showWithGravity(
           "OTP not sent something went wrong! Please try again later.",
           ToastAndroid.SHORT,
@@ -111,7 +104,6 @@ export default function Login({ navigation }: any) {
 
   const handleVerifyOTP = async () => {
     if (otp?.length <= 0) {
-      // Alert.alert("Please enter a valid OTP");
       ToastAndroid.showWithGravity(
         "Please enter a valid OTP",
         ToastAndroid.SHORT,
@@ -140,14 +132,12 @@ export default function Login({ navigation }: any) {
         setHeaders({
           "Authorization": `Bearer ${res?.data?.data?.access_token}`
         })
-        // await AsyncStorage.setItem("token", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MDg5NTU5MTguMjQxLCJkYXRhIjp7Il9pZCI6IjYyZTM3OGI0NTEwZjAxMDAxMWI0NDM1OSIsInVzZXJuYW1lIjoiOTk5OTYzMDIwOCIsImZpcnN0TmFtZSI6ImhhcnNoIiwibGFzdE5hbWUiOiJrYXJkYW0iLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJoYXJzaC5rYXJkYW1AZ21haWwuY29tIiwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwidHlwZSI6IlVTRVIifSwiaWF0IjoxNzA4MzUxMTE4fQ.clJBqysaWDecLnI-RsdMhyXNSsLlQ3Y0urNqcsiX834");
         await AsyncStorage.setItem("token", res?.data?.data?.access_token);
         navigation.navigate('Home');
       }
     }
     catch (err) {
       console.log(err);
-      // Alert.alert("Please enter a valid OTP");
       ToastAndroid.showWithGravity(
         "Please enter a correct OTP",
         ToastAndroid.SHORT,
@@ -167,8 +157,8 @@ export default function Login({ navigation }: any) {
 
     setShowLoader(true);
     const nameArray = name?.split(' ');
-    const firstName = nameArray?.shift(); // Remove and return the first element
-    const lastName = nameArray?.join(' '); // Join the rest with space
+    const firstName = nameArray?.shift();
+    const lastName = nameArray?.join(' ');
 
     console.log(firstName, " ---- ", lastName);
 
@@ -213,7 +203,7 @@ export default function Login({ navigation }: any) {
       >
         <ActivityIndicator color={"#FFFFFF"} size={80} />
       </View>}
-      {/* <Image source= {require('../assets/loginBackdrop.png')} className='w-full h-full absolute top-0 left-0 z-0' width={1920} height={1080} /> */}
+
       <View className='flex-col items-center relative z-[2]'>
         <Image source={require('../assets/pw-logo.png')} className='w-16 h-16' width={10} height={10} />
         <Text className="text-white text-lg font-normal mt-5"> Welcome to</Text>

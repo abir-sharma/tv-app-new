@@ -1,22 +1,16 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Pressable } from 'react-native';
-import { ItemType, VideoType } from '../../types/types';
-import moment from 'moment';
+import React from 'react';
+import { View, Text, Image, FlatList, Pressable } from 'react-native';
+import { ItemType } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
-import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
 import defaultIcon from '../../assets/TV.png';
 
 type VideoPropType = {
   videoList: ItemType[] | null,
-  // setVideoList: Dispatch<SetStateAction<VideoType[] | null>>,
-  // loadMore: boolean,
-  // getPaidBatches: any
 }
 
 export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
 
-  const { mainNavigation, batchDetails } = useGlobalContext();
   const navigation = useNavigation();
 
   const renderGridItem = ({ item }: any) => (
@@ -45,10 +39,6 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
           />}
         </View>
         <View className='p-2'>
-          {/* <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text className='text-white text-[10px]'>{moment(item.date).format("MMM Do YY")}</Text>
-            <Text className='text-white text-[10px]'>{item?.videoDetails?.duration}</Text>
-          </View> */}
           <Text className='text-xs text-white font-medium my-2'>{item?.name?.length >= 60 ? `${item?.name?.substring(0, 60)}...` : item?.name}</Text>
         </View>
       </View>
@@ -57,7 +47,6 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
 
   return (
     <View>
-      {/* <Text style={styles.subjectText}>Physics</Text> */}
       <FlatList
         data={videoList?.sort((a, b) => {
           const nameA = a?.name?.toUpperCase(); // Ignore case
@@ -73,7 +62,6 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
         })}
         renderItem={renderGridItem}
         numColumns={4}
-      // contentContainerStyle={styles.container}
       />
     </View>
   );

@@ -1,9 +1,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, Image, FlatList, Pressable } from 'react-native';
 import { VideoType } from '../../types/types';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
-import { useGlobalContext } from '../../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type VideoPropType = {
@@ -13,9 +12,8 @@ type VideoPropType = {
   getPaidBatches: any
 }
 
-export const VideoComponent = ({ videoList, setVideoList, loadMore, getPaidBatches }: VideoPropType) => {
+export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPropType) => {
 
-  const { mainNavigation, batchDetails } = useGlobalContext();
   const navigation = useNavigation();
 
   const saveToRecentVideos = (item: VideoType) => {

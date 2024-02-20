@@ -10,14 +10,10 @@ import {
 } from "react";
 import { BatchDetails, BatchType, Order, Subject, TopicType, ItemType, ItemType2, QuizItemType } from "../types/types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from "@react-navigation/native";
-// import RNFS from 'react-native-fs';
 
 
 
 type GlobalContextType = {
-  addModalOpen: boolean;
-  setAddModalOpen: Dispatch<SetStateAction<boolean>>;
   subscribedBatches: BatchType[] | null;
   setSubscribedBatches: Dispatch<SetStateAction<BatchType[] | null>>;
   dppList: QuizItemType[] | null;
@@ -50,8 +46,6 @@ type GlobalContextType = {
   setDirectoryLevel: Dispatch<SetStateAction<number>>;
   offlineCurrentDirectory: string;
   setOfflineCurrentDirectory: Dispatch<SetStateAction<string>>;
-  offlineDirectoryListings: any;
-  setOfflineDirectoryListings: Dispatch<SetStateAction<any>>;
   offlineBatches: ItemType2[];
   setOfflineBatches: Dispatch<SetStateAction<ItemType2[]>>;
   offlineSelectedBatch: number;
@@ -91,8 +85,6 @@ type GlobalContextType = {
 }
 
 const GlobalContext = createContext<GlobalContextType>({
-  addModalOpen: false,
-  setAddModalOpen: () => { },
   subscribedBatches: null,
   setSubscribedBatches: () => { },
   dppList: null,
@@ -125,8 +117,6 @@ const GlobalContext = createContext<GlobalContextType>({
   setDirectoryLevel: () => { },
   offlineCurrentDirectory: "http://192.168.1.16:6969/Batches/",
   setOfflineCurrentDirectory: () => { },
-  offlineDirectoryListings: [],
-  setOfflineDirectoryListings: () => { },
   offlineBatches: [],
   setOfflineBatches: () => { },
   offlineSelectedBatch: 0,
@@ -167,7 +157,6 @@ const GlobalContext = createContext<GlobalContextType>({
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
 
-  const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
   const [subscribedBatches, setSubscribedBatches] = useState<BatchType[] | null>(null);
   const [orders, setOrders] = useState<Order[] | null>(null);
   const [selectedBatch, setSelectedBatch] = useState<BatchType | null>(null);
@@ -182,7 +171,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [mainNavigation, setMainNavigation] = useState<any>(null);
 
   const [topicList, setTopicList] = useState<TopicType[] | null>(null);
-  const [showLoadMore, setShowLoadMore] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [selectedDpp, setSelectedDpp] = useState<QuizItemType | null>(null);
@@ -195,7 +183,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
   const [offlineCurrentDirectory, setOfflineCurrentDirectory] = useState<string>("http://192.168.1.16:6969/Batches/");
-  const [offlineDirectoryListings, setOfflineDirectoryListings] = useState<any>([]);
   const [offlineBatches, setOfflineBatches] = useState<ItemType2[]>([]);
   const [offlineSelectedBatch, setOfflineSelectedBatch] = useState<number>(0);
   const [offlineSubjects, setOfflineSubjects] = useState<ItemType[]>([]);
@@ -214,15 +201,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
 
   const [headers, setHeaders] = useState<any>(null)
-
-
-  // useEffect(() => {
-  //   RNFS.writeFile('/test.txt', JSON.stringify(logs), 'utf-8').then((success) => {
-  //     console.log('FILE WRITTEN!');
-  //   }).catch((err) => {
-  //     console.log(err.message);
-  //   });
-  // }, [logs])
 
 
   useEffect(() => {
@@ -314,15 +292,11 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   useEffect(() => {
     batchDetails && setSelectSubjectSlug(batchDetails?.subjects[1]?.slug);
     batchDetails && setSelectedSubject(batchDetails?.subjects[1]);
-    // console.log("Subject setting", batchDetails?.subjects[1]?.subject);
-
-
   }, [batchDetails])
 
   return (
     <GlobalContext.Provider
       value={{
-        addModalOpen, setAddModalOpen,
         subscribedBatches, setSubscribedBatches,
         selectedBatch, setSelectedBatch,
         batchDetails, setBatchDetails,
@@ -341,7 +315,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         directoryLevel, setDirectoryLevel,
         selectedTestMapping, setSelectedTestMapping,
         offlineCurrentDirectory, setOfflineCurrentDirectory,
-        offlineDirectoryListings, setOfflineDirectoryListings,
         offlineBatches, setOfflineBatches,
         offlineSelectedBatch, setOfflineSelectedBatch,
         offlineSubjects, setOfflineSubjects,

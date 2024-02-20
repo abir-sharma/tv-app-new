@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import OfflineNavbarDetails from '../components/Offline/OfflineNavbarDetails';
@@ -10,7 +10,7 @@ import OfflineChapters from '../components/Offline/OfflineChapters';
 
 export default function OfflineDetails({ navigation }: any) {
 
-  const { offlineLectures, offlineNotes, offlineDpp, offlineDppPdf, offlineDppVideos, setMainNavigation, offlineSelectedSection, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, topicList } = useGlobalContext();
+  const { offlineLectures, offlineNotes, offlineDpp, offlineDppPdf, offlineDppVideos, offlineSelectedSection } = useGlobalContext();
 
   const [showLoader, setshowLoader] = useState<boolean>(false);
 

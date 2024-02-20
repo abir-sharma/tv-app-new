@@ -1,6 +1,5 @@
-import { useState } from 'react';
-import { FlatList, Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
-import { TopicType, VideoType } from '../types/types';
+import { FlatList, Pressable, Text, View } from 'react-native';
+import { TopicType } from '../types/types';
 import { useGlobalContext } from '../context/MainContext';
 
 export default function Chapters() {
@@ -31,14 +30,12 @@ export default function Chapters() {
     <View className=" flex-col justify-between items-center p-4">
       <Text className='text-white font-medium text-center w-full text-lg'>CHAPTERS</Text>
       <View className='bg-white/5 rounded-xl overflow-hidden mt-5 h-[510] w-full'>
-        {/* <Text style={styles.subjectText}>Physics</Text> */}
+
         <FlatList
           data={topicList}
           renderItem={renderItem}
           keyExtractor={(item: TopicType) => item?._id}
           numColumns={1}
-        // contentContainerStyle={styles.container}
-        // onEndReached={()=>{loadMore && getPaidBatches()}}
         />
       </View>
     </View>

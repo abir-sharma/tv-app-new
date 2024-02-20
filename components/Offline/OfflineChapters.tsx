@@ -1,12 +1,10 @@
 /// <reference types="nativewind/types" />
-import { useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
-import { TopicType, VideoType } from '../../types/types';
+import { FlatList, Pressable, Text, View } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
 
 export default function OfflineChapters() {
 
-  const { directoryLevel, offlineSelectedChapter, setDirectoryLevel, offlineChapters, setOfflineCurrentDirectory, setOfflineSelectedChapter } = useGlobalContext();
+  const { offlineSelectedChapter, setDirectoryLevel, offlineChapters, setOfflineCurrentDirectory, setOfflineSelectedChapter } = useGlobalContext();
 
   const renderItem = ({ item }: any) => (
     <Pressable
