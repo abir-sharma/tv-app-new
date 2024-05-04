@@ -10,7 +10,7 @@ export default function Navbar() {
   const { mainNavigation, isOnline, setLogs, setIsOnline, headers, setHeaders } = useGlobalContext();
 
   const openApp = () => {
-    PackageManagerModule.openApp('com.youtube');
+    PackageManagerModule.openApp('com.google.android.youtube');
   }
 
 
