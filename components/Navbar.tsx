@@ -1,12 +1,18 @@
 /// <reference types="nativewind/types" />
-import { Image, Pressable, Text, View } from 'react-native';
+import { Image, NativeModules, Pressable, Text, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+const {PackageManagerModule} = NativeModules
 
 export default function Navbar() {
 
   const { mainNavigation, isOnline, setLogs, setIsOnline, headers, setHeaders } = useGlobalContext();
+
+  const openApp = () => {
+    PackageManagerModule.openApp('com.youtube');
+  }
+
 
   const handleLogout = async () => {
 
@@ -41,7 +47,7 @@ export default function Navbar() {
       </Pressable>
 
 
-
+      <View className='flex flex-row gap-5'>
       <View className=' -ml-20 rounded-xl flex-row bg-[#0d0d0d] border-[1px] border-white/5'>
         <Pressable
           hasTVPreferredFocus={true}
@@ -61,6 +67,19 @@ export default function Navbar() {
         }} onPress={() => { setIsOnline(false); mainNavigation.navigate('Offline') }} className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${!isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}>
           <Text className='text-white'>Offline</Text>
         </Pressable>
+      </View>
+
+      <Pressable
+        android_ripple={{
+          color: "rgba(255,255,255,0.5)",
+          borderless: false,
+          radius: 1000,
+          foreground: true
+        }}
+        onPress={openApp}
+        className='flex-row justify-center overflow-hidden rounded-full items-center'>
+        <Text className='bg-white/10 overflow-hidden rounded-full text-white px-4 py-3'>Attendance</Text>
+      </Pressable>
       </View>
 
       <Pressable
