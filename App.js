@@ -9,6 +9,7 @@ import Tests from './screens/Tests'
 import TestSolutions from './screens/TestSolutions'
 import PDFViewer from './components/pdf-viewer/pdf-viewer';
 import MP4Player from './components/mp4-player/mp4-player';
+import AiTeacher from './screens/AiTecher';
 import { Offline } from './screens/Offline';
 import OfflineDetails from './screens/OfflineDeatils';
 import { TestResult } from './screens/TestResult';
@@ -22,6 +23,7 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name="AiTeacher" component={AiTeacher} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
           <Stack.Screen name="Videos" component={Videos} options={{ headerShown: false }} />
