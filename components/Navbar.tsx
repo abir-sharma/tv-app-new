@@ -3,15 +3,10 @@ import { Image, NativeModules, Pressable, Text, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-const {PackageManagerModule} = NativeModules
 
 export default function Navbar() {
 
   const { mainNavigation, isOnline, setLogs, setIsOnline, headers, setHeaders } = useGlobalContext();
-
-  const openApp = () => {
-    PackageManagerModule.openApp('com.google.android.youtube');
-  }
 
 
   const handleLogout = async () => {
@@ -76,7 +71,7 @@ export default function Navbar() {
           radius: 1000,
           foreground: true
         }}
-        onPress={openApp}
+        onPress={()=>{}}
         className='flex-row justify-center overflow-hidden rounded-full items-center'>
         <Text className='bg-white/10 overflow-hidden rounded-full text-white px-4 py-3'>Attendance</Text>
       </Pressable>
