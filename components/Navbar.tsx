@@ -75,6 +75,18 @@ export default function Navbar() {
         className='flex-row justify-center overflow-hidden rounded-full items-center'>
         <Text className='bg-white/10 overflow-hidden rounded-full text-white px-4 py-3'>AI-Teacher</Text>
       </Pressable>
+
+      <Pressable
+        android_ripple={{
+          color: "rgba(255,255,255,0.5)",
+          borderless: false,
+          radius: 1000,
+          foreground: true
+        }}
+        onPress={()=>{mainNavigation.navigate('Attendance');}}
+        className='flex-row justify-center overflow-hidden rounded-full items-center'>
+        <Text className='bg-white/10 overflow-hidden rounded-full text-white px-4 py-3'>Attendance</Text>
+      </Pressable>
       </View>
 
       <Pressable

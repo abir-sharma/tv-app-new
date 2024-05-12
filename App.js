@@ -13,6 +13,7 @@ import AiTeacher from './screens/AiTecher';
 import { Offline } from './screens/Offline';
 import OfflineDetails from './screens/OfflineDeatils';
 import { TestResult } from './screens/TestResult';
+import Attendance from './screens/Attendance';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,6 +25,7 @@ export default function App() {
         <Stack.Navigator>
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="AiTeacher" component={AiTeacher} options={{ headerShown: false }} />
+          <Stack.Screen name="Attendance" component={Attendance} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
           <Stack.Screen name="Videos" component={Videos} options={{ headerShown: false }} />
