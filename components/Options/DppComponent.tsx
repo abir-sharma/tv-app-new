@@ -41,8 +41,8 @@ export const DppComponent = ({ }: DPPPropType) => {
 
   const renderGridItem = ({ item }: any) => (
     <Pressable
-      style={{ flex: 1 / 4 }}
-      className=' my-1 mr-5 overflow-hidden h-20 rounded-xl bg-white/5'
+      style={{ flex: 1 / 2 }}
+      className=' my-1 mr-5 overflow-hidden h-24 rounded-xl bg-[#111111]'
       android_ripple={{
         color: "rgba(255,255,255,0.4)",
         borderless: false,
@@ -54,7 +54,7 @@ export const DppComponent = ({ }: DPPPropType) => {
       <View className='w-full h-full flex-row justify-between items-center px-5'>
         <View>
           <Text className='text-white font-medium text-lg'>{item?.test?.name}</Text>
-          <View className='flex-row'><Image source={require('../../assets/noteIcon.png')} className='w-5 h-5 mr-2' width={10} height={10} /><Text className='text-white font-normal text-sm'>{`${item?.test?.totalQuestions} Questions  |  ${item?.test?.totalMarks} Marks`}</Text></View>
+          <View className='flex-row mt-2'><Image source={require('../../assets/noteIcon.png')} className='w-5 h-5 mr-2' width={10} height={10} /><Text className='text-white font-normal text-sm'>{`${item?.test?.totalQuestions} Questions  |  ${item?.test?.totalMarks} Marks`}</Text></View>
         </View>
         <Image source={require('../../assets/goto.png')} className='w-10 h-10' width={10} height={10} />
       </View>
@@ -62,13 +62,13 @@ export const DppComponent = ({ }: DPPPropType) => {
   );
 
   return (
-    <View className='pt-5'>
+    <View className='p-5'>
       {dppList?.length === 0 && <Text className='text-white text-2xl self-center items-center' >No Tests available!!</Text>}
       {dppList && <FlatList
         data={dppList}
         renderItem={renderGridItem}
         keyExtractor={(item: any) => item?.test?._id}
-        numColumns={1}
+        numColumns={2}
       />}
     </View>
   );

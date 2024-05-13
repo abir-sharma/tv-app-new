@@ -66,7 +66,8 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
 
   return (
 
-    <View className=" flex-row justify-between items-center p-4 bg-white/5">
+    <View className=" flex-row justify-between items-center p-4 bg-[#111111]">
+      <View className='flex flex-row items-center justify-center gap-2'>
       <Pressable
         hasTVPreferredFocus={true}
         android_ripple={{
@@ -88,10 +89,9 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         <Image source={require('../assets/home.png')} className='w-8 h-8' width={10} height={10} />
       </Pressable>
 
-      <View>
-        <Pressable
+      <Pressable
           onPress={() => { handleDropdownPress() }}
-          className='rounded-xl bg-[#444444] px-16 py-2 overflow-hidden'
+          className='rounded-xl bg-[#444444] px-10 py-2 overflow-hidden'
           hasTVPreferredFocus={true}
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
@@ -101,6 +101,11 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
           }}>
           <Text className='text-white text-sm'>{selectedSubject && (selectedSubject?.subject?.length > 20) ? `${selectedSubject?.subject.substring(0, 20)}...` : selectedSubject?.subject || "Select Subject"}</Text>
         </Pressable>
+      </View>
+      
+
+      <View>
+        
 
         <Modal
           transparent={true}
@@ -122,14 +127,14 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         </Modal>
       </View>
 
-      <View className='bg-white/10 rounded-xl flex-row gap-x-5 py-2 pr-5' >
+      <View className=' rounded-xl flex-row gap-x-5 py-2 pr-5' >
         <Pressable hasTVPreferredFocus={true}
           android_ripple={{
             color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
             foreground: true
-          }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 0 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(0); setContentType('videos'); setCurrentPage(1) }}>
+          }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 0 ? '#414347' : 'transparent' }} onPress={() => { setSelectedMenu(0); setContentType('videos'); setCurrentPage(1) }}>
           <Text className="font-normal text-sm text-white">Lectures</Text>
         </Pressable>
         <Pressable hasTVPreferredFocus={true}
@@ -138,7 +143,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             borderless: false,
             radius: 1000,
             foreground: true
-          }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 1 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(1); setContentType('notes'); setCurrentPage(1) }}>
+          }} className='w-20 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 1 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(1); setContentType('notes'); setCurrentPage(1) }}>
           <Text className="font-normal text-sm text-white">Notes</Text>
         </Pressable>
         <Pressable hasTVPreferredFocus={true}
@@ -147,8 +152,8 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             borderless: false,
             radius: 1000,
             foreground: true
-          }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 2 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(2); }}>
-          <Text className="font-normal text-sm text-white">DPP</Text>
+          }} className='w-20 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 2 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(2); }}>
+          <Text className="font-normal text-sm text-white">DPP Quiz</Text>
         </Pressable>
         <Pressable hasTVPreferredFocus={true}
           android_ripple={{
@@ -156,15 +161,15 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             borderless: false,
             radius: 1000,
             foreground: true
-          }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 3 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(3); setContentType('DppNotes'); setCurrentPage(1) }}>
-          <Text className="font-normal text-sm text-white">DPP PDF</Text>
+          }} className='w-20 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 3 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(3); setContentType('DppNotes'); setCurrentPage(1) }}>
+          <Text className="font-normal text-sm text-white">DPP Notes</Text>
         </Pressable>
         <Pressable android_ripple={{
           color: "rgba(255,255,255,0.4)",
           borderless: false,
           radius: 1000,
           foreground: true
-        }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 4 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(4); setContentType('DppVideos'); setCurrentPage(1) }}>
+        }} className='w-20 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 4 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(4); setContentType('DppVideos'); setCurrentPage(1) }}>
           <Text className="font-normal text-sm text-white">DPP Videos</Text>
         </Pressable>
 

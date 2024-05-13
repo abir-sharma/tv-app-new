@@ -47,7 +47,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
         });
         saveToRecentVideos(item);
       }}>
-      <View >
+      {/* <View >
         <View>
           {item?.videoDetails?.image && <Image
             style={{ width: '100%', height: 135, objectFit: 'cover', borderRadius: 10, }}
@@ -61,6 +61,26 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
           </View>
           <Text className='text-xs text-white font-medium my-2'>{item?.videoDetails?.name?.length >= 60 ? `${item?.videoDetails?.name?.substring(0, 60)}...` : item?.videoDetails?.name}</Text>
         </View>
+      </View> */}
+      <View className='relative'>
+          <View className="w-full h-36 overflow-hidden rounded-lg relative">
+              {item?.videoDetails?.image && <Image
+                  className=' w-full h-full object-cover rounded-t-lg '
+                  source={{ uri: `${item?.videoDetails?.image}` }}
+              />}
+          </View>
+          <Image source={require('../../assets/cardgrad2.png')} className='absolute w-full h-full bottom-0 left-0' width={10} height={10} />
+          <View className='p-2 absolute bottom-2 left-2 text-white'>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <View className='flex flex-row items-center justify-start gap-1'>
+                      {/* <Image source={require('../assets/clock2.png')} className='w-4 h-4' width={10} height={10} /> */}
+                      {/* <Text className='text-white text-xs font-light pt-1'>{moment(order?.date).format("MMM Do YY")}</Text> */}
+                      <Text className='text-white text-xs font-light pt-1'>{moment(item?.date).format("MMM Do YY")} | {item?.videoDetails?.duration}</Text>
+                  </View>
+              </View>
+              <Text className='text-lg text-white font-medium mb-0'>{item?.videoDetails?.name?.length >= 25 ? `${item?.videoDetails?.name?.substring(0, 25)}...` : item?.videoDetails?.name}</Text>
+          </View>
+          
       </View>
     </Pressable>
   );

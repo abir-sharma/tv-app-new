@@ -109,14 +109,14 @@ export default function Details({ navigation }: any) {
   }, [selectedChapter, currentPage, selectedMenu])
 
   return (
-    <View className="bg-[#1A1A1A] flex-1">
+    <View className="bg-[#1B2124] flex-1">
       <NavbarDetails selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} setContentType={setContentType} setCurrentPage={setCurrentPage} />
 
       <View className='flex-1 flex-row'>
 
         {showLoader && <View
           style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
-          className='bg-white/10 '
+          className='bg-[#1B2124] '
         >
           <ActivityIndicator color={"#FFFFFF"} size={80} />
         </View>}

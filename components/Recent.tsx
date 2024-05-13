@@ -6,6 +6,7 @@ import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { VideoType } from '../types/types';
 import moment from 'moment';
+import LinearGradient from 'react-native-linear-gradient';
 
 export default function Recent() {
 
@@ -25,8 +26,8 @@ export default function Recent() {
 
     return (
         <View className=''>
-            <Text className='text-white text-lg font-medium ml-5'>Recent Learning</Text>
-            <View className='bg-[#1B2124] p-5  my-2 flex-none overflow-hidden'>
+            <Text className='text-white text-2xl font-medium ml-5'>Continue Learning</Text>
+            <View className=' p-5  my-2 flex-none overflow-hidden'>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
                     {recentVideos?.map((order, index) => (
                         <Pressable
@@ -43,22 +44,24 @@ export default function Recent() {
                                     lectureDetails: order?.videoDetails,
                                 });
                             }}
-                            className='bg-[#414347] rounded-lg h-fit w-72 overflow-hidden'>
-                            <View >
-                                <View>
+                            className=' rounded-lg h-fit w-72 overflow-hidden'>
+                            <View className='relative'>
+                                <View className="w-full h-44 overflow-hidden rounded-lg relative">
                                     {order?.videoDetails?.image && <Image
-                                        style={{ width: '100%', height: 135, objectFit: 'cover', borderRadius: 10, }}
+                                       className=' w-full h-full object-cover rounded-t-lg '
                                         source={{ uri: `${order?.videoDetails?.image}` }}
                                     />}
                                 </View>
-                                <View className='p-2'>
-                                    <Text className='text-base text-white font-medium my-1 mb-0'>{order?.videoDetails?.name?.length >= 60 ? `${order?.videoDetails?.name?.substring(0, 60)}...` : order?.videoDetails?.name}</Text>
+                                <Image source={require('../assets/cardgrad.png')} className='absolute w-full h-full bottom-0 left-0' width={10} height={10} />
+                                <View className='p-2 absolute bottom-2 left-2 text-white'>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <View className='flex flex-row items-center justify-start gap-1'>
-                                        <Image source={require('../assets/clock2.png')} className='w-4 h-4' width={10} height={10} />
-                                        <Text className='text-white text-xs font-light pt-1'>{moment(order?.date).format("MMM Do YY")}</Text>
+                                        <View className='flex flex-row items-center justify-start gap-1'>
+                                            {/* <Image source={require('../assets/clock2.png')} className='w-4 h-4' width={10} height={10} /> */}
+                                            {/* <Text className='text-white text-xs font-light pt-1'>{moment(order?.date).format("MMM Do YY")}</Text> */}
+                                            <Text className='text-white text-xs font-light pt-1'>Class-12 | Physics</Text>
+                                        </View>
                                     </View>
-                                    </View>
+                                    <Text className='text-lg text-white font-medium mb-0'>{order?.videoDetails?.name?.length >= 25 ? `${order?.videoDetails?.name?.substring(0, 25)}...` : order?.videoDetails?.name}</Text>
                                 </View>
                                 
                             </View>

@@ -10,7 +10,7 @@ export default function Chapters() {
   const renderItem = ({ item }: any) => (
     <Pressable
       key={item?._id}
-      className={`py-4 px-4 overflow-hidden rounded-lg ${selectedChapter?._id === item?._id && 'bg-[#8E89BA]'}`}
+      className={`py-4 px-4 overflow-hidden rounded-lg ${selectedChapter?._id === item?._id && 'bg-[#7363FC]'}`}
       hasTVPreferredFocus={true}
       android_ripple={{
         color: "rgba(255,255,255,0.5)",
@@ -27,9 +27,9 @@ export default function Chapters() {
     </Pressable>
   );
   return (
-    <View className=" flex-col justify-between items-center p-4">
-      <Text className='text-white font-medium text-center w-full text-lg'>CHAPTERS</Text>
-      <View className='bg-white/5 rounded-xl overflow-hidden mt-5 h-[510] w-full'>
+    <View className=" flex-col justify-between items-center p-4 bg-[#111111]">
+      <Text className='text-white font-medium text-left w-full text-2xl pl-2'>Chapters</Text>
+      <View className=' rounded-xl overflow-hidden mt-5 h-[510] w-full'>
 
         <FlatList
           data={topicList}
