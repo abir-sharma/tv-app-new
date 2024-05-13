@@ -24,9 +24,9 @@ export default function Recent() {
 
 
     return (
-        <View className='w-[95%] mx-auto'>
-            <Text className='text-white text-lg font-medium ml-5 mt-2'>Recent Learning</Text>
-            <View className='bg-white/5 p-5 rounded-lg  my-5 flex-none overflow-hidden'>
+        <View className=''>
+            <Text className='text-white text-lg font-medium ml-5'>Recent Learning</Text>
+            <View className='bg-[#1B2124] p-5  my-2 flex-none overflow-hidden'>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
                     {recentVideos?.map((order, index) => (
                         <Pressable
@@ -43,7 +43,7 @@ export default function Recent() {
                                     lectureDetails: order?.videoDetails,
                                 });
                             }}
-                            className='bg-white/10 rounded-lg h-52 w-72 overflow-hidden'>
+                            className='bg-[#414347] rounded-lg h-fit w-72 overflow-hidden'>
                             <View >
                                 <View>
                                     {order?.videoDetails?.image && <Image
@@ -52,12 +52,15 @@ export default function Recent() {
                                     />}
                                 </View>
                                 <View className='p-2'>
+                                    <Text className='text-base text-white font-medium my-1 mb-0'>{order?.videoDetails?.name?.length >= 60 ? `${order?.videoDetails?.name?.substring(0, 60)}...` : order?.videoDetails?.name}</Text>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text className='text-white text-[10px]'>{moment(order?.date).format("MMM Do YY")}</Text>
-                                        <Text className='text-white text-[10px]'>{order?.videoDetails?.duration}</Text>
+                                    <View className='flex flex-row items-center justify-start gap-1'>
+                                        <Image source={require('../assets/clock2.png')} className='w-4 h-4' width={10} height={10} />
+                                        <Text className='text-white text-xs font-light pt-1'>{moment(order?.date).format("MMM Do YY")}</Text>
                                     </View>
-                                    <Text className='text-xs text-white font-medium my-2'>{order?.videoDetails?.name?.length >= 60 ? `${order?.videoDetails?.name?.substring(0, 60)}...` : order?.videoDetails?.name}</Text>
+                                    </View>
                                 </View>
+                                
                             </View>
 
                         </Pressable>

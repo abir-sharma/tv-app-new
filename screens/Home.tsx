@@ -43,7 +43,7 @@ export default function Home({ navigation }: any) {
   }, [])
 
   return (
-    <View className="bg-[#1A1A1A] flex-1">
+    <View className="bg-[#111111] flex-1">
       <Navbar />
       <Batches />
       <Recent />

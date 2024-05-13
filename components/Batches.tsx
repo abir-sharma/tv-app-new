@@ -8,7 +8,9 @@ export default function Batches() {
     const { orders, mainNavigation, subscribedBatches, setSelectedBatch, } = useGlobalContext();
 
     return (
-        <View className='bg-white/5 p-5 w-[95%] rounded-3xl mx-auto my-5 flex-none overflow-hidden'>
+        <View className=''>
+            <Text className='text-white text-lg font-medium ml-5 mt-2'>Online Batches</Text>
+        <View className='bg-[#1B2124] p-5 w-full mx-auto mb-3 mt-2 flex-none overflow-hidden'>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
                 {subscribedBatches?.map((order, index) => (
                     <Pressable
@@ -25,26 +27,37 @@ export default function Batches() {
                             setSelectedBatch(order);
                             mainNavigation?.navigate('Details');
                         }}
-                        className='bg-white/10 rounded-lg h-52 w-72 overflow-hidden'>
-                        <View className="w-full h-40 overflow-hidden">
+                        className='bg-[#414347] rounded-xl h-fit pb-2 w-72 overflow-hidden'>
+                        <View className="w-full h-28 overflow-hidden rounded-lg relative">
                             {
                                 orders?.map((item, index) => {
                                     if (item?.itemName === order?.batch?.name) {
-                                        return item?.thumbnailImageLink && <Image key={index} className=' w-full h-full object-cover rounded-lg ' source={{ uri: `${item?.thumbnailImageLink}` }} />
+                                        return item?.thumbnailImageLink && <Image key={index} className=' w-full h-full object-cover rounded-t-lg ' source={{ uri: `${item?.thumbnailImageLink}` }} />
                                     }
-
                                 })
                             }
+                            <Text className='text-black text-[10px] font-medium absolute left-2 bottom-1.5 rounded-md bg-white/80 px-2 py-1'>{"Hindi"}</Text>
                         </View>
                         <View className='p-2 relative px-5'>
-                            <Text className='text-white text-xs font-medium'>{order?.batch?.name}</Text>
-                            <Text className='text-white text-xs font-light'>Starts On <Text className='text-white text-xs font-medium'>14th Feb 2023</Text></Text>
-                            <Text className='text-white text-[10px] font-medium absolute right-2 top-1.5 rounded-md bg-black/50 px-2 py-1'>{"Hindi"}</Text>
+                            <View className='flex flex-row items-center justify-start gap-3'>
+                                {/* <Image source={require('../assets/icon1.png')} className='w-3 h-3' width={10} height={10} /> */}
+                                <Text className='text-white text-xl font-bold pt-1'>{order?.batch?.name}</Text>
+                            </View>
+                            <View className='flex flex-row items-center justify-start gap-3'>
+                                <Image source={require('../assets/icon1.png')} className='w-3 h-3' width={10} height={10} />
+                                <Text className='text-white text-xs font-light pt-1'>Class 12th JEE Mains and Advanced Exam</Text>
+                            </View>
+                            <View className='flex flex-row items-center justify-start gap-3'>
+                                <Image source={require('../assets/icon2.png')} className='w-3 h-3' width={10} height={10} />
+                                <Text className='text-white text-xs font-light pt-1'>Starts On <Text className='text-white text-xs font-medium'>Starts on 09 May, 2024</Text></Text>
+                            </View>
+                            
                         </View>
 
                     </Pressable>
                 ))}
             </ScrollView>
+        </View>
         </View>
     );
 }

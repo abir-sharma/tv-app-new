@@ -27,7 +27,9 @@ export default function Navbar() {
   }
 
   return (
-    <View className=" flex-row justify-between items-center p-4">
+    <View className=" flex-row justify-between items-center p-4 bg-[#1B2124]">
+      
+      <View className='flex flex-row gap-2'>
       <Pressable
         hasTVPreferredFocus={true}
         android_ripple={{
@@ -36,14 +38,12 @@ export default function Navbar() {
           radius: 1000,
           foreground: true
         }}
-        className='flex-row justify-center items-center rounded-xl overflow-hidden px-2'>
+        className='flex-row justify-center items-center rounded-xl overflow-hidden px-2 gap-x-5'>
         <Image source={require('../assets/pw-logo.png')} className='w-10 h-10' width={10} height={10} />
-        <Text className='text-white font-medium text-xl ml-4'>Physics Wallah</Text>
+        {/* <Text className='text-white font-medium text-xl ml-4'>Physics Wallah</Text> */}
+        
       </Pressable>
-
-
-      <View className='flex flex-row gap-5'>
-      <View className=' -ml-20 rounded-xl flex-row bg-[#0d0d0d] border-[1px] border-white/5'>
+      {/* <View className=' -ml-20 rounded-xl flex-row bg-[#0d0d0d] border-[1px] border-white/5'> */}
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
@@ -51,18 +51,24 @@ export default function Navbar() {
             borderless: false,
             radius: 1000,
             foreground: true
-          }} onPress={() => { setIsOnline(true); mainNavigation.navigate('Home') }} className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}>
-          <Text className='text-white'>Online</Text>
+          }} onPress={() => { setIsOnline(true); mainNavigation.navigate('Home') }}
+          // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
+          className='w-20 h-10 rounded-xl items-center justify-center overflow-hidden'
+          >
+          <Text className={`text-white ${isOnline && " font-bold "}`}>Online</Text>
         </Pressable>
         <Pressable android_ripple={{
           color: "rgba(255,255,255,0.4)",
           borderless: false,
           radius: 1000,
           foreground: true
-        }} onPress={() => { setIsOnline(false); mainNavigation.navigate('Offline') }} className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${!isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}>
-          <Text className='text-white'>Offline</Text>
+        }} onPress={() => { setIsOnline(false); mainNavigation.navigate('Offline') }}
+        // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${!isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
+        className='w-20 h-10 rounded-xl items-center justify-center overflow-hidden'
+        >
+          <Text className={`text-white ${!isOnline && " font-bold "}`}>Offline</Text>
         </Pressable>
-      </View>
+      {/* </View> */}
 
       <Pressable
         android_ripple={{
@@ -72,8 +78,8 @@ export default function Navbar() {
           foreground: true
         }}
         onPress={()=>{mainNavigation.navigate('AiTeacher');}}
-        className='flex-row justify-center overflow-hidden rounded-full items-center'>
-        <Text className='bg-white/10 overflow-hidden rounded-full text-white px-4 py-3'>AI-Teacher</Text>
+        className='flex-row justify-center overflow-hidden rounded-xl w-32 h-10 items-center'>
+        <Text className='overflow-hidden rounded-xl text-white'>AI-Teacher</Text>
       </Pressable>
 
       <Pressable
@@ -84,10 +90,13 @@ export default function Navbar() {
           foreground: true
         }}
         onPress={()=>{mainNavigation.navigate('Attendance');}}
-        className='flex-row justify-center overflow-hidden rounded-full items-center'>
-        <Text className='bg-white/10 overflow-hidden rounded-full text-white px-4 py-3'>Attendance</Text>
+        className='flex-row justify-center overflow-hidden rounded-xl w-32 h-10 items-center'>
+        <Text className=' overflow-hidden rounded-xl text-white'>Attendance</Text>
       </Pressable>
       </View>
+
+
+      
 
       <Pressable
         android_ripple={{

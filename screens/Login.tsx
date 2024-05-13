@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 
-import { View, Text, Image, TextInput, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid, ActivityIndicator } from 'react-native';
+import { View, Text, Image, TextInput, ImageBackground, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid, ActivityIndicator } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
@@ -196,7 +196,17 @@ export default function Login({ navigation }: any) {
   const nameInputRef = useRef<TextInput>(null);
 
   return (
-    <View className="bg-[#1A1A1A] w-full flex-1 items-center justify-center">
+
+    
+    <ImageBackground
+      source={require('../assets/bg.png')}
+      style={{ 
+        flex: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
       {showLoader && <View
         style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
         className='bg-white/10 '
@@ -204,91 +214,116 @@ export default function Login({ navigation }: any) {
         <ActivityIndicator color={"#FFFFFF"} size={80} />
       </View>}
 
-      <View className='flex-col items-center relative z-[2]'>
-        <Image source={require('../assets/pw-logo.png')} className='w-16 h-16' width={10} height={10} />
-        <Text className="text-white text-lg font-normal mt-5"> Welcome to</Text>
-        <Text className="text-white text-2xl font-medium mt-2"> Physics Wallah </Text>
-        <Text className="text-white text-sm font-normal mt-6"> Please enter your mobile no. to Login  / Register </Text>
-        <Pressable
-          android_ripple={{
-            color: "rgba(255,255,255,0.4)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-          }}
-          onPress={() => phoneInputRef.current?.focus()}
-          className='bg-black w-80 h-12 mt-3 flex-row rounded-md px-4 items-center justify-start overflow-hidden'
+      <View className='flex flex-row w-full pl-40 items-center justify-between gap-10'>
+        <View className='flex-col items-start relative z-[2]'>
+          {!otpSent && <Image source={require('../assets/pw-logo.png')} className='w-16 h-16' width={10} height={10} />}
 
-        >
-          <View className='flex-row items-center justify-start'>
-            <Image source={require('../assets/india.png')} className='w-6 h-6' width={10} height={10} />
-            <Text className="text-white text-lg font-semibold mx-2" > +91 </Text>
-          </View>
-          <TextInput ref={phoneInputRef} hasTVPreferredFocus={true} value={phone} onChangeText={newText => { handleTextChange(newText) }} onFocus={(e) => { console.log("Focused") }}
-            className='w-full text-white text-lg' autoFocus={true} placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Mobile No.' /></Pressable>
+          {otpSent && <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.4)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+            onPress={()=>{setOtpSent(false)}}
+            className='bg-[#1B2124] w-16 h-12 rounded-xl overflow-hidden flex items-center justify-center'
+            ><Image source={require('../assets/back2.png')} className='w-5 h-5' width={10} height={10} /></Pressable>}
 
-
-        {newUser && <Pressable
-          android_ripple={{
-            color: "rgba(255,255,255,0.4)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-          }}
-          onPress={() => nameInputRef.current?.focus()} className='bg-black w-80 overflow-hidden h-12 mt-3 flex-row rounded-md px-4 items-center justify-start'>
-
-          <TextInput ref={nameInputRef} hasTVPreferredFocus={true} value={name} onChangeText={newText => { handleNameChange(newText) }}
-            className='w-full text-white text-lg' autoFocus={true} placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Name' />
-        </Pressable>}
-
-        {otpSent && <Pressable
-          android_ripple={{
-            color: "rgba(255,255,255,0.4)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-          }}
-          onPress={() => otpInputRef.current?.focus()} className='bg-black w-80 overflow-hidden h-12 mt-3 flex-row rounded-md px-4 items-center justify-start'>
-
-          <TextInput ref={otpInputRef} hasTVPreferredFocus={true} value={otp} onChangeText={newText => { handleOTPChange(newText) }}
-            className='w-full text-white text-lg' autoFocus={true} placeholderTextColor={"rgba(255,255,255,0.7)"} placeholder='Enter Correct OTP' />
-        </Pressable>}
-
-        {otpSent && <Pressable
-          android_ripple={{
-            color: "rgba(255,255,255,0.4)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-          }}
-          disabled={otpTimer > 0}
-          onPress={() => {
-            handleSentOTP()
-            setOtpTimer(30);
-            setOtpReSent(true);
-          }} className='mt-2 px-4 rounded-full overflow-hidden'>
-
-          <Text className='w-full text-purple-300 text-base '>Resend OTP {otpTimer > 0 && ("in " + otpTimer + "s")}</Text>
-        </Pressable>}
+          <Text className="text-white text-lg font-normal mt-5"> Welcome to</Text>
+          <Text className="text-white text-2xl font-medium mt-2">PhysicsWallah AI-powered </Text>
+          <Text className="text-white text-2xl font-medium mt-2">Smart Classroom </Text>
+          {!otpSent ?
+          <Text className="text-white text-sm font-normal mt-6"> Please enter your mobile no. to Login  / Register </Text>:
+          <Text className="text-white text-sm font-normal mt-6"> A 6 Digit OTP has been sent to {phone} </Text>}
+          {!otpSent && <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.4)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+            onPress={() => phoneInputRef.current?.focus()}
+            className='bg-white w-96 h-12 mt-3 flex-row rounded-md px-4 items-center justify-start overflow-hidden'
+          >
+            <View className='flex-row items-center justify-start'>
+              <Image source={require('../assets/india.png')} className='w-6 h-6' width={10} height={10} />
+              <Text className="text-gray-600 text-lg font-semibold mx-2" > +91 </Text>
+            </View>
+            <TextInput 
+              ref={phoneInputRef}
+              hasTVPreferredFocus={true}
+              value={phone} onChangeText={newText => { handleTextChange(newText) }} onFocus={(e) => { console.log("Focused") }}
+              className='w-full text-black text-lg' autoFocus={true} placeholderTextColor={"rgba(169, 169, 169, 1)"} placeholder='Enter Mobile No.' /></Pressable>}
 
 
-        <Pressable
-          android_ripple={{
-            color: "rgba(255,255,255,0.4)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-          }}
+          {newUser && <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.4)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+            onPress={() => nameInputRef.current?.focus()} className='bg-white w-80 overflow-hidden h-12 mt-3 flex-row rounded-md px-4 items-center justify-start'>
 
-          onPress={() => {
-            setShowLoader(true);
-            newUser ? handleRegisterUser() :
-              otpSent ? handleVerifyOTP() : handleSentOTP()
-          }}
-          className='bg-black w-80 h-12 overflow-hidden mt-3 flex-row rounded-full px-4 items-center justify-start'>
-          <Text className='text-white/60 text-center w-full text-base'>{newUser ? "Register" : otpSent ? "Verify OTP" : "Get OTP"}</Text>
-        </Pressable>
+            <TextInput ref={nameInputRef} hasTVPreferredFocus={true} value={name} onChangeText={newText => { handleNameChange(newText) }}
+              className='w-full text-black text-lg' autoFocus={true} placeholderTextColor={"rgba(169, 169, 169, 1)"} placeholder='Enter Name' />
+          </Pressable>}
+
+          {otpSent && <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.4)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+            onPress={() => otpInputRef.current?.focus()} className='bg-white w-96 overflow-hidden h-12 mt-3 flex-row rounded-md px-4 items-center justify-start'>
+
+            <TextInput ref={otpInputRef} hasTVPreferredFocus={true} value={otp} onChangeText={newText => { handleOTPChange(newText) }}
+              className='w-full text-black text-lg' autoFocus={true} placeholderTextColor={"rgba(169, 169, 169, 1)"} placeholder='Enter Correct OTP' />
+          </Pressable>}
+
+          {otpSent && <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.4)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+            disabled={otpTimer > 0}
+            onPress={() => {
+              handleSentOTP()
+              setOtpTimer(30);
+              setOtpReSent(true);
+            }} className='mt-2 px-4 rounded-full overflow-hidden'>
+
+            <Text className='w-full text-white text-sm '>{otpTimer > 0 ? ( otpTimer < 10? ("00:0" + otpTimer): ("00:" + otpTimer)) : "Resend OTP"}</Text>
+          </Pressable>}
+
+
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.4)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+
+            onPress={() => {
+              setShowLoader(true);
+              newUser ? handleRegisterUser() :
+                otpSent ? handleVerifyOTP() : handleSentOTP()
+            }}
+            className='bg-[#5A4BDA] w-96 h-12 overflow-hidden mt-3 flex-row rounded-lg px-4 items-center justify-start'>
+            <Text className='text-white text-center w-full text-base'>{newUser ? "Register" : otpSent ? "Verify OTP" : "Get OTP"}</Text>
+          </Pressable>
+        </View>
+        <View className='w-[60%] flex items-center justify-center'>
+          <Image
+          className=' w-full h-full'
+            source={require('../assets/otpIllustration.png')}
+          />
+        </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
