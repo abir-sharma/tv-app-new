@@ -33,10 +33,6 @@
         "projectId": "74f57a78-7057-434e-8173-22ac81e672fa"
       }
     },
-    "plugins": [
-      "@react-native-firebase/app",
-      "@react-native-firebase/crashlytics"
-    ],
     "owner": "physicswallah"
   }
 }
