@@ -133,7 +133,7 @@ export default function Login({ navigation }: any) {
           "Authorization": `Bearer ${res?.data?.data?.access_token}`
         })
         await AsyncStorage.setItem("token", res?.data?.data?.access_token);
-        navigation.navigate('Home');
+        navigation.navigate('Intro');
       }
     }
     catch (err) {

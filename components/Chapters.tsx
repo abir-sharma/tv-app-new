@@ -10,7 +10,7 @@ export default function Chapters() {
   const renderItem = ({ item }: any) => (
     <Pressable
       key={item?._id}
-      className={`py-4 px-4 overflow-hidden rounded-lg ${selectedChapter?._id === item?._id && 'bg-[#7363FC]'}`}
+      className={`py-4 px-4 overflow-hidden bg-white/5 my-0.5 rounded-lg ${selectedChapter?._id === item?._id && 'bg-[#7363FC]'}`}
       hasTVPreferredFocus={true}
       android_ripple={{
         color: "rgba(255,255,255,0.5)",
