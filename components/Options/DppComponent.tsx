@@ -53,7 +53,7 @@ export const DppComponent = ({ }: DPPPropType) => {
       onPress={() => { handleDppClick(item) }}>
       <View className='w-full h-full flex-row justify-between items-center px-5'>
         <View>
-          <Text className='text-white font-medium text-lg'>{item?.test?.name}</Text>
+          <Text className='text-white font-medium text-lg'>{item?.test?.name?.length >= 35 ? `${item?.test?.name?.substring(0, 35)}...` : item?.test?.name}</Text>
           <View className='flex-row mt-2'><Image source={require('../../assets/noteIcon.png')} className='w-5 h-5 mr-2' width={10} height={10} /><Text className='text-white font-normal text-sm'>{`${item?.test?.totalQuestions} Questions  |  ${item?.test?.totalMarks} Marks`}</Text></View>
         </View>
         <Image source={require('../../assets/goto.png')} className='w-10 h-10' width={10} height={10} />
