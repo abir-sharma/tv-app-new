@@ -3,7 +3,6 @@
 import { View, Text, Image, TextInput, ImageBackground, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid, ActivityIndicator } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
-import OTPTextInput from 'react-native-otp-textinput'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -196,17 +195,6 @@ export default function Login({ navigation }: any) {
   const otpInputRef = useRef<TextInput>(null);
   const nameInputRef = useRef<TextInput>(null);
 
-  let otpInput = useRef(null);
-
-  const clearText = () => {
-      otpInput.current.clear();
-  }
-
-  const setText = () => {
-      otpInput.current.setValue("1234");
-  }
-
-
   return (
 
     
@@ -292,8 +280,6 @@ export default function Login({ navigation }: any) {
 
             <TextInput ref={otpInputRef} hasTVPreferredFocus={true} value={otp} onChangeText={newText => { handleOTPChange(newText) }}
               className='w-full text-black text-lg' autoFocus={true} placeholderTextColor={"rgba(169, 169, 169, 1)"} placeholder='Enter Correct OTP' />
-
-            {/* <OTPTextInput ref={(e) => (otpInput = e)} /> */}
           </Pressable>}
 
           {otpSent && <Pressable
