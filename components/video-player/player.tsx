@@ -146,7 +146,7 @@ export default function VideoPlayer(props: any) {
           className='h-[30] w-[30]'
         />
       </Pressable>
-      <Pressable
+      {/* <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
           borderless: false,
@@ -156,8 +156,8 @@ export default function VideoPlayer(props: any) {
 
         onPress={() => { setIsActive(!isActive); setShowControls(prev => !prev) }} className='bg-black/80 overflow-hidden rounded-xl px-3 py-1 absolute bottom-2 z-[2] left-2'>
         <Text className='text-white text-lg font-medium'>{showControls ? "Hide Controls" : "Show Controls"}</Text>
-      </Pressable>
-      {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-row items-center justify-center'>
+      </Pressable> */}
+      {/* {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-row items-center justify-center'>
         <View className='flex-row bg-black/50 rounded-xl p-2'>
           <Pressable
             android_ripple={{
@@ -236,7 +236,7 @@ export default function VideoPlayer(props: any) {
             />
           </Pressable>
         </View>
-      </View>}
+      </View>} */}
       <ActivityIndicator style={{ display: spinner ? 'flex' : 'none', marginTop: 100 }} size="small" color="#5a4bda" animating={spinner} />
       {
         noVideoAvailable &&
@@ -265,7 +265,7 @@ export default function VideoPlayer(props: any) {
           }}
           ref={playerRef}
           style={styles.backgroundVideo}
-          useNativeControls={false}
+          useNativeControls={true}
           resizeMode={ResizeMode.CONTAIN}
           onError={(err: any) => console.log('Video Player Error --->', err, `CloundFront-Key-Pair-Id=${cookieParams?.key_pair_id};CloudFront-Policy=${cookieParams?.policy};CloudFront-Signature=${cookieParams?.signature};`)}
           isMuted={false}

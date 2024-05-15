@@ -1,10 +1,13 @@
-import { View, Text, Pressable, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, ActivityIndicator, Image } from "react-native";
 import Pdf from 'react-native-pdf';
 import { useState } from "react";
+import { useGlobalContext } from "../../context/MainContext";
 
 export default function PDFViewer({ route }: any) {
 
   let pdfUrl = route?.params?.pdfUrl;
+
+  const { setMainNavigation, setLogs, mainNavigation, setHeaders } = useGlobalContext();
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [maxPage, setMaxPage] = useState<number>(1);
@@ -27,6 +30,24 @@ export default function PDFViewer({ route }: any) {
       >
         <ActivityIndicator color={"#FFFFFF"} size={80} />
       </View>}
+      <View className="flex-row absolute top-2 left-2 z-[2]">
+      <Pressable
+        android_ripple={{
+          color: "rgba(255,255,255,0.5)",
+          borderless: false,
+          radius: 1000,
+          foreground: true
+        }}
+        onPress={() => { mainNavigation.goBack() }} className='bg-black/80 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2'
+      >
+        <Image
+          source={require('../../assets/exit.png')}
+          width={30}
+          height={30}
+          className='h-[30] w-[30]'
+        />
+      </Pressable>
+      </View>
       <View className="flex-row absolute bottom-2 left-2 z-[2]">
         <Pressable
           android_ripple={{

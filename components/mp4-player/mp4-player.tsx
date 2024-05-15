@@ -71,97 +71,7 @@ const MP4Player = ({ route }: any) => {
           className='h-[30] w-[30]'
         />
       </Pressable>
-      <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.5)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-
-        onPress={() => { setIsActive(!isActive); setShowControls(prev => !prev) }} className='bg-black/80 overflow-hidden rounded-xl px-3 py-1 absolute bottom-2 z-[2] left-2'>
-        <Text className='text-white text-lg font-medium'>{showControls ? "Hide Controls" : "Show Controls"}</Text>
-      </Pressable>
-      {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-row items-center justify-center'>
-        <View className='flex-row bg-black/50 rounded-xl p-2'>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
-            onPress={() => { setIsActive(!isActive); skipBackward(30000) }} className='bg-black/90 overflow-hidden rounded-full p-2'>
-            <Image
-              source={require('../../assets/30b.png')}
-              width={30}
-              height={30}
-              className='h-[30] w-[30]'
-            />
-          </Pressable>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
-            onPress={() => { setIsActive(!isActive); skipBackward(10000) }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'>
-            <Image
-              source={require('../../assets/10b.png')}
-              width={30}
-              height={30}
-              className='h-[30] w-[30]'
-            />
-          </Pressable>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
-            onPress={() => { setIsActive(!isActive); isPlaying ? pauseVideo() : playVideo() }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'>
-            <Image
-              source={isPlaying ? require('../../assets/pause.png') : require('../../assets/play.png')}
-              width={30}
-              height={30}
-              className='h-[30] w-[30]'
-            />
-          </Pressable>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
-            onPress={() => { setIsActive(!isActive); skipForward(10000) }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'
-          >
-            <Image
-              source={require('../../assets/10f.png')}
-              width={30}
-              height={30}
-              className='h-[30] w-[30]'
-            />
-          </Pressable>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
-            onPress={() => { setIsActive(!isActive); skipForward(30000) }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'>
-            <Image
-              source={require('../../assets/30f.png')}
-              width={30}
-              height={30}
-              className='h-[30] w-[30]'
-            />
-          </Pressable>
-        </View>
-      </View>}
+      
 
       <Video
         source={{ uri: uri }}
@@ -172,7 +82,7 @@ const MP4Player = ({ route }: any) => {
         ref={playerRef}
         isLooping
         style={{ width: '100%', height: '100%', backgroundColor: '#000000' }}
-        useNativeControls
+        useNativeControls={true}
         resizeMode={ResizeMode.CONTAIN}
         onLoadStart={() => {
           console.log('Video loading...');

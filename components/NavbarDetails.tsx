@@ -44,12 +44,12 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
   const renderItem = ({ item }: any) => (
     <Pressable
       android_ripple={{
-        color: "rgba(255,255,255,0.4)",
+        color: "rgba(255, 255, 255, 0.1)",
         borderless: false,
         radius: 1000,
         foreground: true
       }}
-      style={styles.dropdownItem}
+      className='py-0.5 px-1 overflow-hidden'
       onPress={() => {
         console.log("Subject iD: ", item?._id)
         setSelectedSubject(item);
@@ -57,7 +57,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         setIsDropdownVisible(false);
       }}
     >
-      <Text className='text-white text-xs'>{item?.subject}</Text>
+      <Text className='text-white text-xs text-md bg-white/5 py-3 rounded-md px-4'>{item?.subject}</Text>
     </Pressable>
   );
 
@@ -115,7 +115,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         >
           <Pressable onPress={() => setIsDropdownVisible(false)}>
             <View style={{ flex: 1 }}>
-              <View className='bg-[#444444] max-h-[200] overflow-scroll w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
+              <View className='bg-[#111111] border-white/20 border-[1px] max-h-[200] overflow-scroll w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
                 <FlatList
                   data={batchDetails?.subjects?.slice(1)}
                   renderItem={renderItem}
