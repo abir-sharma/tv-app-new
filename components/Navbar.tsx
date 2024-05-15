@@ -1,5 +1,5 @@
 /// <reference types="nativewind/types" />
-import { Image, NativeModules, Pressable, Text, View } from 'react-native';
+import { Image, Linking, NativeModules, Pressable, Text, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -95,7 +95,11 @@ export default function Navbar() {
           radius: 1000,
           foreground: true
         }}
-        onPress={()=>{mainNavigation.navigate('Attendance');}}
+        onPress={()=>{
+          const url = 'https://attendence.betterpw.live'; // Replace this with your PWA URL
+          Linking.openURL(url);
+          // mainNavigation.navigate('Attendance');
+        }}
         className='flex-row justify-center gap-x-2 overflow-hidden rounded-xl w-32 h-10 items-center bg-white/10'>
           <Image source={require('../assets/clock3.png')} className='w-4 h-4' width={10} height={10} />
           <Text className=' overflow-hidden rounded-xl text-white'>Attendance</Text>
