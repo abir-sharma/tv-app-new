@@ -8,10 +8,7 @@ export default function Navbar() {
 
   const { mainNavigation, isOnline, setLogs, setIsOnline, headers, setHeaders } = useGlobalContext();
 
-
   const handleLogout = async () => {
-
-
     try {
       mainNavigation.navigate('Login');
       AsyncStorage.clear();
@@ -51,7 +48,7 @@ export default function Navbar() {
             borderless: false,
             radius: 1000,
             foreground: true
-          }} onPress={() => { setIsOnline(true); mainNavigation.navigate('Home') }}
+          }} onPress={() => { setIsOnline(true); mainNavigation.navigate('Home')}}
           // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
           className='w-36 h-10 rounded-xl items-center justify-center overflow-hidden'
           >
@@ -77,16 +74,13 @@ export default function Navbar() {
           radius: 1000,
           foreground: true
         }}
-        onPress={()=>{mainNavigation.navigate('AiTeacher');}}
+        onPress={()=>{mainNavigation.navigate('QrTest');}}
         className='flex-row justify-center overflow-hidden rounded-xl w-32 h-10 items-center'>
-        <Text className='overflow-hidden rounded-xl text-white'>AI Teacher</Text>
+        <Text className='overflow-hidden rounded-xl text-white'>Qr Test</Text>
       </Pressable>
 
       
       </View>
-
-
-      
         <View className='flex flex-row gap-2 items-center'>
         <Pressable
         android_ripple={{

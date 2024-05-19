@@ -15,6 +15,7 @@ import OfflineDetails from './screens/OfflineDeatils';
 import { TestResult } from './screens/TestResult';
 import Attendance from './screens/Attendance';
 import Intro from './screens/Intro';
+import QRCodeGenerator from './screens/QrTest';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,6 +39,7 @@ export default function App() {
           <Stack.Screen name="OfflineDetails" component={OfflineDetails} options={{ headerShown: false }} />
           <Stack.Screen name="MP4Player" component={MP4Player} options={{ headerShown: false }} />
           <Stack.Screen name="Intro" component={Intro} options={{ headerShown: false }} />
+          <Stack.Screen name="QrTest" component={QRCodeGenerator} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </Providers>
