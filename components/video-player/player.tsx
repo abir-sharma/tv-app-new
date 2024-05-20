@@ -1,17 +1,20 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { View, Text, ActivityIndicator, Pressable, Image } from 'react-native'
+import { View, Text, ActivityIndicator, Pressable, Image, TouchableOpacity, StyleSheet } from 'react-native'
 import { WebView } from 'react-native-webview';
 import styles from './player.style';
 import axios from 'axios';
 import { Video, ResizeMode } from 'expo-av';
 import { cookieSplitter } from './cookie-splitter';
 import { useGlobalContext } from '../../context/MainContext';
+import { Slider } from "@miblanchard/react-native-slider";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
+const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 export default function VideoPlayer(props: any) {
 
   const { mainNavigation } = useGlobalContext();
-  const playerRef = useRef(null);
+  const playerRef = useRef<Video | null>(null);
   const [spinner, setSpinner] = useState<any>();
   const [src, setSrc] = useState<any>(undefined);
   const [cookieParams, setCookieParams] = useState<any>(undefined);
@@ -21,7 +24,33 @@ export default function VideoPlayer(props: any) {
   const [showLoader, setShowLoader] = useState<boolean>(true);
   const [isActive, setIsActive] = useState<boolean>(true);
 
+  const [currentTime, setCurrentTime] = useState(0);
+  const [playbackSpeed, setPlaybackSpeed] = useState(1);
+  const [duration, setDuration] = useState<number>(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState<number>(0.8);
+
+  function convertToSeconds(timeString:string) {
+    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+    return hours * 3600 + minutes * 60 + seconds;
+  }
+
+  function formatTime(milliseconds:number) {
+    const totalSeconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+  
+    return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+  }
+  
+  function padZero(number:number) {
+    return number.toString().padStart(2, '0');
+  }
+
   useEffect(() => {
+    setDuration(convertToSeconds(props?.lectureDetails?.duration));
+    
     setSpinner(true);
     if (!props?.lectureDetails?.videoUrl && props?.lectureDetails?.types) {
       setNoVideoAvailable(true);
@@ -50,9 +79,21 @@ export default function VideoPlayer(props: any) {
     }
   }, [])
 
+  const togglePlaybackSpeed = () => {
+    //gets the next playback speed index
+    const nextSpeedIndex = playbackSpeedOptions.indexOf(playbackSpeed) + 1;
+    if (nextSpeedIndex < playbackSpeedOptions.length) {
+      playerRef.current && playerRef.current.setRateAsync(playbackSpeedOptions[nextSpeedIndex], true);
+      setPlaybackSpeed(playbackSpeedOptions[nextSpeedIndex]);
+    }
+    //if the last option i.e. 2x speed is applied. then moves to first option 
+    else {
+      playerRef.current && playerRef.current.setRateAsync(playbackSpeedOptions[0], true);
+      setPlaybackSpeed(playbackSpeedOptions[0]);
+    }
+  };
 
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
-
   const [showControls, setShowControls] = useState<boolean>(true);
 
   const playVideo = () => {
@@ -87,7 +128,6 @@ export default function VideoPlayer(props: any) {
     if (match) {
       const id = match[1]; // Extract the ID from the URL
       const m3u8Url = `https://sec1.pw.live/${id}/master.m3u8`;
-      console.log("m3u8 --->", m3u8Url)
       return m3u8Url;
     } else {
       // Handle invalid MPD URLs here (e.g., return an error message)
@@ -104,7 +144,6 @@ export default function VideoPlayer(props: any) {
     const data = {
       url: uri,
     };
-    console.log('uri --->', uri);
     axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers: newHeaders })
       .then((response) => {
         setCookieParams(cookieSplitter(response?.data?.data));
@@ -115,11 +154,12 @@ export default function VideoPlayer(props: any) {
       });
   }
 
-
-
+  const handlePlaybackStatusUpdate = (status:any) => {
+    setCurrentTime(status.positionMillis);
+  };
 
   useEffect(() => {
-    const interval = setInterval(() => setShowControls(false), 100000);
+    const interval = setInterval(() => setShowControls(false), 15000);
     return () => clearInterval(interval)
   }, [isActive]);
 
@@ -146,18 +186,65 @@ export default function VideoPlayer(props: any) {
           className='h-[30] w-[30]'
         />
       </Pressable>
-      {/* <Pressable
+      <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
           borderless: false,
           radius: 1000,
           foreground: true
         }}
-
-        onPress={() => { setIsActive(!isActive); setShowControls(prev => !prev) }} className='bg-black/80 overflow-hidden rounded-xl px-3 py-1 absolute bottom-2 z-[2] left-2'>
+        onPress={() => { setIsActive(!isActive); setShowControls(prev => !prev) }} className={`bg-black/80 overflow-hidden rounded-xl px-3 py-1 absolute ${showControls ? "bottom-12 mb-1" : "bottom-2"} duration-300  z-[3] left-2`}>
         <Text className='text-white text-lg font-medium'>{showControls ? "Hide Controls" : "Show Controls"}</Text>
-      </Pressable> */}
-      {/* {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-row items-center justify-center'>
+      </Pressable>
+      { showControls && <Pressable
+        className={`bg-black/80 overflow-hidden rounded-xl flex flex-row items-center px-1 pl-2 py-1 absolute duration-300 bottom-12 mb-1 z-[3] right-2`}>
+        
+        <Pressable
+         android_ripple={{
+          color: "rgba(255,255,255,0.5)",
+          borderless: false,
+          radius: 1000,
+          foreground: true
+        }}
+        onPress={() => {
+          setIsMuted(!isMuted);
+          // playerRef.current && playerRef.current.setIsMutedAsync(!isMuted);
+        }}
+        className='p-1 rounded-lg overflow-hidden w-10 flex items-center justify-center'
+        >
+          {/* <Text className='text-[#7363FC] font-bold' >Mute</Text> */}
+          {isMuted?
+          (<FontAwesome5 name="volume-mute" size={24} color="#7363FC" />):(
+            volume<0.3 ?
+            <FontAwesome5 name="volume-off" size={24} color="#7363FC" />:
+            volume>=0.3 && volume<0.7 ?
+            <FontAwesome5 name="volume-down" size={24} color="#7363FC" />:
+            <FontAwesome5 name="volume-up" size={24} color="#7363FC" />
+          )
+        }
+        </Pressable>
+
+            <View className='w-40'>
+              <Slider
+              containerStyle={styles2.slider}
+                minimumValue={0}
+                maximumValue={1}
+                value={volume}
+                onValueChange={(value) => {
+                  setVolume(+value);
+                }}
+                onSlidingComplete={(value) => {
+                  setVolume(+value);
+                  setIsMuted(false);
+                }}
+                minimumTrackTintColor="#7363FC"
+                maximumTrackTintColor="#AAA"
+                thumbTintColor="#7363FC"
+              />
+            </View>
+            <Text className='text-white w-10'>{Math.round(volume * 100)}%</Text>
+      </Pressable>}
+      {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2'>
         <View className='flex-row bg-black/50 rounded-xl p-2'>
           <Pressable
             android_ripple={{
@@ -235,8 +322,42 @@ export default function VideoPlayer(props: any) {
               className='h-[30] w-[30]'
             />
           </Pressable>
+
+          <Pressable
+            onPress={() => {
+              togglePlaybackSpeed();
+            }}
+            className='bg-black/90 overflow-hidden rounded-full w-12 h-12 flex ml-2 items-center justify-center'
+          >
+            <Text className=' text-sm text-[#7363FC] font-bold mb-1 overflow-hidden'>{`${playbackSpeed}x`}</Text>
+          </Pressable>
         </View>
-      </View>} */}
+        <View className='flex-row bg-black/50 rounded-xl mt-2 px-5 w-full mx-5'>
+          <View className='flex flex-row justify-between items-center w-full'>
+            <Text className='text-white' >{formatTime(currentTime)}</Text>
+            <View className='flex-1'>
+              <Slider
+              containerStyle={styles2.slider}
+                minimumValue={0}
+                maximumValue={duration * 1000}
+                value={currentTime}
+                onValueChange={(value) => {
+                  playerRef.current && playerRef.current.setPositionAsync(+value);
+                  setCurrentTime(+value);
+                }}
+                onSlidingComplete={(value) => {
+                  playerRef.current && playerRef.current.setPositionAsync(+value);
+                  setCurrentTime(+value);
+                }}
+                minimumTrackTintColor="#7363FC"
+                maximumTrackTintColor="#AAA"
+                thumbTintColor="#7363FC"
+              />
+            </View>
+            <Text className='text-white'>{formatTime(duration * 1000)}</Text>
+          </View>
+        </View>
+      </View>}
       <ActivityIndicator style={{ display: spinner ? 'flex' : 'none', marginTop: 100 }} size="small" color="#5a4bda" animating={spinner} />
       {
         noVideoAvailable &&
@@ -263,16 +384,52 @@ export default function VideoPlayer(props: any) {
               cookie: cookieParams
             }
           }}
-          ref={playerRef}
           style={styles.backgroundVideo}
-          useNativeControls={true}
+          ref={playerRef}
+          useNativeControls={false}
+          onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
           resizeMode={ResizeMode.CONTAIN}
           onError={(err: any) => console.log('Video Player Error --->', err, `CloundFront-Key-Pair-Id=${cookieParams?.key_pair_id};CloudFront-Policy=${cookieParams?.policy};CloudFront-Signature=${cookieParams?.signature};`)}
-          isMuted={false}
+          isMuted={isMuted}
           shouldPlay
+          volume={volume}
           onLoad={() => setShowLoader(false)}
         />
       }
     </View>
   )
 }
+
+const styles2 = StyleSheet.create({
+  controls: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 10,
+    backgroundColor: "#000",
+  },
+  controlButton: {
+    flex: 1,
+    width: "100%",
+    marginHorizontal: 10,
+  },
+  playbackSpeedText: {
+    color: "white",
+    fontSize: 16,
+  },
+  progressContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    alignSelf: "center",
+    backgroundColor: "black",
+    padding: 10,
+  },
+  slider: {
+    marginHorizontal: 10,
+  },
+  timeText: {
+    color: "white",
+    fontSize: 12,
+  },
+});
