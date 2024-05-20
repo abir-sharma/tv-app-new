@@ -13,6 +13,14 @@ export default function Home({ navigation }: any) {
 
   const { setMainNavigation, setLogs, mainNavigation, setHeaders } = useGlobalContext();
 
+  useEffect(
+    () =>
+      navigation.addListener('beforeRemove', (e:any) => {
+        e.preventDefault();
+      }),
+    [navigation]
+  );
+
   const handleLogin = async () => {
     if (await AsyncStorage.getItem("token")) {
       console.log(await AsyncStorage.getItem("token"));

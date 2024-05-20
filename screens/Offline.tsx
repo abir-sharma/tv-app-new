@@ -306,6 +306,22 @@ export const Offline = () => {
             className='bg-[#8E89BA] w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
             <Text className='text-white text-center w-full text-base'>Enter IP</Text>
           </Pressable>}
+          {
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.4)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}
+
+            onPress={() => {
+              setShowIpInput(true);
+              AsyncStorage.removeItem("iP");
+            }}
+            className='bg-[#272063] w-40 h-10 ml-2 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
+            <Text className='text-white text-center w-full text-base'>Reset Ip</Text>
+          </Pressable>}
 
       </View>
       <OfflineBatches />

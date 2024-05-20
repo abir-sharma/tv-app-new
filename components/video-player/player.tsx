@@ -48,7 +48,25 @@ export default function VideoPlayer(props: any) {
     return number.toString().padStart(2, '0');
   }
 
+  // const MPDTesting = async(mpdUrl: string) => {
+  //   const m3u8url = convertMPDToM3U8(mpdUrl);
+  //   console.log("urlsent:", m3u8url, {headers: {cookie: cookieParams}});
+  //   try{
+  //     const res = await axios.get(m3u8url);
+  //     console.log("resss: ", res.data);
+  //   }
+  //   catch(err){
+  //     console.log("err: ", err);
+  //   }
+
+  // }
+
   useEffect(() => {
+    // console.log("url: ", props?.lectureDetails?.videoUrl);
+
+    // MPD testing
+    // MPDTesting(props?.lectureDetails?.videoUrl);
+
     setDuration(convertToSeconds(props?.lectureDetails?.duration));
     
     setSpinner(true);
@@ -230,10 +248,10 @@ export default function VideoPlayer(props: any) {
                 minimumValue={0}
                 maximumValue={1}
                 value={volume}
-                onValueChange={(value) => {
+                onValueChange={(value:any) => {
                   setVolume(+value);
                 }}
-                onSlidingComplete={(value) => {
+                onSlidingComplete={(value:any) => {
                   setVolume(+value);
                   setIsMuted(false);
                 }}
@@ -341,11 +359,11 @@ export default function VideoPlayer(props: any) {
                 minimumValue={0}
                 maximumValue={duration * 1000}
                 value={currentTime}
-                onValueChange={(value) => {
+                onValueChange={(value:any) => {
                   playerRef.current && playerRef.current.setPositionAsync(+value);
                   setCurrentTime(+value);
                 }}
-                onSlidingComplete={(value) => {
+                onSlidingComplete={(value:any) => {
                   playerRef.current && playerRef.current.setPositionAsync(+value);
                   setCurrentTime(+value);
                 }}
