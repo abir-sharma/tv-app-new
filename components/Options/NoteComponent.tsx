@@ -34,18 +34,11 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NotePropTy
         <View style={{ padding: 16 }}>
           <Text className='text-sm text-white font-medium my-2'>{item?.homeworkIds[0]?.topic?.length >= 40 ? `${item?.homeworkIds[0]?.topic?.substring(0, 40)}...` : item?.homeworkIds[0]?.topic}</Text>
           <View className='bg-[#1B2124] rounded-lg flex-row justify-between items-center px-3 py-2 mt-3' >
-          <Pressable
-          android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-          }}
-          onPress={()=>{}}
+          <View
           className='flex-row justify-center gap-x-2 overflow-hidden rounded-xl w-fit items-center '>
             <Image source={require('../../assets/notesicon2.png')} className='w-5 h-5' width={10} height={10} />
             <Text className=' overflow-hidden rounded-xl text-white'>Notes</Text>
-        </Pressable>
+        </View>
 
             <Pressable
               className={`py-2 px-4 overflow-hidden rounded bg-[#7363FC] `}
@@ -57,6 +50,10 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NotePropTy
                 foreground: true
               }}
               onPress={() => {
+                // @ts-expect-error
+                navigation.navigate('PDFViewer', {
+                  pdfUrl: item?.homeworkIds[0]?.attachmentIds[0]?.baseUrl + item?.homeworkIds[0]?.attachmentIds[0]?.key
+                });
               }}
             >
               <Text className='text-white text-sm'>View</Text>
