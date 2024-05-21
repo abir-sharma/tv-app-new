@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 
-import { View, Text, Image, TextInput, ImageBackground, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid, ActivityIndicator } from 'react-native';
+import { View, Text, Image, TextInput, ImageBackground, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid, ActivityIndicator, BackHandler } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
@@ -18,6 +18,29 @@ export default function Login({ navigation }: any) {
   const [name, setName] = useState<string>("");
   const [otpTimer, setOtpTimer] = useState<number>(30);
   const [showLoader, setShowLoader] = useState<boolean>(false);
+
+  // useEffect(
+  //   () =>
+  //     navigation.addListener('beforeRemove', (e:any) => {
+  //       e.preventDefault();
+  //       //close the app
+  //       BackHandler.exitApp();
+  //     }),
+  //   [navigation]
+  // );
+
+  useEffect(() => {
+    const backAction = () => {
+      BackHandler.exitApp();
+      // Return true to prevent default behavior (closing the app)
+      // Return false to allow default behavior
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove();
+  }, []);
 
 
   useEffect(() => {

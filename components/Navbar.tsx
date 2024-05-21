@@ -67,7 +67,7 @@ export default function Navbar() {
         </Pressable>
       {/* </View> */}
 
-      <Pressable
+      {/* <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
           borderless: false,
@@ -77,12 +77,12 @@ export default function Navbar() {
         onPress={()=>{mainNavigation.navigate('QrTest');}}
         className='flex-row justify-center overflow-hidden rounded-xl w-32 h-10 items-center'>
         <Text className='overflow-hidden rounded-xl text-white'>Qr Test</Text>
-      </Pressable>
+      </Pressable> */}
 
       
       </View>
         <View className='flex flex-row gap-2 items-center'>
-        <Pressable
+        {/* <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
           borderless: false,
@@ -97,7 +97,7 @@ export default function Navbar() {
         className='flex-row justify-center gap-x-2 overflow-hidden rounded-xl w-32 h-10 items-center bg-white/10'>
           <Image source={require('../assets/clock3.png')} className='w-4 h-4' width={10} height={10} />
           <Text className=' overflow-hidden rounded-xl text-white'>Attendance</Text>
-      </Pressable>
+      </Pressable> */}
 
       <Pressable
         android_ripple={{

@@ -1,10 +1,12 @@
 /// <reference types="nativewind/types" />
 import { useState } from 'react';
-import { Image, Text, Pressable, View, Modal, FlatList } from 'react-native';
+import { Image, Text, Pressable, View, Modal, FlatList, ScrollView } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
 import styles from './NavbarDetails.style'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Entypo from '@expo/vector-icons/Entypo';
+
 
 
 type PropType = {
@@ -91,7 +93,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
 
       <Pressable
           onPress={() => { handleDropdownPress() }}
-          className='rounded-xl bg-[#444444] px-10 py-2 overflow-hidden'
+          className='rounded-xl bg-[#444444] px-5 py-2 overflow-hidden'
           hasTVPreferredFocus={true}
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
@@ -99,7 +101,10 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             radius: 1000,
             foreground: true
           }}>
-          <Text className='text-white text-sm'>{selectedSubject && (selectedSubject?.subject?.length > 20) ? `${selectedSubject?.subject.substring(0, 20)}...` : selectedSubject?.subject || "Select Subject"}</Text>
+            <View className='flex-row items-center justify-center gap-2'>
+              <Text className='text-white text-sm'>{selectedSubject && (selectedSubject?.subject?.length > 20) ? `${selectedSubject?.subject.substring(0, 20)}...` : selectedSubject?.subject || "Select Subject"}</Text>
+              <Entypo name="chevron-down" size={20} color="white" />
+            </View>
         </Pressable>
       </View>
       
@@ -115,7 +120,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         >
           <Pressable onPress={() => setIsDropdownVisible(false)}>
             <View style={{ flex: 1 }}>
-              <View className='bg-[#111111] border-white/20 border-[1px] max-h-[200] overflow-scroll w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
+              <View className='bg-[#111111] border-white/20 border-[1px] max-h-[200] overflow-hidden w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
                 <FlatList
                   data={batchDetails?.subjects?.slice(1)}
                   renderItem={renderItem}
