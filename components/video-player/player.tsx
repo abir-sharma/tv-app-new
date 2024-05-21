@@ -29,6 +29,7 @@ export default function VideoPlayer(props: any) {
   const [duration, setDuration] = useState<number>(0);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState<number>(0.8);
+  const [quality, setQuality] = useState(720);
 
   function convertToSeconds(timeString:string) {
     const [hours, minutes, seconds] = timeString.split(':').map(Number);
@@ -48,24 +49,24 @@ export default function VideoPlayer(props: any) {
     return number.toString().padStart(2, '0');
   }
 
-  // const MPDTesting = async(mpdUrl: string) => {
-  //   const m3u8url = convertMPDToM3U8(mpdUrl);
-  //   console.log("urlsent:", m3u8url, {headers: {cookie: cookieParams}});
-  //   try{
-  //     const res = await axios.get(m3u8url);
-  //     console.log("resss: ", res.data);
-  //   }
-  //   catch(err){
-  //     console.log("err: ", err);
-  //   }
+  const MPDTesting = async(mpdUrl: string) => {
+    const m3u8url = convertMPDToM3U8(mpdUrl);
+    console.log("urlsent:", m3u8url, {headers: {cookie: cookieParams}});
+    try{
+      const res = await axios.get(m3u8url);
+      console.log("resss: ", res.data);
+    }
+    catch(err){
+      console.log("err: ", err);
+    }
 
-  // }
+  }
 
   useEffect(() => {
     // console.log("url: ", props?.lectureDetails?.videoUrl);
 
     // MPD testing
-    // MPDTesting(props?.lectureDetails?.videoUrl);
+    MPDTesting(props?.lectureDetails?.videoUrl);
 
     setDuration(convertToSeconds(props?.lectureDetails?.duration));
     
@@ -95,7 +96,11 @@ export default function VideoPlayer(props: any) {
       setRenderVideo(true);
       setSpinner(false);
     }
-  }, [])
+  }, [quality])
+  
+  useEffect(()=>{
+    console.log(currentTime);
+  }, [currentTime])
 
   const togglePlaybackSpeed = () => {
     //gets the next playback speed index
@@ -145,13 +150,18 @@ export default function VideoPlayer(props: any) {
 
     if (match) {
       const id = match[1]; // Extract the ID from the URL
-      const m3u8Url = `https://sec1.pw.live/${id}/master.m3u8`;
+      const m3u8Url = `https://sec1.pw.live/${id}/hls/${quality}/main.m3u8`;
       return m3u8Url;
     } else {
       // Handle invalid MPD URLs here (e.g., return an error message)
       return "Invalid MPD URL";
     }
   }
+
+  useEffect(() => {
+    setSrc(convertMPDToM3U8(props?.lectureDetails?.videoUrl));
+    console.log("uu: ", convertMPDToM3U8(props?.lectureDetails?.videoUrl));
+  }, [quality]);
 
   async function sendAnalyticsData(uri: string) {
     const newHeaders = {
@@ -164,6 +174,7 @@ export default function VideoPlayer(props: any) {
     };
     axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers: newHeaders })
       .then((response) => {
+        console.log("analytics success", response.data.data);
         setCookieParams(cookieSplitter(response?.data?.data));
         setRenderVideo(true);
       })
@@ -264,6 +275,17 @@ export default function VideoPlayer(props: any) {
       </Pressable>}
       {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2'>
         <View className='flex-row bg-black/50 rounded-xl p-2'>
+        <Pressable
+            onPress={() => {
+              const qualityOptions = [240, 360, 480, 720];
+              const currentIndex = qualityOptions.indexOf(quality);
+              const nextIndex = (currentIndex + 1) % qualityOptions.length;
+              setQuality(qualityOptions[nextIndex]);
+            }}
+            className='bg-black/90 overflow-hidden rounded-full w-12 h-12 flex mr-2 items-center justify-center'
+          >
+            <Text className=' text-sm text-[#7363FC] font-bold mb-1 overflow-hidden'>{`${quality}p`}</Text>
+          </Pressable>
           <Pressable
             android_ripple={{
               color: "rgba(255,255,255,0.5)",
