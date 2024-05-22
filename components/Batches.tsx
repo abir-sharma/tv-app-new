@@ -2,7 +2,7 @@
 
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
-// import FastImage from 'react-native-fast-image'
+import FastImage from 'react-native-fast-image'
 
 export default function Batches() {
 
@@ -33,7 +33,7 @@ export default function Batches() {
                             {
                                 orders?.map((item, index) => {
                                     if (item?.itemName === order?.batch?.name) {
-                                        return item?.thumbnailImageLink && <Image key={index} className=' w-full h-full rounded-t-lg ' source={{ uri: `${item?.thumbnailImageLink}` }} />
+                                        return item?.thumbnailImageLink && <FastImage key={index} className=' w-full h-full rounded-t-lg ' source={{ uri: `${item?.thumbnailImageLink}` }} />
                                     }
                                 })
                             }
