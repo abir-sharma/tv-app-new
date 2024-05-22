@@ -63,9 +63,9 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
         </View>
       </View> */}
       <View className='relative'>
-          <View className="w-full h-36 overflow-hidden rounded-lg relative">
+          <View className="w-full aspect-video overflow-hidden rounded-lg relative">
               {item?.videoDetails?.image && <Image
-                  className=' w-full h-full object-cover rounded-t-lg '
+                  className=' w-full h-full rounded-t-lg '
                   source={{ uri: `${item?.videoDetails?.image}` }}
               />}
           </View>

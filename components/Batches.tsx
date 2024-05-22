@@ -2,6 +2,7 @@
 
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
+// import FastImage from 'react-native-fast-image'
 
 export default function Batches() {
 
@@ -28,11 +29,11 @@ export default function Batches() {
                             mainNavigation?.navigate('Details');
                         }}
                         className=' rounded-xl h-fit pb-2 w-72 overflow-hidden'>
-                        <View className="w-full h-44 overflow-hidden rounded-lg relative">
+                        <View className="w-full aspect-video rounded-xl overflow-hidden relative  bg-white">
                             {
                                 orders?.map((item, index) => {
                                     if (item?.itemName === order?.batch?.name) {
-                                        return item?.thumbnailImageLink && <Image key={index} className=' w-full h-full object-cover rounded-t-lg ' source={{ uri: `${item?.thumbnailImageLink}` }} />
+                                        return item?.thumbnailImageLink && <Image key={index} className=' w-full h-full rounded-t-lg ' source={{ uri: `${item?.thumbnailImageLink}` }} />
                                     }
                                 })
                             }

@@ -51,7 +51,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         radius: 1000,
         foreground: true
       }}
-      className='py-0.5 px-1 overflow-hidden'
+      className='py-0.5 px-1 overflow-hidden '
       onPress={() => {
         console.log("Subject iD: ", item?._id)
         setSelectedSubject(item);
@@ -118,17 +118,17 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
           visible={isDropdownVisible}
           onRequestClose={() => setIsDropdownVisible(false)}
         >
-          <Pressable onPress={() => setIsDropdownVisible(false)}>
+          {/* <Pressable onPress={() => setIsDropdownVisible(false)}> */}
             <View style={{ flex: 1 }}>
-              <View className='bg-[#111111] border-white/20 border-[1px] max-h-[200] overflow-hidden w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
+              <ScrollView className='bg-[#111111] border-white/20 border-[1px] max-h-[200] overflow-hidden w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
                 <FlatList
                   data={batchDetails?.subjects?.slice(1)}
                   renderItem={renderItem}
                   keyExtractor={(item) => item?._id}
                 />
-              </View>
+              </ScrollView>
             </View>
-          </Pressable>
+          {/* </Pressable> */}
         </Modal>
       </View>
 

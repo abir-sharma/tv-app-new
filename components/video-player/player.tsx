@@ -30,6 +30,7 @@ export default function VideoPlayer(props: any) {
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState<number>(0.8);
   const [quality, setQuality] = useState(720);
+  const [storedTimestamp, setStoredTimestamp] = useState(0);
 
   function convertToSeconds(timeString:string) {
     const [hours, minutes, seconds] = timeString.split(':').map(Number);
@@ -51,7 +52,7 @@ export default function VideoPlayer(props: any) {
 
   const MPDTesting = async(mpdUrl: string) => {
     const m3u8url = convertMPDToM3U8(mpdUrl);
-    console.log("urlsent:", m3u8url, {headers: {cookie: cookieParams}});
+    // console.log("urlsent:", m3u8url, {headers: {cookie: cookieParams}});
     try{
       const res = await axios.get(m3u8url);
       console.log("resss: ", res.data);
@@ -97,10 +98,6 @@ export default function VideoPlayer(props: any) {
       setSpinner(false);
     }
   }, [quality])
-  
-  useEffect(()=>{
-    console.log(currentTime);
-  }, [currentTime])
 
   const togglePlaybackSpeed = () => {
     //gets the next playback speed index
@@ -160,7 +157,6 @@ export default function VideoPlayer(props: any) {
 
   useEffect(() => {
     setSrc(convertMPDToM3U8(props?.lectureDetails?.videoUrl));
-    console.log("uu: ", convertMPDToM3U8(props?.lectureDetails?.videoUrl));
   }, [quality]);
 
   async function sendAnalyticsData(uri: string) {
@@ -174,7 +170,7 @@ export default function VideoPlayer(props: any) {
     };
     axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers: newHeaders })
       .then((response) => {
-        console.log("analytics success", response.data.data);
+        // console.log("analytics success", response.data.data);
         setCookieParams(cookieSplitter(response?.data?.data));
         setRenderVideo(true);
       })
@@ -184,7 +180,7 @@ export default function VideoPlayer(props: any) {
   }
 
   const handlePlaybackStatusUpdate = (status:any) => {
-    setCurrentTime(status.positionMillis);
+      setCurrentTime(status.positionMillis);
   };
 
   useEffect(() => {
@@ -207,7 +203,7 @@ export default function VideoPlayer(props: any) {
           radius: 1000,
           foreground: true
         }}
-        onPress={() => { mainNavigation.goBack() }} className='bg-black/40 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2'>
+        onPress={() => { mainNavigation.goBack() }} className='bg-black/40 overflow-hidden rounded-full z-[3] p-2 absolute top-2 left-2'>
         <Image
           source={require('../../assets/exit.png')}
           width={30}
@@ -216,14 +212,14 @@ export default function VideoPlayer(props: any) {
         />
       </Pressable>
       <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.5)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        onPress={() => { setIsActive(!isActive); setShowControls(prev => !prev) }} className={`bg-black/80 overflow-hidden rounded-xl px-3 py-1 absolute ${showControls ? "bottom-12 mb-1" : "bottom-2"} duration-300  z-[3] left-2`}>
-        <Text className='text-white text-lg font-medium'>{showControls ? "Hide Controls" : "Show Controls"}</Text>
+        // android_ripple={{
+        //   color: "rgba(255,255,255,0.5)",
+        //   borderless: false,
+        //   radius: 1000,
+        //   foreground: true
+        // }}
+        onPress={() => { setIsActive(!isActive); setShowControls(prev => !prev) }} className={`bg-transparent overflow-hidden w-screen h-screen absolute top-0 left-0 duration-300  z-[2]`}>
+        {/* <Text className='text-white text-lg font-medium'>{showControls ? "Hide Controls" : "Show Controls"}</Text> */}
       </Pressable>
       { showControls && <Pressable
         className={`bg-black/80 overflow-hidden rounded-xl flex flex-row items-center px-1 pl-2 py-1 absolute duration-300 bottom-12 mb-1 z-[3] right-2`}>
@@ -280,6 +276,7 @@ export default function VideoPlayer(props: any) {
               const qualityOptions = [240, 360, 480, 720];
               const currentIndex = qualityOptions.indexOf(quality);
               const nextIndex = (currentIndex + 1) % qualityOptions.length;
+              setStoredTimestamp(currentTime);
               setQuality(qualityOptions[nextIndex]);
             }}
             className='bg-black/90 overflow-hidden rounded-full w-12 h-12 flex mr-2 items-center justify-center'
@@ -423,6 +420,10 @@ export default function VideoPlayer(props: any) {
             headers: {
               cookie: cookieParams
             }
+          }}
+          onLoadStart={() => {console.log("stored: ", storedTimestamp, "--- current: ", currentTime);
+            playerRef.current && playerRef.current.setPositionAsync(storedTimestamp);
+            setCurrentTime(storedTimestamp);
           }}
           style={styles.backgroundVideo}
           ref={playerRef}
