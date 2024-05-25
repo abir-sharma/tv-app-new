@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 import { useState } from 'react';
-import { Image, Text, Pressable, View, Modal, FlatList, ScrollView } from 'react-native';
+import { Image, Text, Pressable, View, Modal, FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
 import styles from './NavbarDetails.style'
 import axios from 'axios';
@@ -118,7 +118,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
           visible={isDropdownVisible}
           onRequestClose={() => setIsDropdownVisible(false)}
         >
-          {/* <Pressable onPress={() => setIsDropdownVisible(false)}> */}
+            <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
             <View style={{ flex: 1 }}>
               <ScrollView className='bg-[#111111] border-white/20 border-[1px] max-h-[200] overflow-hidden w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
                 <FlatList
@@ -128,7 +128,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
                 />
               </ScrollView>
             </View>
-          {/* </Pressable> */}
+            </TouchableWithoutFeedback>
         </Modal>
       </View>
 

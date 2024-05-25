@@ -15,6 +15,7 @@ import OfflineDetails from './screens/OfflineDeatils';
 import { TestResult } from './screens/TestResult';
 import Attendance from './screens/Attendance';
 import Intro from './screens/Intro';
+import RecentVideos from './screens/RecentVideos';
 // import QRCodeGenerator from './screens/QrTest';
 
 const Stack = createNativeStackNavigator();
@@ -31,6 +32,7 @@ export default function App() {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
           <Stack.Screen name="Videos" component={Videos} options={{ headerShown: false }} />
+          <Stack.Screen name="RecentVideos" component={RecentVideos} options={{ headerShown: false }} />
           <Stack.Screen name="Tests" component={Tests} options={{ headerShown: false }} />
           <Stack.Screen name="TestResult" component={TestResult} options={{ headerShown: false }} />
           <Stack.Screen name="TestSolutions" component={TestSolutions} options={{ headerShown: false }} />

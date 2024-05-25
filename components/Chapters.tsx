@@ -1,10 +1,27 @@
 import { FlatList, Pressable, Text, View } from 'react-native';
 import { TopicType } from '../types/types';
 import { useGlobalContext } from '../context/MainContext';
+import { useEffect } from 'react';
 
 export default function Chapters() {
 
   const { topicList, setSelectedChapter, selectedChapter } = useGlobalContext();
+
+  const sortedList = topicList?.sort((a:any, b:any) => {
+    if (a.videos === 0 && b.videos !== 0) {
+      return 1;
+    } else if (a.videos !== 0 && b.videos === 0) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+
+  useEffect(()=>{
+    if(sortedList){
+      setSelectedChapter(sortedList[0]);
+    }
+  }, [sortedList])
 
 
   const renderItem = ({ item }: any) => (
@@ -32,7 +49,7 @@ export default function Chapters() {
       <View className=' rounded-xl overflow-hidden mt-5 h-[510] w-full'>
 
         <FlatList
-          data={topicList}
+          data={sortedList}
           renderItem={renderItem}
           keyExtractor={(item: TopicType) => item?._id}
           numColumns={1}

@@ -264,7 +264,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentPage}`, { headers });
       setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
       console.log("Setting selected chapter", res?.data?.data[0]?.name);
-      setSelectedChapter(res?.data?.data[0]);
+      // setSelectedChapter(res?.data?.data[0]);
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);

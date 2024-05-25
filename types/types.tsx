@@ -252,6 +252,9 @@ export type VideoType = {
   endTime: string;
   timeline: any[];
   url: string;
+  subject: string;
+  chapter?: string;
+  batch?: string;
   videoDetails: VideoDetailsType;
   dRoomId: string;
   isBatchDoubtEnabled: boolean;

@@ -315,7 +315,10 @@ const Tests = ({ navigation, route }: any) => {
                     </View>
                 </View>
                 <View className='flex-row'>
-                    {/* <Pressable
+                    <Pressable
+                        onPress={()=>{
+                            navigation.navigate('Details')
+                        }}
                         hasTVPreferredFocus={true}
                         android_ripple={{
                             color: "rgba(255,255,255,0.5)",
@@ -323,8 +326,8 @@ const Tests = ({ navigation, route }: any) => {
                             radius: 1000,
                             foreground: true
                         }} className='bg-white/20 rounded-xl px-5 py-2 overflow-hidden'>
-                        <Text className='text-white text-lg'>View Instructions</Text>
-                    </Pressable> */}
+                        <Text className='text-white text-lg'>Back</Text>
+                    </Pressable>
                     <Pressable
                         hasTVPreferredFocus={true}
                         android_ripple={{

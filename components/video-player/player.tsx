@@ -8,6 +8,9 @@ import { cookieSplitter } from './cookie-splitter';
 import { useGlobalContext } from '../../context/MainContext';
 import { Slider } from "@miblanchard/react-native-slider";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
+import AntDesign from '@expo/vector-icons/AntDesign';
+
+
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -97,7 +100,7 @@ export default function VideoPlayer(props: any) {
       setRenderVideo(true);
       setSpinner(false);
     }
-  }, [quality])
+  }, [quality, props])
 
   const togglePlaybackSpeed = () => {
     //gets the next playback speed index
@@ -180,7 +183,9 @@ export default function VideoPlayer(props: any) {
   }
 
   const handlePlaybackStatusUpdate = (status:any) => {
+    if (status.isPlaying) {
       setCurrentTime(status.positionMillis);
+    }
   };
 
   useEffect(() => {
@@ -211,6 +216,24 @@ export default function VideoPlayer(props: any) {
           className='h-[30] w-[30]'
         />
       </Pressable>
+      {showControls &&  props?.currentVideos?.length > 1 && <View
+         className='bg-black/60 overflow-hidden rounded-xl z-[3] p-1.5 absolute bottom-12 mb-1 left-2'>
+        
+        <View className='flex flex-row gap-2 items-center justify-center'>
+          <TouchableOpacity className='bg-black px-4 py-2 rounded-full overflow-hidden' onPress={props?.handlePrevious} disabled={props.currentIndex === 0}>
+          <AntDesign name="stepbackward" size={20} color="#7363FC" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            className='bg-black px-4 py-2 rounded-full overflow-hidden'
+            onPress={props?.handleNext}
+            disabled={props?.currentIndex === props?.currentVideos.length - 1}
+          >
+            <AntDesign name="stepforward" size={20} color="#7363FC" />
+          </TouchableOpacity>
+        </View>
+      
+      </View>}
+      
       <Pressable
         // android_ripple={{
         //   color: "rgba(255,255,255,0.5)",
@@ -421,7 +444,7 @@ export default function VideoPlayer(props: any) {
               cookie: cookieParams
             }
           }}
-          onLoadStart={() => {console.log("stored: ", storedTimestamp, "--- current: ", currentTime);
+          onLoadStart={() => {
             playerRef.current && playerRef.current.setPositionAsync(storedTimestamp);
             setCurrentTime(storedTimestamp);
           }}

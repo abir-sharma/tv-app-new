@@ -4,6 +4,7 @@ import { VideoType } from '../../types/types';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useGlobalContext } from '../../context/MainContext';
 
 type VideoPropType = {
   videoList: VideoType[] | null,
@@ -15,18 +16,34 @@ type VideoPropType = {
 export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPropType) => {
 
   const navigation = useNavigation();
+  const {selectedSubject, selectedChapter, selectedBatch} = useGlobalContext();
 
-  const saveToRecentVideos = (item: VideoType) => {
-    AsyncStorage.getItem('recentVideos').then((value) => {
-      if (value) {
-        let recentVideos = JSON.parse(value);
-        let newRecentVideos = [...recentVideos, item];
-        AsyncStorage.setItem('recentVideos', JSON.stringify(newRecentVideos));
+  const saveToRecentVideos = async (item: VideoType) => {
+    try {
+      const recentVideosStr = await AsyncStorage.getItem('recentVideos');
+      const recentVideos: { [key: string]: VideoType[] } = recentVideosStr
+        ? JSON.parse(recentVideosStr)
+        : {};
+  
+      const subject = selectedSubject?.subject || 'Unknown';
+      const newVideo = {
+        ...item,
+        subject: subject,
+        chapter: selectedChapter?.name,
+        batch: selectedBatch?.batch?.name,
+      };
+  
+      if (recentVideos[subject]) {
+        recentVideos[subject] = [newVideo, ...recentVideos[subject]].slice(0, 5);
       } else {
-        AsyncStorage.setItem('recentVideos', JSON.stringify([item]));
+        recentVideos[subject] = [newVideo];
       }
-    });
-  }
+  
+      await AsyncStorage.setItem('recentVideos', JSON.stringify(recentVideos));
+    } catch (error) {
+      console.error('Error saving recent videos:', error);
+    }
+  };
 
   const renderGridItem = ({ item }: any) => (
     <Pressable
