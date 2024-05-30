@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { View, Text, ActivityIndicator, Pressable, Image, TouchableOpacity, StyleSheet } from 'react-native'
+import { View, Text, ActivityIndicator, Pressable, Image, TouchableOpacity, StyleSheet, Modal, FlatList, TouchableWithoutFeedback } from 'react-native'
 import { WebView } from 'react-native-webview';
 import styles from './player.style';
 import axios from 'axios';
@@ -34,6 +34,24 @@ export default function VideoPlayer(props: any) {
   const [volume, setVolume] = useState<number>(0.8);
   const [quality, setQuality] = useState(720);
   const [storedTimestamp, setStoredTimestamp] = useState(0);
+
+  const [modalVisible, setModalVisible] = useState(false);
+  const qualityOptions = [240, 360, 480, 720];
+
+  const handleQualityChange = (selectedQuality:number) => {
+    setQuality(selectedQuality);
+    setStoredTimestamp(currentTime);
+    setModalVisible(false);
+  };
+
+  const renderQualityOption = ({ item } : any) => (
+    <Pressable
+      onPress={() => handleQualityChange(item)}
+      className="p-2 border-b border-gray-300/50 text-white"
+    >
+      <Text className='text-white pl-2'>{`${item}p`}</Text>
+    </Pressable>
+  );
 
   function convertToSeconds(timeString:string) {
     const [hours, minutes, seconds] = timeString.split(':').map(Number);
@@ -294,7 +312,7 @@ export default function VideoPlayer(props: any) {
       </Pressable>}
       {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2'>
         <View className='flex-row bg-black/50 rounded-xl p-2'>
-        <Pressable
+        {/* <Pressable
             onPress={() => {
               const qualityOptions = [240, 360, 480, 720];
               const currentIndex = qualityOptions.indexOf(quality);
@@ -305,7 +323,34 @@ export default function VideoPlayer(props: any) {
             className='bg-black/90 overflow-hidden rounded-full w-12 h-12 flex mr-2 items-center justify-center'
           >
             <Text className=' text-sm text-[#7363FC] font-bold mb-1 overflow-hidden'>{`${quality}p`}</Text>
-          </Pressable>
+          </Pressable> */}
+          <View>
+            <Pressable
+              onPress={() => setModalVisible(true)}
+              className="bg-black/90 overflow-hidden rounded-full w-12 h-12 flex mr-2 items-center justify-center"
+            >
+              <Text className="text-sm text-[#7363FC] font-bold mb-1 overflow-hidden">{`${quality}p`}</Text>
+            </Pressable>
+
+            <Modal
+              visible={modalVisible}
+              animationType="fade"
+              transparent
+              onRequestClose={() => setModalVisible(false)}
+            >
+              <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+                <View style={{ flex: 1 }}>
+                <View className="bg-black/90 w-40 absolute bottom-24 left-80 rounded-lg m-4">
+                  <FlatList
+                    data={qualityOptions}
+                    renderItem={renderQualityOption}
+                    keyExtractor={(item) => item.toString()}
+                  />
+                </View>
+                </View>
+              </TouchableWithoutFeedback>
+            </Modal>
+          </View>
           <Pressable
             android_ripple={{
               color: "rgba(255,255,255,0.5)",
