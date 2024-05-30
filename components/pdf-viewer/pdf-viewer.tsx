@@ -72,8 +72,9 @@ export default function PDFViewer({ route }: any) {
           setShowLoader(false);
         }}
         page={currentPage}
-        enablePaging={true}
-        onPageSingleTap={(e) => { handleNextPage(e) }}
+        // enablePaging={true}
+        // onPageSingleTap={(e) => { handleNextPage(e) }}
+        // onPageChanged={(e)=>{setCurrentPage(e)}}
         trustAllCerts={false}
         style={{
           height: "100%",
