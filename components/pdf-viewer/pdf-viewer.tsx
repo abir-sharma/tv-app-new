@@ -16,13 +16,13 @@ export default function PDFViewer({ route }: any) {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [maxPage, setMaxPage] = useState<number>(1);
   const [showLoader, setShowLoader] = useState<boolean>(true);
-  const [paths, setPaths] = useState<string[]>([]);
+  const [annotations, setAnnotations] = useState<{ [key: number]: string[] }>({});
   const [currentPath, setCurrentPath] = useState<string>('');
-  const [tool, setTool] = useState<string>('pen');
-  const [showAnnotationButtons, setShowAnnotationButtons] = useState<boolean>(false);
+  const [tool, setTool] = useState<string | null>(null);
+  const [allowAnnotations, setAllowAnnotations] = useState<boolean>(false);
 
   const onTouchStart = (event: any) => {
-    if (!showAnnotationButtons) return;
+    if (!allowAnnotations) return;
     const { locationX, locationY } = event.nativeEvent;
     if (tool === 'eraser') {
       erasePath(locationX, locationY);
@@ -32,7 +32,7 @@ export default function PDFViewer({ route }: any) {
   };
 
   const onTouchMove = (event: any) => {
-    if (!showAnnotationButtons) return;
+    if (!allowAnnotations) return;
     const { locationX, locationY } = event.nativeEvent;
     if (tool === 'eraser') {
       erasePath(locationX, locationY);
@@ -42,15 +42,18 @@ export default function PDFViewer({ route }: any) {
   };
 
   const onTouchEnd = () => {
-    if (!showAnnotationButtons) return;
+    if (!allowAnnotations) return;
     if (tool === 'pen') {
-      setPaths((prevPaths) => [...prevPaths, currentPath]);
+      setAnnotations((prevAnnotations) => ({
+        ...prevAnnotations,
+        [currentPage]: [...(prevAnnotations[currentPage] || []), currentPath],
+      }));
       setCurrentPath('');
     }
   };
 
   const erasePath = (x: number, y: number) => {
-    const updatedPaths = paths.filter((path) => {
+    const updatedPaths = (annotations[currentPage] || []).filter((path) => {
       const commands = path.split(/(?=[ML])/);
       for (let i = 0; i < commands.length; i++) {
         const [command, coords] = commands[i].split(' ');
@@ -61,20 +64,27 @@ export default function PDFViewer({ route }: any) {
       }
       return true;
     });
-    setPaths(updatedPaths);
+    setAnnotations((prevAnnotations) => ({
+      ...prevAnnotations,
+      [currentPage]: updatedPaths,
+    }));
   };
 
   const clearAll = () => {
-    setPaths([]);
+    setAnnotations((prevAnnotations) => ({
+      ...prevAnnotations,
+      [currentPage]: [],
+    }));
   };
 
   const switchTool = (selectedTool: string) => {
-    setTool(selectedTool);
-  };
-
-  const toggleAnnotationButtons = () => {
-    setShowAnnotationButtons((prevState) => !prevState);
-    clearAll();
+    if (tool === selectedTool) {
+      setTool(null);
+      setAllowAnnotations(false);
+    } else {
+      setTool(selectedTool);
+      setAllowAnnotations(true);
+    }
   };
 
   return (
@@ -122,64 +132,35 @@ export default function PDFViewer({ route }: any) {
             radius: 1000,
             foreground: true,
           }}
-          className={` bg-black/80  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 overflow-hidden`}
-          onPress={toggleAnnotationButtons}
+          className={` ${tool === 'pen' ? 'bg-[#7363FC]' : 'bg-black/80'}  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
+          onPress={() => switchTool('pen')}
         >
-            {!showAnnotationButtons ? <Ionicons name="color-palette" size={24} color={showAnnotationButtons? "white" : "#7363FC"} />:
-            <Entypo name="cross" size={30} color="#7363FC" />}
+          <FontAwesome name="pencil" size={24} color={tool === 'pen' ? 'white' : '#7363FC'} />
         </Pressable>
-        {showAnnotationButtons && (
-          <>
-            <Pressable
-              android_ripple={{
-                color: 'rgba(255,255,255,0.8)',
-                borderless: false,
-                radius: 1000,
-                foreground: true,
-              }}
-              className={` ${tool=='pen'? "bg-[#7363FC]" : "bg-black/80"}  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
-              onPress={() => switchTool('pen')}
-            >
-              <FontAwesome name="pencil" size={24} color={tool=='pen'? "white" : "#7363FC"} />
-            </Pressable>
-            <Pressable
-              android_ripple={{
-                color: 'rgba(255,255,255,0.8)',
-                borderless: false,
-                radius: 1000,
-                foreground: true,
-              }}
-              className={` ${tool=='eraser'? "bg-[#7363FC]" : "bg-black/80"}  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
-              onPress={() => switchTool('eraser')}
-            >
-              <FontAwesome5 name="eraser" size={24} color={tool=='eraser'? "white" : "#7363FC"} />
-            </Pressable>
-            {/* <Pressable
-              android_ripple={{
-                color: 'rgba(255,255,255,0.8)',
-                borderless: false,
-                radius: 1000,
-                foreground: true,
-              }}
-              className="bg-black/80 border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden"
-              onPress={clearAll}
-            >
-              <Text className="text-xl font-bold text-white">Clear All</Text>
-            </Pressable> */}
-            {/* <Pressable
-              android_ripple={{
-                color: 'rgba(255,255,255,0.8)',
-                borderless: false,
-                radius: 1000,
-                foreground: true,
-              }}
-              className="bg-black/80 border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden"
-              onPress={toggleAnnotationButtons}
-            >
-              <Entypo name="cross" size={35} color="#7363FC" />
-            </Pressable> */}
-          </>
-        )}
+        <Pressable
+          android_ripple={{
+            color: 'rgba(255,255,255,0.8)',
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          className={` ${tool === 'eraser' ? 'bg-[#7363FC]' : 'bg-black/80'}  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
+          onPress={() => switchTool('eraser')}
+        >
+          <FontAwesome5 name="eraser" size={24} color={tool === 'eraser' ? 'white' : '#7363FC'} />
+        </Pressable>
+        <Pressable
+          android_ripple={{
+            color: 'rgba(255,255,255,0.8)',
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          className={` bg-black/80  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
+          onPress={clearAll}
+        >
+          <Entypo name="cross" size={30} color={tool === 'eraser' ? 'white' : '#7363FC'} />
+        </Pressable>
       </View>
       <View
         style={styles.drawingArea}
@@ -196,14 +177,17 @@ export default function PDFViewer({ route }: any) {
           trustAllCerts={false}
           style={styles.pdf}
           source={{ uri: pdfUrl, cache: true }}
+          onPageChanged={(page, numberOfPages) => {
+            setCurrentPage(page);
+          }}
         />
-        {showAnnotationButtons && (
+        {allowAnnotations && (
           <Svg style={styles.svg}>
-            {paths.map((path, index) => (
-              <Path key={index} d={`M ${path.substring(2)}`} stroke="black" strokeWidth={3} fill="none" />
+            {(annotations[currentPage] || []).map((path, index) => (
+              <Path key={index} d={path} stroke="black" strokeWidth={3} fill="none" />
             ))}
             {currentPath !== '' && (
-              <Path d={`M ${currentPath.substring(2)}`} stroke="black" strokeWidth={3} fill="none" />
+              <Path d={currentPath} stroke="black" strokeWidth={3} fill="none" />
             )}
           </Svg>
         )}
