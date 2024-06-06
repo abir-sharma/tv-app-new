@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { View, Text, ActivityIndicator, Pressable, Image, TouchableOpacity, StyleSheet, Modal, FlatList, TouchableWithoutFeedback } from 'react-native'
 import { WebView } from 'react-native-webview';
 import styles from './player.style';
+import Svg, { Path } from 'react-native-svg';
 import axios from 'axios';
 import { Video, ResizeMode } from 'expo-av';
 import { cookieSplitter } from './cookie-splitter';
@@ -9,6 +10,8 @@ import { useGlobalContext } from '../../context/MainContext';
 import { Slider } from "@miblanchard/react-native-slider";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import Entypo from '@expo/vector-icons/Entypo';
 
 
 
@@ -28,12 +31,86 @@ export default function VideoPlayer(props: any) {
   const [isActive, setIsActive] = useState<boolean>(true);
 
   const [currentTime, setCurrentTime] = useState(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [duration, setDuration] = useState<number>(0);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState<number>(0.8);
   const [quality, setQuality] = useState(720);
   const [storedTimestamp, setStoredTimestamp] = useState(0);
+
+  const [annotations, setAnnotations] = useState<{ [key: number]: string[] }>({});
+  const [currentPath, setCurrentPath] = useState<string>('');
+  const [tool, setTool] = useState<string | null>(null);
+  const [allowAnnotations, setAllowAnnotations] = useState<boolean>(false);
+
+  const onTouchStart = (event: any) => {
+    if (!allowAnnotations) return;
+    const { locationX, locationY } = event.nativeEvent;
+    if (tool === 'eraser') {
+      erasePath(locationX, locationY);
+    } else {
+      setCurrentPath(`M ${locationX},${locationY}`);
+    }
+  };
+
+  const onTouchMove = (event: any) => {
+    if (!allowAnnotations) return;
+    const { locationX, locationY } = event.nativeEvent;
+    if (tool === 'eraser') {
+      erasePath(locationX, locationY);
+    } else {
+      setCurrentPath((prevPath) => `${prevPath} L ${locationX},${locationY}`);
+    }
+  };
+
+  const onTouchEnd = () => {
+    if (!allowAnnotations) return;
+    if (tool === 'pen') {
+      setAnnotations((prevAnnotations) => ({
+        ...prevAnnotations,
+        [currentPage]: [...(prevAnnotations[currentPage] || []), currentPath],
+      }));
+      setCurrentPath('');
+    }
+  };
+
+  const erasePath = (x: number, y: number) => {
+    const updatedPaths = (annotations[currentPage] || []).filter((path) => {
+      const commands = path.split(/(?=[ML])/);
+      for (let i = 0; i < commands.length; i++) {
+        const [command, coords] = commands[i].split(' ');
+        const [pathX, pathY] = coords.split(',');
+        if (Math.abs(x - Number(pathX)) <= 10 && Math.abs(y - Number(pathY)) <= 10) {
+          return false;
+        }
+      }
+      return true;
+    });
+    setAnnotations((prevAnnotations) => ({
+      ...prevAnnotations,
+      [currentPage]: updatedPaths,
+    }));
+  };
+
+  const clearAll = () => {
+    setAnnotations((prevAnnotations) => ({
+      ...prevAnnotations,
+      [currentPage]: [],
+    }));
+  };
+
+  const switchTool = (selectedTool: string) => {
+    console.log("tool toggling");
+    if (tool === selectedTool) {
+      setTool(null);
+      setAllowAnnotations(false);
+    } else {
+      setTool(selectedTool);
+      setAllowAnnotations(true);
+    }
+  };
+
 
   const [modalVisible, setModalVisible] = useState(false);
   const qualityOptions = [240, 360, 480, 720];
@@ -189,6 +266,7 @@ export default function VideoPlayer(props: any) {
     const data = {
       url: uri,
     };
+    console.log(data, newHeaders);
     axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers: newHeaders })
       .then((response) => {
         // console.log("analytics success", response.data.data);
@@ -212,7 +290,11 @@ export default function VideoPlayer(props: any) {
   }, [isActive]);
 
   return (
-    <View style={{ minHeight: '100%' }} className='bg-[#1A1A1A] h-full'>
+    <View
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        style={{ minHeight: '100%' }} className=' bg-[#1A1A1A] h-full'>
       {showLoader && <View
         style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
         className='bg-white/10 '
@@ -234,6 +316,46 @@ export default function VideoPlayer(props: any) {
           className='h-[30] w-[30]'
         />
       </Pressable>
+      {
+        showControls && <View className="flex-row absolute top-2 right-2 z-[5]">
+        <Pressable
+          android_ripple={{
+            color: 'rgba(255,255,255,0.8)',
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          className={` ${tool === 'pen' ? 'bg-[#7363FC]' : 'bg-black/80'}  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
+          onPress={() => switchTool('pen')}
+        >
+          <FontAwesome name="pencil" size={24} color={tool === 'pen' ? 'white' : '#7363FC'} />
+        </Pressable>
+        <Pressable
+          android_ripple={{
+            color: 'rgba(255,255,255,0.8)',
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          className={` ${tool === 'eraser' ? 'bg-[#7363FC]' : 'bg-black/80'}  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
+          onPress={() => switchTool('eraser')}
+        >
+          <FontAwesome5 name="eraser" size={24} color={tool === 'eraser' ? 'white' : '#7363FC'} />
+        </Pressable>
+        <Pressable
+          android_ripple={{
+            color: 'rgba(255,255,255,0.8)',
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          className={` bg-black/80  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
+          onPress={clearAll}
+        >
+          <Entypo name="cross" size={30} color={tool === 'eraser' ? 'white' : '#7363FC'} />
+        </Pressable>
+      </View>
+      }
       {showControls &&  props?.currentVideos?.length > 1 && <View
          className='bg-black/60 overflow-hidden rounded-xl z-[3] p-1.5 absolute bottom-12 mb-1 left-2'>
         
@@ -312,18 +434,6 @@ export default function VideoPlayer(props: any) {
       </Pressable>}
       {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2'>
         <View className='flex-row bg-black/50 rounded-xl p-2'>
-        {/* <Pressable
-            onPress={() => {
-              const qualityOptions = [240, 360, 480, 720];
-              const currentIndex = qualityOptions.indexOf(quality);
-              const nextIndex = (currentIndex + 1) % qualityOptions.length;
-              setStoredTimestamp(currentTime);
-              setQuality(qualityOptions[nextIndex]);
-            }}
-            className='bg-black/90 overflow-hidden rounded-full w-12 h-12 flex mr-2 items-center justify-center'
-          >
-            <Text className=' text-sm text-[#7363FC] font-bold mb-1 overflow-hidden'>{`${quality}p`}</Text>
-          </Pressable> */}
           <View>
             <Pressable
               onPress={() => setModalVisible(true)}
@@ -482,6 +592,7 @@ export default function VideoPlayer(props: any) {
       }
       {
         renderVideo &&
+        
         <Video
           source={{
             uri: src,
@@ -506,6 +617,7 @@ export default function VideoPlayer(props: any) {
         />
       }
     </View>
+    
   )
 }
 
