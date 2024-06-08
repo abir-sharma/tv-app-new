@@ -1,24 +1,36 @@
-import React, { useEffect, useState, useRef } from 'react'
-import { View, Text, ActivityIndicator, Pressable, Image, TouchableOpacity, StyleSheet, Modal, FlatList, TouchableWithoutFeedback } from 'react-native'
-import { WebView } from 'react-native-webview';
-import styles from './player.style';
-import Svg, { Path } from 'react-native-svg';
-import axios from 'axios';
-import { Video, ResizeMode } from 'expo-av';
-import { cookieSplitter } from './cookie-splitter';
-import { useGlobalContext } from '../../context/MainContext';
+import React, { useEffect, useState, useRef } from "react";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  Pressable,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  FlatList,
+  TouchableWithoutFeedback,
+} from "react-native";
+import { WebView } from "react-native-webview";
+import styles from "./player.style";
+import Svg, { Path } from "react-native-svg";
+import axios from "axios";
+import { Video, ResizeMode } from "expo-av";
+import { cookieSplitter } from "./cookie-splitter";
+import { useGlobalContext } from "../../context/MainContext";
 import { Slider } from "@miblanchard/react-native-slider";
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import Entypo from '@expo/vector-icons/Entypo';
-
-
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import Entypo from "@expo/vector-icons/Entypo";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+// import Video, { VideoRef } from 'react-native-video';
+// import ResizeMode from "react-native-video";
+import uuid from "react-native-uuid";
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 export default function VideoPlayer(props: any) {
-
   const { mainNavigation } = useGlobalContext();
   const playerRef = useRef<Video | null>(null);
   const [spinner, setSpinner] = useState<any>();
@@ -39,15 +51,18 @@ export default function VideoPlayer(props: any) {
   const [quality, setQuality] = useState(720);
   const [storedTimestamp, setStoredTimestamp] = useState(0);
 
-  const [annotations, setAnnotations] = useState<{ [key: number]: string[] }>({});
-  const [currentPath, setCurrentPath] = useState<string>('');
+  const [annotations, setAnnotations] = useState<{ [key: number]: string[] }>(
+    {}
+  );
+  const [currentPath, setCurrentPath] = useState<string>("");
   const [tool, setTool] = useState<string | null>(null);
   const [allowAnnotations, setAllowAnnotations] = useState<boolean>(false);
+  const [token, setToken] = useState<string | null>(null);
 
   const onTouchStart = (event: any) => {
     if (!allowAnnotations) return;
     const { locationX, locationY } = event.nativeEvent;
-    if (tool === 'eraser') {
+    if (tool === "eraser") {
       erasePath(locationX, locationY);
     } else {
       setCurrentPath(`M ${locationX},${locationY}`);
@@ -57,7 +72,7 @@ export default function VideoPlayer(props: any) {
   const onTouchMove = (event: any) => {
     if (!allowAnnotations) return;
     const { locationX, locationY } = event.nativeEvent;
-    if (tool === 'eraser') {
+    if (tool === "eraser") {
       erasePath(locationX, locationY);
     } else {
       setCurrentPath((prevPath) => `${prevPath} L ${locationX},${locationY}`);
@@ -66,12 +81,12 @@ export default function VideoPlayer(props: any) {
 
   const onTouchEnd = () => {
     if (!allowAnnotations) return;
-    if (tool === 'pen') {
+    if (tool === "pen") {
       setAnnotations((prevAnnotations) => ({
         ...prevAnnotations,
         [currentPage]: [...(prevAnnotations[currentPage] || []), currentPath],
       }));
-      setCurrentPath('');
+      setCurrentPath("");
     }
   };
 
@@ -79,9 +94,12 @@ export default function VideoPlayer(props: any) {
     const updatedPaths = (annotations[currentPage] || []).filter((path) => {
       const commands = path.split(/(?=[ML])/);
       for (let i = 0; i < commands.length; i++) {
-        const [command, coords] = commands[i].split(' ');
-        const [pathX, pathY] = coords.split(',');
-        if (Math.abs(x - Number(pathX)) <= 10 && Math.abs(y - Number(pathY)) <= 10) {
+        const [command, coords] = commands[i].split(" ");
+        const [pathX, pathY] = coords.split(",");
+        if (
+          Math.abs(x - Number(pathX)) <= 10 &&
+          Math.abs(y - Number(pathY)) <= 10
+        ) {
           return false;
         }
       }
@@ -101,7 +119,7 @@ export default function VideoPlayer(props: any) {
   };
 
   const switchTool = (selectedTool: string) => {
-    console.log("tool toggling");
+    // console.log("tool toggling");
     if (tool === selectedTool) {
       setTool(null);
       setAllowAnnotations(false);
@@ -111,55 +129,52 @@ export default function VideoPlayer(props: any) {
     }
   };
 
-
   const [modalVisible, setModalVisible] = useState(false);
   const qualityOptions = [240, 360, 480, 720];
 
-  const handleQualityChange = (selectedQuality:number) => {
+  const handleQualityChange = (selectedQuality: number) => {
     setQuality(selectedQuality);
     setStoredTimestamp(currentTime);
     setModalVisible(false);
   };
 
-  const renderQualityOption = ({ item } : any) => (
+  const renderQualityOption = ({ item }: any) => (
     <Pressable
       onPress={() => handleQualityChange(item)}
       className="p-2 border-b border-gray-300/50 text-white"
     >
-      <Text className='text-white pl-2'>{`${item}p`}</Text>
+      <Text className="text-white pl-2">{`${item}p`}</Text>
     </Pressable>
   );
 
-  function convertToSeconds(timeString:string) {
-    const [hours, minutes, seconds] = timeString.split(':').map(Number);
+  function convertToSeconds(timeString: string) {
+    const [hours, minutes, seconds] = timeString.split(":").map(Number);
     return hours * 3600 + minutes * 60 + seconds;
   }
 
-  function formatTime(milliseconds:number) {
+  function formatTime(milliseconds: number) {
     const totalSeconds = Math.floor(milliseconds / 1000);
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
-  
+
     return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
   }
-  
-  function padZero(number:number) {
-    return number.toString().padStart(2, '0');
+
+  function padZero(number: number) {
+    return number.toString().padStart(2, "0");
   }
 
-  const MPDTesting = async(mpdUrl: string) => {
+  const MPDTesting = async (mpdUrl: string) => {
     const m3u8url = convertMPDToM3U8(mpdUrl);
     // console.log("urlsent:", m3u8url, {headers: {cookie: cookieParams}});
-    try{
+    try {
       const res = await axios.get(m3u8url);
-      console.log("resss: ", res.data);
+      // console.log("resss: ", res.data);
+    } catch (err) {
+      // console.log("err: ", err);
     }
-    catch(err){
-      console.log("err: ", err);
-    }
-
-  }
+  };
 
   useEffect(() => {
     // console.log("url: ", props?.lectureDetails?.videoUrl);
@@ -168,7 +183,7 @@ export default function VideoPlayer(props: any) {
     MPDTesting(props?.lectureDetails?.videoUrl);
 
     setDuration(convertToSeconds(props?.lectureDetails?.duration));
-    
+
     setSpinner(true);
     if (!props?.lectureDetails?.videoUrl && props?.lectureDetails?.types) {
       setNoVideoAvailable(true);
@@ -187,26 +202,30 @@ export default function VideoPlayer(props: any) {
       setRenderVideo(true);
       setSpinner(false);
       return;
-    }
-    else {
-      setSrc(convertMPDToM3U8(props?.lectureDetails?.videoUrl));
+    } else {
       let m3u8Url = convertMPDToM3U8(props?.lectureDetails?.videoUrl);
+      setSrc(m3u8Url);
       sendAnalyticsData(m3u8Url);
       setRenderVideo(true);
       setSpinner(false);
     }
-  }, [quality, props])
+  }, [quality, props]);
 
   const togglePlaybackSpeed = () => {
     //gets the next playback speed index
     const nextSpeedIndex = playbackSpeedOptions.indexOf(playbackSpeed) + 1;
     if (nextSpeedIndex < playbackSpeedOptions.length) {
-      playerRef.current && playerRef.current.setRateAsync(playbackSpeedOptions[nextSpeedIndex], true);
+      playerRef.current &&
+        playerRef.current.setRateAsync(
+          playbackSpeedOptions[nextSpeedIndex],
+          true
+        );
       setPlaybackSpeed(playbackSpeedOptions[nextSpeedIndex]);
     }
-    //if the last option i.e. 2x speed is applied. then moves to first option 
+    //if the last option i.e. 2x speed is applied. then moves to first option
     else {
-      playerRef.current && playerRef.current.setRateAsync(playbackSpeedOptions[0], true);
+      playerRef.current &&
+        playerRef.current.setRateAsync(playbackSpeedOptions[0], true);
       setPlaybackSpeed(playbackSpeedOptions[0]);
     }
   };
@@ -217,23 +236,29 @@ export default function VideoPlayer(props: any) {
   const playVideo = () => {
     setIsPlaying(true);
     (playerRef.current as Video | null)?.playAsync();
-  }
+  };
 
   const pauseVideo = () => {
     setIsPlaying(false);
     (playerRef.current as Video | null)?.pauseAsync();
-  }
+  };
 
   const skipForward = (skipTime: number) => {
     (playerRef.current as Video | null)?.getStatusAsync().then((status) => {
-      const newPosition = Math.max((status as any).positionMillis + skipTime, 0);
+      const newPosition = Math.max(
+        (status as any).positionMillis + skipTime,
+        0
+      );
       (playerRef.current as Video | null)?.setPositionAsync(newPosition);
     });
   };
 
   const skipBackward = (skipTime: number) => {
     (playerRef.current as Video | null)?.getStatusAsync().then((status) => {
-      const newPosition = Math.min((status as any).positionMillis - skipTime, (status as any).durationMillis);
+      const newPosition = Math.min(
+        (status as any).positionMillis - skipTime,
+        (status as any).durationMillis
+      );
       (playerRef.current as Video | null)?.setPositionAsync(newPosition);
     });
   };
@@ -245,7 +270,8 @@ export default function VideoPlayer(props: any) {
 
     if (match) {
       const id = match[1]; // Extract the ID from the URL
-      const m3u8Url = `https://sec1.pw.live/${id}/hls/${quality}/main.m3u8`;
+      // const m3u8Url = `https://sec1.pw.live/${id}/hls/${quality}/main.m3u8`;
+      const m3u8Url = `https://sec1.pw.live/${id}/master.m3u8`;
       return m3u8Url;
     } else {
       // Handle invalid MPD URLs here (e.g., return an error message)
@@ -259,26 +285,34 @@ export default function VideoPlayer(props: any) {
 
   async function sendAnalyticsData(uri: string) {
     const newHeaders = {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: headers.Authorization,
-      'Client-Type': 'WEB',
+      "Client-Type": "WEB",
     };
     const data = {
       url: uri,
     };
-    console.log(data, newHeaders);
-    axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers: newHeaders })
+    // console.log('test uri', uri)
+    // console.log(data, newHeaders);
+    axios
+      .post("https://api.penpencil.co/v3/files/send-analytics-data", data, {
+        headers: newHeaders,
+      })
       .then((response) => {
-        // console.log("analytics success", response.data.data);
-        setCookieParams(cookieSplitter(response?.data?.data));
+        const cookie = cookieSplitter(response?.data?.data);
+        console.log("---------------------------------------------");
+        console.log("* m3u8 uri --->", uri);
+        console.log("* cookie --->", cookie);
+        getM3U8WithCookie(uri, cookieSplitter(response?.data?.data));
+        setCookieParams(cookie);
         setRenderVideo(true);
       })
       .catch((error) => {
-        console.error('analytics failed --->', error?.response?.data);
+        console.error("analytics failed --->", error?.response?.data);
       });
   }
 
-  const handlePlaybackStatusUpdate = (status:any) => {
+  const handlePlaybackStatusUpdate = (status: any) => {
     if (status.isPlaying) {
       setCurrentTime(status.positionMillis);
     }
@@ -286,94 +320,159 @@ export default function VideoPlayer(props: any) {
 
   useEffect(() => {
     const interval = setInterval(() => setShowControls(false), 15000);
-    return () => clearInterval(interval)
+    return () => clearInterval(interval);
   }, [isActive]);
+
+  function getM3U8WithCookie(src: string, cookieParams: string) {
+    axios
+      .get(src, {
+        headers: {
+          cookie: cookieParams,
+        },
+      })
+      .then((res) => {
+        console.log("* url cookie validation success");
+      })
+      .catch((err) => {
+        console.log("* m3u8 get error", err);
+      });
+  }
+
+  const getAndSetToken = async () => {
+    AsyncStorage.getItem("token").then((token) => {
+      setToken(token);
+    });
+  };
+
+  useEffect(() => {
+    getAndSetToken();
+    // console.log('props', props);
+    console.log('cookie params log', cookieParams)
+  }, []);
 
   return (
     <View
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
-        style={{ minHeight: '100%' }} className=' bg-[#1A1A1A] h-full'>
-      {showLoader && <View
-        style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
-        className='bg-white/10 '
-      >
-        <ActivityIndicator color={"#FFFFFF"} size={80} />
-      </View>}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+      style={{ minHeight: "100%" }}
+      className=" bg-[#1A1A1A] h-full"
+    >
+      {showLoader && (
+        <View
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            zIndex: 10,
+            height: "100%",
+            width: "100%",
+            alignContent: "center",
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+          className="bg-white/10"
+        >
+          <ActivityIndicator color={"#FFFFFF"} size={80} />
+        </View>
+      )}
       <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
           borderless: false,
           radius: 1000,
-          foreground: true
+          foreground: true,
         }}
-        onPress={() => { mainNavigation.goBack() }} className='bg-black/40 overflow-hidden rounded-full z-[3] p-2 absolute top-2 left-2'>
+        onPress={() => {
+          mainNavigation.goBack();
+        }}
+        className="bg-black/40 overflow-hidden rounded-full z-[3] p-2 absolute top-2 left-2"
+      >
         <Image
-          source={require('../../assets/exit.png')}
+          source={require("../../assets/exit.png")}
           width={30}
           height={30}
-          className='h-[30] w-[30]'
+          className="h-[30] w-[30]"
         />
       </Pressable>
-      {
-        showControls && <View className="flex-row absolute top-2 right-2 z-[5]">
-        <Pressable
-          android_ripple={{
-            color: 'rgba(255,255,255,0.8)',
-            borderless: false,
-            radius: 1000,
-            foreground: true,
-          }}
-          className={` ${tool === 'pen' ? 'bg-[#7363FC]' : 'bg-black/80'}  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
-          onPress={() => switchTool('pen')}
-        >
-          <FontAwesome name="pencil" size={24} color={tool === 'pen' ? 'white' : '#7363FC'} />
-        </Pressable>
-        <Pressable
-          android_ripple={{
-            color: 'rgba(255,255,255,0.8)',
-            borderless: false,
-            radius: 1000,
-            foreground: true,
-          }}
-          className={` ${tool === 'eraser' ? 'bg-[#7363FC]' : 'bg-black/80'}  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
-          onPress={() => switchTool('eraser')}
-        >
-          <FontAwesome5 name="eraser" size={24} color={tool === 'eraser' ? 'white' : '#7363FC'} />
-        </Pressable>
-        <Pressable
-          android_ripple={{
-            color: 'rgba(255,255,255,0.8)',
-            borderless: false,
-            radius: 1000,
-            foreground: true,
-          }}
-          className={` bg-black/80  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
-          onPress={clearAll}
-        >
-          <Entypo name="cross" size={30} color={tool === 'eraser' ? 'white' : '#7363FC'} />
-        </Pressable>
-      </View>
-      }
-      {showControls &&  props?.currentVideos?.length > 1 && <View
-         className='bg-black/60 overflow-hidden rounded-xl z-[3] p-1.5 absolute bottom-12 mb-1 left-2'>
-        
-        <View className='flex flex-row gap-2 items-center justify-center'>
-          <TouchableOpacity className='bg-black px-4 py-2 rounded-full overflow-hidden' onPress={props?.handlePrevious} disabled={props.currentIndex === 0}>
-          <AntDesign name="stepbackward" size={20} color="#7363FC" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className='bg-black px-4 py-2 rounded-full overflow-hidden'
-            onPress={props?.handleNext}
-            disabled={props?.currentIndex === props?.currentVideos.length - 1}
+      {showControls && (
+        <View className="flex-row absolute top-2 right-2 z-[5]">
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.8)",
+              borderless: false,
+              radius: 1000,
+              foreground: true,
+            }}
+            className={` ${
+              tool === "pen" ? "bg-[#7363FC]" : "bg-black/80"
+            }  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
+            onPress={() => switchTool("pen")}
           >
-            <AntDesign name="stepforward" size={20} color="#7363FC" />
-          </TouchableOpacity>
+            <FontAwesome
+              name="pencil"
+              size={24}
+              color={tool === "pen" ? "white" : "#7363FC"}
+            />
+          </Pressable>
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.8)",
+              borderless: false,
+              radius: 1000,
+              foreground: true,
+            }}
+            className={` ${
+              tool === "eraser" ? "bg-[#7363FC]" : "bg-black/80"
+            }  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
+            onPress={() => switchTool("eraser")}
+          >
+            <FontAwesome5
+              name="eraser"
+              size={24}
+              color={tool === "eraser" ? "white" : "#7363FC"}
+            />
+          </Pressable>
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.8)",
+              borderless: false,
+              radius: 1000,
+              foreground: true,
+            }}
+            className={` bg-black/80  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
+            onPress={clearAll}
+          >
+            <Entypo
+              name="cross"
+              size={30}
+              color={tool === "eraser" ? "white" : "#7363FC"}
+            />
+          </Pressable>
         </View>
-      
-      </View>}
-      
+      )}
+      {showControls && props?.currentVideos?.length > 1 && (
+        <View className="bg-black/60 overflow-hidden rounded-xl z-[3] p-1.5 absolute bottom-12 mb-1 left-2">
+          <View className="flex flex-row gap-2 items-center justify-center">
+            <TouchableOpacity
+              className="bg-black px-4 py-2 rounded-full overflow-hidden"
+              onPress={props?.handlePrevious}
+              disabled={props.currentIndex === 0}
+            >
+              <AntDesign name="stepbackward" size={20} color="#7363FC" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="bg-black px-4 py-2 rounded-full overflow-hidden"
+              onPress={props?.handleNext}
+              disabled={props?.currentIndex === props?.currentVideos.length - 1}
+            >
+              <AntDesign name="stepforward" size={20} color="#7363FC" />
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
       <Pressable
         // android_ripple={{
         //   color: "rgba(255,255,255,0.5)",
@@ -381,227 +480,272 @@ export default function VideoPlayer(props: any) {
         //   radius: 1000,
         //   foreground: true
         // }}
-        onPress={() => { setIsActive(!isActive); setShowControls(prev => !prev) }} className={`bg-transparent overflow-hidden w-screen h-screen absolute top-0 left-0 duration-300  z-[2]`}>
+        onPress={() => {
+          setIsActive(!isActive);
+          setShowControls((prev) => !prev);
+        }}
+        className={`bg-transparent overflow-hidden w-screen h-screen absolute top-0 left-0 duration-300  z-[2]`}
+      >
         {/* <Text className='text-white text-lg font-medium'>{showControls ? "Hide Controls" : "Show Controls"}</Text> */}
       </Pressable>
-      { showControls && <Pressable
-        className={`bg-black/80 overflow-hidden rounded-xl flex flex-row items-center px-1 pl-2 py-1 absolute duration-300 bottom-12 mb-1 z-[3] right-2`}>
-        
+      {showControls && (
         <Pressable
-         android_ripple={{
-          color: "rgba(255,255,255,0.5)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        onPress={() => {
-          setIsMuted(!isMuted);
-          // playerRef.current && playerRef.current.setIsMutedAsync(!isMuted);
-        }}
-        className='p-1 rounded-lg overflow-hidden w-10 flex items-center justify-center'
+          className={`bg-black/80 overflow-hidden rounded-xl flex flex-row items-center px-1 pl-2 py-1 absolute duration-300 bottom-12 mb-1 z-[3] right-2`}
         >
-          {/* <Text className='text-[#7363FC] font-bold' >Mute</Text> */}
-          {isMuted?
-          (<FontAwesome5 name="volume-mute" size={24} color="#7363FC" />):(
-            volume<0.3 ?
-            <FontAwesome5 name="volume-off" size={24} color="#7363FC" />:
-            volume>=0.3 && volume<0.7 ?
-            <FontAwesome5 name="volume-down" size={24} color="#7363FC" />:
-            <FontAwesome5 name="volume-up" size={24} color="#7363FC" />
-          )
-        }
-        </Pressable>
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.5)",
+              borderless: false,
+              radius: 1000,
+              foreground: true,
+            }}
+            onPress={() => {
+              setIsMuted(!isMuted);
+              // playerRef.current && playerRef.current.setIsMutedAsync(!isMuted);
+            }}
+            className="p-1 rounded-lg overflow-hidden w-10 flex items-center justify-center"
+          >
+            {/* <Text className='text-[#7363FC] font-bold' >Mute</Text> */}
+            {isMuted ? (
+              <FontAwesome5 name="volume-mute" size={24} color="#7363FC" />
+            ) : volume < 0.3 ? (
+              <FontAwesome5 name="volume-off" size={24} color="#7363FC" />
+            ) : volume >= 0.3 && volume < 0.7 ? (
+              <FontAwesome5 name="volume-down" size={24} color="#7363FC" />
+            ) : (
+              <FontAwesome5 name="volume-up" size={24} color="#7363FC" />
+            )}
+          </Pressable>
 
-            <View className='w-40'>
-              <Slider
+          <View className="w-40">
+            <Slider
               containerStyle={styles2.slider}
-                minimumValue={0}
-                maximumValue={1}
-                value={volume}
-                onValueChange={(value:any) => {
-                  setVolume(+value);
-                }}
-                onSlidingComplete={(value:any) => {
-                  setVolume(+value);
-                  setIsMuted(false);
-                }}
-                minimumTrackTintColor="#7363FC"
-                maximumTrackTintColor="#AAA"
-                thumbTintColor="#7363FC"
-              />
+              minimumValue={0}
+              maximumValue={1}
+              value={volume}
+              onValueChange={(value: any) => {
+                setVolume(+value);
+              }}
+              onSlidingComplete={(value: any) => {
+                setVolume(+value);
+                setIsMuted(false);
+              }}
+              minimumTrackTintColor="#7363FC"
+              maximumTrackTintColor="#AAA"
+              thumbTintColor="#7363FC"
+            />
+          </View>
+          <Text className="text-white w-10">{Math.round(volume * 100)}%</Text>
+        </Pressable>
+      )}
+      {showControls && (
+        <View className="absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2">
+          <View className="flex-row bg-black/50 rounded-xl p-2">
+            <View>
+              <Pressable
+                onPress={() => setModalVisible(true)}
+                className="bg-black/90 overflow-hidden rounded-full w-12 h-12 flex mr-2 items-center justify-center"
+              >
+                <Text className="text-sm text-[#7363FC] font-bold mb-1 overflow-hidden">{`${quality}p`}</Text>
+              </Pressable>
+
+              <Modal
+                visible={modalVisible}
+                animationType="fade"
+                transparent
+                onRequestClose={() => setModalVisible(false)}
+              >
+                <TouchableWithoutFeedback
+                  onPress={() => setModalVisible(false)}
+                >
+                  <View style={{ flex: 1 }}>
+                    <View className="bg-black/90 w-40 absolute bottom-24 left-80 rounded-lg m-4">
+                      <FlatList
+                        data={qualityOptions}
+                        renderItem={renderQualityOption}
+                        keyExtractor={(item) => item.toString()}
+                      />
+                    </View>
+                  </View>
+                </TouchableWithoutFeedback>
+              </Modal>
             </View>
-            <Text className='text-white w-10'>{Math.round(volume * 100)}%</Text>
-      </Pressable>}
-      {showControls && <View className='absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2'>
-        <View className='flex-row bg-black/50 rounded-xl p-2'>
-          <View>
             <Pressable
-              onPress={() => setModalVisible(true)}
-              className="bg-black/90 overflow-hidden rounded-full w-12 h-12 flex mr-2 items-center justify-center"
+              android_ripple={{
+                color: "rgba(255,255,255,0.5)",
+                borderless: false,
+                radius: 1000,
+                foreground: true,
+              }}
+              onPress={() => {
+                setIsActive(!isActive);
+                skipBackward(30000);
+              }}
+              className="bg-black/90 overflow-hidden rounded-full p-2"
             >
-              <Text className="text-sm text-[#7363FC] font-bold mb-1 overflow-hidden">{`${quality}p`}</Text>
+              <Image
+                source={require("../../assets/30b.png")}
+                width={30}
+                height={30}
+                className="h-[30] w-[30]"
+              />
+            </Pressable>
+            <Pressable
+              android_ripple={{
+                color: "rgba(255,255,255,0.5)",
+                borderless: false,
+                radius: 1000,
+                foreground: true,
+              }}
+              onPress={() => {
+                setIsActive(!isActive);
+                skipBackward(10000);
+              }}
+              className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
+            >
+              <Image
+                source={require("../../assets/10b.png")}
+                width={30}
+                height={30}
+                className="h-[30] w-[30]"
+              />
+            </Pressable>
+            <Pressable
+              android_ripple={{
+                color: "rgba(255,255,255,0.5)",
+                borderless: false,
+                radius: 1000,
+                foreground: true,
+              }}
+              onPress={() => {
+                setIsActive(!isActive);
+                isPlaying ? pauseVideo() : playVideo();
+              }}
+              className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
+            >
+              <Image
+                source={
+                  isPlaying
+                    ? require("../../assets/pause.png")
+                    : require("../../assets/play.png")
+                }
+                width={30}
+                height={30}
+                className="h-[30] w-[30]"
+              />
+            </Pressable>
+            <Pressable
+              android_ripple={{
+                color: "rgba(255,255,255,0.5)",
+                borderless: false,
+                radius: 1000,
+                foreground: true,
+              }}
+              onPress={() => {
+                setIsActive(!isActive);
+                skipForward(10000);
+              }}
+              className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
+            >
+              <Image
+                source={require("../../assets/10f.png")}
+                width={30}
+                height={30}
+                className="h-[30] w-[30]"
+              />
+            </Pressable>
+            <Pressable
+              android_ripple={{
+                color: "rgba(255,255,255,0.5)",
+                borderless: false,
+                radius: 1000,
+                foreground: true,
+              }}
+              onPress={() => {
+                setIsActive(!isActive);
+                skipForward(30000);
+              }}
+              className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
+            >
+              <Image
+                source={require("../../assets/30f.png")}
+                width={30}
+                height={30}
+                className="h-[30] w-[30]"
+              />
             </Pressable>
 
-            <Modal
-              visible={modalVisible}
-              animationType="fade"
-              transparent
-              onRequestClose={() => setModalVisible(false)}
+            <Pressable
+              onPress={() => {
+                togglePlaybackSpeed();
+              }}
+              className="bg-black/90 overflow-hidden rounded-full w-12 h-12 flex ml-2 items-center justify-center"
             >
-              <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-                <View style={{ flex: 1 }}>
-                <View className="bg-black/90 w-40 absolute bottom-24 left-80 rounded-lg m-4">
-                  <FlatList
-                    data={qualityOptions}
-                    renderItem={renderQualityOption}
-                    keyExtractor={(item) => item.toString()}
-                  />
-                </View>
-                </View>
-              </TouchableWithoutFeedback>
-            </Modal>
+              <Text className=" text-sm text-[#7363FC] font-bold mb-1 overflow-hidden">{`${playbackSpeed}x`}</Text>
+            </Pressable>
           </View>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
-            onPress={() => { setIsActive(!isActive); skipBackward(30000) }} className='bg-black/90 overflow-hidden rounded-full p-2'>
-            <Image
-              source={require('../../assets/30b.png')}
-              width={30}
-              height={30}
-              className='h-[30] w-[30]'
-            />
-          </Pressable>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
-            onPress={() => { setIsActive(!isActive); skipBackward(10000) }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'>
-            <Image
-              source={require('../../assets/10b.png')}
-              width={30}
-              height={30}
-              className='h-[30] w-[30]'
-            />
-          </Pressable>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
-            onPress={() => { setIsActive(!isActive); isPlaying ? pauseVideo() : playVideo() }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'>
-            <Image
-              source={isPlaying ? require('../../assets/pause.png') : require('../../assets/play.png')}
-              width={30}
-              height={30}
-              className='h-[30] w-[30]'
-            />
-          </Pressable>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
-            onPress={() => { setIsActive(!isActive); skipForward(10000) }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'
-          >
-            <Image
-              source={require('../../assets/10f.png')}
-              width={30}
-              height={30}
-              className='h-[30] w-[30]'
-            />
-          </Pressable>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
-            onPress={() => { setIsActive(!isActive); skipForward(30000) }} className='bg-black/90 overflow-hidden rounded-full ml-2 p-2'>
-            <Image
-              source={require('../../assets/30f.png')}
-              width={30}
-              height={30}
-              className='h-[30] w-[30]'
-            />
-          </Pressable>
-
-          <Pressable
-            onPress={() => {
-              togglePlaybackSpeed();
-            }}
-            className='bg-black/90 overflow-hidden rounded-full w-12 h-12 flex ml-2 items-center justify-center'
-          >
-            <Text className=' text-sm text-[#7363FC] font-bold mb-1 overflow-hidden'>{`${playbackSpeed}x`}</Text>
-          </Pressable>
-        </View>
-        <View className='flex-row bg-black/50 rounded-xl mt-2 px-5 w-full mx-5'>
-          <View className='flex flex-row justify-between items-center w-full'>
-            <Text className='text-white' >{formatTime(currentTime)}</Text>
-            <View className='flex-1'>
-              <Slider
-              containerStyle={styles2.slider}
-                minimumValue={0}
-                maximumValue={duration * 1000}
-                value={currentTime}
-                onValueChange={(value:any) => {
-                  playerRef.current && playerRef.current.setPositionAsync(+value);
-                  setCurrentTime(+value);
-                }}
-                onSlidingComplete={(value:any) => {
-                  playerRef.current && playerRef.current.setPositionAsync(+value);
-                  setCurrentTime(+value);
-                }}
-                minimumTrackTintColor="#7363FC"
-                maximumTrackTintColor="#AAA"
-                thumbTintColor="#7363FC"
-              />
+          <View className="flex-row bg-black/50 rounded-xl mt-2 px-5 w-full mx-5">
+            <View className="flex flex-row justify-between items-center w-full">
+              <Text className="text-white">{formatTime(currentTime)}</Text>
+              <View className="flex-1">
+                <Slider
+                  containerStyle={styles2.slider}
+                  minimumValue={0}
+                  maximumValue={duration * 1000}
+                  value={currentTime}
+                  onValueChange={(value: any) => {
+                    playerRef.current &&
+                      playerRef.current.setPositionAsync(+value);
+                    setCurrentTime(+value);
+                  }}
+                  onSlidingComplete={(value: any) => {
+                    playerRef.current &&
+                      playerRef.current.setPositionAsync(+value);
+                    setCurrentTime(+value);
+                  }}
+                  minimumTrackTintColor="#7363FC"
+                  maximumTrackTintColor="#AAA"
+                  thumbTintColor="#7363FC"
+                />
+              </View>
+              <Text className="text-white">{formatTime(duration * 1000)}</Text>
             </View>
-            <Text className='text-white'>{formatTime(duration * 1000)}</Text>
           </View>
         </View>
-      </View>}
-      <ActivityIndicator style={{ display: spinner ? 'flex' : 'none', marginTop: 100 }} size="small" color="#5a4bda" animating={spinner} />
-      {
-        noVideoAvailable &&
-        <View style={{ alignItems: 'center', marginTop: 100 }}>
-          <Text style={{ fontSize: 16, color: '#757575' }}>No video available</Text>
+      )}
+      <ActivityIndicator
+        style={{ display: spinner ? "flex" : "none", marginTop: 100 }}
+        size="small"
+        color="#5a4bda"
+        animating={spinner}
+      />
+      {noVideoAvailable && (
+        <View style={{ alignItems: "center", marginTop: 100 }}>
+          <Text style={{ fontSize: 16, color: "#757575" }}>
+            No video available
+          </Text>
         </View>
-      }
-      {
-        !props?.lectureDetails?.types &&
-        <View style={{ height: '100%' }}>
+      )}
+      {!props?.lectureDetails?.types && (
+        <View style={{ height: "100%" }}>
           <WebView
             style={{ flex: 1 }}
             // source={{ uri: "https://www.youtube.com/embed/d3sLImqhjHc" }}
             source={{ uri: src }}
           />
         </View>
-      }
-      {
-        renderVideo &&
-        
+      )}
+      {renderVideo && (
         <Video
           source={{
             uri: src,
             headers: {
-              cookie: cookieParams
-            }
+              cookie: cookieParams,
+            },
           }}
           onLoadStart={() => {
-            playerRef.current && playerRef.current.setPositionAsync(storedTimestamp);
+            playerRef.current &&
+              playerRef.current.setPositionAsync(storedTimestamp);
             setCurrentTime(storedTimestamp);
           }}
           style={styles.backgroundVideo}
@@ -609,16 +753,55 @@ export default function VideoPlayer(props: any) {
           useNativeControls={false}
           onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
           resizeMode={ResizeMode.CONTAIN}
-          onError={(err: any) => console.log('Video Player Error --->', err, `CloundFront-Key-Pair-Id=${cookieParams?.key_pair_id};CloudFront-Policy=${cookieParams?.policy};CloudFront-Signature=${cookieParams?.signature};`)}
+          onError={(err: string) => {
+            console.log("Video Player Error --->", err, `${cookieParams}`)
+          }}
           isMuted={isMuted}
           shouldPlay
           volume={volume}
           onLoad={() => setShowLoader(false)}
         />
-      }
+
+        // <WebView
+        //     source={{
+        //         uri: `https://pw-video-player-stage.physicswallah.live/watch/?type=${props?.scheduleDetails?.type}&src=${props?.scheduleDetails?.url}&token=${token}&clientType=TEACHER&randomId=${uuid.v4()}&back_button=false&three_dots=false&is_products_enabled=false`
+        //     }}
+        //     style={{ flex: 1, zIndex: 10 }}
+        //     onLoadEnd={() => {
+        //       setShowLoader(false);
+        //       console.log(`https://pw-video-player-stage.physicswallah.live/watch/?type=${props?.scheduleDetails?.type}&src=${props?.scheduleDetails?.url}&token=${token}&clientType=TEACHER&randomId=${uuid.v4()}&back_button=false&three_dots=false&is_products_enabled=false`)
+        //     }}
+        // />
+
+        // <View style={{ flex: 1, zIndex: 10}}>
+        //   {token && (
+        //     <WebView
+        //       // source={{ uri: "https://www.pw.live/study" }}
+        //       source={{ uri: 'https://www.pw.live/watch/?batchSlug=class-12th--lakshya-jee-415093&batchSubjectId=60509bd366e46a0290457b7a&subjectSlug=physics-951356&topicSlug=all&scheduleId=60509bd366e46a0290457beb&isUnderMaintenance=false&entryPoint=BATCH_LECTURE_VIDEOS_634fb88abc72420011da2fe4' }}
+        //       javaScriptEnabled
+        //       domStorageEnabled
+        //       cacheEnabled
+        //       injectedJavaScript={`
+        //           // alert(Object.keys(localStorage).map(key => key + ' : ' + localStorage.getItem(key)).join('\\n'));
+        //         `}
+        //       injectedJavaScriptBeforeContentLoaded={`
+        //           localStorage.clear();
+        //           window.localStorage.setItem('TOKEN', '${token}');
+        //           window.localStorage.setItem('uuid', '303513ad-b369-4266-97d5-351edfa3c741');
+        //         `}
+        //       injectedJavaScriptBeforeContentLoadedForMainFrameOnly
+        //       incognito
+        //       style={{ flex: 1 }}
+        //       onLoad={() => {
+        //         setShowLoader(false);
+        //       }}
+        //       startInLoadingState
+        //     />
+        //   )}
+        // </View>
+      )}
     </View>
-    
-  )
+  );
 }
 
 const styles2 = StyleSheet.create({

@@ -1,4 +1,4 @@
-//@ts-ignore
+//@ts-nocheck
 import * as crypto from 'crypto-js'
 
 export const setJSONValue = (key: CookieKeys, data: any = '') => {

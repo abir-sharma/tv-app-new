@@ -57,10 +57,12 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
       }}
       hasTVPreferredFocus
       onPress={() => {
-        console.log("Go to Video Page", item?.videoDetails);
+        console.log("Go to Video Page", item);
+        console.log(item)
         //@ts-expect-error
         navigation.navigate("Videos", {
           lectureDetails: item?.videoDetails,
+          scheduleDetails: item,
         });
         saveToRecentVideos(item);
       }}>

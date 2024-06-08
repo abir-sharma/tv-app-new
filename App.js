@@ -18,16 +18,21 @@ import Attendance from './screens/Attendance';
 import Intro from './screens/Intro';
 import RecentVideos from './screens/RecentVideos';
 // import QRCodeGenerator from './screens/QrTest';
+import VideoPlayer from './components/video-player/player';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import VideoTest from './screens/VideoTest';
 
 const Stack = createNativeStackNavigator();
 
 
 export default function App() {
 
+  AsyncStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTgzNzA4NTMuNzA0LCJkYXRhIjp7Il9pZCI6IjYwYzliZmQ1ZWM0NjliMDAxZmE3YTc3MiIsInVzZXJuYW1lIjoiOTM5NDI1NTc1NiIsImZpcnN0TmFtZSI6IkFybmFiIiwibGFzdE5hbWUiOiJSb3kiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwiZW1haWwiOiJtci5yb3kuYXJuYWJAZ21haWwuY29tIiwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwidHlwZSI6IlVTRVIifSwiaWF0IjoxNzE3NzY2MDUzfQ.F58_mob5SDmml8lA-rVYZRZsP9aU0Np0W_ohKBGyw0E');
+
   return (
     <Providers>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator initialRouteName='Home'>
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="AiTeacher" component={AiTeacher} options={{ headerShown: false }} />
           <Stack.Screen name="Attendance" component={Attendance} options={{ headerShown: false }} />
@@ -44,6 +49,8 @@ export default function App() {
           <Stack.Screen name="MP4Player" component={MP4Player} options={{ headerShown: false }} />
           <Stack.Screen name="Intro" component={Intro} options={{ headerShown: false }} />
           {/* <Stack.Screen name="QrTest" component={QRCodeGenerator} options={{ headerShown: false }} /> */}
+          <Stack.Screen name="VideoPlayer" component={VideoPlayer} options={{ headerShown: false }} />
+          <Stack.Screen name="VideoTest" component={VideoTest} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </Providers>
