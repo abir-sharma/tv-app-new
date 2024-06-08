@@ -17,10 +17,13 @@ import { TestResult } from './screens/TestResult';
 import Attendance from './screens/Attendance';
 import Intro from './screens/Intro';
 import RecentVideos from './screens/RecentVideos';
-// import QRCodeGenerator from './screens/QrTest';
+import QRCodeGenerator from './screens/QrTest';
 import VideoPlayer from './components/video-player/player';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import VideoTest from './screens/VideoTest';
+import UDPClient from './screens/UDPClient';
+import Test from './screens/Test';
+import { StatusBar } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,7 +35,7 @@ export default function App() {
   return (
     <Providers>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='Home'>
+        <Stack.Navigator initialRouteName='QrTest'>
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="AiTeacher" component={AiTeacher} options={{ headerShown: false }} />
           <Stack.Screen name="Attendance" component={Attendance} options={{ headerShown: false }} />
@@ -48,10 +51,13 @@ export default function App() {
           <Stack.Screen name="OfflineDetails" component={OfflineDetails} options={{ headerShown: false }} />
           <Stack.Screen name="MP4Player" component={MP4Player} options={{ headerShown: false }} />
           <Stack.Screen name="Intro" component={Intro} options={{ headerShown: false }} />
-          {/* <Stack.Screen name="QrTest" component={QRCodeGenerator} options={{ headerShown: false }} /> */}
+          <Stack.Screen name="QrTest" component={QRCodeGenerator} options={{ headerShown: false }} />
           <Stack.Screen name="VideoPlayer" component={VideoPlayer} options={{ headerShown: false }} />
           <Stack.Screen name="VideoTest" component={VideoTest} options={{ headerShown: false }} />
+          <Stack.Screen name="UDPClient" component={UDPClient} options={{ headerShown: false, orientation: 'portrait' }} />
+          <Stack.Screen name="Test" component={Test} options={{ headerShown: false, orientation: 'portrait' }} />
         </Stack.Navigator>
+        <StatusBar hidden />
       </NavigationContainer>
     </Providers>
   );
