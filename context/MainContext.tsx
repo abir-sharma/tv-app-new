@@ -82,6 +82,8 @@ type GlobalContextType = {
   setRecentVideoLoad: Dispatch<SetStateAction<boolean>>;
   logs: string[];
   setLogs: Dispatch<SetStateAction<string[]>>;
+  messageFromRemote: string;
+  setMessageFromRemote: Dispatch<SetStateAction<string>>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -153,6 +155,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setRecentVideoLoad: () => { },
   logs: [],
   setLogs: () => { },
+  messageFromRemote: "",
+  setMessageFromRemote: () => { },
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
@@ -198,10 +202,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [offlineSelectedSection, setOfflineSelectedSection] = useState<number>(3);
   const [showIpInput, setShowIpInput] = useState<boolean>(false);
   const [logs, setLogs] = useState<string[]>([]);
-
-
   const [headers, setHeaders] = useState<any>(null)
-
+  const [messageFromRemote, setMessageFromRemote] = useState<string>("");
 
   useEffect(() => {
     const getIP = async () => {
@@ -331,6 +333,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         showIpInput, setShowIpInput,
         recentVideoLoad, setRecentVideoLoad,
         logs, setLogs,
+        messageFromRemote, setMessageFromRemote
       } as GlobalContextType}>
       {children}
     </GlobalContext.Provider>

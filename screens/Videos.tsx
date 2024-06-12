@@ -7,7 +7,7 @@ const Videos = ({ route }: any) => {
   useKeepAwake();
   return (
     <View>
-      <VideoPlayer lectureDetails={route?.params?.lectureDetails} isLive={false} />
+      <VideoPlayer lectureDetails={route?.params?.lectureDetails} scheduleDetails={route?.params?.scheduleDetails} isLive={false} />
     </View>
   )
 }

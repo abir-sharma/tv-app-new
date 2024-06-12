@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import UdpSocket from 'react-native-udp';
 import { NetworkInfo } from 'react-native-network-info';
+import { useGlobalContext } from '../context/MainContext';
 
 export default function useUdpServer() {
   const [connectionStatus, setConnectionStatus] = useState('');
@@ -8,6 +9,7 @@ export default function useUdpServer() {
   const [ipAddress, setIpAddress] = useState('');
   const [clientInfo, setClientInfo] = useState(null);
   const [server, setServer] = useState(null);
+  const { messageFromRemote, setMessageFromRemote } = useGlobalContext();
 
   useEffect(() => {
     const fetchIpAddress = async () => {
@@ -22,7 +24,8 @@ export default function useUdpServer() {
     udpServer.on('message', (data, rinfo) => {
       setMessage(data.toString());
       setClientInfo(rinfo);
-      console.log('Message received:', data.toString());
+      setMessageFromRemote(data.toString());
+      console.log('[Message] From Remote:', data.toString());
     });
 
     udpServer.on('listening', () => {

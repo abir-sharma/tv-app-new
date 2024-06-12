@@ -10,10 +10,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 // import useUdpClient from '../hooks/useUdpClient';
 import WebView from "react-native-webview";
-import useUdpServer from "../hooks/useUdpServer";
+// import useUdpServer from "../hooks/useUdpServer";
 
 export default function Home({ navigation }: any) {
-  const { message, sendMessageToClient } = useUdpServer();
+  // const { message, sendMessageToClient } = useUdpServer();
   const { setMainNavigation, setLogs, mainNavigation, setHeaders } =
     useGlobalContext();
   const [showYoutubeModal, setShowYoutubeModal] = useState(false);
@@ -27,18 +27,18 @@ export default function Home({ navigation }: any) {
     [navigation]
   );
 
-  useEffect(() => {
-    console.log("message", message);
-    try {
-      if (message && JSON.parse(message)?.type == "youtube") {
-        setYoutubeUrl(JSON.parse(message)?.url);
-        setShowYoutubeModal(true);
-        sendMessageToClient("youtube");
-      }
-    } catch (err) {
-      console.log("err while parsing", err);
-    }
-  }, [message]);
+  // useEffect(() => {
+  //   console.log("message", message);
+  //   try {
+  //     if (message && JSON.parse(message)?.type == "youtube") {
+  //       setYoutubeUrl(JSON.parse(message)?.url);
+  //       setShowYoutubeModal(true);
+  //       sendMessageToClient("youtube");
+  //     }
+  //   } catch (err) {
+  //     console.log("err while parsing", err);
+  //   }
+  // }, [message]);
 
   const handleLogin = async () => {
     if (await AsyncStorage.getItem("token")) {
@@ -49,7 +49,10 @@ export default function Home({ navigation }: any) {
       try {
         const res = await axios.post(
           "https://api.penpencil.co/v3/oauth/verify-token",
-          { Authorization: `Bearer ${await AsyncStorage.getItem("token")}` }
+            {
+              Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+              randomId: Math.random(),
+            }
         );
       } catch (err: any) {
         setLogs((logs) => [
@@ -62,12 +65,11 @@ export default function Home({ navigation }: any) {
       mainNavigation?.navigate("Home");
     } else {
       console.log("not logged in");
-      // navigation?.navigate('Login')
+      navigation?.navigate('Login')
     }
   };
 
   useEffect(() => {
-    navigation.setOptions({ headerShown: false });
     setMainNavigation(navigation);
     handleLogin();
   }, []);
@@ -78,7 +80,7 @@ export default function Home({ navigation }: any) {
       <Batches />
       <Recent />
 
-      <Modal
+      {/* <Modal
         animationType="slide"
         transparent={true}
         visible={showYoutubeModal}
@@ -87,7 +89,7 @@ export default function Home({ navigation }: any) {
         }}
       >
         <WebView source={{ uri: youtubeUrl }} style={{ flex: 1, margin: 10 }} />
-      </Modal>
+      </Modal> */}
     </View>
   );
 }

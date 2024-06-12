@@ -30,7 +30,7 @@ const myToolItem = {
     [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, myToolItem, Config.Buttons.undo]
   };
 
-const App = ({ route }: any) => {
+const PDFTronViewer = ({ route }: any) => {
 
   // Using useState hook to manage state
   // const [permissionGranted, setPermissionGranted] = useState(Platform.OS === 'ios' ? true : false);
@@ -127,4 +127,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default PDFTronViewer;

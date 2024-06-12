@@ -18,26 +18,26 @@ export default function QRCodeGenerator({ navigation }: any) {
   const { message, ipAddress, sendMessageToClient } = useUdpServer();
 
   useEffect(() => {
-    navigation.setOptions({ headerShown: false });
+    // navigation.setOptions({ headerShown: false });
     setMainNavigation(navigation);
   }, []);
 
   useEffect(() => {
-	try {
-		if (message && JSON.parse(message)?.type == "qrscan") {
-			AsyncStorage.setItem("token", JSON.parse(message)?.token);
-			navigation.navigate("Home");
-		}
-	} catch (err) {
-		console.log("err while parsing", err);
-	}
+	// try {
+	// 	if (message && JSON.parse(message)?.type == "qrscan") {
+	// 		AsyncStorage.setItem("token", JSON.parse(message)?.token);
+	// 		navigation.navigate("Home");
+	// 	}
+	// } catch (err) {
+	// 	console.log("err while parsing", err);
+	// }
   }, [message]);
 
   return (
     <View className="flex-1 justify-center items-center bg-[#111111]">
       <View className="bg-white/5 p-5 rounded-xl">
 		<Text className="text-white text-center">{ipAddress}</Text>
-		<Text className="text-white text-center">{message}</Text>
+		{/* <Text className="text-white text-center">{message}</Text> */}
 
         {/* <Text className="border-[1px] text-xl border-white/50 text-center rounded-xl px-5 py-2 text-white mb-5 w-80">
           {ipAddress}

@@ -89,7 +89,8 @@ export default function Login({ navigation }: any) {
       const res = await axios.post("https://api.penpencil.co/v1/users/get-otp?smsType=0", {
         username: phone,
         countryCode: "+91",
-        organizationId: "5eb393ee95fab7468a79d189"
+        organizationId: "5eb393ee95fab7468a79d189",
+        // "Client-Type": "WEB",
       })
 
       console.log("success", res?.data);
@@ -97,7 +98,6 @@ export default function Login({ navigation }: any) {
       if (res?.data?.success) {
         setOtpSent(true);
       }
-
 
     }
     catch (err: any) {
@@ -144,7 +144,8 @@ export default function Login({ navigation }: any) {
         grant_type: "password",
         organizationId: "5eb393ee95fab7468a79d189",
         latitude: 0,
-        longitude: 0
+        longitude: 0,
+        // "Client-Type": "WEB",
       })
 
       console.log("success: ", res?.data?.data);
