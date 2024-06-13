@@ -10,7 +10,7 @@ import Videos from "./screens/Videos";
 import Tests from "./screens/Tests";
 import TestSolutions from "./screens/TestSolutions";
 import PDFViewer from "./components/pdf-viewer/pdf-viewer";
-import PDFViewer2 from "./components/pdf-viewer/pdf-viewer-2";
+// import PDFViewer2 from "./components/pdf-viewer/pdf-viewer-2";
 import MP4Player from "./components/mp4-player/mp4-player";
 import AiTeacher from "./screens/AiTecher";
 import { Offline } from "./screens/Offline";
@@ -29,6 +29,8 @@ import WebView from "react-native-webview";
 import { useGlobalContext } from "./context/MainContext";
 import PDFTronViewer from "./components/pdf-viewer/pdf-viewer-2";
 import { createNavigationContainerRef } from "@react-navigation/native";
+import axios from "axios";
+import Pdf from "react-native-pdf";
 
 const Stack = createNativeStackNavigator();
 
@@ -43,6 +45,8 @@ export default function App() {
     const [imgChunks, setImgChunks] = useState([]);
     const [showImgModal, setShowImgModal] = useState(false);
     const [imgUrl, setImgUrl] = useState("");
+    const [showPdfModal, setShowPdfModal] = useState(false);
+    const [pdfUrl, setPdfUrl] = useState("");
     const navigationRef = createNavigationContainerRef();
 
   // useEffect(() => {
@@ -81,6 +85,7 @@ export default function App() {
           setShowYoutubeModal(true);
           sendMessageToClient("youtube");
           setShowImgModal(false);
+          setShowPdfModal(false);
         } else if (msg.type == "pdf_chunk_start") {
           setPdfChunks([]);
           setShowYoutubeModal(false);
@@ -90,7 +95,10 @@ export default function App() {
         } else if (msg.type == "pdf_chunk_end") {
           const sortedChunks = pdfChunks.sort((a, b) => a.index - b.index);
           const pdfData = sortedChunks.map((chunk) => chunk.chunk).join("");
-          navigationRef.current.navigate("OldPDFViewer", { pdfUrl: `data:application/pdf;base64,${pdfData}` });
+          sendMessageToClient(`{"type": "reset"}`);
+          sendMessageToClient(`{"type": "received_pdf"}`);
+          console.log(navigationRef)
+          // navigationRef.current.navigate("OldPDFViewer", { pdfUrl: `data:application/pdf;base64,${pdfData}` });
         } else if (msg.type == "image_chunk_start") {
           setImgChunks([]);
           setShowYoutubeModal(false);
@@ -101,16 +109,44 @@ export default function App() {
           const imgData = sortedChunks.map((chunk) => chunk.chunk).join("");
           setImgUrl(`data:image/png;base64,${imgData}`);
           setShowImgModal(true);
+          sendMessageToClient(`{"type": "reset"}`);
+          sendMessageToClient(`{"type": "received_image"}`);
         } else if (msg.type == "close_modal") {
           setShowYoutubeModal(false);
           setShowImgModal(false);
+          setShowPdfModal(false);
+        } else if (msg.type == "serve_pdf") {
+          console.log(msg);
+          fetch(msg.requestUrl).then(res => res.json())
+            .then(data => {
+              let pdfUrl = data.uri;
+              pdfUrl && console.log('pdf uri length:', pdfUrl.length);
+              setShowYoutubeModal(false);
+              setShowImgModal(false);
+              setPdfUrl(pdfUrl);
+              setShowPdfModal(true);
+            }).catch(err => {
+              console.log(err);
+            })
+            // navigationRef.current.navigate("OldPDFViewer", { pdfUrl: pdfUrl });
+        } else if (msg.type == "serve_image") {
+          console.log(msg);
+          fetch(msg.requestUrl).then(res => res.json()).then(data => {
+            let imgUrl = data.uri;
+            imgUrl && console.log('uri exists, length:', imgUrl.length);
+            setShowPdfModal(false);
+            setShowYoutubeModal(false);
+            setImgUrl(imgUrl);
+            setShowImgModal(true);
+          }).catch(err => {
+            console.log(err);
+          })
         }
       }
     } catch (err) {
       console.log("Error while parsing message:", err);
     }
   }, [message]);
-
 
   return (
     <Providers>
@@ -127,7 +163,7 @@ export default function App() {
           <Stack.Screen name="TestResult" component={TestResult} options={{ headerShown: false }} />
           <Stack.Screen name="TestSolutions" component={TestSolutions} options={{ headerShown: false }} />
           <Stack.Screen name="OldPDFViewer" component={PDFViewer} options={{ headerShown: false }} />
-          <Stack.Screen name="PDFViewer" component={PDFViewer2} options={{ headerShown: false }} />
+          <Stack.Screen name="PDFViewer" component={PDFTronViewer} options={{ headerShown: false }} />
           <Stack.Screen name="Offline" component={Offline} options={{ headerShown: false }} />
           <Stack.Screen name="OfflineDetails" component={OfflineDetails} options={{ headerShown: false }} />
           <Stack.Screen name="MP4Player" component={MP4Player} options={{ headerShown: false }} />
@@ -161,6 +197,18 @@ export default function App() {
         }}
       >
         <Image source={{ uri: imgUrl }} style={{ flex: 1, margin: 0, borderRadius: 0 }} />
+      </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showPdfModal}
+        onRequestClose={() => {
+          setShowPdfModal(false);
+        }}
+      >
+        <Pdf source={{ uri: pdfUrl }} style={{ flex: 1 }} /> 
+        {/* <PDFViewer pdfUrl={pdfUrl} /> */}
       </Modal>
     </Providers>
   );
