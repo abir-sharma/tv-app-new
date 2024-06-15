@@ -1,5 +1,7 @@
 /// <reference types="nativewind/types" />
 
+import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
+
 import { View } from 'react-native';
 import Navbar from '../components/Navbar';
 import Batches from '../components/Batches';
@@ -8,6 +10,7 @@ import { useEffect } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Home({ navigation }: any) {
 
@@ -51,10 +54,18 @@ export default function Home({ navigation }: any) {
   }, [])
 
   return (
-    <View className="bg-[#111111] flex-1">
+    <LinearGradient
+  // colors={['#2D3A41', '#2D3A41', '#000000']}
+  // locations={[0.0647, 0.4775, 1]}
+  // start={{ x: 0.5, y: 0 }}
+  // end={{ x: 0.5, y: 1 }}
+    {...fromCSS(
+      `linear-gradient(276.29deg, #2D3A41 6.47%, #2D3A41 47.75%, #000000 100%)`
+    )}
+    className=" flex-1">
       <Navbar />
       <Batches />
       <Recent />
-    </View>
+    </LinearGradient>
   );
 }
