@@ -3,6 +3,7 @@
 import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../context/MainContext';
 import FastImage from 'react-native-fast-image'
+import { LinearGradient } from 'expo-linear-gradient';
 
 export default function Batches() {
 
@@ -28,8 +29,11 @@ export default function Batches() {
                             setSelectedBatch(order);
                             mainNavigation?.navigate('Details');
                         }}
-                        className=' rounded-xl h-fit pb-2 w-72 overflow-hidden'>
-                        <View className="w-full aspect-video rounded-xl overflow-hidden relative  bg-white">
+                        className=' rounded-xl h-fit pb-2 w-72 overflow-hidden '>
+                            <LinearGradient
+                                colors={['rgba(0,0,0,0.8)', 'transparent']}
+                            />
+                        <View className="w-full aspect-video rounded-xl overflow-hidden relative">
                             {
                                 orders?.map((item, index) => {
                                     if (item?.itemName === order?.batch?.name) {
@@ -54,7 +58,6 @@ export default function Batches() {
                             </View> */}
                             
                         </View>
-
                     </Pressable>
                 ))}
             </ScrollView>
