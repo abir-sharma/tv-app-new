@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StatusBar, Modal, Image } from "react-native";
+import { StatusBar, Modal, Image, ActivityIndicator } from "react-native";
 import Providers from "./utils/Providers";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -97,7 +97,7 @@ export default function App() {
           const pdfData = sortedChunks.map((chunk) => chunk.chunk).join("");
           sendMessageToClient(`{"type": "reset"}`);
           sendMessageToClient(`{"type": "received_pdf"}`);
-          console.log(navigationRef)
+          // console.log(navigationRef)
           // navigationRef.current.navigate("OldPDFViewer", { pdfUrl: `data:application/pdf;base64,${pdfData}` });
         } else if (msg.type == "image_chunk_start") {
           setImgChunks([]);
@@ -116,23 +116,24 @@ export default function App() {
           setShowImgModal(false);
           setShowPdfModal(false);
         } else if (msg.type == "serve_pdf") {
-          console.log(msg);
-          fetch(msg.requestUrl).then(res => res.json())
-            .then(data => {
-              let pdfUrl = data.uri;
-              pdfUrl && console.log('pdf uri length:', pdfUrl.length);
-              setShowYoutubeModal(false);
-              setShowImgModal(false);
-              setPdfUrl(pdfUrl);
-              setShowPdfModal(true);
-            }).catch(err => {
-              console.log(err);
-            })
-            // navigationRef.current.navigate("OldPDFViewer", { pdfUrl: pdfUrl });
+          setPdfUrl("");
+          setShowPdfModal(true);
+          axios.get(msg.requestUrl).then(res => {
+            let pdfUrl = res.data.uri;
+            pdfUrl && console.log('pdf uri length:', pdfUrl.length);
+            setShowYoutubeModal(false);
+            setShowImgModal(false);
+            setPdfUrl(pdfUrl);
+            setShowPdfModal(true);
+          }).catch(err => {
+            console.log(err);
+            setShowPdfModal(false);
+          });
         } else if (msg.type == "serve_image") {
-          console.log(msg);
-          fetch(msg.requestUrl).then(res => res.json()).then(data => {
-            let imgUrl = data.uri;
+          setImgUrl("");
+          setShowImgModal(true);
+          axios.get(msg.requestUrl).then(res => {
+            let imgUrl = res.data.uri;
             imgUrl && console.log('uri exists, length:', imgUrl.length);
             setShowPdfModal(false);
             setShowYoutubeModal(false);
@@ -140,7 +141,8 @@ export default function App() {
             setShowImgModal(true);
           }).catch(err => {
             console.log(err);
-          })
+            setShowImgModal(false);
+          });
         }
       }
     } catch (err) {
@@ -190,24 +192,34 @@ export default function App() {
       {/* image modal */}
       <Modal
         animationType="slide"
-        transparent={true}
+        transparent={false}
         visible={showImgModal}
         onRequestClose={() => {
           setShowImgModal(false);
         }}
       >
-        <Image source={{ uri: imgUrl }} style={{ flex: 1, margin: 0, borderRadius: 0 }} />
+        {imgUrl == "" && <ActivityIndicator size="large" color="#000" style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }} />}
+        {imgUrl && <Image source={{ uri: imgUrl }} style={{ flex: 1, margin: 0, borderRadius: 0 }} />}
       </Modal>
 
       <Modal
         animationType="slide"
-        transparent={true}
+        transparent={false}
         visible={showPdfModal}
         onRequestClose={() => {
           setShowPdfModal(false);
         }}
       >
-        <Pdf source={{ uri: pdfUrl }} style={{ flex: 1 }} /> 
+        {pdfUrl == "" && <ActivityIndicator size="large" color="#000" style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }} />}
+        {pdfUrl && <Pdf source={{ uri: pdfUrl }} style={{ flex: 1 }} />}
         {/* <PDFViewer pdfUrl={pdfUrl} /> */}
       </Modal>
     </Providers>
