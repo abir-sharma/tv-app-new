@@ -5,6 +5,8 @@ import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGlobalContext } from '../../context/MainContext';
+import { LinearGradient } from 'expo-linear-gradient';
+import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 
 type VideoPropType = {
   videoList: VideoType[] | null,
@@ -15,6 +17,7 @@ type VideoPropType = {
 
 export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPropType) => {
 
+  console.log("videoList:", videoList);
   const navigation = useNavigation();
   const {selectedSubject, selectedChapter, selectedBatch} = useGlobalContext();
 
@@ -66,37 +69,26 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
         });
         saveToRecentVideos(item);
       }}>
-      {/* <View >
-        <View>
-          {item?.videoDetails?.image && <Image
-            style={{ width: '100%', height: 135, objectFit: 'cover', borderRadius: 10, }}
-            source={{ uri: `${item?.videoDetails?.image}` }}
-          />}
-        </View>
-        <View className='p-2'>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text className='text-white text-[10px]'>{moment(item?.date).format("MMM Do YY")}</Text>
-            <Text className='text-white text-[10px]'>{item?.videoDetails?.duration}</Text>
-          </View>
-          <Text className='text-xs text-white font-medium my-2'>{item?.videoDetails?.name?.length >= 60 ? `${item?.videoDetails?.name?.substring(0, 60)}...` : item?.videoDetails?.name}</Text>
-        </View>
-      </View> */}
+        <LinearGradient
+            {...fromCSS(
+                `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
+              )}
+              className='rounded-xl overflow-hidden border-[1px] border-white/30'
+        >
       <View className='relative'>
-          <View className="w-full aspect-video overflow-hidden rounded-lg relative">
+          <View className="w-full aspect-video rounded-xl overflow-hidden relative">
               {item?.videoDetails?.image && <Image
                   className=' w-full h-full rounded-t-lg '
                   source={{ uri: `${item?.videoDetails?.image}` }}
               />}
           </View>
-          <Image source={require('../../assets/grad3.png')} className='absolute w-full h-full bottom-0 left-0' width={10} height={10} />
-          <View className='p-2 absolute bottom-2 left-2 text-white'>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                  
-              </View>
-              <Text className='text-lg text-white font-medium mb-0'>{item?.videoDetails?.name?.length >= 20 ? `${item?.videoDetails?.name?.substring(0, 20)}...` : item?.videoDetails?.name}</Text>
+          <View className='p-2 relative px-5'>
+              <View className='flex flex-row items-center justify-start gap-3'>
+              <Text className='text-base text-white font-normal mb-0'>{item?.videoDetails?.name?.length >= 30 ? `${item?.videoDetails?.name?.substring(0, 30)}...` : item?.videoDetails?.name}</Text>
+              </View>                            
           </View>
-          
       </View>
+      </LinearGradient>
     </Pressable>
   );
 
