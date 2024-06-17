@@ -12,6 +12,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
+
 export default function Home({ navigation }: any) {
 
   const { setMainNavigation, setLogs, mainNavigation, setHeaders } = useGlobalContext();
@@ -25,26 +28,32 @@ export default function Home({ navigation }: any) {
   );
 
   const handleLogin = async () => {
-    if (await AsyncStorage.getItem("token")) {
-      console.log(await AsyncStorage.getItem("token"));
-      setHeaders({
-        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`
-      })
-      try {
-        const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", { Authorization: `Bearer ${await AsyncStorage.getItem("token")}` });
-      } catch (err: any) {
-        setLogs((logs) => [...logs, "Error in VERIFY TOKEN API:" + JSON.stringify(err.response)]);
-        await AsyncStorage.removeItem("token");
-        mainNavigation?.navigate('Login')
+    console.log("checking login...");
+    const randu = uuidv4();
+    console.log("randu: ", randu);
+    AsyncStorage.getItem("token").then(async (res)=>{
+      console.log("ressss:", res)
+      if (res) {
+        console.log("token exists");
+        setHeaders({
+          Authorization: `Bearer ${res}`
+        })
+        try {
+          const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", { Authorization: `Bearer ${await AsyncStorage.getItem("token")}`, randomId: randu });
+          console.log("verified token");
+        } catch (err: any) {
+          console.log("not verified");
+          setLogs((logs) => [...logs, "Error in VERIFY TOKEN API:" + JSON.stringify(err.response)]);
+          await AsyncStorage.removeItem("token");
+          mainNavigation?.navigate('Login')
+        }
+        mainNavigation?.navigate('Home')
       }
-      mainNavigation?.navigate('Home')
-    }
-    else {
-      console.log("not logged in");
-
-
-      navigation?.navigate('Login')
-    }
+      else {
+        console.log("not logged in");
+        navigation?.navigate('Login')
+      }
+    })
   }
 
   useEffect(() => {
