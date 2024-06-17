@@ -109,7 +109,7 @@ export default function Login({ navigation }: any) {
           ToastAndroid.CENTER,
         );
       } else if (err?.response?.status === 400) {
-        console.log("New user error: ", err?.response?.status);
+        // console.log("New user error: ", err?.response?.status);
         setNewUser(true);
       }
       else {
@@ -275,7 +275,7 @@ export default function Login({ navigation }: any) {
             <TextInput 
               ref={phoneInputRef}
               hasTVPreferredFocus={true}
-              value={phone} onChangeText={newText => { handleTextChange(newText) }} onFocus={(e) => { console.log("Focused") }}
+              value={phone} onChangeText={newText => { handleTextChange(newText) }}  
               className='w-full text-black text-lg' autoFocus={true} placeholderTextColor={"rgba(169, 169, 169, 1)"} placeholder='Enter Mobile No.' /></Pressable>}
 
 

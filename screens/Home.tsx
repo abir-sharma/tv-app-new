@@ -39,7 +39,13 @@ export default function Home({ navigation }: any) {
           Authorization: `Bearer ${res}`
         })
         try {
-          const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", { Authorization: `Bearer ${await AsyncStorage.getItem("token")}`, randomId: randu });
+          const headers = { 'Authorization': `Bearer ${await AsyncStorage.getItem("token")}`, 'randomId': randu }
+          // const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", '', { headers: headers });
+          const res = await fetch("https://api.penpencil.co/v3/oauth/verify-token", {
+            method: "POST",
+            headers: headers,
+            body: '',
+          });
           console.log("verified token");
         } catch (err: any) {
           console.log("not verified");

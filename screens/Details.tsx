@@ -95,7 +95,7 @@ export default function Details({ navigation }: any) {
 
     }
     catch (err: any) {
-      console.log("error:", err);
+      // console.log("error:", err);
       setLogs((logs) => [...logs, "Error in DETAILS PAGE API:" + JSON.stringify(err?.response)]);
 
     }
