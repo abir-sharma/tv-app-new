@@ -5,12 +5,14 @@ import { useGlobalContext } from '../context/MainContext';
 import FastImage from 'react-native-fast-image'
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
+import { useNavigation } from '@react-navigation/native';
 // import { BlurView } from 'expo-blur';
 
 
 export default function Batches() {
 
     const { orders, mainNavigation, subscribedBatches, setSelectedBatch, } = useGlobalContext();
+    const navigation = useNavigation();
 
     return (
         <View className=''>
@@ -30,7 +32,9 @@ export default function Batches() {
                         onPress={() => {
                             console.log("Batch iD: ", order?.batch?._id);
                             setSelectedBatch(order);
-                            mainNavigation?.navigate('Details');
+                            // mainNavigation?.navigate('Details');
+                            // @ts-expect-error
+                            navigation.navigate('Details');
                         }}
                         className=' rounded-xl h-fit w-72 overflow-hidden '>
                             {/* <BlurView intensity={100} > */}

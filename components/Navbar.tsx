@@ -82,7 +82,7 @@ export default function Navbar() {
         {/* <Text className='text-white font-medium text-xl ml-4'>Physics Wallah</Text> */}
       </Pressable>
       <View className="flex flex-row gap-2">
-        {/* <View className=' -ml-20 rounded-xl flex-row bg-[#0d0d0d] border-[1px] border-white/5'> */}
+        {/* <!-- <View className=' -ml-20 rounded-xl flex-row bg-[#0d0d0d] border-[1px] border-white/5'> */}
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
@@ -99,19 +99,6 @@ export default function Navbar() {
           className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${isOnline && " bg-[#414347] "}  `}
           >
           <Text className={`text-white ${isOnline && "font-bold "}`}>Online Batches</Text>
-        </Pressable>
-        <Pressable android_ripple={{
-          color: "rgba(255,255,255,0.4)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }} onPress={() => { setIsOnline(false); mainNavigation.navigate('Offline') }}
-        // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${!isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
-        className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${!isOnline && " bg-[#414347] "}  `}
-        >
-          <Text className={`text-white ${isOnline && " font-bold "}`}>
-            Online Batches
-          </Text>
         </Pressable>
         <Pressable
           android_ripple={{
@@ -131,38 +118,8 @@ export default function Navbar() {
             Offline Batches
           </Text>
         </Pressable>
-        {/* </View> */}
-
-        {/* <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.5)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        onPress={()=>{mainNavigation.navigate('QrTest');}}
-        className='flex-row justify-center overflow-hidden rounded-xl w-32 h-10 items-center'>
-        <Text className='overflow-hidden rounded-xl text-white'>Qr Test</Text>
-      </Pressable> */}
       </View>
       <View className="flex flex-row gap-2 items-center">
-        {/* <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.5)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        onPress={()=>{
-          const url = 'https://attendence.betterpw.live'; // Replace this with your PWA URL
-          Linking.openURL(url);
-          // mainNavigation.navigate('Attendance');
-        }}
-        className='flex-row justify-center gap-x-2 overflow-hidden rounded-xl w-32 h-10 items-center bg-white/10'>
-          <Image source={require('../assets/clock3.png')} className='w-4 h-4' width={10} height={10} />
-          <Text className=' overflow-hidden rounded-xl text-white'>Attendance</Text>
-      </Pressable> */}
-
         <Pressable
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
