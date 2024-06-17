@@ -98,16 +98,11 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
       {videoList?.length === 0 && <Text className='text-white text-2xl self-center items-center'>No videos available!!</Text>}
       <FlatList
         data={videoList?.sort((a, b) => {
-          const nameA = a?.videoDetails?.name?.toUpperCase(); // Ignore case
-          const nameB = b?.videoDetails?.name?.toUpperCase();
-
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          return 0; // Names are equal
+          const dateA = new Date(a?.videoDetails?.createdAt);
+          const dateB = new Date(b?.videoDetails?.createdAt);
+        
+          // @ts-ignore
+          return dateA - dateB;
         })}
         renderItem={renderGridItem}
         keyExtractor={(item: VideoType) => item._id}

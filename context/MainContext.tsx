@@ -231,7 +231,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in BATCHES API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
-      console.log("error:", err);
+      // console.log("error:", err);
     }
   }
 
@@ -243,7 +243,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in ORDERS API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
-      console.log("error:", err);
+      // console.log("error:", err);
     }
   }
 
@@ -256,7 +256,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in BATCH DETAIL API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
-      console.log("errorr:", err);
+      // console.log("errorr:", err);
     }
   }
 
@@ -265,12 +265,12 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     try {
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentPage}`, { headers });
       setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
-      console.log("Setting selected chapter", res?.data?.data[0]?.name);
+      // console.log("Setting selected chapter", res?.data?.data[0]?.name);
       // setSelectedChapter(res?.data?.data[0]);
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
-      console.log("error:", err);
+      // console.log("error:", err);
     }
   }
 
@@ -285,7 +285,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   }, [selectedBatch])
 
   useEffect(() => {
-    console.log("getting chapters data");
+    // console.log("getting chapters data");
     setTopicList(null);
     getChaptersData();
   }, [selectedSubject])
