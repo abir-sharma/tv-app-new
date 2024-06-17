@@ -24,7 +24,7 @@ export default function Navbar() {
   }
 
   return (
-    <View className=" flex-row justify-between items-center p-4 bg-[#1B2124]">
+    <View className=" flex-row justify-between items-center p-4 ">
       <Pressable
         hasTVPreferredFocus={true}
         android_ripple={{
@@ -50,9 +50,9 @@ export default function Navbar() {
             foreground: true
           }} onPress={() => { setIsOnline(true); mainNavigation.navigate('Home')}}
           // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
-          className='w-36 h-10 rounded-xl items-center justify-center overflow-hidden'
+          className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${isOnline && " bg-[#414347] "}  `}
           >
-          <Text className={`text-white ${isOnline && " font-bold "}`}>Online Batches</Text>
+          <Text className={`text-white ${isOnline && "font-bold "}`}>Online Batches</Text>
         </Pressable>
         <Pressable android_ripple={{
           color: "rgba(255,255,255,0.4)",
@@ -61,7 +61,7 @@ export default function Navbar() {
           foreground: true
         }} onPress={() => { setIsOnline(false); mainNavigation.navigate('Offline') }}
         // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${!isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
-        className='w-36 h-10 rounded-xl items-center justify-center overflow-hidden'
+        className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${!isOnline && " bg-[#414347] "}  `}
         >
           <Text className={`text-white ${!isOnline && " font-bold "}`}>Offline Batches</Text>
         </Pressable>

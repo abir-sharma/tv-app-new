@@ -5,7 +5,7 @@ import { useGlobalContext } from '../context/MainContext';
 import FastImage from 'react-native-fast-image'
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
-import { BlurView } from 'expo-blur';
+// import { BlurView } from 'expo-blur';
 
 
 export default function Batches() {
@@ -32,15 +32,15 @@ export default function Batches() {
                             setSelectedBatch(order);
                             mainNavigation?.navigate('Details');
                         }}
-                        className=' rounded-xl h-fit pb-2 w-72 overflow-hidden '>
-                            <BlurView intensity={100} >
+                        className=' rounded-xl h-fit w-72 overflow-hidden '>
+                            {/* <BlurView intensity={100} > */}
                             <LinearGradient
                                 {...fromCSS(
                                     `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
                                   )}
-                                  className='rounded-xl overflow-hidden'
+                                  className='rounded-xl overflow-hidden border-[1px] border-white/30'
                             >
-                        <View className="w-full aspect-video rounded-xl overflow-hidden relative">
+                        <View className="w-full aspect-video rounded-t-xl overflow-hidden relative">
                             {
                                 orders?.map((item, index) => {
                                     if (item?.itemName === order?.batch?.name) {
@@ -56,7 +56,7 @@ export default function Batches() {
                             </View>                            
                         </View>
                         </LinearGradient>
-                        </BlurView>
+                        {/* </BlurView> */}
                     </Pressable>
                 ))}
             </ScrollView>
