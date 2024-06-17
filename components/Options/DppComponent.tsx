@@ -38,7 +38,6 @@ export const DppComponent = ({ }: DPPPropType) => {
     }
   }
 
-
   const renderGridItem = ({ item }: any) => (
     <Pressable
       style={{ flex: 1 / 2 }}
@@ -63,7 +62,7 @@ export const DppComponent = ({ }: DPPPropType) => {
 
   return (
     <View className='p-5'>
-      {dppList?.length === 0 && <Text className='text-white text-2xl self-center items-center' >No Tests available!!</Text>}
+      {dppList?.length === 0 && <Text className='text-white text-2xl self-center items-center'>No Tests available!!</Text>}
       {dppList && <FlatList
         data={dppList}
         renderItem={renderGridItem}

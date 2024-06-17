@@ -16,16 +16,32 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function Home({ navigation }: any) {
-
-  const { setMainNavigation, setLogs, mainNavigation, setHeaders } = useGlobalContext();
+  // const { message, sendMessageToClient } = useUdpServer();
+  const { setMainNavigation, setLogs, mainNavigation, setHeaders } =
+    useGlobalContext();
+  const [showYoutubeModal, setShowYoutubeModal] = useState(false);
+  const [youtubeUrl, setYoutubeUrl] = useState("");
 
   useEffect(
     () =>
-      navigation.addListener('beforeRemove', (e:any) => {
+      navigation.addListener("beforeRemove", (e: any) => {
         e.preventDefault();
       }),
     [navigation]
   );
+
+  // useEffect(() => {
+  //   console.log("message", message);
+  //   try {
+  //     if (message && JSON.parse(message)?.type == "youtube") {
+  //       setYoutubeUrl(JSON.parse(message)?.url);
+  //       setShowYoutubeModal(true);
+  //       sendMessageToClient("youtube");
+  //     }
+  //   } catch (err) {
+  //     console.log("err while parsing", err);
+  //   }
+  // }, [message]);
 
   const handleLogin = async () => {
     console.log("checking login...");
@@ -57,10 +73,9 @@ export default function Home({ navigation }: any) {
   }
 
   useEffect(() => {
-    navigation.setOptions({ headerShown: false });
     setMainNavigation(navigation);
     handleLogin();
-  }, [])
+  }, []);
 
   return (
     <LinearGradient
