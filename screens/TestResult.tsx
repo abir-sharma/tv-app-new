@@ -85,7 +85,7 @@ export const TestResult = () => {
               foreground: true
             }}
             onPress={() => {
-              navigation.navigate('Home')
+              navigation.navigate('Details')
             }}
             className="overflow-hidden rounded-full p-2"
           >

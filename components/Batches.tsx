@@ -16,7 +16,7 @@ export default function Batches() {
 
     return (
         <View className=''>
-            <Text className='text-white text-2xl font-medium ml-5 mt-2'>Online Batches</Text>
+            <Text className='text-white text-2xl font-medium ml-5 mt-2'> Batches</Text>
         <View className='p-5 w-full mx-auto mb-3 mt-2 flex-none overflow-hidden'>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
                 {subscribedBatches?.map((order, index) => (
@@ -36,13 +36,13 @@ export default function Batches() {
                             // @ts-expect-error
                             navigation.navigate('Details');
                         }}
-                        className=' rounded-xl h-fit w-72 overflow-hidden '>
+                        className=' rounded-xl h-52 w-72 overflow-hidden '>
                             {/* <BlurView intensity={100} > */}
                             <LinearGradient
                                 {...fromCSS(
                                     `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
                                   )}
-                                  className='rounded-xl overflow-hidden border-[1px] border-white/30'
+                                  className='rounded-xl overflow-hidden h-52 border-[1px] border-white/30'
                             >
                         <View className="w-full aspect-video rounded-t-xl overflow-hidden relative">
                             {
@@ -56,7 +56,8 @@ export default function Batches() {
                         </View>
                         <View className='p-2 relative px-5'>
                             <View className='flex flex-row items-center justify-center gap-3'>
-                                <Text className='text-white text-lg font-base text-center'>{order?.batch?.name}</Text>
+                                {/* <Text className='text-white text-lg font-base text-center'>{order?.batch?.name}</Text> */}
+                                <Text className='text-white text-lg font-base text-center'>{order?.batch?.name?.length > 20 ? `${order?.batch?.name?.substring(0, 20)}...` : order?.batch?.name}</Text>
                             </View>                            
                         </View>
                         </LinearGradient>

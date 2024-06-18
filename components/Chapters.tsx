@@ -2,6 +2,8 @@ import { FlatList, Pressable, Text, View } from 'react-native';
 import { TopicType } from '../types/types';
 import { useGlobalContext } from '../context/MainContext';
 import { useEffect } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
+import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 
 export default function Chapters() {
 
@@ -27,7 +29,7 @@ export default function Chapters() {
   const renderItem = ({ item }: any) => (
     <Pressable
       key={item?._id}
-      className={`py-4 px-4 overflow-hidden bg-white/5 my-0.5 rounded-lg ${selectedChapter?._id === item?._id && 'bg-[#7363FC]'}`}
+      className={` overflow-hidden rounded-xl bg-white/5 my-0.5`}
       hasTVPreferredFocus={true}
       android_ripple={{
         color: "rgba(255,255,255,0.5)",
@@ -40,7 +42,19 @@ export default function Chapters() {
         console.log("Chapter selected: ", item?._id);
       }}
     >
-      <Text className='text-white text-sm'>{item?.name}</Text>
+      {
+        selectedChapter?._id === item?._id ?
+        <LinearGradient {...fromCSS(`linear-gradient(90deg, #0368FF 0%, #5899FF 100%)`)}
+          className='py-4 px-4 rounded-xl overflow-hidden'>
+          <Text className='text-white text-sm'>{item?.name}</Text>
+        </LinearGradient>
+        :
+      <View
+        
+        className='py-4 px-4 rounded-xl overflow-hidden'
+      >
+        <Text className='text-white text-sm'>{item?.name}</Text>
+      </View>}
     </Pressable>
   );
   return (

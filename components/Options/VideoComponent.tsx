@@ -53,7 +53,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
       style={{ flex: 1 / 4 }}
       className=' m-2 overflow-hidden rounded-xl bg-white/5 h-52'
       android_ripple={{
-        color: "rgba(75, 61, 196, 0.01)",
+        color: "rgba(255,255,255,0.1)",
         borderless: false,
         radius: 1000,
         foreground: true
@@ -82,7 +82,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
                   source={{ uri: `${item?.videoDetails?.image}` }}
               />}
           </View>
-          <View className='p-2 relative px-5'>
+          <View className='p-2 relative px-5 pt-3'>
               <View className='flex flex-row items-center justify-start gap-3'>
               <Text className='text-base text-white font-normal mb-0'>{item?.videoDetails?.name?.length >= 40 ? `${item?.videoDetails?.name?.substring(0, 40)}...` : item?.videoDetails?.name}</Text>
               </View>                            

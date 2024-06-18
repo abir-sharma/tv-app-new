@@ -210,7 +210,7 @@ const TestSolutions = ({ route }: any) => {
                             foreground: true
                         }}
                         onPress={() => {
-                            mainNavigation.navigate('Home')
+                            mainNavigation.goBack();
                         }}
                         className="overflow-hidden rounded-full p-2"
                     >

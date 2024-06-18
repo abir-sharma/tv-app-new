@@ -452,7 +452,7 @@ export default function VideoPlayer(props: any) {
               color={tool === "eraser" ? "white" : "#7363FC"}
             />
           </Pressable>
-          <Pressable
+          {/* <Pressable
             android_ripple={{
               color: "rgba(255,255,255,0.8)",
               borderless: false,
@@ -467,7 +467,7 @@ export default function VideoPlayer(props: any) {
               size={30}
               color={tool === "eraser" ? "white" : "#7363FC"}
             />
-          </Pressable>
+          </Pressable> */}
         </View>
       )}
       {showControls && props?.currentVideos?.length > 1 && (
@@ -793,7 +793,7 @@ export default function VideoPlayer(props: any) {
               <Path key={index} d={path} stroke="red" strokeWidth={3} fill="none" />
             ))}
             {currentPath !== '' && (
-              <Path d={currentPath} stroke="black" strokeWidth={3} fill="none" />
+              <Path d={currentPath} stroke="red" strokeWidth={3} fill="none" />
             )}
           </Svg>
         )}

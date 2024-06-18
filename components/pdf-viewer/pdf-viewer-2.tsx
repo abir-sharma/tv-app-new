@@ -7,7 +7,9 @@ import {
   PermissionsAndroid,
   BackHandler,
   Alert,
+  Pressable,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { Config, DocumentView, RNPdftron } from "react-native-pdftron";
 import { useGlobalContext } from "../../context/MainContext";
@@ -15,19 +17,28 @@ import { useGlobalContext } from "../../context/MainContext";
 const myToolItem = {
     [Config.CustomToolItemKey.Id]: 'add_page',
     [Config.CustomToolItemKey.Name]: 'Add page',
-    // An example of custom Android icon:
-    [Config.CustomToolItemKey.Icon]: 'ic_add_blank_page_white', 
-    // An example of custom iOS icon:
-    //[Config.CustomToolItemKey.Icon]: 'pencil.circle', 
+    [Config.CustomToolItemKey.Icon]: 'ic_add_blank_page_white'
   };
 
+  const myBackToolItem = {
+    [Config.CustomToolItemKey.Id]: 'go_back',
+    [Config.CustomToolItemKey.Name]: 'Go Back',
+    [Config.CustomToolItemKey.Icon]: 'ic_arrow_back_white_24dp'
+  };
   
   
   const myToolbar = {
     [Config.CustomToolbarKey.Id]: 'myToolbar',
     [Config.CustomToolbarKey.Name]: 'myToolbar',
     [Config.CustomToolbarKey.Icon]: Config.ToolbarIcons.FillAndSign,
-    [Config.CustomToolbarKey.Items]: [Config.Tools.annotationCreateArrow, Config.Tools.annotationCreateCallout, myToolItem, Config.Buttons.undo]
+    [Config.CustomToolbarKey.Items]: [
+      myBackToolItem,
+      Config.Tools.annotationCreateFreeHand,
+      Config.Tools.annotationCreateFreeHighlighter,
+      Config.Tools.annotationEraserTool,
+      Config.Tools.annotationCreateLine,
+      Config.Tools.annotationCreateEllipse
+    ]
   };
 
 const PDFTronViewer = ({ route }: any) => {
@@ -35,6 +46,7 @@ const PDFTronViewer = ({ route }: any) => {
   // Using useState hook to manage state
   // const [permissionGranted, setPermissionGranted] = useState(Platform.OS === 'ios' ? true : false);
 
+  const navigation = useNavigation();
   let pdfUrl = route?.params?.pdfUrl;
 
   const { setMainNavigation, setLogs, mainNavigation, setHeaders } = useGlobalContext();
@@ -95,6 +107,7 @@ const PDFTronViewer = ({ route }: any) => {
     "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
 
   return (
+    <>
     <DocumentView
       document={pdfUrl}
     //   showLeadingNavButton={true}
@@ -104,7 +117,7 @@ const PDFTronViewer = ({ route }: any) => {
       hideTopAppNavBar={true}
       hideToolbarsOnTap={true}
       backgroundColor={{red: 0, green: 255, blue: 0}}
-      annotationToolbars={[Config.DefaultToolbars.Pens]}
+      annotationToolbars={[myToolbar]}
       forceAppTheme={Config.ThemeOptions.ThemeLight}
       leadingNavButtonIcon={
         Platform.OS === "ios"
@@ -113,8 +126,9 @@ const PDFTronViewer = ({ route }: any) => {
       }
       annotationMenuItems={[Config.AnnotationMenu.search, Config.AnnotationMenu.share]}
       onLeadingNavButtonPressed={onLeadingNavButtonPressed}
-
     />
+    <Pressable className="w-10 h-10 rounded-full absolute top-1 left-1" onPress={()=>{navigation.goBack()}}></Pressable>
+    </>
   );
 };
 

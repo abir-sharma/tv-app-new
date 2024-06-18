@@ -337,7 +337,7 @@ export default function Login({ navigation }: any) {
               newUser ? handleRegisterUser() :
                 otpSent ? handleVerifyOTP() : handleSentOTP()
             }}
-            className='bg-[#5A4BDA] w-96 h-12 overflow-hidden mt-3 flex-row rounded-lg px-4 items-center justify-start'>
+            className={`bg-[#0569FF] ${phone.length !== 10 && " bg-[#0569FF]/50 " } w-96 h-12 overflow-hidden mt-3 flex-row rounded-full px-4 items-center justify-start`}>
             <Text className='text-white text-center w-full text-base'>{newUser ? "Register" : otpSent ? "Verify OTP" : "Get OTP"}</Text>
           </Pressable>
         </View>

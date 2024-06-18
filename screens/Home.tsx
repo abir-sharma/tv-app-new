@@ -2,7 +2,7 @@
 
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 
-import { View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 import Navbar from '../components/Navbar';
 import Batches from '../components/Batches';
 import Recent from '../components/Recent';
@@ -94,8 +94,10 @@ export default function Home({ navigation }: any) {
     )}
     className=" flex-1">
       <Navbar />
-      <Batches />
-      <Recent />
+      <ScrollView>
+        <Batches />
+        <Recent />
+      </ScrollView>
     </LinearGradient>
   );
 }
