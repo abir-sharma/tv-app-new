@@ -17,7 +17,7 @@ export const TestResult = () => {
     try {
       setShowLoader(true);
       const testId = testData?.test?._id;
-      const batchId = selectedBatch?.batch?._id;
+      const batchId = selectedBatch?._id;
       const options = {
         headers
       }
@@ -38,8 +38,8 @@ export const TestResult = () => {
         headers
       };
       const item = selectedDpp;
-      console.log("Restart Link: ", `https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Reattempt&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`);
-      const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Reattempt&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`, options);
+      console.log("Restart Link: ", `https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Reattempt&batchId=${selectedBatch?._id}&batchScheduleId=${item?.scheduleId}`);
+      const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Reattempt&batchId=${selectedBatch?._id}&batchScheduleId=${item?.scheduleId}`, options);
       console.log("Test Reattempt Request: ", res?.data);
       setTestData(res?.data?.data);
       setTestSections(res?.data?.data?.sections);

@@ -27,8 +27,8 @@ export const DppComponent = ({ }: DPPPropType) => {
         headers
       }
       console.log(headers)
-      console.log(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`)
-      const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?.batch?._id}&batchScheduleId=${item?.scheduleId}`, options);
+      console.log(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?._id}&batchScheduleId=${item?.scheduleId}`)
+      const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?._id}&batchScheduleId=${item?.scheduleId}`, options);
       console.log("Test Started", res?.data);
       setTestData(res?.data?.data);
       setTestSections(res?.data?.data?.sections)

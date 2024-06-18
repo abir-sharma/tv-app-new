@@ -44,28 +44,8 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NotePropTy
           className='flex-row justify-center gap-x-2 overflow-hidden rounded-xl w-fit items-center '>
             <Image source={require('../../assets/notesicon2.png')} className='w-5 h-5' width={10} height={10} />
             <Text className=' overflow-hidden rounded-xl text-white'>Notes</Text>
-        </View>
-
-            {/* <Pressable
-              className={`overflow-hidden rounded`}
-              hasTVPreferredFocus={true}
-              android_ripple={{
-                color: "rgba(255,255,255,0.5)",
-                borderless: false,
-                radius: 1000,
-                foreground: true
-              }}
-              onPress={() => {
-                // @ts-expect-error
-                navigation.navigate('PDFViewer', {
-                  pdfUrl: item?.homeworkIds[0]?.attachmentIds[0]?.baseUrl + item?.homeworkIds[0]?.attachmentIds[0]?.key
-                });
-              }}
-            > */}
-              
+        </View>      
               <Image source={require('../../assets/goto.png')} className='w-7 h-7' width={40} height={40} />
-            {/* </Pressable> */}
-
           </LinearGradient>
         </View>
       </LinearGradient>

@@ -6,6 +6,9 @@ import { useGlobalContext } from '../../context/MainContext';
 // @ts-expect-error
 import defaultIcon from '../../assets/TV.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { LinearGradient } from 'expo-linear-gradient';
+import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
+import FastImage from 'react-native-fast-image';
 
 
 export default function OfflineBatches(params: any) {
@@ -29,13 +32,14 @@ export default function OfflineBatches(params: any) {
     }, [offlineBatches])
 
     return (
-        <View className='bg-white/5 p-5 w-[95%] rounded-3xl mx-auto my-5 flex-none overflow-hidden'>
+        <View className=' w-[95%] mx-auto my-5 flex-none overflow-hidden'>
             {showLoader && <View
                 style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
                 className='bg-white/10 '
             >
                 <ActivityIndicator color={"#FFFFFF"} size={80} />
             </View>}
+            <Text className='text-white text-2xl font-medium mt-2 mb-8'> Batches</Text>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
                 {offlineBatches?.map((batch: any, index: number) => (
                     <Pressable
@@ -56,24 +60,26 @@ export default function OfflineBatches(params: any) {
                         }}
                         className='bg-white/10 rounded-xl h-52 w-72 overflow-hidden'
                     >
-                        {batch?.thumbnail && <View className="w-full h-40 bg-white/10 overflow-hidden">
-                            {/* <Image
-                                style={{ width: '100%', height: 170, objectFit: 'cover', borderRadius: 5 }}
+                        <LinearGradient
+                                {...fromCSS(
+                                    `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
+                                  )}
+                                  className='rounded-xl overflow-hidden h-52 border-[1px] border-white/30'
+                            >
+                        <View className="w-full aspect-video rounded-t-xl overflow-hidden relative">
+                        <FastImage
+                                key={index}
+                                className="w-full h-full rounded-t-lg"
                                 source={{ uri: `${batch?.thumbnail}` }}
-                            /> */}
-                            {batch.defaultThumbnail ? <Image
-                                style={{ width: '100%', height: 168, objectFit: 'cover', borderRadius: 5 }}
-                                source={{ uri: `${batch?.thumbnail}` }}
-                            /> : <Image
-                                style={{ width: '100%', height: 168, objectFit: 'cover', borderRadius: 5 }}
-                                source={defaultIcon}
-                            />}
-                        </View>}
-                        <View className='p-2 relative px-5'>
-                            <Text className='text-white text-xs font-medium'>{batch?.name}</Text>
-                            <Text className='text-white text-xs font-light'>Starts On <Text className='text-white text-xs font-medium'>14th Feb 2023</Text></Text>
-                            <Text className='text-white text-[10px] font-medium absolute right-2 top-1.5 rounded-md bg-black/50 px-2 py-1'>{"Hindi"}</Text>
+                                />
                         </View>
+                        <View className='p-2 relative px-5'>
+                            <View className='flex flex-row items-center justify-center gap-3'>
+                                {/* <Text className='text-white text-lg font-base text-center'>{order?.batch?.name}</Text> */}
+                                <Text className='text-white text-lg font-base text-center'>{batch?.name >= 20 ? `${batch?.name?.substring(0, 20)}...` : batch?.name}</Text>
+                            </View>                            
+                        </View>
+                        </LinearGradient>
                     </Pressable>
                 ))}
             </ScrollView>

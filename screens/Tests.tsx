@@ -178,7 +178,7 @@ const Tests = ({ navigation, route }: any) => {
                 "lastVisitedQuestionId": currentQuestion?._id,
                 "type": "Submit",
                 "submittedBy": "user",
-                "batchId": selectedBatch?.batch?._id,
+                "batchId": selectedBatch?._id,
             }
             console.log("Submit Test Body: ", body);
             console.log(options);

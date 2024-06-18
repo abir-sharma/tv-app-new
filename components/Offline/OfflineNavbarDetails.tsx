@@ -3,13 +3,32 @@ import { useState } from 'react';
 import { Image, Text, Pressable, View, Modal, FlatList } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
 import styles from './NavbarDetails.style'
+import Entypo from '@expo/vector-icons/Entypo';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+
 
 
 export default function OfflineNavbarDetails() {
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const { offlineSections, setDirectoryLevel, offlineSelectedSection, setOfflineCurrentDirectory, setOfflineSelectedSection, offlineSubjects, setOfflineSelectedBatch, setOfflineSelectedSubject, offlineSelectedSubject, mainNavigation } = useGlobalContext();
+  const { offlineSections, setDirectoryLevel, offlineSelectedSection, headers, setHeaders, setOfflineCurrentDirectory, setOfflineSelectedSection, offlineSubjects, setOfflineSelectedBatch, setOfflineSelectedSubject, offlineSelectedSubject, mainNavigation } = useGlobalContext();
 
+  const handleLogout = async () => {
+
+    mainNavigation.navigate('Login');
+    AsyncStorage.clear();
+    setHeaders(null);
+    try {
+      const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", { headers })
+      if (res?.data?.success) {
+
+      }
+    }
+    catch (err: any) {
+      console.log(err);
+    }
+  }
 
   const renderItem = ({ item }: any) => (
     <Pressable
@@ -28,7 +47,8 @@ export default function OfflineNavbarDetails() {
 
 
   return (
-    <View className=" flex-row justify-between items-center p-4 bg-white/5">
+    <View className=" flex-row justify-between items-center p-4 bg-[#111111]">
+      <View className='flex flex-row items-center justify-center gap-2'>
       <Pressable
         hasTVPreferredFocus={true}
         android_ripple={{
@@ -50,7 +70,7 @@ export default function OfflineNavbarDetails() {
           onPress={() => {
             setIsDropdownVisible(prev => !prev);
           }}
-          className='rounded-xl bg-[#444444] px-16 py-2 overflow-hidden'
+          className='rounded-xl bg-[#444444] px-5 py-2 overflow-hidden'
           hasTVPreferredFocus={true}
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
@@ -58,8 +78,13 @@ export default function OfflineNavbarDetails() {
             radius: 1000,
             foreground: true
           }}>
-          {offlineSubjects[offlineSelectedSubject]?.name && <Text className='text-white text-sm'>{(offlineSubjects[offlineSelectedSubject]?.name?.length > 20) ? `${offlineSubjects[offlineSelectedSubject]?.name?.substring(0, 20)}...` : offlineSubjects[offlineSelectedSubject]?.name}</Text>}
+          
+          <View className='flex-row items-center justify-center gap-2'>
+            {offlineSubjects[offlineSelectedSubject]?.name && <Text className='text-white text-sm'>{(offlineSubjects[offlineSelectedSubject]?.name?.length > 20) ? `${offlineSubjects[offlineSelectedSubject]?.name?.substring(0, 20)}...` : offlineSubjects[offlineSelectedSubject]?.name}</Text>}
+            <Entypo name="chevron-down" size={20} color="white" />
+          </View>
         </Pressable>
+        </View>
 
         <Modal
           transparent={true}
@@ -80,7 +105,7 @@ export default function OfflineNavbarDetails() {
         </Modal>
       </View>
 
-      <View className='bg-white/10 rounded-xl flex-row gap-x-5 py-2 pr-5' >
+      <View className=' rounded-xl flex-row gap-x-5 py-2 pr-5' >
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
@@ -122,7 +147,7 @@ export default function OfflineNavbarDetails() {
           }}>
           <Text className="font-normal text-sm text-white">Notes</Text>
         </Pressable>
-        <Pressable
+        {/* <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
             color: "rgba(255,255,255,0.4)",
@@ -142,7 +167,7 @@ export default function OfflineNavbarDetails() {
           }}
         >
           <Text className="font-normal text-sm text-white">DPP</Text>
-        </Pressable>
+        </Pressable> */}
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
@@ -196,8 +221,10 @@ export default function OfflineNavbarDetails() {
           radius: 1000,
           foreground: true
         }}
+        onPress={handleLogout}
         className='flex-row justify-center overflow-hidden rounded-full items-center'>
-        <Image source={require('../../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
+        {/* <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} /> */}
+        <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text>
       </Pressable>
     </View>
   );

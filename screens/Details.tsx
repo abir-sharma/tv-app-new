@@ -57,7 +57,7 @@ export default function Details({ navigation }: any) {
     try {
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/contents?page=${currentPage}&contentType=${contentType}&tag=${selectedChapter?.slug}`, { headers });
 
-      const resDpp = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?.batch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, { headers });
+      const resDpp = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, { headers });
 
       if (selectedMenu === 0) {
         setVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));

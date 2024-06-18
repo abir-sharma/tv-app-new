@@ -24,7 +24,7 @@ export default function OfflineDetails({ navigation }: any) {
 
 
   return (
-    <View className="bg-[#1A1A1A] flex-1">
+    <View className="bg-[#1B2124] flex-1">
       <OfflineNavbarDetails />
 
       <View className='flex-1 flex-row'>
