@@ -106,9 +106,11 @@ const Tests = ({ navigation, route }: any) => {
                 console.log("Final Responses: ", newResponses);
             }
         } else if (questionType === "Numeric") {
-            if (responses[curr]) {
-                return;
-            } else {
+            console.log("numeric submitting 1");
+            // if (responses[curr]) {
+            //     console.log("numeric submitting 2:", responses[curr], curr);
+            //     return;
+            // } else {
                 setSelectedAnswers([]);
                 const timeDiff = seconds - lastTimeStamp;
                 const obj = {
@@ -126,12 +128,13 @@ const Tests = ({ navigation, route }: any) => {
                 newResponses[curr] = obj;
                 setResponses(newResponses);
                 console.log("Final Responses: ", newResponses);
-                ToastAndroid.showWithGravity(
-                    "Submitted integer value!!",
+                 ToastAndroid.showWithGravity(
+                    "Numeric Answer Submitted",
                     ToastAndroid.SHORT,
-                    ToastAndroid.TOP,
-                );
-            }
+                    ToastAndroid.TOP
+                 );
+                handleNextClick();
+            // }
         }
     }
 
