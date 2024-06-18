@@ -51,7 +51,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
   const renderGridItem = ({ item }: any) => (
     <Pressable
       style={{ flex: 1 / 4 }}
-      className=' m-2 overflow-hidden rounded-xl bg-white/5'
+      className=' m-2 overflow-hidden rounded-xl bg-white/5 h-52'
       android_ripple={{
         color: "rgba(75, 61, 196, 0.01)",
         borderless: false,
@@ -73,7 +73,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
             {...fromCSS(
                 `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
               )}
-              className='rounded-xl overflow-hidden border-[1px] border-white/30'
+              className='rounded-xl overflow-hidden h-52 border-[1px] border-white/30'
         >
       <View className='relative'>
           <View className="w-full aspect-video rounded-xl overflow-hidden relative">
@@ -84,7 +84,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
           </View>
           <View className='p-2 relative px-5'>
               <View className='flex flex-row items-center justify-start gap-3'>
-              <Text className='text-base text-white font-normal mb-0'>{item?.videoDetails?.name?.length >= 30 ? `${item?.videoDetails?.name?.substring(0, 30)}...` : item?.videoDetails?.name}</Text>
+              <Text className='text-base text-white font-normal mb-0'>{item?.videoDetails?.name?.length >= 40 ? `${item?.videoDetails?.name?.substring(0, 40)}...` : item?.videoDetails?.name}</Text>
               </View>                            
           </View>
       </View>

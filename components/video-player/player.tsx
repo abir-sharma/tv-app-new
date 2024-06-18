@@ -26,6 +26,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 // import Video, { VideoRef } from 'react-native-video';
 // import ResizeMode from "react-native-video";
 import uuid from "react-native-uuid";
+import Pdf from "react-native-pdf";
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -127,6 +128,12 @@ export default function VideoPlayer(props: any) {
     }
   };
 
+  useEffect(()=>{
+    if(allowAnnotations){
+      pauseVideo();
+    }
+  }, [allowAnnotations])
+
   const [modalVisible, setModalVisible] = useState(false);
   const qualityOptions = [240, 360, 480, 720];
 
@@ -139,9 +146,9 @@ export default function VideoPlayer(props: any) {
   const renderQualityOption = ({ item }: any) => (
     <Pressable
       onPress={() => handleQualityChange(item)}
-      className="p-2 border-b border-gray-300/50 text-white"
+      className="p-2 border-b border-gray-300/50"
     >
-      <Text className="text-white pl-2">{`${item}p`}</Text>
+      <Text className="text-[#7363FC] text-center">{`${item}p`}</Text>
     </Pressable>
   );
 
@@ -235,6 +242,9 @@ export default function VideoPlayer(props: any) {
   const playVideo = () => {
     setIsPlaying(true);
     (playerRef.current as Video | null)?.playAsync();
+    setAllowAnnotations(false);
+    setTool(null);
+    setAnnotations({})
   };
 
   const pauseVideo = () => {
@@ -567,7 +577,7 @@ export default function VideoPlayer(props: any) {
                   onPress={() => setModalVisible(false)}
                 >
                   <View style={{ flex: 1 }}>
-                    <View className="bg-black/90 w-40 absolute bottom-24 left-80 rounded-lg m-4">
+                    <View className="bg-black/90 w-20 absolute bottom-16 left-96 rounded-lg m-4 ml-16 mb-8 border-[#7363FC]/40 border-[1px]">
                       <FlatList
                         data={qualityOptions}
                         renderItem={renderQualityOption}
@@ -743,7 +753,13 @@ export default function VideoPlayer(props: any) {
           />
         </View>
       )}
-      {renderVideo && (
+      <View
+        className=" flex-1"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+        {renderVideo && (
         <Video
           source={{
             uri: src,
@@ -771,6 +787,18 @@ export default function VideoPlayer(props: any) {
           onLoad={() => setShowLoader(false)}
         />
       )}
+        {allowAnnotations && (
+          <Svg className=" absolute top-0 left-0 right-0 bottom-0">
+            {(annotations[currentPage] || []).map((path, index) => (
+              <Path key={index} d={path} stroke="red" strokeWidth={3} fill="none" />
+            ))}
+            {currentPath !== '' && (
+              <Path d={currentPath} stroke="black" strokeWidth={3} fill="none" />
+            )}
+          </Svg>
+        )}
+      </View>
+      
     </View>
   );
 }
