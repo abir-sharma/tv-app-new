@@ -29,7 +29,7 @@ export default function Chapters() {
   const renderItem = ({ item }: any) => (
     <Pressable
       key={item?._id}
-      className={` overflow-hidden rounded-xl bg-white/5 my-0.5`}
+      className={` overflow-hidden rounded-xl bg-white/5 my-1`}
       hasTVPreferredFocus={true}
       android_ripple={{
         color: "rgba(255,255,255,0.5)",
@@ -49,12 +49,10 @@ export default function Chapters() {
           <Text className='text-white text-sm'>{item?.name}</Text>
         </LinearGradient>
         :
-      <View
-        
-        className='py-4 px-4 rounded-xl overflow-hidden'
-      >
+        <LinearGradient {...fromCSS(`linear-gradient(102.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`)}
+        className='py-4 px-4 rounded-xl overflow-hidden'>
         <Text className='text-white text-sm'>{item?.name}</Text>
-      </View>}
+      </LinearGradient>}
     </Pressable>
   );
   return (

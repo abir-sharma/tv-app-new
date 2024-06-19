@@ -16,7 +16,7 @@ export default function Batches() {
 
     return (
         <View className=''>
-            <Text className='text-white text-2xl font-medium ml-5 mt-2'> Batches</Text>
+            {/* <Text className='text-white text-2xl font-medium ml-5 mt-2'> Batches</Text> */}
         <View className='p-5 w-full mx-auto mb-3 mt-2 flex-none overflow-hidden'>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
                 {subscribedBatches?.map((order, index) => order.isPurchased &&(

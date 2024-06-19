@@ -39,7 +39,7 @@ export default function OfflineBatches(params: any) {
             >
                 <ActivityIndicator color={"#FFFFFF"} size={80} />
             </View>}
-            <Text className='text-white text-2xl font-medium mt-2 mb-8'> Batches</Text>
+            {/* <Text className='text-white text-2xl font-medium mt-2 mb-8'> Batches</Text> */}
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
                 {offlineBatches?.map((batch: any, index: number) => (
                     <Pressable
