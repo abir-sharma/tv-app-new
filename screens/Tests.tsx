@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator, TextInput } from 'react-native'
+import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator, TextInput, TouchableHighlight } from 'react-native'
 import { useGlobalContext } from '../context/MainContext'
 import axios from 'axios';
 import { ReviewOrSubmitModal } from '../components/modals/ReviewOrSubmit';
@@ -391,29 +391,15 @@ const Tests = ({ navigation, route }: any) => {
                             <TextInput ref={IntegerInputRef} hasTVPreferredFocus={true} value={inputInteger} onChangeText={newText => { setInputInteger(newText) }}
                                 className='text-black bg-white text-base self-center' autoFocus={true} placeholder='Enter an integer' />
                         </Pressable>}
-                        {questionType === 'Numeric' && <Pressable
-                            hasTVPreferredFocus={true}
-                            android_ripple={{
-                                color: "rgba(255,255,255,0.5)",
-                                borderless: false,
-                                radius: 2000,
-                                foreground: true
-                            }}
+                        {questionType === 'Numeric' && <TouchableHighlight
                             onPress={() => { handleOptionClick("") }}
                             className='mb-8 text-white bg-[#5A4BDA] rounded-xl py-3 px-6 text-center self-center overflow-hidden'
                         >
                             <Text className='text-white font-bold'>
                                 Submit
                             </Text>
-                        </Pressable>}
-                        {currentQuestion && questionType === 'Single' && <Pressable
-                            hasTVPreferredFocus={true}
-                            android_ripple={{
-                                color: "rgba(255,255,255,0.5)",
-                                borderless: false,
-                                radius: 2000,
-                                foreground: true
-                            }}
+                        </TouchableHighlight>}
+                        {currentQuestion && questionType === 'Single' && <TouchableHighlight
                             //65cdde8fc2f511239983b526
                             onPress={() => { handleOptionClick(currentQuestion?.options[0]?._id) }}
                             className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : '' : ''}`}
@@ -422,15 +408,8 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'> {currentQuestion?.options[0]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{markedOptions?.length > 0 ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
-                        </Pressable>}
-                        {currentQuestion && questionType === 'Multiple' && <Pressable
-                            hasTVPreferredFocus={true}
-                            android_ripple={{
-                                color: "rgba(255,255,255,0.5)",
-                                borderless: false,
-                                radius: 2000,
-                                foreground: true
-                            }}
+                        </TouchableHighlight>}
+                        {currentQuestion && questionType === 'Multiple' && <TouchableHighlight
                             onPress={() => { handleOptionClick(currentQuestion?.options[0]?._id) }}
                             className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
                         >
@@ -438,16 +417,9 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'> {currentQuestion?.options[0]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) && correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
-                        </Pressable>}
+                        </TouchableHighlight>}
 
-                        {currentQuestion && questionType === 'Single' && <Pressable
-                            hasTVPreferredFocus={true}
-                            android_ripple={{
-                                color: "rgba(255,255,255,0.5)",
-                                borderless: false,
-                                radius: 2000,
-                                foreground: true
-                            }}
+                        {currentQuestion && questionType === 'Single' && <TouchableHighlight
                             onPress={() => { handleOptionClick(currentQuestion?.options[1]?._id) }}
                             className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'bg-green-400' : '' : ''}`}
 
@@ -456,15 +428,8 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'> {currentQuestion?.options[1]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{markedOptions?.length > 0 ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? !correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
-                        </Pressable>}
-                        {currentQuestion && questionType === 'Multiple' && <Pressable
-                            hasTVPreferredFocus={true}
-                            android_ripple={{
-                                color: "rgba(255,255,255,0.5)",
-                                borderless: false,
-                                radius: 2000,
-                                foreground: true
-                            }}
+                        </TouchableHighlight>}
+                        {currentQuestion && questionType === 'Multiple' && <TouchableHighlight
                             onPress={() => { handleOptionClick(currentQuestion?.options[1]?._id) }}
                             className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
                         >
@@ -472,15 +437,8 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'> {currentQuestion?.options[1]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) && correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[1]?._id) ? !correctOptions?.includes(currentQuestion?.options[1]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
-                        </Pressable>}
-                        {currentQuestion && questionType === 'Single' && <Pressable
-                            hasTVPreferredFocus={true}
-                            android_ripple={{
-                                color: "rgba(255,255,255,0.5)",
-                                borderless: false,
-                                radius: 2000,
-                                foreground: true
-                            }}
+                        </TouchableHighlight>}
+                        {currentQuestion && questionType === 'Single' && <TouchableHighlight
                             onPress={() => { handleOptionClick(currentQuestion?.options[2]?._id) }}
                             className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'bg-green-400' : '' : ''}`}
                         >
@@ -488,15 +446,8 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'>{currentQuestion?.options[2]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{markedOptions?.length > 0 ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? !correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
-                        </Pressable>}
-                        {currentQuestion && questionType === 'Multiple' && <Pressable
-                            hasTVPreferredFocus={true}
-                            android_ripple={{
-                                color: "rgba(255,255,255,0.5)",
-                                borderless: false,
-                                radius: 2000,
-                                foreground: true
-                            }}
+                        </TouchableHighlight>}
+                        {currentQuestion && questionType === 'Multiple' && <TouchableHighlight
                             onPress={() => { handleOptionClick(currentQuestion?.options[2]?._id) }}
                             className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
                         >
@@ -504,15 +455,8 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'> {currentQuestion?.options[2]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) && correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[2]?._id) ? !correctOptions?.includes(currentQuestion?.options[2]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
-                        </Pressable>}
-                        {currentQuestion && questionType === 'Single' && <Pressable
-                            hasTVPreferredFocus={true}
-                            android_ripple={{
-                                color: "rgba(255,255,255,0.5)",
-                                borderless: false,
-                                radius: 2000,
-                                foreground: true
-                            }}
+                        </TouchableHighlight>}
+                        {currentQuestion && questionType === 'Single' && <TouchableHighlight
                             onPress={() => { handleOptionClick(currentQuestion?.options[3]?._id) }}
                             className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'bg-green-400' : '' : ''}`}
 
@@ -521,15 +465,8 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'> {currentQuestion?.options[3]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{markedOptions?.length > 0 ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
-                        </Pressable>}
-                        {currentQuestion && questionType === 'Multiple' && <Pressable
-                            hasTVPreferredFocus={true}
-                            android_ripple={{
-                                color: "rgba(255,255,255,0.5)",
-                                borderless: false,
-                                radius: 2000,
-                                foreground: true
-                            }}
+                        </TouchableHighlight>}
+                        {currentQuestion && questionType === 'Multiple' && <TouchableHighlight
                             onPress={() => { handleOptionClick(currentQuestion?.options[3]?._id) }}
                             className={`bg-white/5 px-5 py-3 rounded-xl my-4 overflow-hidden ${markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'bg-green-400' : 'bg-red-400' : '' : ''}`}
                         >
@@ -537,7 +474,7 @@ const Tests = ({ navigation, route }: any) => {
                                 <Text className='text-white font-bold'>  {currentQuestion?.options[3]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) && correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Correct Answer' : '' : ''} {markedOptions?.length > 0 ? markedOptions?.includes(currentQuestion?.options[3]?._id) ? !correctOptions?.includes(currentQuestion?.options[3]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : '' : ''}</Text>
                             </View>
-                        </Pressable>}
+                        </TouchableHighlight>}
                     </View>
                 </View>
                 <View className='flex flex-row justify-center mt-4'>
