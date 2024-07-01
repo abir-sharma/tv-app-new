@@ -83,7 +83,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
               />}
           </View>
           <Image source={require('../../assets/grad3.png')} className='absolute w-full h-full bottom-0 left-0' width={10} height={10} />
-          <View className='p-2 absolute bottom-2 left-2 text-white'>
+          {/* <View className='p-2 absolute bottom-2 left-2 text-white'>
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   
               </View>
@@ -92,8 +92,17 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
                 ? <Text className='text-lg text-white font-medium mb-0'>{item?.topic?.length >= 20 ? `${item?.topic?.substring(0, 20)}...` : item?.topic}</Text>
                 : <Text className='text-lg text-white font-medium mb-0'>{item?.videoDetails?.name?.length >= 20 ? `${item?.videoDetails?.name?.substring(0, 20)}...` : item?.videoDetails?.name}</Text>
               }
-          </View>
+          </View> */}
       </View>
+        <View className='p-2 relative px-5 pt-3'>
+            <View className='flex flex-row items-center justify-start gap-3'>
+            {
+              item.topic
+              ? <Text className='text-lg text-white font-medium mb-0'>{item?.topic?.length >= 20 ? `${item?.topic?.substring(0, 20)}...` : item?.topic}</Text>
+              : <Text className='text-lg text-white font-medium mb-0'>{item?.videoDetails?.name?.length >= 20 ? `${item?.videoDetails?.name?.substring(0, 20)}...` : item?.videoDetails?.name}</Text>
+            }
+          </View>   
+        </View>
       </LinearGradient>
     </Pressable>
   );
