@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { View, Text, Image, FlatList, Pressable } from 'react-native';
 import { VideoType } from '../../types/types';
 import moment from 'moment';
@@ -58,7 +58,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
       hasTVPreferredFocus
       onPress={() => {
         console.log("Go to Video Page", item);
-        console.log(item)
+        console.log(item?.videoDetails?.topic);
         //@ts-expect-error
         navigation.navigate("Videos", {
           lectureDetails: item?.videoDetails,
@@ -66,21 +66,6 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
         });
         saveToRecentVideos(item);
       }}>
-      {/* <View >
-        <View>
-          {item?.videoDetails?.image && <Image
-            style={{ width: '100%', height: 135, objectFit: 'cover', borderRadius: 10, }}
-            source={{ uri: `${item?.videoDetails?.image}` }}
-          />}
-        </View>
-        <View className='p-2'>
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Text className='text-white text-[10px]'>{moment(item?.date).format("MMM Do YY")}</Text>
-            <Text className='text-white text-[10px]'>{item?.videoDetails?.duration}</Text>
-          </View>
-          <Text className='text-xs text-white font-medium my-2'>{item?.videoDetails?.name?.length >= 60 ? `${item?.videoDetails?.name?.substring(0, 60)}...` : item?.videoDetails?.name}</Text>
-        </View>
-      </View> */}
       <View className='relative'>
           <View className="w-full aspect-video overflow-hidden rounded-lg relative">
               {item?.videoDetails?.image && <Image
@@ -93,7 +78,11 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                   
               </View>
-              <Text className='text-lg text-white font-medium mb-0'>{item?.videoDetails?.name?.length >= 20 ? `${item?.videoDetails?.name?.substring(0, 20)}...` : item?.videoDetails?.name}</Text>
+              {
+                item.topic
+                ? <Text className='text-lg text-white font-medium mb-0'>{item?.topic?.length >= 20 ? `${item?.topic?.substring(0, 20)}...` : item?.topic}</Text>
+                : <Text className='text-lg text-white font-medium mb-0'>{item?.videoDetails?.name?.length >= 20 ? `${item?.videoDetails?.name?.substring(0, 20)}...` : item?.videoDetails?.name}</Text>
+              }
           </View>
           
       </View>
