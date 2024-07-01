@@ -89,7 +89,8 @@ export default function Login({ navigation }: any) {
       const res = await axios.post("https://api.penpencil.co/v1/users/get-otp?smsType=0", {
         username: phone,
         countryCode: "+91",
-        organizationId: "5eb393ee95fab7468a79d189"
+        organizationId: "5eb393ee95fab7468a79d189",
+        // "Client-Type": "WEB",
       })
 
       console.log("success", res?.data);
@@ -97,7 +98,6 @@ export default function Login({ navigation }: any) {
       if (res?.data?.success) {
         setOtpSent(true);
       }
-
 
     }
     catch (err: any) {
@@ -109,7 +109,7 @@ export default function Login({ navigation }: any) {
           ToastAndroid.CENTER,
         );
       } else if (err?.response?.status === 400) {
-        console.log("New user error: ", err?.response?.status);
+        // console.log("New user error: ", err?.response?.status);
         setNewUser(true);
       }
       else {
@@ -144,7 +144,8 @@ export default function Login({ navigation }: any) {
         grant_type: "password",
         organizationId: "5eb393ee95fab7468a79d189",
         latitude: 0,
-        longitude: 0
+        longitude: 0,
+        // "Client-Type": "WEB",
       })
 
       console.log("success: ", res?.data?.data);
@@ -275,7 +276,7 @@ export default function Login({ navigation }: any) {
             <TextInput 
               ref={phoneInputRef}
               hasTVPreferredFocus={true}
-              value={phone} onChangeText={newText => { handleTextChange(newText) }} onFocus={(e) => { console.log("Focused") }}
+              value={phone} onChangeText={newText => { handleTextChange(newText) }}  
               className='w-full text-black text-lg' autoFocus={true} placeholderTextColor={"rgba(169, 169, 169, 1)"} placeholder='Enter Mobile No.' /></Pressable>}
 
 
@@ -336,7 +337,7 @@ export default function Login({ navigation }: any) {
               newUser ? handleRegisterUser() :
                 otpSent ? handleVerifyOTP() : handleSentOTP()
             }}
-            className='bg-[#5A4BDA] w-96 h-12 overflow-hidden mt-3 flex-row rounded-lg px-4 items-center justify-start'>
+            className={`bg-[#0569FF] ${phone.length !== 10 && " bg-[#0569FF]/50 " } w-96 h-12 overflow-hidden mt-3 flex-row rounded-full px-4 items-center justify-start`}>
             <Text className='text-white text-center w-full text-base'>{newUser ? "Register" : otpSent ? "Verify OTP" : "Get OTP"}</Text>
           </Pressable>
         </View>

@@ -5,6 +5,8 @@ import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGlobalContext } from '../../context/MainContext';
+import { LinearGradient } from 'expo-linear-gradient';
+import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 
 type VideoPropType = {
   videoList: VideoType[] | null,
@@ -15,6 +17,7 @@ type VideoPropType = {
 
 export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPropType) => {
 
+  console.log("videoList:", videoList);
   const navigation = useNavigation();
   const {selectedSubject, selectedChapter, selectedBatch} = useGlobalContext();
 
@@ -48,9 +51,9 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
   const renderGridItem = ({ item }: any) => (
     <Pressable
       style={{ flex: 1 / 4 }}
-      className=' m-2 overflow-hidden rounded-xl bg-white/5'
+      className=' m-2 overflow-hidden rounded-xl bg-white/5 h-52'
       android_ripple={{
-        color: "rgba(75, 61, 196, 0.01)",
+        color: "rgba(255,255,255,0.1)",
         borderless: false,
         radius: 1000,
         foreground: true
@@ -66,8 +69,14 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
         });
         saveToRecentVideos(item);
       }}>
+        <LinearGradient
+            {...fromCSS(
+                `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
+              )}
+              className='rounded-xl overflow-hidden h-52 border-[1px] border-white/30'
+        >
       <View className='relative'>
-          <View className="w-full aspect-video overflow-hidden rounded-lg relative">
+          <View className="w-full aspect-video rounded-xl overflow-hidden relative">
               {item?.videoDetails?.image && <Image
                   className=' w-full h-full rounded-t-lg '
                   source={{ uri: `${item?.videoDetails?.image}` }}
@@ -84,8 +93,8 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
                 : <Text className='text-lg text-white font-medium mb-0'>{item?.videoDetails?.name?.length >= 20 ? `${item?.videoDetails?.name?.substring(0, 20)}...` : item?.videoDetails?.name}</Text>
               }
           </View>
-          
       </View>
+      </LinearGradient>
     </Pressable>
   );
 
@@ -95,16 +104,11 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
       {videoList?.length === 0 && <Text className='text-white text-2xl self-center items-center'>No videos available!!</Text>}
       <FlatList
         data={videoList?.sort((a, b) => {
-          const nameA = a?.videoDetails?.name?.toUpperCase(); // Ignore case
-          const nameB = b?.videoDetails?.name?.toUpperCase();
-
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          return 0; // Names are equal
+          const dateA = new Date(a?.videoDetails?.createdAt);
+          const dateB = new Date(b?.videoDetails?.createdAt);
+        
+          // @ts-ignore
+          return dateA - dateB;
         })}
         renderItem={renderGridItem}
         keyExtractor={(item: VideoType) => item._id}

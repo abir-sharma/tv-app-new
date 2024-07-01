@@ -6,10 +6,11 @@ export type BatchInfoType = {
 }
 
 export type BatchType = {
-  thumbnail?: string;
+  _id: string;
+  previewImage: FileId;
   batch: BatchInfoType;
-  isPaid: boolean;
-  mahapackBatch: string | null;
+  isPurchased: boolean;
+  name: string;
 }
 
 export type Order = {

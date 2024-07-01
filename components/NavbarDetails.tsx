@@ -70,48 +70,46 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
 
     <View className=" flex-row justify-between items-center p-4 bg-[#111111]">
       <View className='flex flex-row items-center justify-center gap-2'>
-      <Pressable
-        hasTVPreferredFocus={true}
-        android_ripple={{
-          color: "rgba(255,255,255,0.4)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        onPress={() => {
-          mainNavigation.navigate('Home');
-          setRecentVideoLoad(prev => !prev);
-          setSelectedBatch(null);
-          setSelectSubjectSlug(null);
-          setSelectedSubject(null);
-          setSelectedChapter(null);
-          setTopicList(null);
-        }}
-        className='flex-row justify-center items-center rounded-xl overflow-hidden px-2'>
-        <Image source={require('../assets/home.png')} className='w-8 h-8' width={10} height={10} />
-      </Pressable>
-
-      <Pressable
-          onPress={() => { handleDropdownPress() }}
-          className='rounded-xl bg-[#444444] px-5 py-2 overflow-hidden'
+        <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
-            color: "rgba(255,255,255,0.5)",
+            color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
             foreground: true
-          }}>
-            <View className='flex-row items-center justify-center gap-2'>
-              <Text className='text-white text-sm'>{selectedSubject && (selectedSubject?.subject?.length > 20) ? `${selectedSubject?.subject.substring(0, 20)}...` : selectedSubject?.subject || "Select Subject"}</Text>
-              <Entypo name="chevron-down" size={20} color="white" />
-            </View>
+          }}
+          onPress={() => {
+            mainNavigation.navigate('Home');
+            setRecentVideoLoad(prev => !prev);
+            setSelectedBatch(null);
+            setSelectSubjectSlug(null);
+            setSelectedSubject(null);
+            setSelectedChapter(null);
+            setTopicList(null);
+          }}
+          className='flex-row justify-center items-center rounded-xl overflow-hidden px-2'>
+          <Image source={require('../assets/home.png')} className='w-8 h-8' width={10} height={10} />
         </Pressable>
+
+        <Pressable
+            onPress={() => { handleDropdownPress() }}
+            className='rounded-xl bg-[#444444] px-5 py-2 overflow-hidden'
+            hasTVPreferredFocus={true}
+            android_ripple={{
+              color: "rgba(255,255,255,0.5)",
+              borderless: false,
+              radius: 1000,
+              foreground: true
+            }}>
+              <View className='flex-row items-center justify-center gap-2'>
+                <Text className='text-white text-sm'>{selectedSubject && (selectedSubject?.subject?.length > 20) ? `${selectedSubject?.subject.substring(0, 20)}...` : selectedSubject?.subject || "Select Subject"}</Text>
+                <Entypo name="chevron-down" size={20} color="white" />
+              </View>
+          </Pressable>
       </View>
       
 
       <View>
-        
-
         <Modal
           transparent={true}
           animationType="fade"
@@ -139,7 +137,8 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             borderless: false,
             radius: 1000,
             foreground: true
-          }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 0 ? '#414347' : 'transparent' }} onPress={() => { setSelectedMenu(0); setContentType('videos'); setCurrentPage(1) }}>
+          }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 0 ? '#414347' : 'transparent' }}
+          onPress={() => { setSelectedMenu(0); setContentType('videos'); setCurrentPage(1) }}>
           <Text className="font-normal text-sm text-white">Lectures</Text>
         </Pressable>
         <Pressable hasTVPreferredFocus={true}

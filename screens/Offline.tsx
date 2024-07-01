@@ -7,6 +7,8 @@ import { useGlobalContext } from '../context/MainContext';
 import { ItemType, ItemType2 } from '../types/types';
 import OfflineBatches from '../components/Offline/OfflineBatches';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 export const Offline = () => {
@@ -287,7 +289,11 @@ export const Offline = () => {
   }
 
   return (
-    <View style={{ flex: 1 }} className='bg-[#1A1A1A]'>
+    <LinearGradient
+    {...fromCSS(
+      `linear-gradient(276.29deg, #2D3A41 6.47%, #2D3A41 47.75%, #000000 100%)`
+    )}
+    className=" flex-1">
       <Navbar />
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
         {showIpInput && <TextInput autoFocus={true} placeholder='Enter Ip' className=' rounded-lg pl-4 overflow-hidden ' onChangeText={(text) => { setIpAddress(text) }} style={{ backgroundColor: 'white', width: 200, marginRight: 20, padding: 4, }} />}
@@ -303,7 +309,7 @@ export const Offline = () => {
             onPress={() => {
               console.log("HiHi"); handleIPChange()
             }}
-            className='bg-[#8E89BA] w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
+            className='bg-[#0569FF] w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
             <Text className='text-white text-center w-full text-base'>Enter IP</Text>
           </Pressable>}
           {
@@ -319,12 +325,12 @@ export const Offline = () => {
               setShowIpInput(true);
               AsyncStorage.removeItem("iP");
             }}
-            className='bg-[#272063] w-40 h-10 ml-2 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
+            className='bg-[#0569FF] w-40 h-10 ml-2 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
             <Text className='text-white text-center w-full text-base'>Reset Ip</Text>
           </Pressable>}
 
       </View>
       <OfflineBatches />
-    </View>
+    </LinearGradient>
   );
 };

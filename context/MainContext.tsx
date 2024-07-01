@@ -82,6 +82,8 @@ type GlobalContextType = {
   setRecentVideoLoad: Dispatch<SetStateAction<boolean>>;
   logs: string[];
   setLogs: Dispatch<SetStateAction<string[]>>;
+  messageFromRemote: string;
+  setMessageFromRemote: Dispatch<SetStateAction<string>>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -153,6 +155,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setRecentVideoLoad: () => { },
   logs: [],
   setLogs: () => { },
+  messageFromRemote: "",
+  setMessageFromRemote: () => { },
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
@@ -198,10 +202,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [offlineSelectedSection, setOfflineSelectedSection] = useState<number>(3);
   const [showIpInput, setShowIpInput] = useState<boolean>(false);
   const [logs, setLogs] = useState<string[]>([]);
-
-
   const [headers, setHeaders] = useState<any>(null)
-
+  const [messageFromRemote, setMessageFromRemote] = useState<string>("");
 
   useEffect(() => {
     const getIP = async () => {
@@ -219,8 +221,9 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const getPaidBatches = async () => {
     try {
-      const res = await axios.get("https://api.penpencil.co/v3/batches/all-purchased-batches", { headers });
+      const res = await axios.get("https://api.penpencil.co/v3/batches/my-batches?mode=1&page=1&limit=50", { headers });
       setSubscribedBatches(res?.data?.data);
+      console.log("subscribed batches:::: ", res?.data?.data);
       setSelectedBatch(res?.data?.data[0]);
       setSelectSubjectSlug(res?.data?.data[0]?.subjects[0]?.slug);
       setSelectedSubject(res?.data?.data[0]?.subjects[0]);
@@ -229,7 +232,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in BATCHES API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
-      console.log("error:", err);
+      // console.log("error:", err);
     }
   }
 
@@ -237,24 +240,24 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     try {
       const res = await axios.get("https://api.penpencil.co/v2/orders/myPurchaseOrders?page=1&limit=50&status=ALL", { headers });
       setOrders(res?.data?.data?.data);
-
+      console.log("ordersss: ", res?.data?.data?.data);
     }
     catch (err: any) {
-      setLogs((logs) => [...logs, "Error in ORDERS API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
-      console.log("error:", err);
+      // setLogs((logs) => [...logs, "Error in ORDERS API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
+      console.log("buuuuu:", err);
     }
   }
 
   const getBatchDetails = async () => {
     try {
-      const res = await axios.get(`https://api.penpencil.co/v3/batches/${selectedBatch?.batch._id}/details`, { headers });
+      const res = await axios.get(`https://api.penpencil.co/v3/batches/${selectedBatch?._id}/details`, { headers });
       setBatchDetails(res?.data?.data)
 
       batchDetails && setSelectedSubject(batchDetails?.subjects ? batchDetails?.subjects[0] : null);
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in BATCH DETAIL API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
-      console.log("errorr:", err);
+      // console.log("errorr:", err);
     }
   }
 
@@ -263,12 +266,12 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     try {
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentPage}`, { headers });
       setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
-      console.log("Setting selected chapter", res?.data?.data[0]?.name);
+      // console.log("Setting selected chapter", res?.data?.data[0]?.name);
       // setSelectedChapter(res?.data?.data[0]);
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
-      console.log("error:", err);
+      // console.log("error:", err);
     }
   }
 
@@ -283,7 +286,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   }, [selectedBatch])
 
   useEffect(() => {
-    console.log("getting chapters data");
+    // console.log("getting chapters data");
     setTopicList(null);
     getChaptersData();
   }, [selectedSubject])
@@ -331,6 +334,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         showIpInput, setShowIpInput,
         recentVideoLoad, setRecentVideoLoad,
         logs, setLogs,
+        messageFromRemote, setMessageFromRemote
       } as GlobalContextType}>
       {children}
     </GlobalContext.Provider>

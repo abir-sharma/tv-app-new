@@ -4,6 +4,8 @@ import { ItemType } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
 // @ts-expect-error
 import defaultIcon from '../../assets/TV.png';
+import { LinearGradient } from 'expo-linear-gradient';
+import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 
 type VideoPropType = {
   videoList: ItemType[] | null,
@@ -28,20 +30,29 @@ export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
         //@ts-expect-error
         navigation.navigate('MP4Player', { videoUrl: item?.path });
       }}>
-      <View >
-        <View>
+      <LinearGradient
+            {...fromCSS(
+                `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
+              )}
+              className='rounded-xl overflow-hidden h-52 border-[1px] border-white/30'
+        >
+      <View className='relative'>
+          <View className="w-full aspect-video rounded-xl overflow-hidden relative">
           {item.defaultThumbnail ? <Image
-            style={{ width: '100%', height: 142, objectFit: 'contain', borderRadius: 5 }}
+          className='w-full h-full rounded-t-lg'
             source={{ uri: `${item?.thumbnail}` }}
           /> : <Image
-            style={{ width: '100%', height: 142, objectFit: 'contain', borderRadius: 5 }}
+            className='w-full h-full rounded-t-lg'
             source={defaultIcon}
           />}
-        </View>
-        <View className='p-2'>
-          <Text className='text-xs text-white font-medium my-2'>{item?.name?.length >= 60 ? `${item?.name?.substring(0, 60)}...` : item?.name}</Text>
-        </View>
+          </View>
+          <View className='p-2 relative px-5 pt-3'>
+              <View className='flex flex-row items-center justify-start gap-3'>
+              <Text className='text-base text-white font-normal mb-0'>{item?.name?.length >= 40 ? `${item?.name?.substring(0, 40)}...` : item?.name}</Text>
+              </View>                            
+          </View>
       </View>
+      </LinearGradient>
     </Pressable>
   );
 

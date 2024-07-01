@@ -23,22 +23,21 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import Entypo from "@expo/vector-icons/Entypo";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 // import Video, { VideoRef } from 'react-native-video';
 // import ResizeMode from "react-native-video";
 import uuid from "react-native-uuid";
+import Pdf from "react-native-pdf";
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 export default function VideoPlayer(props: any) {
-  const { mainNavigation } = useGlobalContext();
+  const { mainNavigation, selectedBatch, headers } = useGlobalContext();
   const playerRef = useRef<Video | null>(null);
   const [spinner, setSpinner] = useState<any>();
   const [src, setSrc] = useState<any>(undefined);
   const [cookieParams, setCookieParams] = useState<any>(undefined);
   const [renderVideo, setRenderVideo] = useState<boolean>(false);
   const [noVideoAvailable, setNoVideoAvailable] = useState<boolean>(false);
-  const { headers } = useGlobalContext();
   const [showLoader, setShowLoader] = useState<boolean>(true);
   const [isActive, setIsActive] = useState<boolean>(true);
 
@@ -129,6 +128,12 @@ export default function VideoPlayer(props: any) {
     }
   };
 
+  useEffect(()=>{
+    if(allowAnnotations){
+      pauseVideo();
+    }
+  }, [allowAnnotations])
+
   const [modalVisible, setModalVisible] = useState(false);
   const qualityOptions = [240, 360, 480, 720];
 
@@ -141,9 +146,9 @@ export default function VideoPlayer(props: any) {
   const renderQualityOption = ({ item }: any) => (
     <Pressable
       onPress={() => handleQualityChange(item)}
-      className="p-2 border-b border-gray-300/50 text-white"
+      className="p-2 border-b border-gray-300/50"
     >
-      <Text className="text-white pl-2">{`${item}p`}</Text>
+      <Text className="text-[#7363FC] text-center">{`${item}p`}</Text>
     </Pressable>
   );
 
@@ -209,7 +214,7 @@ export default function VideoPlayer(props: any) {
     }
     if (props.isLive) {
       setSrc(props?.lectureDetails?.videoUrl);
-      sendAnalyticsData(props?.lectureDetails?.videoUrl);
+      // sendAnalyticsData(props?.lectureDetails?.videoUrl);
       setRenderVideo(true);
       setSpinner(false);
       return;
@@ -218,6 +223,7 @@ export default function VideoPlayer(props: any) {
       if(!m3u8Url) return;
       setSrc(m3u8Url);
       sendAnalyticsData(m3u8Url);
+      // getSignedUrlCookie(m3u8Url);
       setRenderVideo(true);
       setSpinner(false);
     }
@@ -248,6 +254,9 @@ export default function VideoPlayer(props: any) {
   const playVideo = () => {
     setIsPlaying(true);
     (playerRef.current as Video | null)?.playAsync();
+    setAllowAnnotations(false);
+    setTool(null);
+    setAnnotations({})
   };
 
   const pauseVideo = () => {
@@ -292,8 +301,8 @@ export default function VideoPlayer(props: any) {
 
     if (match) {
       const id = match[1]; // Extract the ID from the URL
-      // const m3u8Url = `https://sec1.pw.live/${id}/hls/${quality}/main.m3u8`;
-      const m3u8Url = `https://sec1.pw.live/${id}/master.m3u8`;
+      const m3u8Url = `https://sec1.pw.live/${id}/hls/${quality}/main.m3u8`;
+      // const m3u8Url = `https://sec1.pw.live/${id}/master.m3u8`;
       return m3u8Url;
     } else {
       // Handle invalid MPD URLs here (e.g., return an error message)
@@ -335,6 +344,27 @@ export default function VideoPlayer(props: any) {
       });
   }
 
+  // async function getSignedUrlCookie(url: string) {
+  //   const token = await AsyncStorage.getItem("token");
+  //   console.log("token", token);
+  //   axios.post("https://api.penpencil.co/v1/files/signed-url?reqType=cookie&gcpCdnType=media", {
+  //     batchId: selectedBatch?.batch?._id,
+  //     scheduleId: props?.scheduleDetails?._id,
+  //     playingSource: "BATCHES",
+  //     url: url,
+  //   }, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         randomId: JSON.stringify(uuid.v4()),
+  //       }
+  //     }).then((res) => {
+  //       console.log("* signed url cookie validation success");
+  //       console.log(res?.data?.data);
+  //     }).catch((err) => {
+  //       console.log("* signed url cookie validation failed", err.response?.data);
+  //     });
+  // }
+
   const handlePlaybackStatusUpdate = (status: any) => {
     if (status.isPlaying) {
       setCurrentTime(status.positionMillis);
@@ -360,18 +390,6 @@ export default function VideoPlayer(props: any) {
         console.log("* m3u8 get error", err);
       });
   }
-
-  const getAndSetToken = async () => {
-    AsyncStorage.getItem("token").then((token) => {
-      setToken(token);
-    });
-  };
-
-  useEffect(() => {
-    getAndSetToken();
-    // console.log('props', props);
-    console.log('cookie params log', cookieParams)
-  }, []);
 
   return (
     <View
@@ -457,7 +475,7 @@ export default function VideoPlayer(props: any) {
               color={tool === "eraser" ? "white" : "#7363FC"}
             />
           </Pressable>
-          <Pressable
+          {/* <Pressable
             android_ripple={{
               color: "rgba(255,255,255,0.8)",
               borderless: false,
@@ -472,7 +490,7 @@ export default function VideoPlayer(props: any) {
               size={30}
               color={tool === "eraser" ? "white" : "#7363FC"}
             />
-          </Pressable>
+          </Pressable> */}
         </View>
       )}
       {showControls && props?.currentVideos?.length > 1 && (
@@ -582,7 +600,7 @@ export default function VideoPlayer(props: any) {
                   onPress={() => setModalVisible(false)}
                 >
                   <View style={{ flex: 1 }}>
-                    <View className="bg-black/90 w-40 absolute bottom-24 left-80 rounded-lg m-4">
+                    <View className="bg-black/90 w-20 absolute bottom-16 left-96 rounded-lg m-4 ml-16 mb-8 border-[#7363FC]/40 border-[1px]">
                       <FlatList
                         data={qualityOptions}
                         renderItem={renderQualityOption}
@@ -758,13 +776,19 @@ export default function VideoPlayer(props: any) {
           />
         </View>
       )}
-      {renderVideo && (
+      <View
+        className=" flex-1"
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+        {renderVideo && (
         <Video
           source={{
             uri: src,
             headers: {
               cookie: cookieParams,
-              Authorization: headers.Authorization
+              Authorization: headers?.Authorization,
             },
           }}
           onLoadStart={() => {
@@ -785,45 +809,19 @@ export default function VideoPlayer(props: any) {
           volume={volume}
           onLoad={() => setShowLoader(false)}
         />
-
-        // <WebView
-        //     source={{
-        //         uri: `https://pw-video-player-stage.physicswallah.live/watch/?type=${props?.scheduleDetails?.type}&src=${props?.scheduleDetails?.url}&token=${token}&clientType=TEACHER&randomId=${uuid.v4()}&back_button=false&three_dots=false&is_products_enabled=false`
-        //     }}
-        //     style={{ flex: 1, zIndex: 10 }}
-        //     onLoadEnd={() => {
-        //       setShowLoader(false);
-        //       console.log(`https://pw-video-player-stage.physicswallah.live/watch/?type=${props?.scheduleDetails?.type}&src=${props?.scheduleDetails?.url}&token=${token}&clientType=TEACHER&randomId=${uuid.v4()}&back_button=false&three_dots=false&is_products_enabled=false`)
-        //     }}
-        // />
-
-        // <View style={{ flex: 1, zIndex: 10}}>
-        //   {token && (
-        //     <WebView
-        //       // source={{ uri: "https://www.pw.live/study" }}
-        //       source={{ uri: 'https://www.pw.live/watch/?batchSlug=class-12th--lakshya-jee-415093&batchSubjectId=60509bd366e46a0290457b7a&subjectSlug=physics-951356&topicSlug=all&scheduleId=60509bd366e46a0290457beb&isUnderMaintenance=false&entryPoint=BATCH_LECTURE_VIDEOS_634fb88abc72420011da2fe4' }}
-        //       javaScriptEnabled
-        //       domStorageEnabled
-        //       cacheEnabled
-        //       injectedJavaScript={`
-        //           // alert(Object.keys(localStorage).map(key => key + ' : ' + localStorage.getItem(key)).join('\\n'));
-        //         `}
-        //       injectedJavaScriptBeforeContentLoaded={`
-        //           localStorage.clear();
-        //           window.localStorage.setItem('TOKEN', '${token}');
-        //           window.localStorage.setItem('uuid', '303513ad-b369-4266-97d5-351edfa3c741');
-        //         `}
-        //       injectedJavaScriptBeforeContentLoadedForMainFrameOnly
-        //       incognito
-        //       style={{ flex: 1 }}
-        //       onLoad={() => {
-        //         setShowLoader(false);
-        //       }}
-        //       startInLoadingState
-        //     />
-        //   )}
-        // </View>
       )}
+        {allowAnnotations && (
+          <Svg className=" absolute top-0 left-0 right-0 bottom-0">
+            {(annotations[currentPage] || []).map((path, index) => (
+              <Path key={index} d={path} stroke="red" strokeWidth={3} fill="none" />
+            ))}
+            {currentPath !== '' && (
+              <Path d={currentPath} stroke="red" strokeWidth={3} fill="none" />
+            )}
+          </Svg>
+        )}
+      </View>
+      
     </View>
   );
 }

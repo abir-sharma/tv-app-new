@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator } from 'react-native'
+import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator, ScrollView } from 'react-native'
 import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
 import { cookieSplitter } from '../components/video-player/cookie-splitter';
@@ -138,6 +138,13 @@ const TestSolutions = ({ route }: any) => {
         }
     };
 
+    const handleNumberClick = (index: number) => {
+        setCurrentQuestion(questionsData[index]);
+        setCorrectOptions(questionsData[index]?.question?.solutions);
+        setMarkedOptions(questionsData[index]?.yourResult?.markedSolutions);
+        setQuestionType(questionsData[index]?.question?.type);
+        
+    };
 
     const handlePreviousClick = () => {
         const curr = questionsData?.indexOf(currentQuestion);
@@ -156,10 +163,37 @@ const TestSolutions = ({ route }: any) => {
             return;
         }
     }
+    const getBorderColor = (status:string) => {
+        switch (status) {
+          case 'WRONG':
+            return 'red-500';
+          case 'CORRECT':
+            return 'green-500';
+          case 'UnAttempted':
+            return 'gray-400';
+          default:
+            return 'white';
+        }
+      };
+
+      const getColoredDot = (status:string) => {
+        switch (status) {
+          case 'WRONG':
+            return <View className='w-2 h-2 rounded-full bg-red-400'></View>;
+          case 'CORRECT':
+            return <View className='w-2 h-2 rounded-full bg-green-400'></View>;
+          case 'UnAttempted':
+            return <View className='w-2 h-2 rounded-full bg-gray-400'></View>;
+          default:
+            return <View className='w-2 h-2 rounded-full bg-white'></View>;
+        }
+      };
+
+    console.log("curr--: ", currentQuestion);
 
 
     return (
-        <View className='bg-[#1A1A1A] min-h-screen p-5'>
+        <ScrollView className='bg-[#1A1A1A] p-5'>
             {showLoader && <View
                 style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
                 className='bg-white/10 '
@@ -176,7 +210,7 @@ const TestSolutions = ({ route }: any) => {
                             foreground: true
                         }}
                         onPress={() => {
-                            mainNavigation.navigate('Home')
+                            mainNavigation.goBack();
                         }}
                         className="overflow-hidden rounded-full p-2"
                     >
@@ -201,10 +235,10 @@ const TestSolutions = ({ route }: any) => {
 
             <View className='flex-1 flex-row w-full rounded-xl mt-5 gap-x-5'>
                 <View className='flex-[2] rounded-xl items-start justify-start px-5 py-0'>
-                    <Text className='text-white text-sm ml-auto text-center'>Video solution for Question {currentQuestion?.question?.questionNumber}</Text>
-                    <View className='h-52 bg-gray-600 rounded-lg w-full mt-1'>
-                    </View>
-                    <View className='flex-row mt-3 gap-x-2'>
+                    {/* <Text className='text-white text-sm ml-auto text-center'>Video solution for Question {currentQuestion?.question?.questionNumber}</Text> */}
+                    {/* <View className='h-52 bg-gray-600 rounded-lg w-full mt-1'>
+                    </View> */}
+                    {/* <View className='flex-row mt-3 gap-x-2'>
                         <Pressable
                             hasTVPreferredFocus={true}
                             android_ripple={{
@@ -257,18 +291,7 @@ const TestSolutions = ({ route }: any) => {
                         >
                             <Text className={`overflow-hidden ${selectedFilter === 'skipped' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>Skipped</Text>
                         </Pressable>
-                    </View>
-                    <View className='flex-row flex-wrap py-4 gap-2 overflow-scroll'>
-                        {
-                            questionsData && questionsData.map(
-                                (question: any, index: number) => (
-                                    <View key={index} className={`w-16 h-16 bg-white/10 rounded items-center justify-center ${currentQuestion?.question?.questionNumber === question?.question?.questionNumber ? 'bg-[#8E89BA]' : ''}`}>
-                                        <Text className=' text-lg text-white font-medium '>{question?.question?.questionNumber}</Text>
-                                    </View>
-                                )
-                            )
-                        }
-                    </View>
+                    </View> */}
                     <View className='flex-row mt-3 justify-between items-center '>
                         <View className='flex-row flex-1 items-center justify-start gap-x-2'>
                             <View className='w-2 h-2 rounded-full bg-green-400'></View>
@@ -283,7 +306,31 @@ const TestSolutions = ({ route }: any) => {
                             <Text className='text-white text-base text-center'>Skipped</Text>
                         </View>
                     </View>
-                    <View className=' flex-row justify-between items-center mt-5 w-full'>
+                    <View className='flex-row flex-wrap py-4 gap-2 overflow-scroll'>
+                        {
+                            questionsData && questionsData.map(
+                                (question: any, index: number) => (
+                                    <Pressable
+                                        onPress={() => handleNumberClick(index)}
+                                        >
+                                        <View
+                                            key={index}
+                                            className={`w-20 h-20 flex flex-col bg-white/10 rounded-lg items-center justify-center ${
+                                            currentQuestion?.question?.questionNumber === question?.question?.questionNumber ? 'bg-[#8E89BA]' : ''} ${"border-" + getBorderColor(question?.yourResult.status)} border-[1px]`}
+                                        >
+                                            <Text className=" text-lg text-white font-medium ">
+                                            {question?.question?.questionNumber}
+                                            </Text>
+                                            {getColoredDot(question?.yourResult.status)}
+                                            
+                                        </View>
+                                    </Pressable>
+                                )
+                            )
+                        }
+                    </View>
+                    
+                    {/* <View className=' flex-row justify-between items-center mt-5 w-full'>
                         <Pressable
                             hasTVPreferredFocus={true}
                             android_ripple={{
@@ -310,10 +357,23 @@ const TestSolutions = ({ route }: any) => {
                         >
                             <Text className='text-white text-lg'>Next</Text>
                         </Pressable>
-                    </View>
+                    </View> */}
                 </View>
-                <View className='flex-[3] h-[550]'>
+                <View className='flex-[3]'>
                     <View className='flex-1 bg-white/5 rounded-xl p-5'>
+                        <View className='flex flex-row gap-3 mb-4'>
+                            <View className='rounded-full overflow-hidden bg-[#504D6B] w-10 h-10 flex items-center justify-center'>
+                                <Text className='text-white text-xl font-semibold'>
+                                    {currentQuestion?.question?.questionNumber}
+                                </Text>
+                            </View>
+                            <View className='bg-white h-[70%] w-[1px] rounded-sm items-center justify-center'></View>
+                            <View className='rounded-full overflow-hidden bg-white flex items-center justify-center'>
+                                <Text className='text-black text-base px-4 font-semibold'>
+                                    Type: {questionType}
+                                </Text>
+                            </View>
+                        </View>
                         <View className='h-[220] bg-white/5 w-full rounded-lg items-center justify-center'>
                             <Image
                                 source={{ uri: `${currentQuestion?.question?.imageIds?.en?.baseUrl}${currentQuestion?.question?.imageIds?.en?.key}` }}
@@ -323,7 +383,7 @@ const TestSolutions = ({ route }: any) => {
                                 alt='Question'
                             />
                         </View>
-                        {questionType === 'Numeric' && <View className='gap-y-2 mt-5 w-[60%]'>
+                        {questionType === 'Numeric' && <View className='gap-y-2 mt-5 w-[100%]'>
                             {currentQuestion?.yourResult?.markedSolutionText && currentQuestion?.yourResult?.markedSolutionText !== '' && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${currentQuestion?.question?.solutionText === currentQuestion?.yourResult?.markedSolutionText ? 'bg-green-400' : 'bg-red-400'}`}>
                                 <Text className='text-white font-bold'> {currentQuestion?.yourResult?.markedSolutionText} </Text>
                                 <Text className='text-white font-bold'> {currentQuestion?.question?.solutionText === currentQuestion?.yourResult?.markedSolutionText ? 'Correct Answer (marked by you)' : 'Incorrect Answer (marked by you)'}</Text>
@@ -333,7 +393,7 @@ const TestSolutions = ({ route }: any) => {
                                 <Text className='text-white font-bold'> Correct Answer </Text>
                             </View>}
                         </View>}
-                        {questionType !== 'Numeric' && <View className='gap-y-2 mt-5 w-[60%]'>
+                        {questionType !== 'Numeric' && <View className='gap-y-2 mt-5 w-[100%]'>
                             {currentQuestion?.question?.options && <View className={`bg-white/5 px-5 py-5 rounded-lg flex flex-row justify-between ${markedOptions?.includes(currentQuestion?.question?.options[0]?._id) ? correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'bg-green-400' : 'bg-red-400' : correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'bg-green-400' : ''}`}>
                                 <Text className='text-white font-bold'> {currentQuestion?.question?.options[0]?.texts?.en} </Text>
                                 <Text className='text-white font-bold'>{correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'Correct Answer' : ''} {markedOptions?.includes(currentQuestion?.question?.options[0]?._id) ? !correctOptions?.includes(currentQuestion?.question?.options[0]?._id) ? 'Incorrect (marked by you)' : '(marked by you)' : ''}</Text>
@@ -354,10 +414,13 @@ const TestSolutions = ({ route }: any) => {
                         </View>}
                     </View>
                 </View>
+                <View>
+                    
+                </View>
 
 
             </View>
-        </View>
+        </ScrollView>
     )
 }
 
