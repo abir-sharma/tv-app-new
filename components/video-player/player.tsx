@@ -174,6 +174,7 @@ export default function VideoPlayer(props: any) {
     const m3u8url = convertMPDToM3U8(mpdUrl);
     // console.log("urlsent:", m3u8url, {headers: {cookie: cookieParams}});
     try {
+      if(!m3u8url) return;
       const res = await axios.get(m3u8url);
       // console.log("resss: ", res.data);
     } catch (err) {
@@ -182,7 +183,17 @@ export default function VideoPlayer(props: any) {
   };
 
   useEffect(() => {
-    // console.log("url: ", props?.lectureDetails?.videoUrl);
+    if(props.scheduleDetails.videoContentId) {
+      console.log("Detected program batch, using 'videoContentId' key.");
+      const { videoUrl } = props.scheduleDetails.videoContentId.content[0];
+      let m3u8Url = convertMPDToM3U8(videoUrl);
+      if(!m3u8Url) return;
+      setSrc(m3u8Url);
+      sendAnalyticsData(m3u8Url);
+      setRenderVideo(true);
+      setSpinner(false);
+      return;
+    }
 
     // MPD testing
     MPDTesting(props?.lectureDetails?.videoUrl);
@@ -209,6 +220,7 @@ export default function VideoPlayer(props: any) {
       return;
     } else {
       let m3u8Url = convertMPDToM3U8(props?.lectureDetails?.videoUrl);
+      if(!m3u8Url) return;
       setSrc(m3u8Url);
       sendAnalyticsData(m3u8Url);
       // getSignedUrlCookie(m3u8Url);
@@ -274,8 +286,18 @@ export default function VideoPlayer(props: any) {
 
   function convertMPDToM3U8(mpdUrl: string) {
     // Define a regular expression to match the ID in the MPD URL
-    const idRegex = /\/([0-9a-f-]+)\/master\.mpd$/i;
-    const match = mpdUrl.match(idRegex);
+    if(!mpdUrl) return;
+
+    let match;
+
+    try {
+      const idRegex = /\/([0-9a-f-]+)\/master\.mpd$/i;
+      match = mpdUrl.match(idRegex);
+    }
+    catch (e) {
+      console.error("Unexpected error occured!", e);
+      return;
+    }
 
     if (match) {
       const id = match[1]; // Extract the ID from the URL
@@ -289,7 +311,8 @@ export default function VideoPlayer(props: any) {
   }
 
   useEffect(() => {
-    setSrc(convertMPDToM3U8(props?.lectureDetails?.videoUrl));
+    if(props.scheduleDetails.videoContentId) setSrc(convertMPDToM3U8(props.scheduleDetails.videoContentId.content[0].videoUrl));
+    else setSrc(convertMPDToM3U8(props?.lectureDetails?.videoUrl));
   }, [quality]);
 
   async function sendAnalyticsData(uri: string) {
