@@ -63,18 +63,6 @@ export default function Navbar() {
     getPhone();
   },[isDropdownVisible])
 
-  useEffect(() => {
-    console.log("message in navbar", messageFromRemote);
-    try {
-      if (messageFromRemote && JSON.parse(messageFromRemote)?.type == "qrscan") {
-        setIsQrModalVisible(false);
-        // sendMessageToClient(`{"type": "qrscan-success"}`);
-      }
-    } catch (err) {
-      console.log("err while parsing", err);
-    }
-  }, [messageFromRemote]);
-
   
 
   return (

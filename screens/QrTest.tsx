@@ -9,15 +9,18 @@ import {
   Image,
   StyleSheet,
   TouchableHighlight,
+  Pressable,
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { useGlobalContext } from "../context/MainContext";
 import useUdpServer from "../hooks/useUdpServer";
+import { useNavigation } from "@react-navigation/native";
 
-export default function QRCodeGenerator({ navigation, setIsQrModalVisible }: any) {
-  const { setMainNavigation } = useGlobalContext();
+export default function QRCodeGenerator({ setIsQrModalVisible }: any) {
+  const { setMainNavigation, messageFromRemote } = useGlobalContext();
   const { message, ipAddress, sendMessageToClient } = useUdpServer();
-  const [showNetworkMessage, setShowNetworkMessage] = useState(false);
+
+  const navigation = useNavigation();
 
   useEffect(() => {
     // navigation.setOptions({ headerShown: false });
@@ -25,10 +28,16 @@ export default function QRCodeGenerator({ navigation, setIsQrModalVisible }: any
   }, []);
 
   useEffect(() => {
-      setTimeout(() => {
-        setShowNetworkMessage(true);
-      }, 15000);
-  }, [showNetworkMessage]);
+    console.log("message in navbar", messageFromRemote);
+    try {
+      if (messageFromRemote && JSON.parse(messageFromRemote)?.type == "qrscan") {
+        navigation.goBack();
+        // sendMessageToClient(`{"type": "qrscan-success"}`);
+      }
+    } catch (err) {
+      console.log("err while parsing", err);
+    }
+  }, [messageFromRemote]);
 
 
 
@@ -89,7 +98,7 @@ export default function QRCodeGenerator({ navigation, setIsQrModalVisible }: any
           </>
         )}
       </View>
-      {showNetworkMessage && <Text className="text-center mx-auto text-red-500 text-base mt-10 bg-red-400/10 rounded-lg px-4 py-2">* Make sure you are connected to the same WiFi network</Text>}
+      <Text className="text-center mx-auto text-red-500 text-base mt-10 bg-red-400/10 rounded-lg px-4 py-2">* Make sure you are connected to the same WiFi network</Text>
     </View>
   );
 }

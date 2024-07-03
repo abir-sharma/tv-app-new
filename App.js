@@ -41,7 +41,7 @@ export default function App() {
     const { connectionStatus, message, ipAddress, sendMessageToClient } = useUdpServer();
     // modals
     const [showYoutubeModal, setShowYoutubeModal] = useState(false);
-    const [youtubeUrl, setYoutubeUrl] = useState("https://youtu.be/7LSLVvMhiZU?si=ADKE1Y-11Ma95lpu");
+    const [youtubeUrl, setYoutubeUrl] = useState("");
     // const [pdfUrl, setPdfUrl] = useState("");
     // const [showPdfModal, setShowPdfModal] = useState(false);
     const [pdfChunks, setPdfChunks] = useState([]);
@@ -201,8 +201,7 @@ export default function App() {
       <Modal
         animationType="slide"
         transparent={true}
-        visible={true}
-        // visible={showYoutubeModal}
+        visible={showYoutubeModal}
         onRequestClose={() => {
           setShowYoutubeModal(true);
         }}
