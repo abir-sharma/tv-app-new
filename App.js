@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { StatusBar, Modal, Image, ActivityIndicator, View, Button } from "react-native";
 import Providers from "./utils/Providers";
+import getYouTubeID from 'get-youtube-id';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
@@ -40,7 +41,7 @@ export default function App() {
     const { connectionStatus, message, ipAddress, sendMessageToClient } = useUdpServer();
     // modals
     const [showYoutubeModal, setShowYoutubeModal] = useState(false);
-    const [youtubeUrl, setYoutubeUrl] = useState("");
+    const [youtubeUrl, setYoutubeUrl] = useState("https://youtu.be/7LSLVvMhiZU?si=ADKE1Y-11Ma95lpu");
     // const [pdfUrl, setPdfUrl] = useState("");
     // const [showPdfModal, setShowPdfModal] = useState(false);
     const [pdfChunks, setPdfChunks] = useState([]);
@@ -165,6 +166,9 @@ export default function App() {
     }
   }, [message]);
 
+  useEffect(()=>{console.log("huhuhuhuhu: ",getYouTubeID(youtubeUrl))}, [youtubeUrl])
+
+
   return (
     <Providers>
       <NavigationContainer ref={navigationRef}>
@@ -197,17 +201,16 @@ export default function App() {
       <Modal
         animationType="slide"
         transparent={true}
-        // visible={true}
-        visible={showYoutubeModal}
+        visible={true}
+        // visible={showYoutubeModal}
         onRequestClose={() => {
-          setShowYoutubeModal(false);
+          setShowYoutubeModal(true);
         }}
-        cl
       >
           {youtubeUrl && <YoutubePlayer
             height={"100%"}
             play={playing}
-            videoId={`${(new URL(youtubeUrl)).searchParams.get('v')}`}
+            videoId={`${getYouTubeID(youtubeUrl)}`}
             onChangeState={onStateChange}
           />}
 
