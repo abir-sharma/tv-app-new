@@ -3,8 +3,13 @@ import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator, ScrollVi
 import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
 import { cookieSplitter } from '../components/video-player/cookie-splitter';
+import { useNavigation } from '@react-navigation/native';
+import AntDesign from '@expo/vector-icons/AntDesign';
+
 
 const TestSolutions = ({ route }: any) => {
+
+    const navigation = useNavigation();
 
     const { headers, selectedTestMapping, mainNavigation } = useGlobalContext();
     const [solutionData, setSolutionData] = useState<any>();
@@ -26,6 +31,10 @@ const TestSolutions = ({ route }: any) => {
         fetchSolutionData();
     }, [])
 
+    useEffect(()=>{
+        console.log("quescur:--",currentQuestion);
+    }, [currentQuestion])
+
     const fetchSolutionData = async () => {
         setShowLoader(true);
         try {
@@ -38,6 +47,7 @@ const TestSolutions = ({ route }: any) => {
             setQuestionsData(res?.data?.data?.questions);
             setOriginalQuestionData([...res?.data?.data?.questions]);
             setSolutionData(res?.data?.data);
+            console.log("solutions:--- ", res?.data.data);
             setCurrentQuestion(res?.data?.data?.questions[0]);
             setCorrectOptions(res?.data?.data?.questions[0]?.question?.solutions);
             setMarkedOptions(res?.data?.data?.questions[0]?.yourResult?.markedSolutions);
@@ -193,7 +203,7 @@ const TestSolutions = ({ route }: any) => {
 
 
     return (
-        <ScrollView className='bg-[#1A1A1A] p-5'>
+        <View className='bg-[#111111] h-full p-5'>
             {showLoader && <View
                 style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
                 className='bg-white/10 '
@@ -220,21 +230,15 @@ const TestSolutions = ({ route }: any) => {
                     </Pressable>
                 </View>
                 <Text className='text-white text-xl font-medium' >{solutionData?.test?.name}</Text>
-                <Pressable
-                    android_ripple={{
-                        color: "rgba(255,255,255,0.5)",
-                        borderless: false,
-                        radius: 1000,
-                        foreground: true
-                    }}
-                    className='flex-row justify-center overflow-hidden rounded-full items-center p-2'>
+                <View
+                    className='flex-row justify-center opacity-0 overflow-hidden rounded-full items-center p-2'>
                     <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
                     {/* <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text> */}
-                </Pressable>
+                </View>
             </View>
 
             <View className='flex-1 flex-row w-full rounded-xl mt-5 gap-x-5'>
-                <View className='flex-[2] rounded-xl items-start justify-start px-5 py-0'>
+                <View className='flex-[2] rounded-xl items-start justify-start pl-5 py-0'>
                     {/* <Text className='text-white text-sm ml-auto text-center'>Video solution for Question {currentQuestion?.question?.questionNumber}</Text> */}
                     {/* <View className='h-52 bg-gray-600 rounded-lg w-full mt-1'>
                     </View> */}
@@ -250,7 +254,7 @@ const TestSolutions = ({ route }: any) => {
                             onPress={() => { setSelectedFilter('all'); handleFilter('all'); }}
                             className={`overflow-hidden ${selectedFilter === 'all' ? 'bg-[#DEDAFF]' : ''} px-5 py-1 text-center flex-1 rounded`}
                         >
-                            <Text className={`overflow-hidden ${selectedFilter === 'all' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>All</Text>
+                            <Text className={`overflow-hidden ${selectedFilter === 'all' ? 'text-[#0569FF]' : 'text-white'} text-base`}>All</Text>
                         </Pressable>
                         <Pressable
                             hasTVPreferredFocus={true}
@@ -263,7 +267,7 @@ const TestSolutions = ({ route }: any) => {
                             onPress={() => { setSelectedFilter('incorrect'); handleFilter('incorrect') }}
                             className={`overflow-hidden ${selectedFilter === 'incorrect' ? 'bg-[#DEDAFF]' : ''} px-5 py-1 text-center flex-1 rounded`}
                         >
-                            <Text className={`overflow-hidden ${selectedFilter === 'incorrect' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>Incorrect</Text>
+                            <Text className={`overflow-hidden ${selectedFilter === 'incorrect' ? 'text-[#0569FF]' : 'text-white'} text-base`}>Incorrect</Text>
                         </Pressable>
                         <Pressable
                             hasTVPreferredFocus={true}
@@ -276,7 +280,7 @@ const TestSolutions = ({ route }: any) => {
                             onPress={() => { setSelectedFilter('correct'); handleFilter('correct') }}
                             className={`overflow-hidden ${selectedFilter === 'correct' ? 'bg-[#DEDAFF]' : ''} px-5 py-1 text-center flex-1 rounded`}
                         >
-                            <Text className={`overflow-hidden ${selectedFilter === 'correct' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>Correct</Text>
+                            <Text className={`overflow-hidden ${selectedFilter === 'correct' ? 'text-[#0569FF]' : 'text-white'} text-base`}>Correct</Text>
                         </Pressable>
                         <Pressable
                             hasTVPreferredFocus={true}
@@ -289,24 +293,25 @@ const TestSolutions = ({ route }: any) => {
                             onPress={() => { setSelectedFilter('skipped'); handleFilter('skipped') }}
                             className={`overflow-hidden ${selectedFilter === 'skipped' ? 'bg-[#DEDAFF]' : ''} px-5 py-1 text-center flex-1 rounded`}
                         >
-                            <Text className={`overflow-hidden ${selectedFilter === 'skipped' ? 'text-[#5A4BDA]' : 'text-white'} text-base`}>Skipped</Text>
+                            <Text className={`overflow-hidden ${selectedFilter === 'skipped' ? 'text-[#0569FF]' : 'text-white'} text-base`}>Skipped</Text>
                         </Pressable>
                     </View> */}
                     <View className='flex-row mt-3 justify-between items-center '>
                         <View className='flex-row flex-1 items-center justify-start gap-x-2'>
                             <View className='w-2 h-2 rounded-full bg-green-400'></View>
-                            <Text className='text-white text-base text-center'>Correct</Text>
+                            <Text className='text-white text-sm text-center'>Correct</Text>
                         </View>
                         <View className='flex-row flex-1 items-center justify-start gap-x-2'>
                             <View className='w-2 h-2 rounded-full bg-red-400'></View>
-                            <Text className='text-white text-base text-center'>Incorrect</Text>
+                            <Text className='text-white text-sm text-center'>Incorrect</Text>
                         </View>
-                        <View className='flex-row flex-1 items-center justify-start gap-x-2'>
+                        <View className='flex-row flex-1 items-center justify-start gap-x-2 ml-1'>
                             <View className='w-2 h-2 rounded-full bg-gray-400'></View>
-                            <Text className='text-white text-base text-center'>Skipped</Text>
+                            <Text className='text-white text-sm text-center'>Skipped</Text>
                         </View>
                     </View>
-                    <View className='flex-row flex-wrap py-4 gap-2 overflow-scroll'>
+                    <ScrollView>
+                    <View className='flex-row flex-wrap py-4 gap-4 justify-start overflow-scroll'>
                         {
                             questionsData && questionsData.map(
                                 (question: any, index: number) => (
@@ -315,8 +320,8 @@ const TestSolutions = ({ route }: any) => {
                                         >
                                         <View
                                             key={index}
-                                            className={`w-20 h-20 flex flex-col bg-white/10 rounded-lg items-center justify-center ${
-                                            currentQuestion?.question?.questionNumber === question?.question?.questionNumber ? 'bg-[#8E89BA]' : ''} ${"border-" + getBorderColor(question?.yourResult.status)} border-[1px]`}
+                                            className={`w-16 h-16 flex flex-col bg-[#1B2124] rounded-lg items-center justify-center ${
+                                            currentQuestion?.question?.questionNumber === question?.question?.questionNumber ? 'bg-[#0569FF]' : ''} ${"border-" + getBorderColor(question?.yourResult.status)} border-[1px]`}
                                         >
                                             <Text className=" text-lg text-white font-medium ">
                                             {question?.question?.questionNumber}
@@ -329,6 +334,7 @@ const TestSolutions = ({ route }: any) => {
                             )
                         }
                     </View>
+                    </ScrollView>
                     
                     {/* <View className=' flex-row justify-between items-center mt-5 w-full'>
                         <Pressable
@@ -359,10 +365,10 @@ const TestSolutions = ({ route }: any) => {
                         </Pressable>
                     </View> */}
                 </View>
-                <View className='flex-[3]'>
-                    <View className='flex-1 bg-white/5 rounded-xl p-5'>
+                <View className='flex-[4.5]'>
+                    <View className='flex-1 bg-[#1B2124] rounded-xl p-5'>
                         <View className='flex flex-row gap-3 mb-4'>
-                            <View className='rounded-full overflow-hidden bg-[#504D6B] w-10 h-10 flex items-center justify-center'>
+                            <View className='rounded-full overflow-hidden bg-[#12448e] w-10 h-10 flex items-center justify-center'>
                                 <Text className='text-white text-xl font-semibold'>
                                     {currentQuestion?.question?.questionNumber}
                                 </Text>
@@ -374,13 +380,14 @@ const TestSolutions = ({ route }: any) => {
                                 </Text>
                             </View>
                         </View>
-                        <View className='h-[220] bg-white/5 w-full rounded-lg items-center justify-center'>
+                        <View className='w-full bg-white rounded-lg overflow-hidden items-center justify-center reltaive'>
                             <Image
                                 source={{ uri: `${currentQuestion?.question?.imageIds?.en?.baseUrl}${currentQuestion?.question?.imageIds?.en?.key}` }}
-                                width={600}
-                                height={220}
-                                resizeMode='contain'
+                                width={550}
+                                height={200}
                                 alt='Question'
+                                resizeMode='contain'
+                                className=' w-full  '
                             />
                         </View>
                         {questionType === 'Numeric' && <View className='gap-y-2 mt-5 w-[100%]'>
@@ -414,13 +421,22 @@ const TestSolutions = ({ route }: any) => {
                         </View>}
                     </View>
                 </View>
-                <View>
-                    
+                <View className='flex-[4.5] flex-row w-80 h-80 items-start justify-between'>
+                    <Text className='text-white text-2xl font-medium'> Solution</Text>
+                    <Pressable
+                    className=' bg-[#0569FF] rounded-full pb-2 px-4 flex flex-row gap-2 items-center justify-center '
+                        onPress={()=>{
+                            // @ts-ignore
+                            navigation.navigate("Videos", {
+                        lectureDetails: currentQuestion?.question?.solutionDescription[0]?.videoDetails,
+                        scheduleDetails: {lectureDetails: currentQuestion?.question?.solutionDescription[0]?.videoDetails},
+                        });}}>
+                         <AntDesign name="playcircleo" size={20} color="white" />
+                         <Text className='text-white font-semibold'>Video Solution</Text>
+                    </Pressable>
                 </View>
-
-
             </View>
-        </ScrollView>
+        </View>
     )
 }
 

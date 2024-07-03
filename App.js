@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { StatusBar, Modal, Image, ActivityIndicator } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { StatusBar, Modal, Image, ActivityIndicator, View, Button } from "react-native";
 import Providers from "./utils/Providers";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -31,10 +31,12 @@ import PDFTronViewer from "./components/pdf-viewer/pdf-viewer-2";
 import { createNavigationContainerRef } from "@react-navigation/native";
 import axios from "axios";
 import Pdf from "react-native-pdf";
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+
     const { connectionStatus, message, ipAddress, sendMessageToClient } = useUdpServer();
     // modals
     const [showYoutubeModal, setShowYoutubeModal] = useState(false);
@@ -48,6 +50,19 @@ export default function App() {
     const [showPdfModal, setShowPdfModal] = useState(false);
     const [pdfUrl, setPdfUrl] = useState("");
     const navigationRef = createNavigationContainerRef();
+
+    const [playing, setPlaying] = useState(false);
+
+    const onStateChange = useCallback((state) => {
+      if (state === "ended") {
+        setPlaying(false);
+        Alert.alert("video has finished playing!");
+      }
+    }, []);
+
+    const togglePlaying = useCallback(() => {
+      setPlaying((prev) => !prev);
+    }, []);
 
   // useEffect(() => {
   //   let localUrl = "";
@@ -182,12 +197,20 @@ export default function App() {
       <Modal
         animationType="slide"
         transparent={true}
+        // visible={true}
         visible={showYoutubeModal}
         onRequestClose={() => {
           setShowYoutubeModal(false);
         }}
+        cl
       >
-        <WebView source={{ uri: youtubeUrl }} style={{ flex: 1 }} />
+          {youtubeUrl && <YoutubePlayer
+            height={"100%"}
+            play={playing}
+            videoId={`${(new URL(youtubeUrl)).searchParams.get('v')}`}
+            onChangeState={onStateChange}
+          />}
+
       </Modal>
       {/* image modal */}
       <Modal

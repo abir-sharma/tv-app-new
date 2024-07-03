@@ -17,7 +17,7 @@ export const DppComponent = ({ }: DPPPropType) => {
 
   const { mainNavigation, setLogs, setTestData, dppList, setSelectedTestMapping, setTestSections, setSelectedDpp, headers, selectedBatch, } = useGlobalContext();
 
-
+  console.log("dppList: ", dppList);
 
   const handleDppClick = async (item: any) => {
     console.log("Selected quiz", item);
@@ -27,7 +27,6 @@ export const DppComponent = ({ }: DPPPropType) => {
         headers
       }
       console.log(headers)
-      console.log(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?._id}&batchScheduleId=${item?.scheduleId}`)
       const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?._id}&batchScheduleId=${item?.scheduleId}`, options);
       console.log("Test Started", res?.data);
       setTestData(res?.data?.data);
@@ -67,7 +66,7 @@ export const DppComponent = ({ }: DPPPropType) => {
 
   return (
     <View className='p-5'>
-      {dppList?.length === 0 && <Text className='text-white text-2xl self-center items-center'>No Tests available!!</Text>}
+      {dppList?.length === 0 && <Text className='text-white text-2xl self-center items-center'>No DPP Quiz Available!</Text>}
       {dppList && <FlatList
         data={dppList}
         renderItem={renderGridItem}

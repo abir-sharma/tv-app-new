@@ -5,7 +5,7 @@ import axios from 'axios';
 import { ReviewOrSubmitModal } from '../components/modals/ReviewOrSubmit';
 
 const Tests = ({ navigation, route }: any) => {
-    const { testData, selectedBatch, headers, selectedTestMapping } = useGlobalContext();
+    const { testData, selectedBatch, headers, fetchDetailTrigger, selectedTestMapping } = useGlobalContext();
     const [totalQuestions, setTotalQuestions] = useState<number>(0);
     const [currentQuestion, setCurrentQuestion] = useState<any>();
     const [responses, setResponses] = useState<any>(0);
@@ -320,7 +320,8 @@ const Tests = ({ navigation, route }: any) => {
                 <View className='flex-row'>
                     <Pressable
                         onPress={()=>{
-                            navigation.navigate('Details')
+                            navigation.navigate('Details');
+                            fetchDetailTrigger();
                         }}
                         hasTVPreferredFocus={true}
                         android_ripple={{
@@ -339,13 +340,13 @@ const Tests = ({ navigation, route }: any) => {
                             radius: 1000,
                             foreground: true
                         }}
-                        className='bg-[#5A4BDA] rounded-xl px-5 py-2 ml-4 overflow-hidden'
+                        className='bg-[#0569FF] rounded-xl px-5 py-2 ml-4 overflow-hidden'
                         onPress={() => {
                             setShowModal(true);
                             // handleSubmitTest()
                         }}
                     >
-                        <Text className='text-white text-lg'>Submit Test</Text>
+                        <Text className='text-white text-lg'>Submit Quiz</Text>
                     </Pressable>
                 </View>
             </View>
@@ -354,7 +355,7 @@ const Tests = ({ navigation, route }: any) => {
                     <Text className='text-white text-center'>{currentQuestion?.topicId?.name}</Text>
                 </View>}
                 <View className='flex flex-row mt-4'>
-                    <View className='bg-[#8E89BA] px-4 py-2 rounded-lg'>
+                    <View className='bg-[#0569FF] px-4 py-2 rounded-lg'>
                         <Text className='text-white text-center'>{currentQuestion?.questionNumber}</Text>
                     </View>
                     <View className='bg-white/10 w-[2px] h-full mx-3'></View>
@@ -393,7 +394,7 @@ const Tests = ({ navigation, route }: any) => {
                         </Pressable>}
                         {questionType === 'Numeric' && <TouchableHighlight
                             onPress={() => { handleOptionClick("") }}
-                            className='mb-8 text-white bg-[#5A4BDA] rounded-xl py-3 px-6 text-center self-center overflow-hidden'
+                            className='mb-8 text-white bg-[#0569FF] rounded-xl py-3 px-6 text-center self-center overflow-hidden'
                         >
                             <Text className='text-white font-bold'>
                                 Submit
@@ -478,32 +479,19 @@ const Tests = ({ navigation, route }: any) => {
                     </View>
                 </View>
                 <View className='flex flex-row justify-center mt-4'>
-                    <Pressable
-                        hasTVPreferredFocus={true}
-                        android_ripple={{
-                            color: "rgba(255,255,255,0.5)",
-                            borderless: false,
-                            radius: 1000,
-                            foreground: true
-                        }}
+                    <TouchableHighlight
+                        
                         onPress={() => handlePreviousClick()}
-                        className='bg-[#A79EEB] rounded-xl px-5 mt-2 mx-4 py-2 overflow-hidden'
+                        className='bg-[#0569FF] rounded-xl px-5 mt-2 mx-4 py-2 overflow-hidden'
                     >
                         <Text className='text-white text-lg'>Previous</Text>
-                    </Pressable>
-                    <Pressable
-                        hasTVPreferredFocus={true}
-                        android_ripple={{
-                            color: "rgba(255,255,255,0.5)",
-                            borderless: false,
-                            radius: 1000,
-                            foreground: true
-                        }}
+                    </TouchableHighlight>
+                    <TouchableHighlight
                         onPress={() => handleNextClick()}
-                        className='bg-[#A79EEB] rounded-xl px-5 mt-2 mx-4 py-2 overflow-hidden'
+                        className='bg-[#0569FF] rounded-xl px-5 mt-2 mx-4 py-2 overflow-hidden'
                     >
                         <Text className='text-white text-lg'>Next</Text>
-                    </Pressable>
+                    </TouchableHighlight>
                 </View>
             </View>
         </View >

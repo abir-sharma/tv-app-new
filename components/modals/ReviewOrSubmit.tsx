@@ -30,10 +30,10 @@ export const ReviewOrSubmitModal = (props: any) => {
     >
       <View className="p-4 rounded-xl text-white bg-[#414141] w-[400] self-center">
         <View className="flex flex-row justify-between items-center">
-          <Text className="text-white text-xl font-bold">Test Summary</Text>
+          <Text className="text-white text-xl font-bold">Quiz Summary</Text>
           <View className="flex flex-row items-center">
             <Text className="text-white text-xs">Time taken: </Text>
-            <Text className="p-1 bg-[#5A4BDA] text-xs rounded-lg text-white">{formatTime()}</Text>
+            <Text className="p-1 bg-[#0569FF] text-xs rounded-lg text-white">{formatTime()}</Text>
           </View>
         </View>
         <View className="bg-[#626060] p-4 flex rounded-xl flex-row justify-between mt-6 items-center">
@@ -49,7 +49,7 @@ export const ReviewOrSubmitModal = (props: any) => {
           {responses && <Text className=" text-white text-sm">{responses?.filter((response: any) => response?.status === "UnAttempted")?.length}</Text>}
         </View>
         <View className="items-center my-6">
-          <Text className=" text-white text-sm">Are you sure you want to submit the test?</Text>
+          <Text className=" text-white text-sm">Are you sure you want to submit the quiz?</Text>
           {responses && <Text className=" text-white text-sm">No changes will be allowed after submission.</Text>}
         </View>
         <View className="flex flex-row justify-between">
@@ -76,7 +76,7 @@ export const ReviewOrSubmitModal = (props: any) => {
               radius: 2000,
               foreground: true
             }}
-            className="overflow-hidden py-2 px-16 self-center  bg-[#5A4BDA]"
+            className="overflow-hidden py-2 px-16 self-center  bg-[#0569FF]"
             onPress={() => handleSubmitTest()}
           >
             <Text className="text-white text-md font-bold">

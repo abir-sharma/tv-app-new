@@ -223,7 +223,6 @@ export default function OfflineNavbarDetails() {
         }}
         onPress={handleLogout}
         className='flex-row justify-center overflow-hidden rounded-full items-center'>
-        {/* <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} /> */}
         <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text>
       </Pressable>
     </View>

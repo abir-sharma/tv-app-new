@@ -1,11 +1,14 @@
 /// <reference types="nativewind/types" />
 import {
+  FlatList,
   Image,
   Linking,
   Modal,
   NativeModules,
   Pressable,
+  ScrollView,
   Text,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { useGlobalContext } from "../context/MainContext";
@@ -49,6 +52,17 @@ export default function Navbar() {
     }
   };
 
+  const [phone, setPhone] = useState<string|null>(null);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+
+  useEffect(()=>{
+    const getPhone = async () => {
+      const temp = await AsyncStorage.getItem('phone');
+      setPhone(temp);
+    }
+    getPhone();
+  },[isDropdownVisible])
+
   useEffect(() => {
     console.log("message in navbar", messageFromRemote);
     try {
@@ -61,8 +75,28 @@ export default function Navbar() {
     }
   }, [messageFromRemote]);
 
+  
+
   return (
     <View className=" flex-row justify-between items-center p-4 ">
+      {/* <View> */}
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={isDropdownVisible}
+          onRequestClose={() => setIsDropdownVisible(false)}
+        >
+            <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
+            <View style={{ flex: 1 }}>
+              <ScrollView className='bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[70] right-[20] z-[2]'>
+                <Pressable onPress={()=>{}} className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">{phone || "---"}</Text></Pressable>
+                <View className="w-full h-[1px] bg-white/40"></View>
+                <Pressable onPress={handleLogout} className="w-full px-5 py-2 rounded-b-lg"><Text className="text-white font-bold text-sm">Logout</Text></Pressable>
+              </ScrollView>
+            </View>
+            </TouchableWithoutFeedback>
+        </Modal>
+      {/* </View> */}
       <Pressable
         hasTVPreferredFocus={true}
         android_ripple={{
@@ -81,7 +115,7 @@ export default function Navbar() {
         />
         {/* <Text className='text-white font-medium text-xl ml-4'>Physics Wallah</Text> */}
       </Pressable>
-      <View className="flex flex-row gap-2">
+      <View className="flex flex-row gap-2 absolute top-5 left-1/2 -translate-x-32">
         {/* <!-- <View className=' -ml-20 rounded-xl flex-row bg-[#0d0d0d] border-[1px] border-white/5'> */}
         <Pressable
           hasTVPreferredFocus={true}
@@ -114,9 +148,7 @@ export default function Navbar() {
           // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${!isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
           className="w-36 h-10 rounded-xl items-center justify-center overflow-hidden"
         >
-          <Text className={`text-white ${!isOnline && " font-bold "}`}>
-            Offline Batches
-          </Text>
+          <Text className={`text-white ${!isOnline && " font-bold "}`}>Offline Batches</Text>
         </Pressable>
       </View>
       <View className="flex flex-row gap-2 items-center">
@@ -128,12 +160,13 @@ export default function Navbar() {
             foreground: true,
           }}
           onPress={() => {
-            setIsQrModalVisible(true);
+            // setIsQrModalVisible(true);
+            mainNavigation?.navigate("QrTest");
           }}
           className="flex-row justify-center overflow-hidden rounded-full items-center"
         >
           <Text className="bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3">
-            Remote
+            Mobile Control
           </Text>
         </Pressable>
         <Pressable
@@ -143,24 +176,15 @@ export default function Navbar() {
             radius: 1000,
             foreground: true,
           }}
-          onPress={handleLogout}
+          onPress={()=>{setIsDropdownVisible(prev=>!prev)}}
           className="flex-row justify-center overflow-hidden rounded-full items-center"
         >
-          <Text className="bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3">
-            Logout
-          </Text>
+          {/* <Text className="bg-white/10 overflow-hidden rounded-xm text-white flex items-center justify-center"> */}
+            <Image source={require('../assets/dp.png')} className='w-10 h-10' width={40} height={40} />
+          {/* </Text> */}
         </Pressable>
       </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isQrModalVisible}
-        onRequestClose={() => {
-          setIsQrModalVisible(false);
-        }}
-      >
-        <QRCodeGenerator />
-      </Modal>
+      
     </View>
   );
 }

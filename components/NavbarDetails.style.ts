@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   dropdownText: {
     color: '#ffffff',
-    backgroundColor: '#5a4bda',
+    backgroundColor: '#0569FF',
     fontWeight: 'bold',
     paddingHorizontal: 15,
     paddingVertical: 8,

@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useGlobalContext } from "../context/MainContext"
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, Pressable, Text, View } from "react-native";
+import { ActivityIndicator, Image, TouchableHighlight, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 
 
 export const TestResult = () => {
-  const { testData, headers, selectedBatch, mainNavigation, setTestData, setTestSections, setSelectedTestMapping, selectedDpp } = useGlobalContext();
+  const { testData, headers, selectedBatch, fetchDetailTrigger, mainNavigation, setTestData, setTestSections, setSelectedTestMapping, selectedDpp } = useGlobalContext();
   const [result, setResult] = useState<any>(null);
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
@@ -77,33 +77,22 @@ export const TestResult = () => {
 
       <View className='flex-row justify-between items-center p-8 pb-0'>
         <View>
-          <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}
+          <TouchableHighlight  
             onPress={() => {
-              navigation.navigate('Details')
+              navigation.navigate('Details');
+              fetchDetailTrigger();
             }}
             className="overflow-hidden rounded-full p-2"
           >
             <View className='flex-row'>
               <Image source={require('../assets/back.png')} className='w-8 h-8' width={10} height={10} />
             </View>
-          </Pressable>
+          </TouchableHighlight>
         </View>
-        <Pressable
-          android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-          }}
-          className='flex-row justify-center overflow-hidden rounded-full items-center p-2'>
+        <View
+          className='flex-row opacity-0 justify-center overflow-hidden rounded-full items-center p-2'>
           <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
-        </Pressable>
+        </View>
       </View>
       <View className="bg-white/5 p-12 py-8 my-12 w-[80%] self-center rounded-xl">
         <View>
@@ -190,36 +179,24 @@ export const TestResult = () => {
         </View>
       </View>
       <View className="flex flex-row justify-between px-20 mt-10">
-        <Pressable
-          hasTVPreferredFocus={true}
-          android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 2000,
-            foreground: true
-          }}
-          className="overflow-hidden py-2 px-16 self-center bg-[#5A4BDA] rounded-lg"
+        <TouchableHighlight
+          
+          className="overflow-hidden py-2 px-16 self-center bg-[#0569FF] rounded-lg"
           onPress={() => restartQuiz()}
         >
           <Text className="text-white text-lg font-bold ">
             Re-Attempt
           </Text>
-        </Pressable>
-        <Pressable
-          hasTVPreferredFocus={true}
-          android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 2000,
-            foreground: true
-          }}
-          className="overflow-hidden py-2 px-16 self-center  bg-[#5A4BDA] rounded-lg"
+        </TouchableHighlight>
+        <TouchableHighlight
+          
+          className="overflow-hidden py-2 px-16 self-center  bg-[#0569FF] rounded-lg"
           onPress={() => mainNavigation.navigate('TestSolutions')}
         >
           <Text className="text-white text-lg font-bold">
             View Solution
           </Text>
-        </Pressable>
+        </TouchableHighlight>
       </View>
     </View>
   )

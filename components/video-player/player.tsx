@@ -31,6 +31,7 @@ import Pdf from "react-native-pdf";
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 export default function VideoPlayer(props: any) {
+
   const { mainNavigation, selectedBatch, headers } = useGlobalContext();
   const playerRef = useRef<Video | null>(null);
   const [spinner, setSpinner] = useState<any>();
@@ -757,7 +758,7 @@ export default function VideoPlayer(props: any) {
       <ActivityIndicator
         style={{ display: spinner ? "flex" : "none", marginTop: 100 }}
         size="small"
-        color="#5a4bda"
+        color="#0569FF"
         animating={spinner}
       />
       {noVideoAvailable && (

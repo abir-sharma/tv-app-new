@@ -84,6 +84,9 @@ type GlobalContextType = {
   setLogs: Dispatch<SetStateAction<string[]>>;
   messageFromRemote: string;
   setMessageFromRemote: Dispatch<SetStateAction<string>>;
+  fetchDetails: boolean;
+  setFetchDetails: Dispatch<SetStateAction<boolean>>;
+  fetchDetailTrigger: () => void;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -157,9 +160,18 @@ const GlobalContext = createContext<GlobalContextType>({
   setLogs: () => { },
   messageFromRemote: "",
   setMessageFromRemote: () => { },
+  fetchDetails: false,
+  setFetchDetails: () => { },
+  fetchDetailTrigger: () => { },
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
+
+  const [fetchDetails, setFetchDetails] = useState(false);
+
+  const fetchDetailTrigger = () => {
+    setFetchDetails(prev=>!prev);
+  }
 
   const [subscribedBatches, setSubscribedBatches] = useState<BatchType[] | null>(null);
   const [orders, setOrders] = useState<Order[] | null>(null);
@@ -334,7 +346,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         showIpInput, setShowIpInput,
         recentVideoLoad, setRecentVideoLoad,
         logs, setLogs,
-        messageFromRemote, setMessageFromRemote
+        messageFromRemote, setMessageFromRemote,
+        fetchDetails, setFetchDetails, fetchDetailTrigger
       } as GlobalContextType}>
       {children}
     </GlobalContext.Provider>

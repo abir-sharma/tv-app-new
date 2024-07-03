@@ -7,8 +7,6 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Entypo from '@expo/vector-icons/Entypo';
 
-
-
 type PropType = {
   selectedMenu: number;
   setSelectedMenu: (arg: number) => void;
@@ -130,7 +128,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         </Modal>
       </View>
 
-      <View className=' rounded-xl flex-row gap-x-5 py-2 pr-5' >
+      <View className=' rounded-xl flex-row gap-x-4 py-2 pr-5' >
         <Pressable hasTVPreferredFocus={true}
           android_ripple={{
             color: "rgba(255,255,255,0.4)",
@@ -156,7 +154,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             borderless: false,
             radius: 1000,
             foreground: true
-          }} className='w-20 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 2 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(2); }}>
+          }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 2 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(2); }}>
           <Text className="font-normal text-sm text-white">DPP Quiz</Text>
         </Pressable>
         <Pressable hasTVPreferredFocus={true}
@@ -165,7 +163,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             borderless: false,
             radius: 1000,
             foreground: true
-          }} className='w-20 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 3 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(3); setContentType('DppNotes'); setCurrentPage(1) }}>
+          }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 3 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(3); setContentType('DppNotes'); setCurrentPage(1) }}>
           <Text className="font-normal text-sm text-white">DPP Notes</Text>
         </Pressable>
         <Pressable android_ripple={{
@@ -173,27 +171,15 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
           borderless: false,
           radius: 1000,
           foreground: true
-        }} className='w-20 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 4 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(4); setContentType('DppVideos'); setCurrentPage(1) }}>
+        }} className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden' style={{ backgroundColor: selectedMenu == 4 ? 'rgba(255,255,255,.2)' : 'transparent' }} onPress={() => { setSelectedMenu(4); setContentType('DppVideos'); setCurrentPage(1) }}>
           <Text className="font-normal text-sm text-white">DPP Videos</Text>
         </Pressable>
 
       </View>
 
-      <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.5)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        onPress={handleLogout}
-        className='flex-row justify-center overflow-hidden rounded-full items-center'>
-        {/* <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} /> */}
+      <View className='flex-row opacity-0 justify-center overflow-hidden rounded-full items-center'>
         <Text className='bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3'>Logout</Text>
-      </Pressable>
-      {/* <ScrollView className=' w-full h-[100] overflow-auto'>
-          <Text className='text-white flex flex-wrap'>{logs}</Text>
-        </ScrollView> */}
+      </View>
     </View>
   );
 }

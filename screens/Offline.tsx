@@ -15,6 +15,7 @@ export const Offline = () => {
 
   const { setDirectoryLevel, showIpInput, setShowIpInput, setOfflineSections, setOfflineSelectedSubject, setOfflineSelectedSection, setOfflineSelectedChapter, setOfflineLectures, setOfflineDpp, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, offlineSelectedSection, directoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, setOfflineBatches, setOfflineSubjects, setOfflineChapters } = useGlobalContext();
   const [ipAddress, setIpAddress] = useState("");
+  const [ipp, setIpp] = useState("");
 
   useEffect(() => {
     fetchDirectoryListing(offlineCurrentDirectory);
@@ -273,7 +274,7 @@ export const Offline = () => {
     return ipv4Pattern.test(input) || ipv6Pattern.test(input);
   }
 
-  const handleIPChange = () => {
+  const handleIPChange = async() => {
     console.log("Hi");
     if (!isIPAddress(ipAddress?.split(':')[0])) {
       ToastAndroid.showWithGravity(
@@ -286,7 +287,21 @@ export const Offline = () => {
     setOfflineCurrentDirectory(`http://${ipAddress}/Batches/`);
     AsyncStorage.setItem("iP", ipAddress);
     fetchBatches();
+    await getIP();
   }
+
+  const getIP = async () => {
+    const ip = await AsyncStorage.getItem("iP");
+    setIpp(ip? ip : "");
+  }
+
+  useEffect(() => {
+    getIP();
+  }, [])
+
+  useEffect(() => {
+    setIpAddress(ipp)
+  }, [ipp])
 
   return (
     <LinearGradient
@@ -296,7 +311,7 @@ export const Offline = () => {
     className=" flex-1">
       <Navbar />
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', padding: 10 }}>
-        {showIpInput && <TextInput autoFocus={true} placeholder='Enter Ip' className=' rounded-lg pl-4 overflow-hidden ' onChangeText={(text) => { setIpAddress(text) }} style={{ backgroundColor: 'white', width: 200, marginRight: 20, padding: 4, }} />}
+        {showIpInput && <TextInput defaultValue={ipp} autoFocus={true} placeholder='Enter Ip' className=' rounded-lg pl-4 overflow-hidden ' onChangeText={(text) => { setIpAddress(text) }} style={{ backgroundColor: 'white', width: 200, marginRight: 20, padding: 4, }} />}
         {showIpInput &&
           <Pressable
             android_ripple={{
@@ -313,6 +328,7 @@ export const Offline = () => {
             <Text className='text-white text-center w-full text-base'>Enter IP</Text>
           </Pressable>}
           {
+          ipp &&
           <Pressable
             android_ripple={{
               color: "rgba(255,255,255,0.4)",
@@ -323,11 +339,14 @@ export const Offline = () => {
 
             onPress={() => {
               setShowIpInput(true);
+              setIpp("");
               AsyncStorage.removeItem("iP");
             }}
             className='bg-[#0569FF] w-40 h-10 ml-2 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
+            
             <Text className='text-white text-center w-full text-base'>Reset Ip</Text>
-          </Pressable>}
+          </Pressable>
+          }
 
       </View>
       <OfflineBatches />

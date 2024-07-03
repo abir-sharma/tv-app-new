@@ -8,19 +8,29 @@ import {
   TouchableOpacity,
   Image,
   StyleSheet,
+  TouchableHighlight,
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { useGlobalContext } from "../context/MainContext";
 import useUdpServer from "../hooks/useUdpServer";
 
-export default function QRCodeGenerator({ navigation }: any) {
+export default function QRCodeGenerator({ navigation, setIsQrModalVisible }: any) {
   const { setMainNavigation } = useGlobalContext();
   const { message, ipAddress, sendMessageToClient } = useUdpServer();
+  const [showNetworkMessage, setShowNetworkMessage] = useState(false);
 
   useEffect(() => {
     // navigation.setOptions({ headerShown: false });
     setMainNavigation(navigation);
   }, []);
+
+  useEffect(() => {
+      setTimeout(() => {
+        setShowNetworkMessage(true);
+      }, 15000);
+  }, [showNetworkMessage]);
+
+
 
   useEffect(() => {
 	// try {
@@ -35,6 +45,17 @@ export default function QRCodeGenerator({ navigation }: any) {
 
   return (
     <View className="flex-1 justify-center items-center bg-[#111111]">
+      <TouchableHighlight
+            onPress={() => {
+              // setIsQrModalVisible(false);
+              navigation.goBack();
+            }}
+            className="overflow-hidden rounded-full p-2 absolute top-4 left-4"
+          >
+            <View className='flex-row'>
+              <Image source={require('../assets/back.png')} className='w-8 h-8' width={10} height={10} />
+            </View>
+          </TouchableHighlight>
       <View className="bg-white/5 p-5 rounded-xl">
 		<Text className="text-white text-center">{ipAddress}</Text>
 		{/* <Text className="text-white text-center">{message}</Text> */}
@@ -68,6 +89,7 @@ export default function QRCodeGenerator({ navigation }: any) {
           </>
         )}
       </View>
+      {showNetworkMessage && <Text className="text-center mx-auto text-red-500 text-base mt-10 bg-red-400/10 rounded-lg px-4 py-2">* Make sure you are connected to the same WiFi network</Text>}
     </View>
   );
 }
