@@ -6,9 +6,7 @@ import VideoPlayer from '../components/video-player/player'
 const Videos = ({ route }: any) => {
   useKeepAwake();
   return (
-    <View>
-      <VideoPlayer lectureDetails={route?.params?.lectureDetails} scheduleDetails={route?.params?.scheduleDetails} isLive={false} />
-    </View>
+      <VideoPlayer smallPlayer={false} lectureDetails={route?.params?.lectureDetails} scheduleDetails={route?.params?.scheduleDetails} isLive={false} />
   )
 }
 

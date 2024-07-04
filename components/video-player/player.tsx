@@ -27,6 +27,8 @@ import Entypo from "@expo/vector-icons/Entypo";
 // import ResizeMode from "react-native-video";
 import uuid from "react-native-uuid";
 import Pdf from "react-native-pdf";
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -154,7 +156,7 @@ export default function VideoPlayer(props: any) {
   );
 
   function convertToSeconds(timeString: string) {
-    const [hours, minutes, seconds] = timeString.split(":").map(Number);
+    const [hours, minutes, seconds] = timeString?.split(":").map(Number);
     return hours * 3600 + minutes * 60 + seconds;
   }
 
@@ -196,6 +198,7 @@ export default function VideoPlayer(props: any) {
       return;
     }
 
+    console.log("tttt000: ",props?.lectureDetails?.duration);
     // MPD testing
     MPDTesting(props?.lectureDetails?.videoUrl);
 
@@ -249,7 +252,7 @@ export default function VideoPlayer(props: any) {
     }
   };
 
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
+  const [isPlaying, setIsPlaying] = useState<boolean>(props.smallPlayer ? false : true);
   const [showControls, setShowControls] = useState<boolean>(true);
 
   const playVideo = () => {
@@ -398,7 +401,7 @@ export default function VideoPlayer(props: any) {
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
       style={{ minHeight: "100%" }}
-      className=" bg-[#1A1A1A] h-full"
+      className={` h-full ${props.smallPlayer == 1 ? "bg-white": "bg-[#1a1a1a]"}`}
     >
       {showLoader && (
         <View
@@ -419,7 +422,7 @@ export default function VideoPlayer(props: any) {
           <ActivityIndicator color={"#FFFFFF"} size={80} />
         </View>
       )}
-      <Pressable
+      {props.smallPlayer == 0 && <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
           borderless: false,
@@ -437,8 +440,26 @@ export default function VideoPlayer(props: any) {
           height={30}
           className="h-[30] w-[30]"
         />
-      </Pressable>
-      {showControls && (
+      </Pressable>}
+      {props.smallPlayer && showControls && <Pressable
+        android_ripple={{
+          color: "rgba(255,255,255,0.5)",
+          borderless: false,
+          radius: 1000,
+          foreground: true,
+        }}
+        onPress={()=>{
+          setIsPlaying(false);
+          // @ts-ignore
+          mainNavigation.navigate("Videos", {
+          lectureDetails: props.lectureDetails,
+          scheduleDetails: props.scheduleDetails,
+          });}}
+        className="bg-black/40 overflow-hidden rounded-full z-[3] p-2 absolute top-2 left-2"
+      >
+        <MaterialIcons name="fullscreen" size={28} color="white" />
+      </Pressable>}
+      {showControls && (props.smallPlayer == 0 ) && (
         <View className="flex-row absolute top-2 right-2 z-[5]">
           <Pressable
             android_ripple={{
@@ -530,9 +551,9 @@ export default function VideoPlayer(props: any) {
       >
         {/* <Text className='text-white text-lg font-medium'>{showControls ? "Hide Controls" : "Show Controls"}</Text> */}
       </Pressable>
-      {showControls && (
+      {showControls && props.smallPlayer == 0 && (
         <Pressable
-          className={`bg-black/80 overflow-hidden rounded-xl flex flex-row items-center px-1 pl-2 py-1 absolute duration-300 bottom-12 mb-1 z-[3] right-2`}
+          className={`bg-black/80 absolute overflow-hidden rounded-xl flex flex-row items-center px-1 pl-2 py-1  duration-300 bottom-12 mb-1 z-[3] right-2`}
         >
           <Pressable
             android_ripple={{
@@ -581,15 +602,15 @@ export default function VideoPlayer(props: any) {
         </Pressable>
       )}
       {showControls && (
-        <View className="absolute bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2">
+        <View className={`absolute ${props.smallPlayer == 1 && " scale-90 "} bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2`}>
           <View className="flex-row bg-black/50 rounded-xl p-2">
             <View>
-              <Pressable
+              {props.smallPlayer == 0 && <Pressable
                 onPress={() => setModalVisible(true)}
                 className="bg-black/90 overflow-hidden rounded-full w-12 h-12 flex mr-2 items-center justify-center"
               >
                 <Text className="text-sm text-[#7363FC] font-bold mb-1 overflow-hidden">{`${quality}p`}</Text>
-              </Pressable>
+              </Pressable>}
 
               <Modal
                 visible={modalVisible}
@@ -717,14 +738,14 @@ export default function VideoPlayer(props: any) {
               />
             </Pressable>
 
-            <Pressable
+            {props.smallPlayer == 0 && <Pressable
               onPress={() => {
                 togglePlaybackSpeed();
               }}
               className="bg-black/90 overflow-hidden rounded-full w-12 h-12 flex ml-2 items-center justify-center"
             >
               <Text className=" text-sm text-[#7363FC] font-bold mb-1 overflow-hidden">{`${playbackSpeed}x`}</Text>
-            </Pressable>
+            </Pressable>}
           </View>
           <View className="flex-row bg-black/50 rounded-xl mt-2 px-5 w-full mx-5">
             <View className="flex flex-row justify-between items-center w-full">
@@ -806,7 +827,7 @@ export default function VideoPlayer(props: any) {
             console.log("Video Player Error --->", err, `${cookieParams}`)
           }}
           isMuted={isMuted}
-          shouldPlay
+          shouldPlay={isPlaying}
           volume={volume}
           onLoad={() => setShowLoader(false)}
         />

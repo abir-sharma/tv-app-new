@@ -5,6 +5,9 @@ import axios from 'axios';
 import { cookieSplitter } from '../components/video-player/cookie-splitter';
 import { useNavigation } from '@react-navigation/native';
 import AntDesign from '@expo/vector-icons/AntDesign';
+import VideoPlayer from '../components/video-player/player';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
 
 
 const TestSolutions = ({ route }: any) => {
@@ -24,6 +27,8 @@ const TestSolutions = ({ route }: any) => {
     const [selectedFilter, setSelectedFilter] = useState<any>('all');
     const [showLoader, setShowLoader] = useState<boolean>(true);
     const [questionType, setQuestionType] = useState<string>('Single');
+
+    const [smallPlayer, setSmallPlayer] = useState(1);
 
 
 
@@ -421,21 +426,33 @@ const TestSolutions = ({ route }: any) => {
                         </View>}
                     </View>
                 </View>
-                <View className='flex-[4.5] flex-row w-80 h-80 items-start justify-between'>
+                <View className='flex-[4.5]  w-80 h-80 items-start justify-between'>
+                    <View className='w-full flex flex-row items-center justify-between mb-5'>
                     <Text className='text-white text-2xl font-medium'> Solution</Text>
-                    <Pressable
-                    className=' bg-[#0569FF] rounded-full pb-2 px-4 flex flex-row gap-2 items-center justify-center '
+                    {/* <Pressable
+                    className=' bg-[#0569FF] rounded-full pb-2 px-4  pl-2 flex flex-row gap-2 items-center justify-center '
                         onPress={()=>{
                             // @ts-ignore
                             navigation.navigate("Videos", {
                         lectureDetails: currentQuestion?.question?.solutionDescription[0]?.videoDetails,
                         scheduleDetails: {lectureDetails: currentQuestion?.question?.solutionDescription[0]?.videoDetails},
                         });}}>
-                         <AntDesign name="playcircleo" size={20} color="white" />
-                         <Text className='text-white font-semibold'>Video Solution</Text>
-                    </Pressable>
+                         <MaterialIcons name="fullscreen" size={20} color="white" />
+                         <Text className='text-white font-semibold'>Full Screen</Text>
+                    </Pressable> */}
+
+                    </View>
+                    {currentQuestion && smallPlayer &&
+                <View className=' w-full h-[100%] rounded-lg overflow-hidden'>
+                    <VideoPlayer smallPlayer={smallPlayer} setSmallPlayer={setSmallPlayer} lectureDetails={currentQuestion?.question?.solutionDescription[0]?.videoDetails} scheduleDetails={{lectureDetails: currentQuestion?.question?.solutionDescription[0]?.videoDetails}} isLive={false}/>
+                </View>}
+                    
                 </View>
             </View>
+            {currentQuestion && !smallPlayer &&
+                <View className='w-screen h-[100%] absolute top-0 left-0 z-50 rounded-lg overflow-hidden'>
+                    <VideoPlayer smallPlayer={smallPlayer} setSmallPlayer={setSmallPlayer} lectureDetails={currentQuestion?.question?.solutionDescription[0]?.videoDetails} scheduleDetails={{lectureDetails: currentQuestion?.question?.solutionDescription[0]?.videoDetails}} isLive={false}/>
+                </View>}
         </View>
     )
 }
