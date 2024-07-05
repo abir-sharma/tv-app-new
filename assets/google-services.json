@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "331933495198",
+    "project_id": "pw-tv-app",
+    "storage_bucket": "pw-tv-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:331933495198:android:ffc1d027a6083cb8fd708f",
+        "android_client_info": {
+          "package_name": "co.penpencil.aitvapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-zTjI_DH0lGLf7V2_1jvcZ5Q-2vfO7bY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

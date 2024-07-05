@@ -1,11 +1,11 @@
 /// <reference types="nativewind/types" />
 
-import { View, Text, Image, TextInput, ImageBackground, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid, ActivityIndicator, BackHandler } from 'react-native';
+import { View, Text, Image, TextInput, ImageBackground, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid, ActivityIndicator, BackHandler, Button } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+// import crashlytics from '@react-native-firebase/crashlytics';
 
 export default function Login({ navigation }: any) {
 
@@ -232,6 +232,7 @@ export default function Login({ navigation }: any) {
         justifyContent: 'center',
       }}
     >
+      {/* <Button title="Test Crash" onPress={() => crashlytics().crash()} /> */}
       {showLoader && <View
         style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
         className='bg-white/10 '

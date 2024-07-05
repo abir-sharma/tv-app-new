@@ -16,10 +16,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.sayak02.pwtvappv2"
+      "bundleIdentifier": "co.penpencil.aitvapp"
     },
     "android": {
-      "package": "com.sayak02.pwtvappv2",
+      "package": "co.penpencil.aitvapp",
+      "googleServicesFile": "./assets/google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -47,7 +48,9 @@
         {
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
-      ]
+      ],
+      "@react-native-firebase/app",
+      "@react-native-firebase/crashlytics"
     ],
     "owner": "physicswallah"
   }

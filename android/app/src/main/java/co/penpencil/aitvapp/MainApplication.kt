@@ -1,4 +1,4 @@
-package com.sayak02.pwtvappv2
+package co.penpencil.aitvapp
 
 import android.app.Application
 import android.content.res.Configuration
