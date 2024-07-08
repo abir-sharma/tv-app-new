@@ -65,32 +65,6 @@ export default function App() {
       setPlaying((prev) => !prev);
     }, []);
 
-  // useEffect(() => {
-  //   let localUrl = "";
-  //   try {
-  //     if (message && JSON.parse(message)?.type == "youtube") {
-  //       setYoutubeUrl(JSON.parse(message)?.url);
-  //       setShowYoutubeModal(true);
-  //       sendMessageToClient("youtube");
-  //     }
-  //     if (message && JSON.parse(message)?.type == "pdf_chunk") {
-  //       // navigationRef.current.navigate("PDFViewer", { pdfUrl: JSON.parse(message)?.url });
-  //       if (JSON.parse(message)?.index == 0) {
-  //         // setPdfUrl(JSON.parse(message)?.chunk);
-  //         localUrl = JSON.parse(message)?.chunk;
-  //       } else {
-  //         // setPdfUrl(pdfUrl + JSON.parse(message)?.chunk);
-  //         localUrl += JSON.parse(message)?.chunk;
-  //       }
-  //       if (JSON.parse(message)?.type == "pdf_chunk_end") {
-  //         navigationRef.current.navigate("PDFViewer", { pdfUrl: `data:application/pdf;base64,${localUrl}` });
-  //       }
-  //     }
-  //   } catch (err) {
-  //     console.log("err while parsing", err);
-  //   }
-  // }, [message]);
-
   useEffect(() => {
     try {
       if (message) {
@@ -214,6 +188,7 @@ export default function App() {
           />}
 
       </Modal>
+
       {/* image modal */}
       <Modal
         animationType="slide"
@@ -228,7 +203,17 @@ export default function App() {
           justifyContent: "center",
           alignItems: "center",
         }} />}
-        {imgUrl && <Image source={{ uri: imgUrl }} style={{ flex: 1, margin: 0, borderRadius: 0 }} />}
+        {imgUrl && (
+          <Image
+            source={{ uri: imgUrl }}
+            style={{
+              flex: 1,
+              resizeMode: 'contain', // Add this line
+              margin: 0,
+              borderRadius: 0
+            }}
+          />
+        )}
       </Modal>
 
       <Modal
@@ -244,8 +229,10 @@ export default function App() {
           justifyContent: "center",
           alignItems: "center",
         }} />}
-        {pdfUrl && <Pdf source={{ uri: pdfUrl }} style={{ flex: 1 }} />}
-        {/* <PDFViewer pdfUrl={pdfUrl} /> */}
+        {
+          pdfUrl && 
+          <Pdf source={{ uri: pdfUrl }} style={{ flex: 1 }} />
+        }
       </Modal>
     </Providers>
   );
