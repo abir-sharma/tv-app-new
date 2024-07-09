@@ -33,6 +33,7 @@ import { createNavigationContainerRef } from "@react-navigation/native";
 import axios from "axios";
 import Pdf from "react-native-pdf";
 import YoutubePlayer from "react-native-youtube-iframe";
+import ModalPDFViewer from "./components/pdf-viewer/modal-pdf-viewer";
 
 const Stack = createNativeStackNavigator();
 
@@ -231,7 +232,8 @@ export default function App() {
         }} />}
         {
           pdfUrl && 
-          <Pdf source={{ uri: pdfUrl }} style={{ flex: 1 }} />
+          // <Pdf source={{ uri: pdfUrl }} style={{ flex: 1 }} />
+          <ModalPDFViewer pdfUrl={pdfUrl} />
         }
       </Modal>
     </Providers>

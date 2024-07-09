@@ -1,16 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import {
-  View,
-  Text,
-  ActivityIndicator,
-  Pressable,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Modal,
-  FlatList,
-  TouchableWithoutFeedback,
-} from "react-native";
+import { View, Text, ActivityIndicator, Pressable, Image, TouchableOpacity, StyleSheet, Modal, FlatList, TouchableWithoutFeedback } from "react-native";
 import { WebView } from "react-native-webview";
 import styles from "./player.style";
 import Svg, { Path } from "react-native-svg";
@@ -22,18 +11,11 @@ import { Slider } from "@miblanchard/react-native-slider";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import Entypo from "@expo/vector-icons/Entypo";
-// import Video, { VideoRef } from 'react-native-video';
-// import ResizeMode from "react-native-video";
-import uuid from "react-native-uuid";
-import Pdf from "react-native-pdf";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 export default function VideoPlayer(props: any) {
-
   const { mainNavigation, selectedBatch, headers } = useGlobalContext();
   const playerRef = useRef<Video | null>(null);
   const [spinner, setSpinner] = useState<any>();
@@ -53,9 +35,7 @@ export default function VideoPlayer(props: any) {
   const [quality, setQuality] = useState(720);
   const [storedTimestamp, setStoredTimestamp] = useState(0);
 
-  const [annotations, setAnnotations] = useState<{ [key: number]: string[] }>(
-    {}
-  );
+  const [annotations, setAnnotations] = useState<{ [key: number]: string[] }>({});
   const [currentPath, setCurrentPath] = useState<string>("");
   const [tool, setTool] = useState<string | null>(null);
   const [allowAnnotations, setAllowAnnotations] = useState<boolean>(false);
@@ -197,13 +177,9 @@ export default function VideoPlayer(props: any) {
       setSpinner(false);
       return;
     }
-
-    console.log("tttt000: ",props?.lectureDetails?.duration);
     // MPD testing
     MPDTesting(props?.lectureDetails?.videoUrl);
-
     setDuration(convertToSeconds(props?.lectureDetails?.duration));
-
     setSpinner(true);
     if (!props?.lectureDetails?.videoUrl && props?.lectureDetails?.types) {
       setNoVideoAvailable(true);
@@ -211,6 +187,10 @@ export default function VideoPlayer(props: any) {
       return;
     }
     if (!props?.lectureDetails?.types) {
+      setShowControls(false);
+      setShowLoader(false);
+      setAllowAnnotations(false);
+      console.log("Detected youtube video, using 'embedCode' key.");
       setSrc(props?.lectureDetails?.embedCode);
       setRenderVideo(true);
       setSpinner(false);
@@ -244,7 +224,6 @@ export default function VideoPlayer(props: any) {
         );
       setPlaybackSpeed(playbackSpeedOptions[nextSpeedIndex]);
     }
-    //if the last option i.e. 2x speed is applied. then moves to first option
     else {
       playerRef.current &&
         playerRef.current.setRateAsync(playbackSpeedOptions[0], true);
@@ -289,11 +268,8 @@ export default function VideoPlayer(props: any) {
   };
 
   function convertMPDToM3U8(mpdUrl: string) {
-    // Define a regular expression to match the ID in the MPD URL
     if(!mpdUrl) return;
-
     let match;
-
     try {
       const idRegex = /\/([0-9a-f-]+)\/master\.mpd$/i;
       match = mpdUrl.match(idRegex);
@@ -302,7 +278,6 @@ export default function VideoPlayer(props: any) {
       console.error("Unexpected error occured!", e);
       return;
     }
-
     if (match) {
       const id = match[1]; // Extract the ID from the URL
       const m3u8Url = `https://sec1.pw.live/${id}/hls/${quality}/main.m3u8`;
@@ -328,10 +303,7 @@ export default function VideoPlayer(props: any) {
     const data = {
       url: uri,
     };
-    // console.log('test uri', uri)
-    // console.log(data, newHeaders);
-    axios
-      .post("https://api.penpencil.co/v3/files/send-analytics-data", data, {
+    axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, {
         headers: newHeaders,
       })
       .then((response) => {
@@ -347,27 +319,6 @@ export default function VideoPlayer(props: any) {
         console.error("analytics failed --->", error?.response?.data);
       });
   }
-
-  // async function getSignedUrlCookie(url: string) {
-  //   const token = await AsyncStorage.getItem("token");
-  //   console.log("token", token);
-  //   axios.post("https://api.penpencil.co/v1/files/signed-url?reqType=cookie&gcpCdnType=media", {
-  //     batchId: selectedBatch?.batch?._id,
-  //     scheduleId: props?.scheduleDetails?._id,
-  //     playingSource: "BATCHES",
-  //     url: url,
-  //   }, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //         randomId: JSON.stringify(uuid.v4()),
-  //       }
-  //     }).then((res) => {
-  //       console.log("* signed url cookie validation success");
-  //       console.log(res?.data?.data);
-  //     }).catch((err) => {
-  //       console.log("* signed url cookie validation failed", err.response?.data);
-  //     });
-  // }
 
   const handlePlaybackStatusUpdate = (status: any) => {
     if (status.isPlaying) {
@@ -422,6 +373,7 @@ export default function VideoPlayer(props: any) {
           <ActivityIndicator color={"#FFFFFF"} size={80} />
         </View>
       )}
+
       {props.smallPlayer == 0 && <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
@@ -441,6 +393,7 @@ export default function VideoPlayer(props: any) {
           className="h-[30] w-[30]"
         />
       </Pressable>}
+
       {props.smallPlayer && showControls && <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
@@ -486,7 +439,7 @@ export default function VideoPlayer(props: any) {
               radius: 1000,
               foreground: true,
             }}
-            className={` ${
+            className={`${
               tool === "eraser" ? "bg-[#7363FC]" : "bg-black/80"
             }  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
             onPress={() => switchTool("eraser")}
@@ -497,22 +450,6 @@ export default function VideoPlayer(props: any) {
               color={tool === "eraser" ? "white" : "#7363FC"}
             />
           </Pressable>
-          {/* <Pressable
-            android_ripple={{
-              color: "rgba(255,255,255,0.8)",
-              borderless: false,
-              radius: 1000,
-              foreground: true,
-            }}
-            className={` bg-black/80  border-[1px] border-[#7363FC] rounded-full flex items-center justify-center w-12 h-12 ml-2 overflow-hidden`}
-            onPress={clearAll}
-          >
-            <Entypo
-              name="cross"
-              size={30}
-              color={tool === "eraser" ? "white" : "#7363FC"}
-            />
-          </Pressable> */}
         </View>
       )}
       {showControls && props?.currentVideos?.length > 1 && (
@@ -537,12 +474,6 @@ export default function VideoPlayer(props: any) {
       )}
 
       <Pressable
-        // android_ripple={{
-        //   color: "rgba(255,255,255,0.5)",
-        //   borderless: false,
-        //   radius: 1000,
-        //   foreground: true
-        // }}
         onPress={() => {
           setIsActive(!isActive);
           setShowControls((prev) => !prev);
@@ -793,13 +724,13 @@ export default function VideoPlayer(props: any) {
         <View style={{ height: "100%" }}>
           <WebView
             style={{ flex: 1 }}
-            // source={{ uri: "https://www.youtube.com/embed/d3sLImqhjHc" }}
+            // source={{ uri: "https://www.youtube.com/embed/JHgdXnRJgA4" }}
             source={{ uri: src }}
           />
         </View>
       )}
       <View
-        className=" flex-1"
+        className="flex-1"
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
