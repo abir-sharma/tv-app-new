@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useCallback } from "react";
 import { View, Text, ActivityIndicator, Pressable, Image, TouchableOpacity, StyleSheet, Modal, FlatList, TouchableWithoutFeedback } from "react-native";
 import { WebView } from "react-native-webview";
 import styles from "./player.style";
@@ -320,11 +320,11 @@ export default function VideoPlayer(props: any) {
       });
   }
 
-  const handlePlaybackStatusUpdate = (status: any) => {
+  const handlePlaybackStatusUpdate = useCallback((status: any) => {
     if (status.isPlaying) {
       setCurrentTime(status.positionMillis);
     }
-  };
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => setShowControls(false), 15000);
@@ -345,6 +345,28 @@ export default function VideoPlayer(props: any) {
         console.log("* m3u8 get error", err);
       });
   }
+
+  useEffect(() => {
+    let animationFrameId: number;
+    const updateTime = () => {
+      playerRef.current?.getStatusAsync().then((status: any) => {
+        setCurrentTime(status.positionMillis);
+        if (isPlaying) {
+          animationFrameId = requestAnimationFrame(updateTime);
+        }
+      });
+    };
+  
+    if (isPlaying) {
+      updateTime();
+    }
+  
+    return () => {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
+  }, [isPlaying]);
 
   return (
     <View
@@ -480,7 +502,6 @@ export default function VideoPlayer(props: any) {
         }}
         className={`bg-transparent overflow-hidden w-screen h-screen absolute top-0 left-0 duration-300  z-[2]`}
       >
-        {/* <Text className='text-white text-lg font-medium'>{showControls ? "Hide Controls" : "Show Controls"}</Text> */}
       </Pressable>
       {showControls && props.smallPlayer == 0 && (
         <Pressable
@@ -495,11 +516,9 @@ export default function VideoPlayer(props: any) {
             }}
             onPress={() => {
               setIsMuted(!isMuted);
-              // playerRef.current && playerRef.current.setIsMutedAsync(!isMuted);
             }}
             className="p-1 rounded-lg overflow-hidden w-10 flex items-center justify-center"
           >
-            {/* <Text className='text-[#7363FC] font-bold' >Mute</Text> */}
             {isMuted ? (
               <FontAwesome5 name="volume-mute" size={24} color="#7363FC" />
             ) : volume < 0.3 ? (

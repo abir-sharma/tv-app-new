@@ -58,7 +58,7 @@ const RecentVideos = ({ route }: any) => {
 
   return (
     <View>
-      {playingVideo && <VideoPlayer currentIndex={currentIndex} currentVideos={currentVideos} handlePrevious={handlePrevious} handleNext={handleNext} lectureDetails={playingVideo?.videoDetails} scheduleDetails={playingVideo} isLive={false} />}
+      {playingVideo && <VideoPlayer smallPlayer={false} currentIndex={currentIndex} currentVideos={currentVideos} handlePrevious={handlePrevious} handleNext={handleNext} lectureDetails={playingVideo?.videoDetails} scheduleDetails={playingVideo} isLive={false} />}
     </View>
   );
 };
