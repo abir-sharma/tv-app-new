@@ -25,6 +25,7 @@ export default function VideoPlayer(props: any) {
   const [noVideoAvailable, setNoVideoAvailable] = useState<boolean>(false);
   const [showLoader, setShowLoader] = useState<boolean>(true);
   const [isActive, setIsActive] = useState<boolean>(true);
+  let isYoutubeVideo = !props?.lectureDetails?.types;
 
   const [currentTime, setCurrentTime] = useState(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -40,6 +41,9 @@ export default function VideoPlayer(props: any) {
   const [tool, setTool] = useState<string | null>(null);
   const [allowAnnotations, setAllowAnnotations] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
+
+  const [isPlaying, setIsPlaying] = useState<boolean>(props.smallPlayer ? false : true);
+  const [showControls, setShowControls] = useState<boolean>(true);
 
   const onTouchStart = (event: any) => {
     if (!allowAnnotations) return;
@@ -186,7 +190,7 @@ export default function VideoPlayer(props: any) {
       setSpinner(false);
       return;
     }
-    if (!props?.lectureDetails?.types) {
+    if (isYoutubeVideo) {
       setShowControls(false);
       setShowLoader(false);
       setAllowAnnotations(false);
@@ -230,9 +234,6 @@ export default function VideoPlayer(props: any) {
       setPlaybackSpeed(playbackSpeedOptions[0]);
     }
   };
-
-  const [isPlaying, setIsPlaying] = useState<boolean>(props.smallPlayer ? false : true);
-  const [showControls, setShowControls] = useState<boolean>(true);
 
   const playVideo = () => {
     setIsPlaying(true);
@@ -416,7 +417,7 @@ export default function VideoPlayer(props: any) {
         />
       </Pressable>}
 
-      {props.smallPlayer && showControls && <Pressable
+      {!isYoutubeVideo && props.smallPlayer && showControls && <Pressable
         android_ripple={{
           color: "rgba(255,255,255,0.5)",
           borderless: false,
@@ -434,7 +435,7 @@ export default function VideoPlayer(props: any) {
       >
         <MaterialIcons name="fullscreen" size={28} color="white" />
       </Pressable>}
-      {showControls && (props.smallPlayer == 0 ) && (
+      {!isYoutubeVideo && showControls && (props.smallPlayer == 0 ) && (
         <View className="flex-row absolute top-2 right-2 z-[5]">
           <Pressable
             android_ripple={{
@@ -474,7 +475,7 @@ export default function VideoPlayer(props: any) {
           </Pressable>
         </View>
       )}
-      {showControls && props?.currentVideos?.length > 1 && (
+      { !isYoutubeVideo && showControls && props?.currentVideos?.length > 1 && (
         <View className="bg-black/60 overflow-hidden rounded-xl z-[3] p-1.5 absolute bottom-12 mb-1 left-2">
           <View className="flex flex-row gap-2 items-center justify-center">
             <TouchableOpacity
@@ -503,7 +504,7 @@ export default function VideoPlayer(props: any) {
         className={`bg-transparent overflow-hidden w-screen h-screen absolute top-0 left-0 duration-300  z-[2]`}
       >
       </Pressable>
-      {showControls && props.smallPlayer == 0 && (
+      {!isYoutubeVideo && showControls && props.smallPlayer == 0 && (
         <Pressable
           className={`bg-black/80 absolute overflow-hidden rounded-xl flex flex-row items-center px-1 pl-2 py-1  duration-300 bottom-12 mb-1 z-[3] right-2`}
         >
@@ -551,7 +552,7 @@ export default function VideoPlayer(props: any) {
           <Text className="text-white w-10">{Math.round(volume * 100)}%</Text>
         </Pressable>
       )}
-      {showControls && (
+      {!isYoutubeVideo && showControls && (
         <View className={`absolute ${props.smallPlayer == 1 && " scale-90 "} bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2`}>
           <View className="flex-row bg-black/50 rounded-xl p-2">
             <View>
@@ -740,7 +741,7 @@ export default function VideoPlayer(props: any) {
         </View>
       )}
       {!props?.lectureDetails?.types && (
-        <View style={{ height: "100%" }}>
+        <View style={{ height: "100%", zIndex: 10 }}>
           <WebView
             style={{ flex: 1 }}
             // source={{ uri: "https://www.youtube.com/embed/JHgdXnRJgA4" }}
