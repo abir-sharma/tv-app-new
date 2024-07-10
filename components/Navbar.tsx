@@ -1,10 +1,7 @@
 /// <reference types="nativewind/types" />
 import {
-  FlatList,
   Image,
-  Linking,
   Modal,
-  NativeModules,
   Pressable,
   ScrollView,
   Text,
@@ -14,11 +11,9 @@ import {
 import { useGlobalContext } from "../context/MainContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import QRCodeGenerator from "../screens/QrTest";
 import { useEffect, useState } from "react";
-import { getAnalytics } from "@react-native-firebase/analytics";
+import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
 import moment from "moment";
-// import useUdpServer from "../hooks/useUdpServer";
 
 export default function Navbar() {
   const {
@@ -117,11 +112,6 @@ export default function Navbar() {
           }}
           onPress={async () => {
             setIsOnline(true);
-            console.log("moment he bhai moment he");
-            await getAnalytics().logEvent('app_open', {
-              registered_no: await AsyncStorage.getItem('phone') || "not_logged_in",
-              timestamp: moment().format('LLLL')
-            });
             mainNavigation.navigate("Home");
           }}
           // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
@@ -136,8 +126,9 @@ export default function Navbar() {
             radius: 1000,
             foreground: true,
           }}
-          onPress={() => {
+          onPress={async () => {
             setIsOnline(false);
+            sendGoogleAnalytics("offline_mode_clicked", {});
             mainNavigation.navigate("Offline");
           }}
           // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${!isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}

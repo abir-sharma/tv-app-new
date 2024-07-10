@@ -6,6 +6,7 @@ import FastImage from 'react-native-fast-image'
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
+import sendGoogleAnalytics from '../hooks/sendGoogleAnalytics';
 // import { BlurView } from 'expo-blur';
 
 
@@ -32,7 +33,10 @@ export default function Batches() {
                         onPress={() => {
                             console.log("Batch iD: ", order?._id);
                             setSelectedBatch(order);
-                            // mainNavigation?.navigate('Details');
+                            sendGoogleAnalytics("batch_opened", { 
+                                // batch_name: order?.name,
+                                batch_id: order?._id,
+                            });
                             // @ts-expect-error
                             navigation.navigate('Details');
                         }}
