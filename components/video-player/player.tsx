@@ -105,7 +105,6 @@ export default function VideoPlayer(props: any) {
   };
 
   const switchTool = (selectedTool: string) => {
-    // console.log("tool toggling");
     if (tool === selectedTool) {
       setTool(null);
       setAllowAnnotations(false);
@@ -159,19 +158,15 @@ export default function VideoPlayer(props: any) {
 
   const MPDTesting = async (mpdUrl: string) => {
     const m3u8url = convertMPDToM3U8(mpdUrl);
-    // console.log("urlsent:", m3u8url, {headers: {cookie: cookieParams}});
     try {
       if(!m3u8url) return;
       const res = await axios.get(m3u8url);
-      // console.log("resss: ", res.data);
     } catch (err) {
-      // console.log("err: ", err);
     }
   };
 
   useEffect(() => {
     if(props.scheduleDetails.videoContentId) {
-      console.log("Detected program batch, using 'videoContentId' key.");
       const { videoUrl } = props.scheduleDetails.videoContentId.content[0];
       let m3u8Url = convertMPDToM3U8(videoUrl);
       if(!m3u8Url) return;
@@ -194,7 +189,6 @@ export default function VideoPlayer(props: any) {
       setShowControls(false);
       setShowLoader(false);
       setAllowAnnotations(false);
-      console.log("Detected youtube video, using 'embedCode' key.");
       setSrc(props?.lectureDetails?.embedCode);
       setRenderVideo(true);
       setSpinner(false);
@@ -291,8 +285,12 @@ export default function VideoPlayer(props: any) {
   }
 
   useEffect(() => {
-    if(props.scheduleDetails.videoContentId) setSrc(convertMPDToM3U8(props.scheduleDetails.videoContentId.content[0].videoUrl));
-    else setSrc(convertMPDToM3U8(props?.lectureDetails?.videoUrl));
+    if(!isYoutubeVideo){
+      if(props.scheduleDetails.videoContentId)
+        setSrc(convertMPDToM3U8(props.scheduleDetails.videoContentId.content[0].videoUrl));
+      else
+        setSrc(convertMPDToM3U8(props?.lectureDetails?.videoUrl));
+    }
   }, [quality]);
 
   async function sendAnalyticsData(uri: string) {
@@ -309,9 +307,6 @@ export default function VideoPlayer(props: any) {
       })
       .then((response) => {
         const cookie = cookieSplitter(response?.data?.data);
-        console.log("---------------------------------------------");
-        console.log("* m3u8 uri --->", uri);
-        console.log("* cookie --->", cookie);
         getM3U8WithCookie(uri, cookieSplitter(response?.data?.data));
         setCookieParams(cookie);
         setRenderVideo(true);
@@ -340,10 +335,8 @@ export default function VideoPlayer(props: any) {
         },
       })
       .then((res) => {
-        console.log("* url cookie validation success");
       })
       .catch((err) => {
-        console.log("* m3u8 get error", err);
       });
   }
 
@@ -740,11 +733,10 @@ export default function VideoPlayer(props: any) {
           </Text>
         </View>
       )}
-      {!props?.lectureDetails?.types && (
+      {isYoutubeVideo && (
         <View style={{ height: "100%", zIndex: 10 }}>
           <WebView
             style={{ flex: 1 }}
-            // source={{ uri: "https://www.youtube.com/embed/JHgdXnRJgA4" }}
             source={{ uri: src }}
           />
         </View>
