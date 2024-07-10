@@ -34,6 +34,8 @@ import axios from "axios";
 import Pdf from "react-native-pdf";
 import YoutubePlayer from "react-native-youtube-iframe";
 import ModalPDFViewer from "./components/pdf-viewer/modal-pdf-viewer";
+import analytics from "@react-native-firebase/analytics";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -65,6 +67,19 @@ export default function App() {
     const togglePlaying = useCallback(() => {
       setPlaying((prev) => !prev);
     }, []);
+
+    useEffect(()=>{
+
+      const sendGoogleAnalytics = async () => {
+        console.log("Analytics gaya");
+        await analytics().logEvent('app_open', {
+          registered_no: await AsyncStorage.getItem('phone') || "not_logged_in",
+          timestamp: new Date.now()
+        });
+      }
+      sendGoogleAnalytics();
+
+    }, [])
 
   useEffect(() => {
     try {
