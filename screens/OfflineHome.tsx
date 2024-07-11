@@ -10,7 +10,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import { LinearGradient } from 'expo-linear-gradient';
 
-
 export const OfflineHome = () => {
 
   const { setDirectoryLevel, showIpInput, setShowIpInput, setOfflineSections, setOfflineSelectedSubject, setOfflineSelectedSection, setOfflineSelectedChapter, setOfflineLectures, setOfflineDpp, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, offlineSelectedSection, directoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, setOfflineBatches, setOfflineSubjects, setOfflineChapters } = useGlobalContext();
@@ -20,7 +19,6 @@ export const OfflineHome = () => {
   useEffect(() => {
     fetchDirectoryListing(offlineCurrentDirectory);
   }, [offlineCurrentDirectory]);
-
 
   const isThumbnailAvailable = (directoryItems: any[], toFind: string) => {
     for (let i = 0; i < directoryItems.length; i++) {

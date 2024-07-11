@@ -100,7 +100,7 @@ export default function Navbar() {
             // @ts-expect-error
             navigation.navigate("Home");
           }}
-          className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${isOnline && " bg-[#414347] "}  `}
+          className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${isOnline && "bg-[#414347]"} `}
           >
           <Text className={`text-white ${isOnline && "font-bold "}`}>Online Batches</Text>
         </Pressable>
@@ -117,7 +117,8 @@ export default function Navbar() {
             // @ts-expect-error
             navigation.navigate("OfflineHome");
           }}
-          className="w-36 h-10 rounded-xl items-center justify-center overflow-hidden"
+          // className="w-36 h-10 rounded-xl items-center justify-center overflow-hidden"
+          className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${!isOnline && "bg-[#414347]"} `}
         >
           <Text className={`text-white ${!isOnline && " font-bold "}`}>Offline Batches</Text>
         </Pressable>
