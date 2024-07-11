@@ -2,10 +2,8 @@ import { View, Text, Pressable } from "react-native"
 import Modal from 'react-native-modal';
 
 export const ReviewOrSubmitModal = (props: any) => {
-
   const { showModal, setShowModal, responses, handleSubmitTest, seconds } = props;
-
-
+  
   const formatTime = () => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
