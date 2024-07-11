@@ -8,6 +8,7 @@ import OfflineBatches from '../components/Offline/OfflineBatches';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Images } from '../images/images';
 
 export const OfflineHome = () => {
 
@@ -39,7 +40,7 @@ export const OfflineHome = () => {
           name: item?.name?.slice(3, -1)?.trim(),
           path: offlineCurrentDirectory + item?.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -1) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -1) + '.png' : Images.tv,
           defaultThumbnail: checkThumbnail
         })
       }
@@ -121,7 +122,7 @@ export const OfflineHome = () => {
           name: item?.name?.slice(0, -4)?.trim(),
           path: offlineCurrentDirectory + item?.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : Images.tv,
           defaultThumbnail: checkThumbnail
         })
       }
@@ -138,7 +139,7 @@ export const OfflineHome = () => {
           name: item?.name?.slice(0, -4).trim(),
           path: offlineCurrentDirectory + item.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : Images.tv,
           defaultThumbnail: checkThumbnail
         })
       }
@@ -156,7 +157,7 @@ export const OfflineHome = () => {
           name: item?.name?.slice(0, -4)?.trim(),
           path: offlineCurrentDirectory + item?.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : Images.tv,
           defaultThumbnail: checkThumbnail
         })
       }
@@ -175,7 +176,7 @@ export const OfflineHome = () => {
           name: item?.name?.slice(0, -4)?.trim(),
           path: offlineCurrentDirectory + item.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : Images.tv,
           defaultThumbnail: checkThumbnail
         })
       }
@@ -194,7 +195,7 @@ export const OfflineHome = () => {
           name: item?.name?.slice(0, -4)?.trim(),
           path: offlineCurrentDirectory + item?.link,
           id: index,
-          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : '../assets/TV.png',
+          thumbnail: checkThumbnail ? offlineCurrentDirectory + item?.link?.slice(0, -4) + '.png' : Images.tv,
           defaultThumbnail: checkThumbnail
         })
       }

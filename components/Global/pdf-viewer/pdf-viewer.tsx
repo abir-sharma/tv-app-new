@@ -6,6 +6,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
+import { Images } from '../../../images/images';
 
 export default function PDFViewer({ route }: any) {
   let pdfUrl = route?.params?.pdfUrl;
@@ -118,7 +119,7 @@ export default function PDFViewer({ route }: any) {
           }}
           className="bg-black/80 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2"
         >
-          <Image source={require('../../../assets/exit.png')} width={30} height={30} className="h-[30] w-[30]" />
+          <Image source={Images.exit} width={30} height={30} className="h-[30] w-[30]" />
         </Pressable>
       </View>
       <View className="flex-row absolute bottom-2 left-2 z-[2]">

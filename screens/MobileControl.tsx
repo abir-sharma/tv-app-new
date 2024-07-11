@@ -11,6 +11,7 @@ import { useGlobalContext } from "../context/MainContext";
 import useUdpServer from "../hooks/useUdpServer";
 import { useNavigation } from "@react-navigation/native";
 import sendGoogleAnalytics from "../utils/sendGoogleAnalytics";
+import { Images } from "../images/images";
 
 export default function MobileControl({ setIsQrModalVisible }: any) {
   const { messageFromRemote } = useGlobalContext();
@@ -39,7 +40,7 @@ export default function MobileControl({ setIsQrModalVisible }: any) {
       >
         <View className="flex-row">
           <Image
-            source={require("../assets/back.png")}
+            source={Images.back}
             className="w-8 h-8"
             width={10}
             height={10}

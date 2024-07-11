@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, TouchableHighlight, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import sendGoogleAnalytics from "../utils/sendGoogleAnalytics";
+import { Images } from "../images/images";
 
 export const DppQuizResult = () => {
   const { testData, headers, selectedBatch, fetchDetailTrigger, setTestData, setTestSections, setSelectedTestMapping, selectedDpp } = useGlobalContext();
@@ -93,13 +94,13 @@ export const DppQuizResult = () => {
             className="overflow-hidden rounded-full p-2"
           >
             <View className='flex-row'>
-              <Image source={require('../assets/back.png')} className='w-8 h-8' width={10} height={10} />
+              <Image source={Images.back} className='w-8 h-8' width={10} height={10} />
             </View>
           </TouchableHighlight>
         </View>
         <View
           className='flex-row opacity-0 justify-center overflow-hidden rounded-full items-center p-2'>
-          <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
+          <Image source={Images.dp} className='w-10 h-10' width={10} height={10} />
         </View>
       </View>
       <View className="bg-white/5 p-12 py-8 my-12 w-[80%] self-center rounded-xl">
@@ -111,7 +112,7 @@ export const DppQuizResult = () => {
         <View className="flex flex-row items-center my-8">
           <View className="flex flex-row justify-center items-center w-[33%]">
             <Image
-              source={require('../assets/correct.png')}
+              source={Images.correct}
               width={50}
               height={50}
               className="mr-2"
@@ -123,7 +124,7 @@ export const DppQuizResult = () => {
           </View>
           <View className="flex flex-row items-center w-[33%] justify-center border-l border-r border-[#525252]">
             <Image
-              source={require('../assets/incorrect.png')}
+              source={Images.incorrect}
               width={50}
               height={50}
               className="mr-2"
@@ -135,7 +136,7 @@ export const DppQuizResult = () => {
           </View>
           <View className="flex flex-row items-center  w-[33%] justify-center">
             <Image
-              source={require('../assets/skipped.png')}
+              source={Images.skipped}
               width={50}
               height={50}
               className="mr-2"
@@ -150,7 +151,7 @@ export const DppQuizResult = () => {
         <View className="flex flex-row justify-around items-center my-8">
           <View className="flex flex-row items-center  w-[33%] justify-center">
             <Image
-              source={require('../assets/accuracy.png')}
+              source={Images.accuracy}
               width={50}
               height={50}
               className="mr-2"
@@ -162,7 +163,7 @@ export const DppQuizResult = () => {
           </View>
           <View className="flex flex-row items-center  w-[33%] justify-center border-l border-r border-[#525252]">
             <Image
-              source={require('../assets/completed.png')}
+              source={Images.completed}
               width={50}
               height={50}
               className="mr-2"
@@ -174,7 +175,7 @@ export const DppQuizResult = () => {
           </View>
           <View className="flex flex-row items-center  w-[33%] justify-center">
             <Image
-              source={require('../assets/time.png')}
+              source={Images.time}
               width={50}
               height={50}
               className="mr-2"

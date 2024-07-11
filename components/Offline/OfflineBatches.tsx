@@ -3,8 +3,6 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
-// @ts-expect-error
-import defaultIcon from '../../assets/TV.png';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';

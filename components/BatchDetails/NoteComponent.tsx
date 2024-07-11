@@ -5,6 +5,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 import { useGlobalContext } from '../../context/MainContext';
+import { Images } from '../../images/images';
 
 export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteComponentPropType) => {
   const { selectedBatch, selectedChapter, selectedSubject, selectedMenu } = useGlobalContext();
@@ -45,10 +46,10 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
           className=' overflow-hidden rounded-xl flex-row justify-between items-center px-3 py-2 mt-3'>
           <View
           className='flex-row justify-center gap-x-2 overflow-hidden rounded-xl w-fit items-center '>
-            <Image source={require('../../assets/notesicon2.png')} className='w-5 h-5' width={10} height={10} />
+            <Image source={Images.notesIcon2} className='w-5 h-5' width={10} height={10} />
             <Text className=' overflow-hidden rounded-xl text-white'>Notes</Text>
         </View>      
-              <Image source={require('../../assets/goto.png')} className='w-7 h-7' width={40} height={40} />
+              <Image source={Images.goto} className='w-7 h-7' width={40} height={40} />
           </LinearGradient>
         </View>
       </LinearGradient>

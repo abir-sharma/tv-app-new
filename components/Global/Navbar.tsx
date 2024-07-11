@@ -14,6 +14,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import sendGoogleAnalytics from "../../utils/sendGoogleAnalytics";
 import { useNavigation } from "@react-navigation/native";
+import { Images } from "../../images/images";
 
 export default function Navbar() {
   const { isOnline, setLogs, setIsOnline, headers, setHeaders } = useGlobalContext();
@@ -79,7 +80,7 @@ export default function Navbar() {
         className="flex-row justify-center items-center rounded-xl overflow-hidden px-2 gap-x-5"
       >
         <Image
-          source={require("../../assets/pw-logo.png")}
+          source={Images.pwLogo}
           className="w-10 h-10"
           width={10}
           height={10}
@@ -152,7 +153,7 @@ export default function Navbar() {
           onPress={()=>{setIsDropdownVisible(prev=>!prev)}}
           className="flex-row justify-center overflow-hidden rounded-full items-center"
         >
-          <Image source={require('../../assets/dp.png')} className='w-10 h-10' width={40} height={40} />
+          <Image source={Images.dp} className='w-10 h-10' width={40} height={40} />
         </Pressable>
       </View>
     </View>

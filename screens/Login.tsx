@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-// import crashlytics from '@react-native-firebase/crashlytics';
+import { Images } from '../images/images';
 
 export default function Login({ navigation }: any) {
 
@@ -194,7 +194,7 @@ export default function Login({ navigation }: any) {
 
     
     <ImageBackground
-      source={require('../assets/bg.png')}
+      source={Images.bg}
       style={{ 
         flex: 1,
         width: '100%',
@@ -212,7 +212,7 @@ export default function Login({ navigation }: any) {
 
       <View className='flex flex-row w-full pl-40 items-center justify-between gap-10'>
         <View className='flex-col items-start relative z-[2]'>
-          {!otpSent && <Image source={require('../assets/pw-logo.png')} className='w-16 h-16' width={10} height={10} />}
+          {!otpSent && <Image source={Images.pwLogo} className='w-16 h-16' width={10} height={10} />}
 
           {otpSent && <Pressable
             android_ripple={{
@@ -223,7 +223,7 @@ export default function Login({ navigation }: any) {
             }}
             onPress={()=>{setOtpSent(false)}}
             className='bg-[#1B2124] w-16 h-12 rounded-xl overflow-hidden flex items-center justify-center'
-            ><Image source={require('../assets/back2.png')} className='w-5 h-5' width={10} height={10} /></Pressable>}
+            ><Image source={Images.back2} className='w-5 h-5' width={10} height={10} /></Pressable>}
 
           <Text className="text-white text-lg font-normal mt-5"> Welcome to</Text>
           <Text className="text-white text-2xl font-medium mt-2">PhysicsWallah AI-powered </Text>
@@ -242,7 +242,7 @@ export default function Login({ navigation }: any) {
             className='bg-white w-96 h-12 mt-3 flex-row rounded-md px-4 items-center justify-start overflow-hidden'
           >
             <View className='flex-row items-center justify-start'>
-              <Image source={require('../assets/india.png')} className='w-6 h-6' width={10} height={10} />
+              <Image source={Images.india} className='w-6 h-6' width={10} height={10} />
               <Text className="text-gray-600 text-lg font-semibold mx-2" > +91 </Text>
             </View>
             <TextInput 
@@ -316,7 +316,7 @@ export default function Login({ navigation }: any) {
         <View className='w-[60%] flex items-center justify-center'>
           <Image
           className=' w-full h-full'
-            source={require('../assets/otpIllustration.png')}
+            source={Images.otpIllustration}
           />
         </View>
       </View>

@@ -3,6 +3,7 @@ import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator, TextInpu
 import { useGlobalContext } from '../context/MainContext'
 import axios from 'axios';
 import { ReviewOrSubmitModal } from '../components/Modals/ReviewOrSubmit';
+import { Images } from '../images/images';
 
 const DppQuiz = ({ navigation, route }: any) => {
     const { testData, selectedBatch, headers, fetchDetailTrigger, selectedTestMapping } = useGlobalContext();
@@ -303,7 +304,7 @@ const DppQuiz = ({ navigation, route }: any) => {
                 <View>
                     {testData && <Text className='text-white text-xl font-medium'>{testData?.test?.name}</Text>}
                     <View className='flex-row mt-2'>
-                        <Image source={require('../assets/clock.png')} className='w-5 h-5' width={10} height={10} />
+                        <Image source={Images.clock} className='w-5 h-5' width={10} height={10} />
                         <Text className='text-white ml-2'>{formatTime()}</Text>
                     </View>
                 </View>

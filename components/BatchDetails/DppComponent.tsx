@@ -6,6 +6,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 import { useNavigation } from '@react-navigation/native';
+import { Images } from '../../images/images';
 
 export const DppComponent = ({ }: DPPPropType) => {
   const navigation = useNavigation();
@@ -53,9 +54,9 @@ export const DppComponent = ({ }: DPPPropType) => {
       <View className='w-full h-full flex-row justify-between items-center px-5'>
         <View>
           <Text className='text-white font-medium text-lg'>{item?.test?.name?.length >= 35 ? `${item?.test?.name?.substring(0, 35)}...` : item?.test?.name}</Text>
-          <View className='flex-row mt-2'><Image source={require('../../assets/noteIcon.png')} className='w-5 h-5 mr-2' width={10} height={10} /><Text className='text-white font-normal text-sm'>{`${item?.test?.totalQuestions} Questions  |  ${item?.test?.totalMarks} Marks`}</Text></View>
+          <View className='flex-row mt-2'><Image source={Images.noteIcon} className='w-5 h-5 mr-2' width={10} height={10} /><Text className='text-white font-normal text-sm'>{`${item?.test?.totalQuestions} Questions  |  ${item?.test?.totalMarks} Marks`}</Text></View>
         </View>
-        <Image source={require('../../assets/goto.png')} className='w-7 h-7' width={40} height={40} />
+        <Image source={Images.goto} className='w-7 h-7' width={40} height={40} />
       </View>
       </LinearGradient>
     </Pressable>

@@ -3,6 +3,7 @@ import { Video, ResizeMode } from 'expo-av'
 import { Text, View, ActivityIndicator, Pressable, Image } from 'react-native'
 import { useGlobalContext } from '../../context/MainContext';
 import { useNavigation } from '@react-navigation/native';
+import { Images } from '../../images/images';
 
 const MP4Player = ({ route }: any) => {
   const uri = route?.params?.videoUrl;
@@ -63,7 +64,7 @@ const MP4Player = ({ route }: any) => {
         onPress={() => { navigation.goBack() }} className='bg-black/40 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2'
       >
         <Image
-          source={require('../../assets/exit.png')}
+          source={Images.exit}
           width={30}
           height={30}
           className='h-[30] w-[30]'

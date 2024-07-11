@@ -13,6 +13,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from "@react-navigation/native";
+import { Images } from "../../../images/images";
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -404,7 +405,7 @@ export default function VideoPlayer(props: any) {
         className="bg-black/40 overflow-hidden rounded-full z-[3] p-2 absolute top-2 left-2"
       >
         <Image
-          source={require("../../../assets/exit.png")}
+          source={Images.exit}
           width={30}
           height={30}
           className="h-[30] w-[30]"
@@ -592,7 +593,7 @@ export default function VideoPlayer(props: any) {
               className="bg-black/90 overflow-hidden rounded-full p-2"
             >
               <Image
-                source={require("../../../assets/30b.png")}
+                source={Images.thirtyB}
                 width={30}
                 height={30}
                 className="h-[30] w-[30]"
@@ -612,7 +613,7 @@ export default function VideoPlayer(props: any) {
               className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
             >
               <Image
-                source={require("../../../assets/10b.png")}
+                source={Images.tenB}
                 width={30}
                 height={30}
                 className="h-[30] w-[30]"
@@ -634,8 +635,8 @@ export default function VideoPlayer(props: any) {
               <Image
                 source={
                   isPlaying
-                    ? require("../../../assets/pause.png")
-                    : require("../../../assets/play.png")
+                    ? Images.pause
+                    : Images.play
                 }
                 width={30}
                 height={30}
@@ -656,7 +657,7 @@ export default function VideoPlayer(props: any) {
               className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
             >
               <Image
-                source={require("../../../assets/10f.png")}
+                source={Images.tenF}
                 width={30}
                 height={30}
                 className="h-[30] w-[30]"
@@ -676,7 +677,7 @@ export default function VideoPlayer(props: any) {
               className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
             >
               <Image
-                source={require("../../../assets/30f.png")}
+                source={Images.thirtyF}
                 width={30}
                 height={30}
                 className="h-[30] w-[30]"

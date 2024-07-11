@@ -1,10 +1,9 @@
 import React from 'react';
 import { View, Text, Image, FlatList, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-// @ts-expect-error
-import defaultIcon from '../../assets/TV.png';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
+import { Images } from '../../images/images';
 
 export const OfflineVideoComponent = ({ videoList }: OfflineVideoComponentPropType) => {
 
@@ -38,7 +37,7 @@ export const OfflineVideoComponent = ({ videoList }: OfflineVideoComponentPropTy
             source={{ uri: `${item?.thumbnail}` }}
           /> : <Image
             className='w-full h-full rounded-t-lg'
-            source={defaultIcon}
+            source={Images.defaultt}
           />}
           </View>
           <View className='p-2 relative px-5 pt-3'>

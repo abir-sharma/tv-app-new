@@ -4,6 +4,7 @@ import { Image, Text, Pressable, View, Modal, FlatList, ScrollView, TouchableWit
 import { useGlobalContext } from '../../context/MainContext';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
+import { Images } from '../../images/images';
 
 export default function NavbarDetails({ selectedMenu, setSelectedMenu, setContentType, setCurrentPage }: NavbarDetailsPropType) {
   const navigation = useNavigation();
@@ -57,7 +58,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             setTopicList(null);
           }}
           className='flex-row justify-center items-center rounded-xl overflow-hidden px-2'>
-          <Image source={require('../../assets/home.png')} className='w-8 h-8' width={10} height={10} />
+          <Image source={Images.home} className='w-8 h-8' width={10} height={10} />
         </Pressable>
 
         <Pressable

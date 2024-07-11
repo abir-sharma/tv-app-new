@@ -4,6 +4,7 @@ import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
 import VideoPlayer from '../components/Global/video-player/player';
 import { useNavigation } from '@react-navigation/native';
+import { Images } from '../images/images';
 
 const DppQuizSolution = ({ route }: any) => {
     const navigation = useNavigation();
@@ -128,14 +129,14 @@ const DppQuizSolution = ({ route }: any) => {
                         className="overflow-hidden rounded-full p-2"
                     >
                         <View className='flex-row'>
-                            <Image source={require('../assets/back.png')} className='w-8 h-8' width={10} height={10} />
+                            <Image source={Images.back} className='w-8 h-8' width={10} height={10} />
                         </View>
                     </Pressable>
                 </View>
                 <Text className='text-white text-xl font-medium' >{solutionData?.test?.name}</Text>
                 <View
                     className='flex-row justify-center opacity-0 overflow-hidden rounded-full items-center p-2'>
-                    <Image source={require('../assets/dp.png')} className='w-10 h-10' width={10} height={10} />
+                    <Image source={Images.dp} className='w-10 h-10' width={10} height={10} />
                 </View>
             </View>
 
