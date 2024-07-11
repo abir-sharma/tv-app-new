@@ -4,7 +4,6 @@ import axios from 'axios';
 import cheerio from 'cheerio';
 import Navbar from '../components/Global/Navbar';
 import { useGlobalContext } from '../context/MainContext';
-import { ItemType, ItemType2 } from '../types/types';
 import OfflineBatches from '../components/Offline/OfflineBatches';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';

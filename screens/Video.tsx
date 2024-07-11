@@ -3,7 +3,6 @@ import { useKeepAwake } from 'expo-keep-awake';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import VideoPlayer from '../components/Global/video-player/player';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { VideoType } from '../types/types';
 
 const Video = ({ route }: any) => {
   useKeepAwake();

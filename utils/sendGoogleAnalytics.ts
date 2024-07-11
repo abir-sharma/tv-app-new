@@ -2,12 +2,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import analytics from "@react-native-firebase/analytics";
 import moment from "moment";
 
-type EventData = {
-  timestamp?: string;
-  registered_mobile_number?: string;
-  [key: string]: any;
-};
-
 const sendGoogleAnalytics = async (eventName: string, data: EventData) => {
   if (!data.timestamp) {
     data.timestamp = moment().format();

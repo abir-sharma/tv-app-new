@@ -8,7 +8,6 @@ import {
   ReactNode,
   useEffect
 } from "react";
-import { BatchDetails, BatchType, Order, Subject, TopicType, ItemType, ItemType2, QuizItemType } from "../types/types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 

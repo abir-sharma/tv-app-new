@@ -8,7 +8,6 @@ import moment from "moment";
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { VideoType } from "../../types/types";
 
 export default function Recent() {
   const navigation = useNavigation();

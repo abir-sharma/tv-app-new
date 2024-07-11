@@ -5,14 +5,7 @@ import { useGlobalContext } from '../../context/MainContext';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
 
-type PropType = {
-  selectedMenu: number;
-  setSelectedMenu: (arg: number) => void;
-  setContentType: (arg: string) => void;
-  setCurrentPage: (arg: number) => void;
-}
-
-export default function NavbarDetails({ selectedMenu, setSelectedMenu, setContentType, setCurrentPage }: PropType) {
+export default function NavbarDetails({ selectedMenu, setSelectedMenu, setContentType, setCurrentPage }: NavbarDetailsPropType) {
   const navigation = useNavigation();
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const { setSelectedSubject, batchDetails, selectedSubject, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter } = useGlobalContext();

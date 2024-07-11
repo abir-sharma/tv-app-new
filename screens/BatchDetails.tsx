@@ -4,7 +4,6 @@ import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
 import NavbarDetails from '../components/BatchDetails/NavbarDetails';
 import { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
-import { NoteType, VideoType } from '../types/types';
 import Chapters from '../components/BatchDetails/Chapters';
 import axios from 'axios';
 import { VideoComponent } from '../components/BatchDetails/VideoComponent';

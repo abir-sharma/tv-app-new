@@ -1,17 +1,10 @@
 import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, Pressable } from 'react-native';
-import { ItemType } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
-// @ts-expect-error
-import defaultIcon from '../../assets/TV.png';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 
-type NotePropType = {
-  noteList: ItemType[] | null,
-}
-
-export const OfflineNoteComponent = ({ noteList }: NotePropType) => {
+export const OfflineNoteComponent = ({ noteList }: OfflineNoteComponentPropType) => {
 
   const navigation = useNavigation();
 

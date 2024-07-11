@@ -1,17 +1,12 @@
 import React from 'react';
 import { View, Text, Image, FlatList, Pressable } from 'react-native';
-import { ItemType } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
 // @ts-expect-error
 import defaultIcon from '../../assets/TV.png';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 
-type VideoPropType = {
-  videoList: ItemType[] | null,
-}
-
-export const OfflineVideoComponent = ({ videoList }: VideoPropType) => {
+export const OfflineVideoComponent = ({ videoList }: OfflineVideoComponentPropType) => {
 
   const navigation = useNavigation();
 

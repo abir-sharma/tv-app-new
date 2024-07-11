@@ -1,11 +1,11 @@
-export type BatchInfoType = {
+ type BatchInfoType = {
   _id: string;
   name: string;
   isPathshala: boolean;
   masterBatchId: string | null;
 }
 
-export type BatchType = {
+ type BatchType = {
   _id: string;
   previewImage: FileId;
   batch: BatchInfoType;
@@ -13,7 +13,7 @@ export type BatchType = {
   name: string;
 }
 
-export type Order = {
+ type Order = {
   orderId: string;
   itemName: string;
   totalAmountPaid: number;
@@ -55,7 +55,7 @@ type StudyMaterial = {
   type: string;
 };
 
-export type Subject = {
+ type Subject = {
   _id: string;
   fileId: FileId;
   subject: string;
@@ -67,7 +67,7 @@ export type Subject = {
   tagCount: number;
 };
 
-export type BatchDetails = {
+ type BatchDetails = {
   _id: string;
   type: string;
   name: string;
@@ -204,7 +204,7 @@ export type BatchDetails = {
   };
 };
 
-export type TopicType = {
+ type TopicType = {
   _id: string;
   name: string;
   type: string;
@@ -234,7 +234,7 @@ type VideoDetailsType = {
   drmProtected: boolean;
 };
 
-export type VideoType = {
+ type VideoType = {
   _id: string;
   restrictedSchedule: boolean;
   restrictedTime: number;
@@ -268,12 +268,12 @@ type Attachment = {
   key: string;
 };
 
-export type ItemType = {
+ type ItemType = {
   name: string,
   id: number
   path: string,
 }
-export type ItemType2 = {
+ type ItemType2 = {
   name: string,
   id: number
   path: string,
@@ -291,7 +291,7 @@ type HomeworkItem = {
   solutionVideoType: string;
 };
 
-export type NoteType = {
+ type NoteType = {
   _id: string;
   isFree: boolean;
   status: string;
@@ -304,7 +304,7 @@ export type NoteType = {
 };
 
 
-export type QuizItemType = {
+ type QuizItemType = {
   "test": {
     "_id": string,
     "displayOrder": number,
@@ -321,3 +321,48 @@ export type QuizItemType = {
   "scheduleId": string,
   "contentId": string
 };
+
+type EventData = {
+  timestamp?: string;
+  registered_mobile_number?: string;
+  [key: string]: any;
+};
+
+
+// PropTypes
+
+type DPPPropType = {
+  noteList: NoteType[] | null,
+  setNoteList: Dispatch<SetStateAction<NoteType[] | null>>,
+  loadMore: boolean,
+  getPaidBatches: any
+}
+
+type NavbarDetailsPropType = {
+  selectedMenu: number;
+  setSelectedMenu: (arg: number) => void;
+  setContentType: (arg: string) => void;
+  setCurrentPage: (arg: number) => void;
+}
+
+type NoteComponentPropType = {
+  noteList: NoteType[] | null,
+  setNoteList: Dispatch<SetStateAction<NoteType[] | null>>,
+  loadMore: boolean,
+  getPaidBatches: any
+}
+
+type VideoComponentPropType = {
+  videoList: VideoType[] | null,
+  setVideoList: Dispatch<SetStateAction<VideoType[] | null>>,
+  loadMore: boolean,
+  getPaidBatches: any
+}
+
+type OfflineNoteComponentPropType = {
+  noteList: ItemType[] | null,
+}
+
+type OfflineVideoComponentPropType = {
+  videoList: ItemType[] | null,
+}

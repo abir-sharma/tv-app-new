@@ -1,20 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, Pressable } from 'react-native';
-import { NoteType } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 import { useGlobalContext } from '../../context/MainContext';
 
-type NotePropType = {
-  noteList: NoteType[] | null,
-  setNoteList: Dispatch<SetStateAction<NoteType[] | null>>,
-  loadMore: boolean,
-  getPaidBatches: any
-}
-
-export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NotePropType) => {
+export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteComponentPropType) => {
   const { selectedBatch, selectedChapter, selectedSubject, selectedMenu } = useGlobalContext();
   const navigation = useNavigation();
 

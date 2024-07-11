@@ -1,5 +1,4 @@
 import { FlatList, Pressable, Text, View } from 'react-native';
-import { TopicType } from '../../types/types';
 import { useGlobalContext } from '../../context/MainContext';
 import { useEffect } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';

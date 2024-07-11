@@ -1,19 +1,11 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { View, Text, Image, FlatList, Pressable } from 'react-native';
-import { NoteType } from '../../types/types';
 import { useGlobalContext } from '../../context/MainContext';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 import { useNavigation } from '@react-navigation/native';
-
-type DPPPropType = {
-  noteList: NoteType[] | null,
-  setNoteList: Dispatch<SetStateAction<NoteType[] | null>>,
-  loadMore: boolean,
-  getPaidBatches: any
-}
 
 export const DppComponent = ({ }: DPPPropType) => {
   const navigation = useNavigation();

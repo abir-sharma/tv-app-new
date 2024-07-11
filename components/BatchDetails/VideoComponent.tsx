@@ -1,6 +1,5 @@
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { View, Text, Image, FlatList, Pressable } from 'react-native';
-import { VideoType } from '../../types/types';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,14 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 
-type VideoPropType = {
-  videoList: VideoType[] | null,
-  setVideoList: Dispatch<SetStateAction<VideoType[] | null>>,
-  loadMore: boolean,
-  getPaidBatches: any
-}
-
-export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPropType) => {
+export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoComponentPropType) => {
 
   const navigation = useNavigation();
   const {selectedSubject, selectedChapter, selectedBatch} = useGlobalContext();
