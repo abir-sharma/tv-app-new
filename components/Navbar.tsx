@@ -147,7 +147,7 @@ export default function Navbar() {
           }}
           onPress={() => {
             // setIsQrModalVisible(true);
-            mainNavigation?.navigate("QrTest");
+            mainNavigation?.navigate("MobileControlQR");
             sendGoogleAnalytics("mobile_control_clicked", {});
           }}
           className="flex-row justify-center overflow-hidden rounded-full items-center"

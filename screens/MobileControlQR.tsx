@@ -12,7 +12,7 @@ import useUdpServer from "../hooks/useUdpServer";
 import { useNavigation } from "@react-navigation/native";
 import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
 
-export default function QRCodeGenerator({ setIsQrModalVisible }: any) {
+export default function MobileControlQR({ setIsQrModalVisible }: any) {
   const { setMainNavigation, messageFromRemote } = useGlobalContext();
   const { message, ipAddress, sendMessageToClient } = useUdpServer();
 

@@ -27,11 +27,9 @@ import { TestResult } from "./screens/TestResult";
 import Attendance from "./screens/Attendance";
 import Intro from "./screens/Intro";
 import RecentVideos from "./screens/RecentVideos";
-import QRCodeGenerator from "./screens/QrTest";
+import MobileControlQR from "./screens/MobileControlQR";
 import VideoPlayer from "./components/video-player/player";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import VideoTest from "./screens/VideoTest";
-import UDPClient from "./screens/UDPClient";
 import useUdpServer from "./hooks/useUdpServer";
 import WebView from "react-native-webview";
 import { useGlobalContext } from "./context/MainContext";
@@ -239,24 +237,14 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="QrTest"
-            component={QRCodeGenerator}
+            name="MobileControlQR"
+            component={MobileControlQR}
             options={{ headerShown: false }}
           />
           <Stack.Screen
             name="VideoPlayer"
             component={VideoPlayer}
             options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="VideoTest"
-            component={VideoTest}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="UDPClient"
-            component={UDPClient}
-            options={{ headerShown: false, orientation: "portrait" }}
           />
         </Stack.Navigator>
         {/* <StatusBar hidden /> */}
