@@ -102,7 +102,16 @@ export const OfflineHome = () => {
     setOfflineSections(sectionData);
     setOfflineSelectedSection(3);
     setDirectoryLevel(4);
-    setOfflineCurrentDirectory(sectionData[3]?.path);
+    setOfflineCurrentDirectory(sectionData[getIndexByDirectoryName(sectionData, 'Lectures')]?.path);
+  }
+
+  function getIndexByDirectoryName(directoryItems: any[], name: string) {
+    for (let i = 0; i < directoryItems.length; i++) {
+      if (directoryItems[i].name === name) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   const fetchLectures = async () => {

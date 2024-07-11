@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Image, Text, Pressable, View, Modal, FlatList } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
-import styles from './NavbarDetails.style'
+import styles from './OfflineNavbarDetails.style'
 import Entypo from '@expo/vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
@@ -42,7 +42,14 @@ export default function OfflineNavbarDetails() {
     </Pressable>
   );
 
-
+  function getIndexByDirectoryName(directoryItems: any[], name: string) {
+    for (let i = 0; i < directoryItems.length; i++) {
+      if (directoryItems[i].name === name) {
+        return i;
+      }
+    }
+    return -1;
+  }
 
   return (
     <View className=" flex-row justify-between items-center p-4 bg-[#111111]">
@@ -118,7 +125,7 @@ export default function OfflineNavbarDetails() {
           onPress={() => {
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[3]?.path);
+              setOfflineCurrentDirectory(offlineSections[getIndexByDirectoryName(offlineSections, 'Lectures')]?.path);
               setOfflineSelectedSection(3);
             }
           }}
@@ -138,7 +145,7 @@ export default function OfflineNavbarDetails() {
           onPress={() => {
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[4]?.path);
+              setOfflineCurrentDirectory(offlineSections[getIndexByDirectoryName(offlineSections, 'Notes')]?.path);
               setOfflineSelectedSection(4);
             }
           }}>
@@ -158,7 +165,7 @@ export default function OfflineNavbarDetails() {
           onPress={() => {
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[1]?.path);
+              setOfflineCurrentDirectory(offlineSections[getIndexByDirectoryName(offlineSections, 'DPP PDF')]?.path);
               setOfflineSelectedSection(1);
             }
           }}
@@ -179,7 +186,7 @@ export default function OfflineNavbarDetails() {
           onPress={() => {
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[2]?.path);
+              setOfflineCurrentDirectory(offlineSections[getIndexByDirectoryName(offlineSections, 'DPP Videos')]?.path);
               setOfflineSelectedSection(2);
             }
           }}
