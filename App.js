@@ -88,30 +88,6 @@ export default function App() {
           sendMessageToClient("youtube");
           setShowImgModal(false);
           setShowPdfModal(false);
-        } else if (msg.type == "pdf_chunk_start") {
-          setPdfChunks([]);
-          setShowYoutubeModal(false);
-          setShowImgModal(false);
-        } else if (msg.type === "pdf_chunk") {
-          setPdfChunks((prevChunks) => [...prevChunks, msg]);
-        } else if (msg.type == "pdf_chunk_end") {
-          const sortedChunks = pdfChunks.sort((a, b) => a.index - b.index);
-          const pdfData = sortedChunks.map((chunk) => chunk.chunk).join("");
-          sendMessageToClient(`{"type": "reset"}`);
-          sendMessageToClient(`{"type": "received_pdf"}`);
-          // navigationRef.current.navigate("OldPDFViewer", { pdfUrl: `data:application/pdf;base64,${pdfData}` });
-        } else if (msg.type == "image_chunk_start") {
-          setImgChunks([]);
-          setShowYoutubeModal(false);
-        } else if (msg.type === "image_chunk") {
-          setImgChunks((prevChunks) => [...prevChunks, msg]);
-        } else if (msg.type == "image_chunk_end") {
-          const sortedChunks = imgChunks.sort((a, b) => a.index - b.index);
-          const imgData = sortedChunks.map((chunk) => chunk.chunk).join("");
-          setImgUrl(`data:image/png;base64,${imgData}`);
-          setShowImgModal(true);
-          sendMessageToClient(`{"type": "reset"}`);
-          sendMessageToClient(`{"type": "received_image"}`);
         } else if (msg.type == "close_modal") {
           setShowYoutubeModal(false);
           setShowImgModal(false);
@@ -119,8 +95,7 @@ export default function App() {
         } else if (msg.type == "serve_pdf") {
           setPdfUrl("");
           setShowPdfModal(true);
-          axios
-            .get(msg.requestUrl)
+          axios.get(msg.requestUrl)
             .then((res) => {
               let pdfUrl = res.data.uri;
               setShowYoutubeModal(false);
@@ -149,106 +124,37 @@ export default function App() {
         }
       }
     } catch (err) {
+      console.error('use effect error - App.js', err)
     }
   }, [message]);
 
   return (
     <Providers>
       <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AiTeacher"
-            component={AiTeacher}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Attendance"
-            component={Attendance}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Details"
-            component={Details}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Videos"
-            component={Videos}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="RecentVideos"
-            component={RecentVideos}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Tests"
-            component={Tests}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="TestResult"
-            component={TestResult}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="TestSolutions"
-            component={TestSolutions}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="OldPDFViewer"
-            component={PDFViewer}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="PDFViewer"
-            component={PDFTronViewer}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Offline"
-            component={Offline}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="OfflineDetails"
-            component={OfflineDetails}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MP4Player"
-            component={MP4Player}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Intro"
-            component={Intro}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="MobileControlQR"
-            component={MobileControlQR}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="VideoPlayer"
-            component={VideoPlayer}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-        {/* <StatusBar hidden /> */}
-        <StatusBar backgroundColor="#000" barStyle="light-content" />
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+        <Stack.Screen name="AiTeacher" component={AiTeacher} options={{ headerShown: false }} />
+        <Stack.Screen name="Attendance" component={Attendance} options={{ headerShown: false }} />
+        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+        <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
+        <Stack.Screen name="Videos" component={Videos} options={{ headerShown: false }} />
+        <Stack.Screen name="RecentVideos" component={RecentVideos} options={{ headerShown: false }} />
+        <Stack.Screen name="Tests" component={Tests} options={{ headerShown: false }} />
+        <Stack.Screen name="TestResult" component={TestResult} options={{ headerShown: false }} />
+        <Stack.Screen name="TestSolutions" component={TestSolutions} options={{ headerShown: false }} />
+        <Stack.Screen name="OldPDFViewer" component={PDFViewer} options={{ headerShown: false }} />
+        <Stack.Screen name="PDFViewer" component={PDFTronViewer} options={{ headerShown: false }} />
+        <Stack.Screen name="Offline" component={Offline} options={{ headerShown: false }} />
+        <Stack.Screen name="OfflineDetails" component={OfflineDetails} options={{ headerShown: false }} />
+        <Stack.Screen name="MP4Player" component={MP4Player} options={{ headerShown: false }} />
+        <Stack.Screen name="Intro" component={Intro} options={{ headerShown: false }} />
+        <Stack.Screen name="QrTest" component={QRCodeGenerator} options={{ headerShown: false }} />
+        <Stack.Screen name="VideoPlayer" component={VideoPlayer} options={{ headerShown: false }} />
+        <Stack.Screen name="VideoTest" component={VideoTest} options={{ headerShown: false }} />
+        <Stack.Screen name="UDPClient" component={UDPClient} options={{ headerShown: false, orientation: "portrait" }} />
+      </Stack.Navigator>
+      {/* <StatusBar hidden /> */}
+      <StatusBar backgroundColor="#000" barStyle="light-content" />
       </NavigationContainer>
 
       <Modal
