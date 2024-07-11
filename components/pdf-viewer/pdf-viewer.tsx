@@ -2,17 +2,14 @@ import React, { useState } from 'react';
 import { View, Text, Pressable, ActivityIndicator, Image, StyleSheet } from 'react-native';
 import Pdf from 'react-native-pdf';
 import Svg, { Path } from 'react-native-svg';
-import { useGlobalContext } from '../../context/MainContext';
-import Ionicons from '@expo/vector-icons/Ionicons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Entypo from '@expo/vector-icons/Entypo';
+import { useNavigation } from '@react-navigation/native';
 
 export default function PDFViewer({ route }: any) {
   let pdfUrl = route?.params?.pdfUrl;
-
-  const { setMainNavigation, setLogs, mainNavigation, setHeaders } = useGlobalContext();
-
+  const navigation = useNavigation();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [maxPage, setMaxPage] = useState<number>(1);
   const [showLoader, setShowLoader] = useState<boolean>(true);
@@ -117,7 +114,7 @@ export default function PDFViewer({ route }: any) {
             foreground: true,
           }}
           onPress={() => {
-            mainNavigation.goBack();
+            navigation.goBack();
           }}
           className="bg-black/80 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2"
         >

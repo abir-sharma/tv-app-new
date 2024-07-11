@@ -6,6 +6,7 @@ import styles from './NavbarDetails.style'
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Entypo from '@expo/vector-icons/Entypo';
+import { useNavigation } from '@react-navigation/native';
 
 type PropType = {
   selectedMenu: number;
@@ -15,25 +16,9 @@ type PropType = {
 }
 
 export default function NavbarDetails({ selectedMenu, setSelectedMenu, setContentType, setCurrentPage }: PropType) {
-
+  const navigation = useNavigation();
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const { setSelectedSubject, setLogs, batchDetails, mainNavigation, selectedSubject, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter, headers, setHeaders } = useGlobalContext();
-
-  const handleLogout = async () => {
-
-    mainNavigation.navigate('Login');
-    AsyncStorage.clear();
-    setHeaders(null);
-    try {
-      const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", { headers })
-      if (res?.data?.success) {
-
-      }
-    }
-    catch (err: any) {
-      setLogs((logs) => [...logs, "Error in LOGOUT API:" + JSON.stringify(err?.response)]);
-    }
-  }
+  const { setSelectedSubject, batchDetails, selectedSubject, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter } = useGlobalContext();
 
   const handleDropdownPress = () => {
     setIsDropdownVisible(prev => !prev);
@@ -72,7 +57,8 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             foreground: true
           }}
           onPress={() => {
-            mainNavigation.navigate('Home');
+            // @ts-expect-error
+            navigation.navigate('Home');
             setRecentVideoLoad(prev => !prev);
             setSelectedBatch(null);
             setSelectSubjectSlug(null);
@@ -85,22 +71,22 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         </Pressable>
 
         <Pressable
-            onPress={() => { handleDropdownPress() }}
-            className='rounded-xl bg-[#444444] px-5 py-2 overflow-hidden'
-            hasTVPreferredFocus={true}
-            android_ripple={{
-              color: "rgba(255,255,255,0.5)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }}>
-              <View className='flex-row items-center justify-center gap-2'>
-                <Text className='text-white text-sm'>{selectedSubject && (selectedSubject?.subject?.length > 20) ? `${selectedSubject?.subject.substring(0, 20)}...` : selectedSubject?.subject || "Select Subject"}</Text>
-                <Entypo name="chevron-down" size={20} color="white" />
-              </View>
-          </Pressable>
+          onPress={() => { handleDropdownPress() }}
+          className='rounded-xl bg-[#444444] px-5 py-2 overflow-hidden'
+          hasTVPreferredFocus={true}
+          android_ripple={{
+            color: "rgba(255,255,255,0.5)",
+            borderless: false,
+            radius: 1000,
+            foreground: true
+          }}>
+          <View className='flex-row items-center justify-center gap-2'>
+            <Text className='text-white text-sm'>{selectedSubject && (selectedSubject?.subject?.length > 20) ? `${selectedSubject?.subject.substring(0, 20)}...` : selectedSubject?.subject || "Select Subject"}</Text>
+            <Entypo name="chevron-down" size={20} color="white" />
+          </View>
+        </Pressable>
       </View>
-      
+
 
       <View>
         <Modal
@@ -109,7 +95,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
           visible={isDropdownVisible}
           onRequestClose={() => setIsDropdownVisible(false)}
         >
-            <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
+          <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
             <View style={{ flex: 1 }}>
               <ScrollView className='bg-[#111111] border-white/20 border-[1px] max-h-[200] overflow-hidden w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
                 <FlatList
@@ -119,7 +105,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
                 />
               </ScrollView>
             </View>
-            </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
         </Modal>
       </View>
 

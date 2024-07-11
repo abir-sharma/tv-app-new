@@ -2,12 +2,11 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Video, ResizeMode } from 'expo-av'
 import { Text, View, ActivityIndicator, Pressable, Image } from 'react-native'
 import { useGlobalContext } from '../../context/MainContext';
+import { useNavigation } from '@react-navigation/native';
 
 const MP4Player = ({ route }: any) => {
   const uri = route?.params?.videoUrl;
-
-  const { mainNavigation } = useGlobalContext();
-
+  const navigation = useNavigation();
   const [showLoader, setShowLoader] = useState<boolean>(true);
   const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [isActive, setIsActive] = useState<boolean>(true);
@@ -61,7 +60,7 @@ const MP4Player = ({ route }: any) => {
           radius: 1000,
           foreground: true
         }}
-        onPress={() => { mainNavigation.goBack() }} className='bg-black/40 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2'
+        onPress={() => { navigation.goBack() }} className='bg-black/40 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2'
       >
         <Image
           source={require('../../assets/exit.png')}

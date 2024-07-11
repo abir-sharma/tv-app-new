@@ -2,17 +2,12 @@ import React, { useEffect, useState } from "react";
 import {
   Platform,
   StyleSheet,
-  Text,
-  View,
-  PermissionsAndroid,
   BackHandler,
   Alert,
   Pressable,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-
 import { Config, DocumentView, RNPdftron } from "react-native-pdftron";
-import { useGlobalContext } from "../../context/MainContext";
 
 const myToolItem = {
     [Config.CustomToolItemKey.Id]: 'add_page',
@@ -45,9 +40,6 @@ const PDFTronViewer = ({ route }: any) => {
 
   const navigation = useNavigation();
   let pdfUrl = route?.params?.pdfUrl;
-
-  const { setMainNavigation, setLogs, mainNavigation, setHeaders } = useGlobalContext();
-
   useEffect(() => {
     RNPdftron.initialize("Insert commercial license key here after purchase");
     RNPdftron.enableJavaScript(true);

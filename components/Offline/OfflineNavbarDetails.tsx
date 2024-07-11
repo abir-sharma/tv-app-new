@@ -6,17 +6,16 @@ import styles from './NavbarDetails.style'
 import Entypo from '@expo/vector-icons/Entypo';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-
-
+import { useNavigation } from '@react-navigation/native';
 
 export default function OfflineNavbarDetails() {
-
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const { offlineSections, setDirectoryLevel, offlineSelectedSection, headers, setHeaders, setOfflineCurrentDirectory, setOfflineSelectedSection, offlineSubjects, setOfflineSelectedBatch, setOfflineSelectedSubject, offlineSelectedSubject, mainNavigation } = useGlobalContext();
+  const { offlineSections, setDirectoryLevel, offlineSelectedSection, headers, setHeaders, setOfflineCurrentDirectory, setOfflineSelectedSection, offlineSubjects, setOfflineSelectedBatch, setOfflineSelectedSubject, offlineSelectedSubject } = useGlobalContext();
+  const navigation = useNavigation();
 
   const handleLogout = async () => {
-
-    mainNavigation.navigate('Login');
+    // @ts-expect-error
+    navigation.navigate('Login');
     AsyncStorage.clear();
     setHeaders(null);
     try {
@@ -57,7 +56,8 @@ export default function OfflineNavbarDetails() {
           foreground: true
         }}
         onPress={() => {
-          mainNavigation.navigate('Home');
+          // @ts-expect-error
+          navigation.navigate('Home');
           setOfflineSelectedBatch(-1);
         }}
         className='flex-row justify-center items-center rounded-xl overflow-hidden px-2'>

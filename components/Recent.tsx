@@ -8,9 +8,11 @@ import { VideoType } from "../types/types";
 import moment from "moment";
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Recent() {
-  const { mainNavigation, recentVideoLoad } = useGlobalContext();
+  const navigation = useNavigation();
+  const { recentVideoLoad } = useGlobalContext();
   const [recentVideos, setRecentVideos] = useState<{
     [key: string]: VideoType[];
   } | null>(null);
@@ -46,7 +48,8 @@ export default function Recent() {
                   foreground: true,
                 }}
                 onPress={async () => {
-                  mainNavigation.navigate("RecentVideos", {
+                  // @ts-expect-error
+                  navigation.navigate("RecentVideos", {
                     lectureDetails: videos[0]?.videoDetails,
                     subject: subject,
                   });
@@ -104,7 +107,8 @@ export default function Recent() {
                   foreground: true,
                 }}
                 onPress={async () => {
-                  mainNavigation.navigate("RecentVideos", {
+                  // @ts-expect-error
+                  navigation.navigate("RecentVideos", {
                     lectureDetails: videos[0]?.videoDetails,
                     subject: subject,
                   });

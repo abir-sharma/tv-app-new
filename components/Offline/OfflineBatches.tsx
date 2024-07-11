@@ -9,12 +9,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import FastImage from 'react-native-fast-image';
+import { useNavigation } from '@react-navigation/native';
 
 
 export default function OfflineBatches(params: any) {
-
     const { setDirectoryLevel, setOfflineCurrentDirectory, offlineBatches } = useGlobalContext();
-    const { mainNavigation } = useGlobalContext();
+    const navigation = useNavigation();
     const [showLoader, setShowLoader] = useState<boolean>(false);
 
     useEffect(() => {
@@ -47,7 +47,8 @@ export default function OfflineBatches(params: any) {
                         onPress={() => {
                             setOfflineCurrentDirectory(batch?.path);
                             setDirectoryLevel(1);
-                            mainNavigation?.navigate('OfflineDetails');
+                            // @ts-expect-error
+                            navigation?.navigate('OfflineDetails');
                         }}
                         className='bg-white/10 rounded-xl h-52 w-72 overflow-hidden'
                     >

@@ -5,13 +5,10 @@ import { ActivityIndicator, Image, TouchableHighlight, Text, View } from "react-
 import { useNavigation } from "@react-navigation/native";
 import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
 
-
-
 export const TestResult = () => {
-  const { testData, headers, selectedBatch, fetchDetailTrigger, mainNavigation, setTestData, setTestSections, setSelectedTestMapping, selectedDpp } = useGlobalContext();
+  const { testData, headers, selectedBatch, fetchDetailTrigger, setTestData, setTestSections, setSelectedTestMapping, selectedDpp } = useGlobalContext();
   const [result, setResult] = useState<any>(null);
   const [showLoader, setShowLoader] = useState<boolean>(false);
-
   const navigation = useNavigation<any>();
 
   const fetchResult = async () => {
@@ -55,7 +52,7 @@ export const TestResult = () => {
       setTestData(res?.data?.data);
       setTestSections(res?.data?.data?.sections);
       setSelectedTestMapping(res?.data?.data?.testStudentMapping?._id);
-      mainNavigation.navigate('Tests');
+      navigation.navigate('Tests');
     } catch (err: any) {
       console.error("Error while restarting Quiz: ", err?.response);
     }
@@ -202,7 +199,7 @@ export const TestResult = () => {
         <TouchableHighlight
           
           className="overflow-hidden py-2 px-16 self-center  bg-[#0569FF] rounded-lg"
-          onPress={() => mainNavigation.navigate('TestSolutions')}
+          onPress={() => navigation.navigate('TestSolutions')}
         >
           <Text className="text-white text-lg font-bold">
             View Solution

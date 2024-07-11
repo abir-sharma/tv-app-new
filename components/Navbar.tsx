@@ -13,25 +13,16 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
-import moment from "moment";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Navbar() {
-  const {
-    mainNavigation,
-    isOnline,
-    setLogs,
-    setIsOnline,
-    headers,
-    setHeaders,
-    messageFromRemote,
-  } = useGlobalContext();
-  const [isQrModalVisible, setIsQrModalVisible] = useState(false);
-
-  // const { sendMessageToClient } = useUdpServer();
+  const { isOnline, setLogs, setIsOnline, headers, setHeaders } = useGlobalContext();
+  const navigation = useNavigation();
 
   const handleLogout = async () => {
     try {
-      mainNavigation.navigate("Login");
+      // @ts-expect-error
+      navigation.navigate("Login");
       AsyncStorage.clear();
       setHeaders(null);
       const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", {
@@ -57,20 +48,17 @@ export default function Navbar() {
       setPhone(temp);
     }
     getPhone();
-  },[isDropdownVisible])
-
-  
+  }, [isDropdownVisible])
 
   return (
     <View className=" flex-row justify-between items-center p-4 ">
-      {/* <View> */}
         <Modal
           transparent={true}
           animationType="fade"
           visible={isDropdownVisible}
           onRequestClose={() => setIsDropdownVisible(false)}
         >
-            <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
+          <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
             <View style={{ flex: 1 }}>
               <ScrollView className='bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[70] right-[20] z-[2]'>
                 <Pressable onPress={()=>{}} className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">{phone || "---"}</Text></Pressable>
@@ -78,9 +66,8 @@ export default function Navbar() {
                 <Pressable onPress={handleLogout} className="w-full px-5 py-2 rounded-b-lg"><Text className="text-white font-bold text-sm">Logout</Text></Pressable>
               </ScrollView>
             </View>
-            </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
         </Modal>
-      {/* </View> */}
       <Pressable
         hasTVPreferredFocus={true}
         android_ripple={{
@@ -97,10 +84,8 @@ export default function Navbar() {
           width={10}
           height={10}
         />
-        {/* <Text className='text-white font-medium text-xl ml-4'>Physics Wallah</Text> */}
       </Pressable>
       <View className="flex flex-row gap-2 absolute top-5 left-1/2 -translate-x-32">
-        {/* <!-- <View className=' -ml-20 rounded-xl flex-row bg-[#0d0d0d] border-[1px] border-white/5'> */}
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
@@ -112,9 +97,9 @@ export default function Navbar() {
           onPress={async () => {
             setIsOnline(true);
             sendGoogleAnalytics("online_mode_clicked", {});
-            mainNavigation.navigate("Home");
+            // @ts-expect-error
+            navigation.navigate("Home");
           }}
-          // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
           className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${isOnline && " bg-[#414347] "}  `}
           >
           <Text className={`text-white ${isOnline && "font-bold "}`}>Online Batches</Text>
@@ -129,9 +114,9 @@ export default function Navbar() {
           onPress={async () => {
             setIsOnline(false);
             sendGoogleAnalytics("offline_mode_clicked", {});
-            mainNavigation.navigate("Offline");
+            // @ts-expect-error
+            navigation.navigate("Offline");
           }}
-          // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${!isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
           className="w-36 h-10 rounded-xl items-center justify-center overflow-hidden"
         >
           <Text className={`text-white ${!isOnline && " font-bold "}`}>Offline Batches</Text>
@@ -146,8 +131,8 @@ export default function Navbar() {
             foreground: true,
           }}
           onPress={() => {
-            // setIsQrModalVisible(true);
-            mainNavigation?.navigate("MobileControlQR");
+            // @ts-expect-error
+            navigation.navigate("MobileControlQR");
             sendGoogleAnalytics("mobile_control_clicked", {});
           }}
           className="flex-row justify-center overflow-hidden rounded-full items-center"
@@ -166,12 +151,9 @@ export default function Navbar() {
           onPress={()=>{setIsDropdownVisible(prev=>!prev)}}
           className="flex-row justify-center overflow-hidden rounded-full items-center"
         >
-          {/* <Text className="bg-white/10 overflow-hidden rounded-xm text-white flex items-center justify-center"> */}
-            <Image source={require('../assets/dp.png')} className='w-10 h-10' width={40} height={40} />
-          {/* </Text> */}
+          <Image source={require('../assets/dp.png')} className='w-10 h-10' width={40} height={40} />
         </Pressable>
       </View>
-      
     </View>
   );
 }

@@ -208,9 +208,7 @@ export default function App() {
             }}
           />
         )}
-        {pdfUrl && (
-          <ModalPDFViewer pdfUrl={pdfUrl} />
-        )}
+        {pdfUrl && (<ModalPDFViewer pdfUrl={pdfUrl} />)}
       </Modal>
     </Providers>
   );

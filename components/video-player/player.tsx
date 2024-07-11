@@ -12,11 +12,13 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import { useNavigation } from "@react-navigation/native";
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 export default function VideoPlayer(props: any) {
-  const { mainNavigation, selectedBatch, headers } = useGlobalContext();
+  const navigation = useNavigation();
+  const { headers } = useGlobalContext();
   const playerRef = useRef<Video | null>(null);
   const [spinner, setSpinner] = useState<any>();
   const [src, setSrc] = useState<any>(undefined);
@@ -397,7 +399,7 @@ export default function VideoPlayer(props: any) {
           foreground: true,
         }}
         onPress={() => {
-          mainNavigation.goBack();
+          navigation.goBack();
         }}
         className="bg-black/40 overflow-hidden rounded-full z-[3] p-2 absolute top-2 left-2"
       >
@@ -418,8 +420,8 @@ export default function VideoPlayer(props: any) {
         }}
         onPress={()=>{
           setIsPlaying(false);
-          // @ts-ignore
-          mainNavigation.navigate("Videos", {
+          // @ts-expect-error
+          navigation.navigate("Videos", {
           lectureDetails: props.lectureDetails,
           scheduleDetails: props.scheduleDetails,
           });}}

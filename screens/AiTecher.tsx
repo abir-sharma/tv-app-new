@@ -14,13 +14,7 @@ import { Audio } from 'expo-av';
 
 export default function AiTeacher({ navigation }: any) {
 
-  const { setMainNavigation } = useGlobalContext();
   const websiteUrl = 'https://ai-teacher-alpha.vercel.app/';
-
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-    setMainNavigation(navigation);
-  }, [])
 
   const [requestingAudio, setRequestingAudio] = useState(true);
   const [requestingCamera, setRequestingCamera] = useState(true);

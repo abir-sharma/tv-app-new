@@ -13,15 +13,10 @@ import { useNavigation } from "@react-navigation/native";
 import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
 
 export default function MobileControlQR({ setIsQrModalVisible }: any) {
-  const { setMainNavigation, messageFromRemote } = useGlobalContext();
-  const { message, ipAddress, sendMessageToClient } = useUdpServer();
+  const { messageFromRemote } = useGlobalContext();
+  const { ipAddress } = useUdpServer();
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    setMainNavigation(navigation);
-  }, []);
-
   useEffect(() => {
     try {
       if (messageFromRemote && JSON.parse(messageFromRemote)?.type == "qrscan") {

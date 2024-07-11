@@ -28,8 +28,6 @@ type GlobalContextType = {
   setBatchDetails: Dispatch<SetStateAction<BatchDetails | null>>;
   selectSubjectSlug: string | null;
   setSelectSubjectSlug: Dispatch<SetStateAction<string | null>>;
-  mainNavigation: any;
-  setMainNavigation: Dispatch<SetStateAction<any>>;
   headers: any;
   setHeaders: Dispatch<SetStateAction<any>>;
   orders: Order[] | null;
@@ -106,8 +104,6 @@ const GlobalContext = createContext<GlobalContextType>({
   setBatchDetails: () => { },
   selectSubjectSlug: null,
   setSelectSubjectSlug: () => { },
-  mainNavigation: null,
-  setMainNavigation: () => { },
   headers: {},
   setHeaders: () => { },
   orders: null,
@@ -188,7 +184,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const [dppList, setDppList] = useState<QuizItemType[] | null>(null);
   const [batchDetails, setBatchDetails] = useState<BatchDetails | null>(null);
-  const [mainNavigation, setMainNavigation] = useState<any>(null);
 
   const [topicList, setTopicList] = useState<TopicType[] | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -317,7 +312,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         topicList, setTopicList,
         dppList, setDppList,
         selectSubjectSlug, setSelectSubjectSlug,
-        mainNavigation, setMainNavigation,
         headers, setHeaders,
         orders, setOrders,
         selectedDpp, setSelectedDpp,

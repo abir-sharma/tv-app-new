@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }: any) {
 
-  const { setMainNavigation, headers, setHeaders } = useGlobalContext();
+  const { setHeaders } = useGlobalContext();
   const [phone, setPhone] = useState<string>("");
   const [otpSent, setOtpSent] = useState<boolean>(false);
   const [otpReSent, setOtpReSent] = useState<boolean>(false);
@@ -19,21 +19,9 @@ export default function Login({ navigation }: any) {
   const [otpTimer, setOtpTimer] = useState<number>(30);
   const [showLoader, setShowLoader] = useState<boolean>(false);
 
-  // useEffect(
-  //   () =>
-  //     navigation.addListener('beforeRemove', (e:any) => {
-  //       e.preventDefault();
-  //       //close the app
-  //       BackHandler.exitApp();
-  //     }),
-  //   [navigation]
-  // );
-
   useEffect(() => {
     const backAction = () => {
       BackHandler.exitApp();
-      // Return true to prevent default behavior (closing the app)
-      // Return false to allow default behavior
       return true;
     };
 
@@ -56,12 +44,6 @@ export default function Login({ navigation }: any) {
       return () => clearInterval(interval);
     }
   }, [otpReSent, otpSent]);
-
-
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-    setMainNavigation(navigation);
-  }, [])
 
   const handleTextChange = (newText: string) => {
     if (newText.length > 10) return;

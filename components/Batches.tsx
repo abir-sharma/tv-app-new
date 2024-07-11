@@ -12,7 +12,7 @@ import sendGoogleAnalytics from '../hooks/sendGoogleAnalytics';
 
 export default function Batches() {
 
-    const { orders, mainNavigation, subscribedBatches, setSelectedBatch, } = useGlobalContext();
+    const { subscribedBatches, setSelectedBatch, } = useGlobalContext();
     const navigation = useNavigation();
 
     return (

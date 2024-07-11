@@ -6,6 +6,7 @@ import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import sendGoogleAnalytics from '../../hooks/sendGoogleAnalytics';
+import { useNavigation } from '@react-navigation/native';
 
 type DPPPropType = {
   noteList: NoteType[] | null,
@@ -15,8 +16,8 @@ type DPPPropType = {
 }
 
 export const DppComponent = ({ }: DPPPropType) => {
-
-  const { mainNavigation, setLogs, setTestData, dppList, setSelectedTestMapping, setTestSections, setSelectedDpp, headers, selectedBatch, selectedSubject } = useGlobalContext();
+  const navigation = useNavigation();
+  const { setLogs, setTestData, dppList, setSelectedTestMapping, setTestSections, setSelectedDpp, headers, selectedBatch, selectedSubject } = useGlobalContext();
 
   const handleDppClick = async (item: any) => {
     setSelectedDpp(item);
@@ -28,7 +29,8 @@ export const DppComponent = ({ }: DPPPropType) => {
       setTestData(res?.data?.data);
       setTestSections(res?.data?.data?.sections)
       setSelectedTestMapping(res?.data?.data?.testStudentMapping?._id);
-      mainNavigation.navigate('Tests');
+      // @ts-expect-error
+      navigation.navigate('Tests');
     } catch (err: any) {
       setLogs((logs) => [...logs, "Error in START TEST API:" + JSON.stringify(err?.response)]);
     }

@@ -13,7 +13,7 @@ import { DppComponent } from '../components/Options/DppComponent';
 
 export default function Details({ navigation }: any) {
 
-  const { setMainNavigation, setLogs, fetchDetails, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, selectedMenu, setSelectedMenu } = useGlobalContext();
+  const { fetchDetails, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, selectedMenu, setSelectedMenu } = useGlobalContext();
 
 
   const [contentType, setContentType] = useState<string>('videos');
@@ -43,11 +43,6 @@ export default function Details({ navigation }: any) {
     setShowLoadMoreDppVideos(true);
 
   }, [batchDetails, selectSubjectSlug, selectedSubject, selectedBatch])
-
-  useEffect(() => {
-    navigation.setOptions({ headerShown: false });
-    setMainNavigation(navigation);
-  }, [])
 
   useEffect(() => {
     getDetails();
