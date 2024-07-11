@@ -25,7 +25,7 @@ import { createNavigationContainerRef } from "@react-navigation/native";
 import axios from "axios";
 import YoutubePlayer from "react-native-youtube-iframe";
 import ModalPDFViewer from "./components/Global/pdf-viewer/modal-pdf-viewer";
-import sendGoogleAnalytics from "./hooks/sendGoogleAnalytics";
+import sendGoogleAnalytics from "./utils/sendGoogleAnalytics";
 
 const Stack = createNativeStackNavigator();
 

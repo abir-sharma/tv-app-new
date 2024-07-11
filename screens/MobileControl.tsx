@@ -10,7 +10,7 @@ import QRCode from "react-native-qrcode-svg";
 import { useGlobalContext } from "../context/MainContext";
 import useUdpServer from "../hooks/useUdpServer";
 import { useNavigation } from "@react-navigation/native";
-import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
+import sendGoogleAnalytics from "../utils/sendGoogleAnalytics";
 
 export default function MobileControl({ setIsQrModalVisible }: any) {
   const { messageFromRemote } = useGlobalContext();

@@ -12,7 +12,7 @@ import { useGlobalContext } from "../../context/MainContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import sendGoogleAnalytics from "../../hooks/sendGoogleAnalytics";
+import sendGoogleAnalytics from "../../utils/sendGoogleAnalytics";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Navbar() {

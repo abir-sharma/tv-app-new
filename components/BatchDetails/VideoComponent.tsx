@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGlobalContext } from '../../context/MainContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
-import sendGoogleAnalytics from '../../hooks/sendGoogleAnalytics';
+import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 
 type VideoPropType = {
   videoList: VideoType[] | null,

@@ -4,7 +4,7 @@ import { NoteType } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
-import sendGoogleAnalytics from '../../hooks/sendGoogleAnalytics';
+import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 import { useGlobalContext } from '../../context/MainContext';
 
 type NotePropType = {

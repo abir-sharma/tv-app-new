@@ -5,7 +5,7 @@ import { useGlobalContext } from '../../context/MainContext';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
-import sendGoogleAnalytics from '../../hooks/sendGoogleAnalytics';
+import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 import { useNavigation } from '@react-navigation/native';
 
 type DPPPropType = {

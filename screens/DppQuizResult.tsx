@@ -3,7 +3,7 @@ import { useGlobalContext } from "../context/MainContext"
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, TouchableHighlight, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
+import sendGoogleAnalytics from "../utils/sendGoogleAnalytics";
 
 export const DppQuizResult = () => {
   const { testData, headers, selectedBatch, fetchDetailTrigger, setTestData, setTestSections, setSelectedTestMapping, selectedDpp } = useGlobalContext();

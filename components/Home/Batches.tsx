@@ -6,7 +6,7 @@ import FastImage from 'react-native-fast-image'
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
-import sendGoogleAnalytics from '../../hooks/sendGoogleAnalytics';
+import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 // import { BlurView } from 'expo-blur';
 
 
