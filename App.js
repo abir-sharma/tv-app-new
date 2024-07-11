@@ -12,8 +12,8 @@ import DppQuiz from "./screens/DppQuiz";
 import DppQuizSolution from "./screens/DppQuizSolution";
 import PDFViewer from "./components/Global/pdf-viewer/pdf-viewer";
 import MP4Player from "./components/Global/mp4-player";
-import { Offline } from "./screens/Offline";
-import OfflineDetails from "./screens/OfflineDeatils";
+import { OfflineHome } from "./screens/OfflineHome";
+import OfflineBatchDetails from "./screens/OfflineBatchDetails";
 import { DppQuizResult } from "./screens/DppQuizResult";
 import Intro from "./screens/Splash";
 import RecentVideos from "./screens/RecentVideos";
@@ -123,8 +123,8 @@ export default function App() {
         <Stack.Screen name="DppQuizSolution" component={DppQuizSolution} options={{ headerShown: false }} />
         <Stack.Screen name="OldPDFViewer" component={PDFViewer} options={{ headerShown: false }} />
         <Stack.Screen name="PDFViewer" component={PDFTronViewer} options={{ headerShown: false }} />
-        <Stack.Screen name="Offline" component={Offline} options={{ headerShown: false }} />
-        <Stack.Screen name="OfflineDetails" component={OfflineDetails} options={{ headerShown: false }} />
+        <Stack.Screen name="OfflineHome" component={OfflineHome} options={{ headerShown: false }} />
+        <Stack.Screen name="OfflineBatchDetails" component={OfflineBatchDetails} options={{ headerShown: false }} />
         <Stack.Screen name="MP4Player" component={MP4Player} options={{ headerShown: false }} />
         <Stack.Screen name="Intro" component={Intro} options={{ headerShown: false }} />
         <Stack.Screen name="MobileControl" component={MobileControl} options={{ headerShown: false }} />

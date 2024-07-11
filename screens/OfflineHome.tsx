@@ -11,7 +11,7 @@ import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
-export const Offline = () => {
+export const OfflineHome = () => {
 
   const { setDirectoryLevel, showIpInput, setShowIpInput, setOfflineSections, setOfflineSelectedSubject, setOfflineSelectedSection, setOfflineSelectedChapter, setOfflineLectures, setOfflineDpp, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, offlineSelectedSection, directoryLevel, offlineCurrentDirectory, setOfflineCurrentDirectory, setOfflineBatches, setOfflineSubjects, setOfflineChapters } = useGlobalContext();
   const [ipAddress, setIpAddress] = useState("");

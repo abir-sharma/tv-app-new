@@ -48,7 +48,7 @@ export default function OfflineBatches(params: any) {
                             setOfflineCurrentDirectory(batch?.path);
                             setDirectoryLevel(1);
                             // @ts-expect-error
-                            navigation?.navigate('OfflineDetails');
+                            navigation?.navigate('OfflineBatchDetails');
                         }}
                         className='bg-white/10 rounded-xl h-52 w-72 overflow-hidden'
                     >

@@ -115,7 +115,7 @@ export default function Navbar() {
             setIsOnline(false);
             sendGoogleAnalytics("offline_mode_clicked", {});
             // @ts-expect-error
-            navigation.navigate("Offline");
+            navigation.navigate("OfflineHome");
           }}
           className="w-36 h-10 rounded-xl items-center justify-center overflow-hidden"
         >

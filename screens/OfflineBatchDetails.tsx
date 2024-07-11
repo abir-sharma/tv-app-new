@@ -8,7 +8,7 @@ import { OfflineVideoComponent } from '../components/Offline/OfflineVideoCompone
 import { OfflineNoteComponent } from '../components/Offline/OfflineNoteComponent';
 import OfflineChapters from '../components/Offline/OfflineChapters';
 
-export default function OfflineDetails({ navigation }: any) {
+export default function OfflineBatchDetails({ navigation }: any) {
 
   const { offlineLectures, offlineNotes, offlineDpp, offlineDppPdf, offlineDppVideos, offlineSelectedSection } = useGlobalContext();
 
@@ -38,13 +38,13 @@ export default function OfflineDetails({ navigation }: any) {
         <View className='flex-1 '>
           <OfflineChapters />
         </View>
-        <ScrollView className=' flex-[3] pt-5'>
+        <View className=' flex-[3] pt-5'>
           {offlineSelectedSection == 0 && <OfflineNoteComponent noteList={offlineDpp} />}
           {offlineSelectedSection == 1 && <OfflineNoteComponent noteList={offlineDppPdf} />}
           {offlineSelectedSection == 2 && <OfflineVideoComponent videoList={offlineDppVideos} />}
           {offlineSelectedSection == 3 && <OfflineVideoComponent videoList={offlineLectures} />}
           {offlineSelectedSection == 4 && <OfflineNoteComponent noteList={offlineNotes} />}
-        </ScrollView>
+        </View>
 
       </View>
     </View>
