@@ -49,13 +49,12 @@ export default function Details({ navigation }: any) {
   }, [fetchDetails])
 
   const getDetails = async () => {
-
-    setShowLoader(true);
     try {
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/contents?page=${currentPage}&contentType=${contentType}&tag=${selectedChapter?.slug}`, { headers });
-
       const resDpp = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, { headers });
-
+      if (res) {
+        setShowLoader(false);
+      }
       if (selectedMenu === 0) {
         setVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
         if (res?.data?.data?.length <= 0) {
@@ -84,19 +83,14 @@ export default function Details({ navigation }: any) {
           setShowLoadMoreDppVideos(false);
         }
       }
-
-
     }
     catch (err: any) {
       console.error("error:", err);
     }
-    setShowLoader(false);
   }
 
   useEffect(() => {
-
     getDetails();
-
   }, [selectedChapter, currentPage, selectedMenu])
 
   return (

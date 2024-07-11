@@ -54,11 +54,11 @@ export default function Chapters() {
       </LinearGradient>}
     </Pressable>
   );
+  
   return (
     <View className=" flex-col justify-between items-center p-4 bg-[#111111]">
       <Text className='text-white font-medium text-left w-full text-2xl pl-2'>Chapters</Text>
       <View className=' rounded-xl overflow-hidden mt-5 h-[510] w-full'>
-
         <FlatList
           data={sortedList}
           renderItem={renderItem}
