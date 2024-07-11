@@ -25,11 +25,9 @@ export default function useUdpServer() {
       setMessage(data.toString());
       setClientInfo(rinfo);
       setMessageFromRemote(data.toString());
-      console.log('[Message] From Remote:', data.toString());
     });
 
     udpServer.on('listening', () => {
-      console.log('Server listening on port:', udpServer.address().port);
       setConnectionStatus(`Server listening on port ${udpServer.address().port}`);
     });
 
@@ -46,13 +44,13 @@ export default function useUdpServer() {
     if (clientInfo && server) {
       server.send(messageToSend, undefined, undefined, clientInfo.port, clientInfo.address, (error) => {
         if (error) {
-          console.log('Error sending message:', error);
+          console.error('Error sending message:', error);
         } else {
-          console.log('Message sent successfully');
+          // console.log('Message sent successfully');
         }
       });
     } else {
-      console.log('No client info available');
+      console.error('No client info available');
     }
   };
 

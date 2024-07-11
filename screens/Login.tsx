@@ -93,15 +93,13 @@ export default function Login({ navigation }: any) {
         // "Client-Type": "WEB",
       })
 
-      console.log("success", res?.data);
-
       if (res?.data?.success) {
         setOtpSent(true);
       }
 
     }
     catch (err: any) {
-      console.log("Error while sending otp! ", err?.res?.status);
+      console.error("Error while sending otp! ", err?.res?.status);
       if (err?.res?.status === 429) {
         ToastAndroid.showWithGravity(
           "Too many OTP requests, Please try after sometime",
@@ -109,7 +107,6 @@ export default function Login({ navigation }: any) {
           ToastAndroid.CENTER,
         );
       } else if (err?.response?.status === 400) {
-        // console.log("New user error: ", err?.response?.status);
         setNewUser(true);
       }
       else {
@@ -148,10 +145,6 @@ export default function Login({ navigation }: any) {
         // "Client-Type": "WEB",
       })
 
-      console.log("success: ", res?.data?.data);
-
-      console.log("Token: ", res?.data?.data?.access_token);
-
       if (res?.data?.success) {
         setHeaders({
           "Authorization": `Bearer ${res?.data?.data?.access_token}`
@@ -162,7 +155,7 @@ export default function Login({ navigation }: any) {
       }
     }
     catch (err) {
-      console.log(err);
+      console.error(err);
       ToastAndroid.showWithGravity(
         "Please enter a correct OTP",
         ToastAndroid.SHORT,
@@ -185,9 +178,6 @@ export default function Login({ navigation }: any) {
     const firstName = nameArray?.shift();
     const lastName = nameArray?.join(' ');
 
-    console.log(firstName, " ---- ", lastName);
-
-
     try {
       const res = await axios.post("https://api.penpencil.co/v1/users/register/5eb393ee95fab7468a79d189", {
         mobile: phone,
@@ -195,8 +185,6 @@ export default function Login({ navigation }: any) {
         firstName: firstName,
         lastName: lastName
       })
-
-      console.log("success", res?.data);
 
       if (res?.data?.success) {
         setOtpSent(true);
@@ -206,7 +194,7 @@ export default function Login({ navigation }: any) {
 
     }
     catch (err) {
-      console.log("err white register", err);
+      console.error("err white register", err);
       ToastAndroid.showWithGravity(
         "Error while registering please try again later!",
         ToastAndroid.SHORT,

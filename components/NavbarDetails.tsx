@@ -32,7 +32,6 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in LOGOUT API:" + JSON.stringify(err?.response)]);
-      console.log(err);
     }
   }
 
@@ -51,7 +50,6 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
       }}
       className='py-0.5 px-1 overflow-hidden '
       onPress={() => {
-        console.log("Subject iD: ", item?._id)
         setSelectedSubject(item);
         setSelectSubjectSlug(item?.slug);
         setIsDropdownVisible(false);

@@ -5,7 +5,7 @@ import moment from "moment";
 type EventData = {
   timestamp?: string;
   registered_mobile_number?: string;
-  [key: string]: any; // Additional properties can be added
+  [key: string]: any;
 };
 
 const sendGoogleAnalytics = async (eventName: string, data: EventData) => {
@@ -18,7 +18,6 @@ const sendGoogleAnalytics = async (eventName: string, data: EventData) => {
     data.registered_phone_number = phoneNumber || "not_logged_in";
   }
   
-  console.log("Sending Google Analytics Event: ", eventName + ",", data);
   await analytics().logEvent(eventName, data);
 };
 

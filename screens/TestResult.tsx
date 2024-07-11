@@ -24,7 +24,7 @@ export const TestResult = () => {
       }
       const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${testId}/my-result?batchId=${batchId}&batchScheduleId`, options);
       const data = res?.data?.data;
-      console.log("Test Result Data: ", data);
+      
       setResult(data);
       sendGoogleAnalytics("dpp_quiz_submitted", {
         test_name: testData?.test?.name,
@@ -38,7 +38,7 @@ export const TestResult = () => {
     });
 
     } catch (err: any) {
-      console.log("Error while fetching test result data: ", err?.resposne);
+      console.error("Error while fetching test result data: ", err?.resposne);
     }
     setShowLoader(false);
   }
@@ -49,15 +49,15 @@ export const TestResult = () => {
         headers
       };
       const item = selectedDpp;
-      console.log("Restart Link: ", `https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Reattempt&batchId=${selectedBatch?._id}&batchScheduleId=${item?.scheduleId}`);
+      
       const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=Reattempt&batchId=${selectedBatch?._id}&batchScheduleId=${item?.scheduleId}`, options);
-      console.log("Test Reattempt Request: ", res?.data);
+      
       setTestData(res?.data?.data);
       setTestSections(res?.data?.data?.sections);
       setSelectedTestMapping(res?.data?.data?.testStudentMapping?._id);
       mainNavigation.navigate('Tests');
     } catch (err: any) {
-      console.log("Error while restarting Quiz: ", err?.response);
+      console.error("Error while restarting Quiz: ", err?.response);
     }
   }
 

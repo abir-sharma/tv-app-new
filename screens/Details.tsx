@@ -49,14 +49,12 @@ export default function Details({ navigation }: any) {
     setMainNavigation(navigation);
   }, [])
 
-  useEffect(()=>{
-    console.log("fetching details on command");
+  useEffect(() => {
     getDetails();
   }, [fetchDetails])
 
   const getDetails = async () => {
 
-    console.log("req:", batchDetails?.slug, selectSubjectSlug, currentPage, contentType, selectedChapter?.slug, selectedMenu);
     setShowLoader(true);
     try {
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/contents?page=${currentPage}&contentType=${contentType}&tag=${selectedChapter?.slug}`, { headers });
@@ -69,39 +67,33 @@ export default function Details({ navigation }: any) {
           setShowLoadMoreVideos(false);
         }
       }
-      else if (selectedMenu === 1) {
+      if (selectedMenu === 1) {
         setNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
         if (res?.data?.data?.length <= 0) {
           setShowLoadMoreNotes(false);
         }
       }
-      else if (selectedMenu === 2) {
+      if (selectedMenu === 2) {
         const data = resDpp?.data?.data;
-        console.log("DPP List: ", data);
         setDppList(data);
       }
-      else if (selectedMenu === 3) {
+      if (selectedMenu === 3) {
         setDppNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
         if (res?.data?.data?.length <= 0) {
           setShowLoadMoreDppNotes(false);
         }
       }
-      else if (selectedMenu === 4) {
+      if (selectedMenu === 4) {
         setDppVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
         if (res?.data?.data?.length <= 0) {
           setShowLoadMoreDppVideos(false);
         }
       }
-      else {
-        console.log("hehehh");
-      }
 
 
     }
     catch (err: any) {
-      // console.log("error:", err);
-      setLogs((logs) => [...logs, "Error in DETAILS PAGE API:" + JSON.stringify(err?.response)]);
-
+      console.error("error:", err);
     }
     setShowLoader(false);
   }

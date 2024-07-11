@@ -22,7 +22,6 @@ export default function OfflineChapters() {
         setOfflineSelectedChapter(item?.id);
         setDirectoryLevel(3);
         setOfflineCurrentDirectory(item?.path);
-        console.log("Chapter selected: ", item);
       }}
     >
       {offlineSelectedChapter === item?.id ? 

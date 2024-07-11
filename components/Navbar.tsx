@@ -45,7 +45,6 @@ export default function Navbar() {
         "Error in LOGOUT API 2( Navbar component):" +
           JSON.stringify(err?.response),
       ]);
-      console.log(err);
     }
   };
 

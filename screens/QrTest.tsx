@@ -23,14 +23,13 @@ export default function QRCodeGenerator({ setIsQrModalVisible }: any) {
   }, []);
 
   useEffect(() => {
-    console.log("message in navbar", messageFromRemote);
     try {
       if (messageFromRemote && JSON.parse(messageFromRemote)?.type == "qrscan") {
         navigation.goBack();
         sendGoogleAnalytics("mobile_control_connected", {});
       }
     } catch (err) {
-      console.log("err while parsing", err);
+      console.error("err while parsing", err);
     }
   }, [messageFromRemote]);
 

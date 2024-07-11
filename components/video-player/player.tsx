@@ -274,12 +274,11 @@ export default function VideoPlayer(props: any) {
       return;
     }
     if (match) {
-      const id = match[1]; // Extract the ID from the URL
+      const id = match[1];
       const m3u8Url = `https://sec1.pw.live/${id}/hls/${quality}/main.m3u8`;
       // const m3u8Url = `https://sec1.pw.live/${id}/master.m3u8`;
       return m3u8Url;
     } else {
-      // Handle invalid MPD URLs here (e.g., return an error message)
       return "Invalid MPD URL";
     }
   }
@@ -767,7 +766,7 @@ export default function VideoPlayer(props: any) {
           onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
           resizeMode={ResizeMode.CONTAIN}
           onError={(err: string) => {
-            console.log("Video Player Error --->", err, `${cookieParams}`)
+            console.error("Video Player Error --->", err, `${cookieParams}`)
           }}
           isMuted={isMuted}
           shouldPlay={isPlaying}

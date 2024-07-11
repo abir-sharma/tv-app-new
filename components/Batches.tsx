@@ -31,7 +31,6 @@ export default function Batches() {
                             foreground: true
                         }}
                         onPress={() => {
-                            console.log("Batch iD: ", order?._id);
                             setSelectedBatch(order);
                             sendGoogleAnalytics("batch_opened", { 
                                 batch_name: order?.name,

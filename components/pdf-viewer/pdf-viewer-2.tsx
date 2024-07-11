@@ -43,66 +43,29 @@ const myToolItem = {
 
 const PDFTronViewer = ({ route }: any) => {
 
-  // Using useState hook to manage state
-  // const [permissionGranted, setPermissionGranted] = useState(Platform.OS === 'ios' ? true : false);
-
   const navigation = useNavigation();
   let pdfUrl = route?.params?.pdfUrl;
 
   const { setMainNavigation, setLogs, mainNavigation, setHeaders } = useGlobalContext();
 
   useEffect(() => {
-    // Using useEffect hook for side effects (similar to componentDidMount)
     RNPdftron.initialize("Insert commercial license key here after purchase");
     RNPdftron.enableJavaScript(true);
-
-    // Uncomment this section if you want to request storage permissions on Android
-    // const requestStoragePermission = async () => {
-    //   if (Platform.OS === 'android') {
-    //     try {
-    //       const granted = await PermissionsAndroid.request(
-    //         PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-    //       );
-    //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    //         setPermissionGranted(true);
-    //         console.log("Storage permission granted");
-    //       } else {
-    //         setPermissionGranted(false);
-    //         console.log("Storage permission denied");
-    //       }
-    //     } catch (err) {
-    //       console.warn(err);
-    //     }
-    //   }
-    // };
-    // requestStoragePermission();
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, []);
 
   const onLeadingNavButtonPressed = () => {
-    console.log("leading nav button pressed");
     if (Platform.OS === "ios") {
       Alert.alert(
         "App",
         "onLeadingNavButtonPressed",
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+        [{ text: "OK", onPress: () => {} }],
         { cancelable: true }
       );
     } else {
       BackHandler.exitApp();
     }
   };
-
-  // Uncomment this section if you want to show a permission request screen
-  // if (!permissionGranted) {
-  //   return (
-  //     <View style={styles.container}>
-  //       <Text>
-  //         Storage permission required.
-  //       </Text>
-  //     </View>
-  //   )
-  // }
-
+  
   const path =
     "https://pdftron.s3.amazonaws.com/downloads/pl/PDFTRON_mobile_about.pdf";
 

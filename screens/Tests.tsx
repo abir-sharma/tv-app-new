@@ -81,7 +81,7 @@ const Tests = ({ navigation, route }: any) => {
                 const newResponses = responses;
                 newResponses[curr] = obj;
                 setResponses(newResponses);
-                console.log("Final Responses: ", newResponses)
+                
             }
         } else if (questionType === "Multiple") {
             if (selectedAnswers?.includes(option)) {
@@ -103,14 +103,10 @@ const Tests = ({ navigation, route }: any) => {
                 const newResponses = responses;
                 newResponses[curr] = obj;
                 setResponses(newResponses);
-                console.log("Final Responses: ", newResponses);
+                
             }
         } else if (questionType === "Numeric") {
-            console.log("numeric submitting 1");
-            // if (responses[curr]) {
-            //     console.log("numeric submitting 2:", responses[curr], curr);
-            //     return;
-            // } else {
+
                 setSelectedAnswers([]);
                 const timeDiff = seconds - lastTimeStamp;
                 const obj = {
@@ -127,14 +123,13 @@ const Tests = ({ navigation, route }: any) => {
                 const newResponses = responses;
                 newResponses[curr] = obj;
                 setResponses(newResponses);
-                console.log("Final Responses: ", newResponses);
+                
                  ToastAndroid.showWithGravity(
                     "Numeric Answer Submitted",
                     ToastAndroid.SHORT,
                     ToastAndroid.TOP
                  );
                 handleNextClick();
-            // }
         }
     }
 
@@ -180,18 +175,13 @@ const Tests = ({ navigation, route }: any) => {
                 "submittedBy": "user",
                 "batchId": selectedBatch?._id,
             }
-            console.log("Submit Test Body: ", body);
-            console.log(options);
-            console.log("Mapping Id: ", selectedTestMapping);
-            console.log("Batch Id: ", selectedBatch);
-            console.log(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/submit-test`);
             const res = await axios.post(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/submit-test`, body, options);
-            console.log("Submit Test Response: ", res?.data);
+            
             setShowModal(false);
             navigation.navigate('TestResult')
 
         } catch (err) {
-            console.log("Error while submitting test!!", err);
+            console.error("Error while submitting test!!", err);
         }
     }
 

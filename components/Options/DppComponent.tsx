@@ -18,23 +18,18 @@ export const DppComponent = ({ }: DPPPropType) => {
 
   const { mainNavigation, setLogs, setTestData, dppList, setSelectedTestMapping, setTestSections, setSelectedDpp, headers, selectedBatch, selectedSubject } = useGlobalContext();
 
-  console.log("dppList: ", dppList);
-
   const handleDppClick = async (item: any) => {
     setSelectedDpp(item);
     try {
       const options = {
         headers
       }
-      console.log(headers)
       const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/${item?.test?._id}/start-test?testId=${item?.test?._id}&testSource=BATCH_QUIZ&type=${item?.tag}&batchId=${selectedBatch?._id}&batchScheduleId=${item?.scheduleId}`, options);
-      console.log("Test Started", res?.data);
       setTestData(res?.data?.data);
       setTestSections(res?.data?.data?.sections)
       setSelectedTestMapping(res?.data?.data?.testStudentMapping?._id);
       mainNavigation.navigate('Tests');
     } catch (err: any) {
-      console.log("Error while starting test!!", err?.response);
       setLogs((logs) => [...logs, "Error in START TEST API:" + JSON.stringify(err?.response)]);
     }
   }

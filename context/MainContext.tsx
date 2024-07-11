@@ -229,7 +229,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         setOfflineCurrentDirectory(`http://${ip}/Batches/`);
         const response = await axios.get(`http://${ip}/Batches/`)
       } catch (err) {
-        console.log("Error while fetchin Ip from local storage : ", err)
+        console.error("Error while fetchin Ip from local storage : ", err)
         setShowIpInput(true);
       }
     };
@@ -240,7 +240,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     try {
       const res = await axios.get("https://api.penpencil.co/v3/batches/my-batches?mode=1&page=1&limit=50", { headers });
       setSubscribedBatches(res?.data?.data);
-      console.log("subscribed batches:::: ", res?.data?.data);
       setSelectedBatch(res?.data?.data[0]);
       setSelectSubjectSlug(res?.data?.data[0]?.subjects[0]?.slug);
       setSelectedSubject(res?.data?.data[0]?.subjects[0]);
@@ -249,7 +248,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in BATCHES API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
-      // console.log("error:", err);
+      console.error("error:", err);
     }
   }
 
@@ -257,11 +256,9 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     try {
       const res = await axios.get("https://api.penpencil.co/v2/orders/myPurchaseOrders?page=1&limit=50&status=ALL", { headers });
       setOrders(res?.data?.data?.data);
-      console.log("ordersss: ", res?.data?.data?.data);
     }
     catch (err: any) {
-      // setLogs((logs) => [...logs, "Error in ORDERS API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
-      console.log("buuuuu:", err);
+      console.error("Err:", err);
     }
   }
 
@@ -274,7 +271,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in BATCH DETAIL API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
-      // console.log("errorr:", err);
+      console.error("err:", err);
     }
   }
 
@@ -283,12 +280,10 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     try {
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentPage}`, { headers });
       setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
-      // console.log("Setting selected chapter", res?.data?.data[0]?.name);
-      // setSelectedChapter(res?.data?.data[0]);
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
-      // console.log("error:", err);
+      console.error("error:", err);
     }
   }
 
@@ -303,7 +298,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   }, [selectedBatch])
 
   useEffect(() => {
-    // console.log("getting chapters data");
     setTopicList(null);
     getChaptersData();
   }, [selectedSubject])

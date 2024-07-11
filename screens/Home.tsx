@@ -30,27 +30,10 @@ export default function Home({ navigation }: any) {
     [navigation]
   );
 
-  // useEffect(() => {
-  //   console.log("message", message);
-  //   try {
-  //     if (message && JSON.parse(message)?.type == "youtube") {
-  //       setYoutubeUrl(JSON.parse(message)?.url);
-  //       setShowYoutubeModal(true);
-  //       sendMessageToClient("youtube");
-  //     }
-  //   } catch (err) {
-  //     console.log("err while parsing", err);
-  //   }
-  // }, [message]);
-
   const handleLogin = async () => {
-    console.log("checking login...");
     const randu = uuidv4();
-    console.log("randu: ", randu);
     AsyncStorage.getItem("token").then(async (res)=>{
-      console.log("ressss:", res)
       if (res) {
-        console.log("token exists");
         setHeaders({
           Authorization: `Bearer ${res}`
         })
@@ -62,17 +45,13 @@ export default function Home({ navigation }: any) {
             headers: headers,
             body: '',
           });
-          console.log("verified token");
         } catch (err: any) {
-          console.log("not verified");
-          setLogs((logs) => [...logs, "Error in VERIFY TOKEN API:" + JSON.stringify(err.response)]);
           await AsyncStorage.removeItem("token");
           mainNavigation?.navigate('Login')
         }
         mainNavigation?.navigate('Home')
       }
       else {
-        console.log("not logged in");
         navigation?.navigate('Login')
       }
     })

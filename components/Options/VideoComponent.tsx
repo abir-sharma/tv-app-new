@@ -44,7 +44,6 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
   
       await AsyncStorage.setItem('recentVideos', JSON.stringify(recentVideos));
     } catch (error) {
-      console.error('Error saving recent videos:', error);
     }
   };
 

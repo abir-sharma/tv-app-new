@@ -35,24 +35,24 @@ const RecentVideos = ({ route }: any) => {
 
   const handleNext = () => {
     if (currentIndex < currentVideos.length - 1) {
-      console.log("playing next video", currentVideos[currentIndex+1]?.videoDetails);
+      
       setCurrentIndex(prev=>prev+1);
       setPlayingVideo(currentVideos[currentIndex+1])
     }
     else{
-      console.log("no next video");
+      
     }
   };
 
   const handlePrevious = () => {
     if (currentIndex > 0) {
-      console.log("playing prev video:", currentVideos[currentIndex-1]?.videoDetails);
+      
       setCurrentIndex(prev=>prev-1);
       setPlayingVideo(currentVideos[currentIndex-1])
 
     }
     else{
-      console.log("no prev video");
+      
     }
   };
 

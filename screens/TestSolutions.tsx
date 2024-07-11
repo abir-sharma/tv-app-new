@@ -30,15 +30,9 @@ const TestSolutions = ({ route }: any) => {
 
     const [smallPlayer, setSmallPlayer] = useState(1);
 
-
-
     useEffect(() => {
         fetchSolutionData();
     }, [])
-
-    useEffect(()=>{
-        console.log("quescur:--",currentQuestion);
-    }, [currentQuestion])
 
     const fetchSolutionData = async () => {
         setShowLoader(true);
@@ -47,12 +41,9 @@ const TestSolutions = ({ route }: any) => {
                 headers
             }
             const res = await axios.get(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/preview-test`, options);
-            console.log("Test Solution Data: ", res?.data?.data?.questions)
-            console.log("DING DING");
             setQuestionsData(res?.data?.data?.questions);
             setOriginalQuestionData([...res?.data?.data?.questions]);
             setSolutionData(res?.data?.data);
-            console.log("solutions:--- ", res?.data.data);
             setCurrentQuestion(res?.data?.data?.questions[0]);
             setCorrectOptions(res?.data?.data?.questions[0]?.question?.solutions);
             setMarkedOptions(res?.data?.data?.questions[0]?.yourResult?.markedSolutions);
@@ -72,7 +63,7 @@ const TestSolutions = ({ route }: any) => {
                 }
             }
         } catch (err: any) {
-            console.log("Errow while fetching Solution Data: ", err?.response);
+            console.error("Errow while fetching Solution Data: ", err?.response);
         }
         setShowLoader(false);
 
@@ -115,7 +106,6 @@ const TestSolutions = ({ route }: any) => {
     }
 
     async function sendAnalyticsData(uri: string) {
-        console.log("Inside send analytics: ", uri)
         const newHeaders = {
             'Content-Type': 'application/json',
             Authorization: headers.Authorization,
@@ -124,7 +114,6 @@ const TestSolutions = ({ route }: any) => {
         const data = {
             url: uri,
         };
-        console.log('uri --->', uri);
         axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, { headers: newHeaders })
             .then((response) => {
                 setCookieParams(cookieSplitter(response?.data?.data));
@@ -204,7 +193,6 @@ const TestSolutions = ({ route }: any) => {
         }
       };
 
-    console.log("curr--: ", currentQuestion);
 
 
     return (

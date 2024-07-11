@@ -32,7 +32,6 @@ export const Offline = () => {
   }
 
   const fetchBatches = async () => {
-    console.log("fetch Batches");
     let directoryItems: any[] = await fetchListing();
     directoryItems = directoryItems?.filter((item) => item?.name?.startsWith('PW'));
     const batchNames: ItemType2[] = [];
@@ -48,12 +47,10 @@ export const Offline = () => {
         })
       }
     })
-    console.log("Batches: ", batchNames);
     setOfflineBatches(batchNames);
   }
 
   const fetchSubjects = async () => {
-    console.log("fetch Subjects");
     let directoryItems: any[] = await fetchListing();
     const subjectNames: ItemType[] = [];
     directoryItems?.map((item, index) => {
@@ -72,7 +69,6 @@ export const Offline = () => {
   }
 
   const fetchChapters = async () => {
-    console.log("fetch Chapters");
 
     let directoryItems: any[] = await fetchListing();
     const chapterNames: ItemType[] = [];
@@ -89,11 +85,9 @@ export const Offline = () => {
     setOfflineSelectedChapter(0);
     setDirectoryLevel(3);
     setOfflineCurrentDirectory(chapterNames[0]?.path);
-    // console.log("Chapter Names:  ", chapterNames);
   }
 
   const fetchSections = async () => {
-    console.log("fetch Sections");
     let directoryItems: any[] = await fetchListing();
     const sectionData: ItemType[] = [];
     directoryItems?.map((item, index) => {
@@ -112,7 +106,6 @@ export const Offline = () => {
   }
 
   const fetchLectures = async () => {
-    console.log("fetch Lectures");
     let directoryItems: any[] = await fetchListing();
     const lecturesData: ItemType2[] = [];
     directoryItems?.map((item, index) => {
@@ -127,12 +120,9 @@ export const Offline = () => {
         })
       }
     })
-    // console.log(lecturesData)
     setOfflineLectures(lecturesData);
-    console.log("Lectures Data:  ", lecturesData);
   }
   const fetchNotes = async () => {
-    console.log("fetch Notes");
     let directoryItems: any[] = await fetchListing();
     const notesData: ItemType2[] = [];
     directoryItems?.map((item, index) => {
@@ -148,10 +138,8 @@ export const Offline = () => {
       }
     })
     setOfflineNotes(notesData);
-    console.log("Notes Data:  ", notesData);
   }
   const fetchDpp = async () => {
-    console.log("fetch Dpp");
 
     let directoryItems: any[] = await fetchListing();
     const dppData: ItemType2[] = [];
@@ -168,10 +156,9 @@ export const Offline = () => {
       }
     })
     setOfflineDpp(dppData);
-    console.log("DPP Data:  ", dppData);
   }
   const fetchDppPdf = async () => {
-    console.log("fetch Dpp Pdf");
+    
 
     let directoryItems: any[] = await fetchListing();
     const dppPdfData: ItemType2[] = [];
@@ -188,10 +175,10 @@ export const Offline = () => {
       }
     })
     setOfflineDppPdf(dppPdfData);
-    console.log("DPP PDF Data:  ", dppPdfData);
+    
   }
   const fetchDppVideos = async () => {
-    console.log("fetch Dpp Videos");
+    
     let directoryItems: any[] = await fetchListing();
     const dppVideosData: ItemType2[] = [];
     directoryItems?.map((item, index) => {
@@ -207,11 +194,10 @@ export const Offline = () => {
       }
     })
     setOfflineDppVideos(dppVideosData);
-    console.log("DPP Videos Data:  ", dppVideosData);
+    
   }
 
   const fetchListing = async () => {
-    console.log("Current Directory : ", offlineCurrentDirectory);
     try {
       const response = await axios.get(offlineCurrentDirectory);
       const directoryHtml = response?.data;
@@ -227,7 +213,7 @@ export const Offline = () => {
       return directoryItems;
 
     } catch (err: any) {
-      console.log("error while fetching directory items", err);
+      console.error("error while fetching directory items", err);
       setShowIpInput(true);
       return [];
     }
@@ -263,7 +249,7 @@ export const Offline = () => {
 
 
   function isIPAddress(input: any) {
-    console.log("Check Input : ", input);
+    
     // Regular expression to match IPv4 address format
     const ipv4Pattern = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$/;
 
@@ -275,7 +261,7 @@ export const Offline = () => {
   }
 
   const handleIPChange = async() => {
-    console.log("Hi");
+    
     if (!isIPAddress(ipAddress?.split(':')[0])) {
       ToastAndroid.showWithGravity(
         'Enter an IP adress in correct format',
@@ -322,7 +308,7 @@ export const Offline = () => {
             }}
 
             onPress={() => {
-              console.log("HiHi"); handleIPChange()
+               handleIPChange()
             }}
             className='bg-[#0569FF] w-40 h-10 overflow-hidden flex-row rounded-full px-4 items-center justify-start'>
             <Text className='text-white text-center w-full text-base'>Enter IP</Text>

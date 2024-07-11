@@ -17,13 +17,6 @@ export default function OfflineBatches(params: any) {
     const { mainNavigation } = useGlobalContext();
     const [showLoader, setShowLoader] = useState<boolean>(false);
 
-
-
-    const getToken = async () => {
-        console.log("Hi");
-        console.log(await AsyncStorage.getItem("token"));
-    }
-
     useEffect(() => {
         setShowLoader(true);
         if (offlineBatches) {
@@ -52,8 +45,6 @@ export default function OfflineBatches(params: any) {
                             foreground: true
                         }}
                         onPress={() => {
-                            console.log(batch?.path);
-                            getToken();
                             setOfflineCurrentDirectory(batch?.path);
                             setDirectoryLevel(1);
                             mainNavigation?.navigate('OfflineDetails');

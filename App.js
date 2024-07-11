@@ -101,7 +101,6 @@ export default function App() {
           const pdfData = sortedChunks.map((chunk) => chunk.chunk).join("");
           sendMessageToClient(`{"type": "reset"}`);
           sendMessageToClient(`{"type": "received_pdf"}`);
-          // console.log(navigationRef)
           // navigationRef.current.navigate("OldPDFViewer", { pdfUrl: `data:application/pdf;base64,${pdfData}` });
         } else if (msg.type == "image_chunk_start") {
           setImgChunks([]);
@@ -126,14 +125,12 @@ export default function App() {
             .get(msg.requestUrl)
             .then((res) => {
               let pdfUrl = res.data.uri;
-              pdfUrl && console.log("pdf uri length:", pdfUrl.length);
               setShowYoutubeModal(false);
               setShowImgModal(false);
               setPdfUrl(pdfUrl);
               setShowPdfModal(true);
             })
             .catch((err) => {
-              console.log(err);
               setShowPdfModal(false);
             });
         } else if (msg.type == "serve_image") {
@@ -143,20 +140,17 @@ export default function App() {
             .get(msg.requestUrl)
             .then((res) => {
               let imgUrl = res.data.uri;
-              imgUrl && console.log("uri exists, length:", imgUrl.length);
               setShowPdfModal(false);
               setShowYoutubeModal(false);
               setImgUrl(imgUrl);
               setShowImgModal(true);
             })
             .catch((err) => {
-              console.log(err);
               setShowImgModal(false);
             });
         }
       }
     } catch (err) {
-      console.log("Error while parsing message:", err);
     }
   }, [message]);
 

@@ -5,7 +5,6 @@ import { useGlobalContext } from '../../context/MainContext';
 
 const MP4Player = ({ route }: any) => {
   const uri = route?.params?.videoUrl;
-  console.log('Video URI', uri);
 
   const { mainNavigation } = useGlobalContext();
 
@@ -85,11 +84,9 @@ const MP4Player = ({ route }: any) => {
         useNativeControls={true}
         resizeMode={ResizeMode.CONTAIN}
         onLoadStart={() => {
-          console.log('Video loading...');
           setShowLoader(true);
         }}
         onLoad={() => {
-          console.log('Video loaded...')
           setShowLoader(false);
         }}
       />

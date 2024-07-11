@@ -11,20 +11,10 @@ import { LinearGradient } from "expo-linear-gradient";
 
 export default function Recent() {
   const { mainNavigation, recentVideoLoad } = useGlobalContext();
-  // const [recentVideos, setRecentVideos] = useState<VideoType[] | null>(null);
   const [recentVideos, setRecentVideos] = useState<{
     [key: string]: VideoType[];
   } | null>(null);
 
-  // useEffect(() => {
-  //     console.log("loading recent videos from local");
-
-  //     AsyncStorage.getItem('recentVideos').then((value) => {
-  //         if (value) {
-  //             setRecentVideos(JSON.parse(value));
-  //         }
-  //     });
-  // }, [recentVideoLoad])
   useEffect(() => {
     AsyncStorage.getItem("recentVideos").then((value) => {
       if (value) {

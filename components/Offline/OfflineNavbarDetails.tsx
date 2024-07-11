@@ -26,7 +26,6 @@ export default function OfflineNavbarDetails() {
       }
     }
     catch (err: any) {
-      console.log(err);
     }
   }
 
@@ -117,7 +116,6 @@ export default function OfflineNavbarDetails() {
           className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden'
           style={{ backgroundColor: offlineSelectedSection == 3 ? 'rgba(255,255,255,.2)' : 'transparent' }}
           onPress={() => {
-            console.log(offlineSections);
             if (offlineSections) {
               setDirectoryLevel(4);
               setOfflineCurrentDirectory(offlineSections[3]?.path);
@@ -138,7 +136,6 @@ export default function OfflineNavbarDetails() {
           className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden'
           style={{ backgroundColor: offlineSelectedSection == 4 ? 'rgba(255,255,255,.2)' : 'transparent' }}
           onPress={() => {
-            console.log(offlineSections);
             if (offlineSections) {
               setDirectoryLevel(4);
               setOfflineCurrentDirectory(offlineSections[4]?.path);
@@ -147,27 +144,7 @@ export default function OfflineNavbarDetails() {
           }}>
           <Text className="font-normal text-sm text-white">Notes</Text>
         </Pressable>
-        {/* <Pressable
-          hasTVPreferredFocus={true}
-          android_ripple={{
-            color: "rgba(255,255,255,0.4)",
-            borderless: false,
-            radius: 1000,
-            foreground: true
-          }}
-          className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden'
-          style={{ backgroundColor: offlineSelectedSection == 0 ? 'rgba(255,255,255,.2)' : 'transparent' }}
-          onPress={() => {
-            console.log(offlineSections);
-            if (offlineSections) {
-              setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[0]?.path);
-              setOfflineSelectedSection(0);
-            }
-          }}
-        >
-          <Text className="font-normal text-sm text-white">DPP</Text>
-        </Pressable> */}
+
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
@@ -179,7 +156,6 @@ export default function OfflineNavbarDetails() {
           className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden'
           style={{ backgroundColor: offlineSelectedSection == 1 ? 'rgba(255,255,255,.2)' : 'transparent' }}
           onPress={() => {
-            console.log(offlineSections);
             if (offlineSections) {
               setDirectoryLevel(4);
               setOfflineCurrentDirectory(offlineSections[1]?.path);
@@ -201,7 +177,6 @@ export default function OfflineNavbarDetails() {
           className='w-24 items-center h-8 justify-center rounded-lg overflow-hidden'
           style={{ backgroundColor: offlineSelectedSection == 2 ? 'rgba(255,255,255,.2)' : 'transparent' }}
           onPress={() => {
-            console.log(offlineSections);
             if (offlineSections) {
               setDirectoryLevel(4);
               setOfflineCurrentDirectory(offlineSections[2]?.path);

@@ -27,9 +27,9 @@ export default function UDPClient() {
     if (client) {
       client.send(text, undefined, undefined, 8888, ipServer, (error) => {
         if (error) {
-          console.log('Error sending message:', error);
+          console.error('Error sending message:', error);
         } else {
-          console.log('Message sent successfully');
+          // console.log('Message sent successfully');
         }
       });
     }
