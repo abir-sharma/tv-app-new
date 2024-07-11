@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator, ScrollView } from 'react-native'
 import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
-import VideoPlayer from '../components/video-player/player';
+import VideoPlayer from '../components/Global/video-player/player';
 import { useNavigation } from '@react-navigation/native';
 
-const TestSolutions = ({ route }: any) => {
+const DppQuizSolution = ({ route }: any) => {
     const navigation = useNavigation();
     const { headers, selectedTestMapping } = useGlobalContext();
     const [solutionData, setSolutionData] = useState<any>();
@@ -275,4 +275,4 @@ const TestSolutions = ({ route }: any) => {
     )
 }
 
-export default TestSolutions
+export default DppQuizSolution

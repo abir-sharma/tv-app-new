@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { Image, Pressable, ScrollView, Text, View } from "react-native";
-import { useGlobalContext } from "../context/MainContext";
+import { useGlobalContext } from "../../context/MainContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { VideoType } from "../types/types";
 import moment from "moment";
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import { VideoType } from "../../types/types";
 
 export default function Recent() {
   const navigation = useNavigation();

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useKeepAwake } from 'expo-keep-awake';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import VideoPlayer from '../components/video-player/player';
+import VideoPlayer from '../components/Global/video-player/player';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { VideoType } from '../types/types';
 

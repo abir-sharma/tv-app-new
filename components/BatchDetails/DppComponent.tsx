@@ -30,7 +30,7 @@ export const DppComponent = ({ }: DPPPropType) => {
       setTestSections(res?.data?.data?.sections)
       setSelectedTestMapping(res?.data?.data?.testStudentMapping?._id);
       // @ts-expect-error
-      navigation.navigate('Tests');
+      navigation.navigate('DppQuiz');
     } catch (err: any) {
       setLogs((logs) => [...logs, "Error in START TEST API:" + JSON.stringify(err?.response)]);
     }

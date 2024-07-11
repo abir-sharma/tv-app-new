@@ -12,7 +12,7 @@ export default function Intro({ navigation }: any) {
 
   return (
     <View className="w-screen h-screen flex items-center justify-center bg-[#111111]">
-        <Image source={require('../assets/intro.gif')} className='w-[80%] mx-auto h-96' width={10} height={10} />
+      <Image source={require('../assets/intro.gif')} className='w-[80%] mx-auto h-96' width={10} height={10} />
     </View>
   );
 }

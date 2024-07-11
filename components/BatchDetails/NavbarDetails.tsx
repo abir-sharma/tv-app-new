@@ -1,10 +1,7 @@
 /// <reference types="nativewind/types" />
 import { useState } from 'react';
 import { Image, Text, Pressable, View, Modal, FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native';
-import { useGlobalContext } from '../context/MainContext';
-import styles from './NavbarDetails.style'
-import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useGlobalContext } from '../../context/MainContext';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
 
@@ -67,7 +64,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             setTopicList(null);
           }}
           className='flex-row justify-center items-center rounded-xl overflow-hidden px-2'>
-          <Image source={require('../assets/home.png')} className='w-8 h-8' width={10} height={10} />
+          <Image source={require('../../assets/home.png')} className='w-8 h-8' width={10} height={10} />
         </Pressable>
 
         <Pressable

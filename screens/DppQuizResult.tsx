@@ -5,7 +5,7 @@ import { ActivityIndicator, Image, TouchableHighlight, Text, View } from "react-
 import { useNavigation } from "@react-navigation/native";
 import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
 
-export const TestResult = () => {
+export const DppQuizResult = () => {
   const { testData, headers, selectedBatch, fetchDetailTrigger, setTestData, setTestSections, setSelectedTestMapping, selectedDpp } = useGlobalContext();
   const [result, setResult] = useState<any>(null);
   const [showLoader, setShowLoader] = useState<boolean>(false);
@@ -52,7 +52,7 @@ export const TestResult = () => {
       setTestData(res?.data?.data);
       setTestSections(res?.data?.data?.sections);
       setSelectedTestMapping(res?.data?.data?.testStudentMapping?._id);
-      navigation.navigate('Tests');
+      navigation.navigate('DppQuiz');
     } catch (err: any) {
       console.error("Error while restarting Quiz: ", err?.response);
     }
@@ -87,7 +87,7 @@ export const TestResult = () => {
         <View>
           <TouchableHighlight  
             onPress={() => {
-              navigation.navigate('Details');
+              navigation.navigate('BatchDetails');
               fetchDetailTrigger();
             }}
             className="overflow-hidden rounded-full p-2"
@@ -199,7 +199,7 @@ export const TestResult = () => {
         <TouchableHighlight
           
           className="overflow-hidden py-2 px-16 self-center  bg-[#0569FF] rounded-lg"
-          onPress={() => navigation.navigate('TestSolutions')}
+          onPress={() => navigation.navigate('DppQuizSolution')}
         >
           <Text className="text-white text-lg font-bold">
             View Solution

@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator, TextInput, TouchableHighlight } from 'react-native'
 import { useGlobalContext } from '../context/MainContext'
 import axios from 'axios';
-import { ReviewOrSubmitModal } from '../components/modals/ReviewOrSubmit';
+import { ReviewOrSubmitModal } from '../components/Modals/ReviewOrSubmit';
 
-const Tests = ({ navigation, route }: any) => {
+const DppQuiz = ({ navigation, route }: any) => {
     const { testData, selectedBatch, headers, fetchDetailTrigger, selectedTestMapping } = useGlobalContext();
     const [totalQuestions, setTotalQuestions] = useState<number>(0);
     const [currentQuestion, setCurrentQuestion] = useState<any>();
@@ -178,7 +178,7 @@ const Tests = ({ navigation, route }: any) => {
             const res = await axios.post(`https://api.penpencil.co/v3/test-service/tests/mapping/${selectedTestMapping}/submit-test`, body, options);
             
             setShowModal(false);
-            navigation.navigate('TestResult')
+            navigation.navigate('DppQuizResult')
 
         } catch (err) {
             console.error("Error while submitting test!!", err);
@@ -310,7 +310,7 @@ const Tests = ({ navigation, route }: any) => {
                 <View className='flex-row'>
                     <Pressable
                         onPress={()=>{
-                            navigation.navigate('Details');
+                            navigation.navigate('BatchDetails');
                             fetchDetailTrigger();
                         }}
                         hasTVPreferredFocus={true}
@@ -488,4 +488,4 @@ const Tests = ({ navigation, route }: any) => {
     )
 }
 
-export default Tests
+export default DppQuiz

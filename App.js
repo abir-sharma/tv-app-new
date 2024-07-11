@@ -6,27 +6,25 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
-import Details from "./screens/Details";
+import BatchDetails from "./screens/BatchDetails";
 import Videos from "./screens/Videos";
-import Tests from "./screens/Tests";
-import TestSolutions from "./screens/TestSolutions";
-import PDFViewer from "./components/pdf-viewer/pdf-viewer";
-import MP4Player from "./components/mp4-player/mp4-player";
-import AiTeacher from "./screens/AiTecher";
+import DppQuiz from "./screens/DppQuiz";
+import DppQuizSolution from "./screens/DppQuizSolution";
+import PDFViewer from "./components/Global/pdf-viewer/pdf-viewer";
+import MP4Player from "./components/Global/mp4-player";
 import { Offline } from "./screens/Offline";
 import OfflineDetails from "./screens/OfflineDeatils";
-import { TestResult } from "./screens/TestResult";
-import Attendance from "./screens/Attendance";
-import Intro from "./screens/Intro";
+import { DppQuizResult } from "./screens/DppQuizResult";
+import Intro from "./screens/Splash";
 import RecentVideos from "./screens/RecentVideos";
-import MobileControlQR from "./screens/MobileControlQR";
-import VideoPlayer from "./components/video-player/player";
+import MobileControl from "./screens/MobileControl";
+import VideoPlayer from "./components/Global/video-player/player";
 import useUdpServer from "./hooks/useUdpServer";
-import PDFTronViewer from "./components/pdf-viewer/pdf-viewer-2";
+import PDFTronViewer from "./components/Global/pdf-viewer/pdf-viewer-2";
 import { createNavigationContainerRef } from "@react-navigation/native";
 import axios from "axios";
 import YoutubePlayer from "react-native-youtube-iframe";
-import ModalPDFViewer from "./components/pdf-viewer/modal-pdf-viewer";
+import ModalPDFViewer from "./components/Global/pdf-viewer/modal-pdf-viewer";
 import sendGoogleAnalytics from "./hooks/sendGoogleAnalytics";
 
 const Stack = createNativeStackNavigator();
@@ -116,22 +114,20 @@ export default function App() {
       <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="AiTeacher" component={AiTeacher} options={{ headerShown: false }} />
-        <Stack.Screen name="Attendance" component={Attendance} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Details" component={Details} options={{ headerShown: false }} />
+        <Stack.Screen name="BatchDetails" component={BatchDetails} options={{ headerShown: false }} />
         <Stack.Screen name="Videos" component={Videos} options={{ headerShown: false }} />
         <Stack.Screen name="RecentVideos" component={RecentVideos} options={{ headerShown: false }} />
-        <Stack.Screen name="Tests" component={Tests} options={{ headerShown: false }} />
-        <Stack.Screen name="TestResult" component={TestResult} options={{ headerShown: false }} />
-        <Stack.Screen name="TestSolutions" component={TestSolutions} options={{ headerShown: false }} />
+        <Stack.Screen name="DppQuiz" component={DppQuiz} options={{ headerShown: false }} />
+        <Stack.Screen name="DppQuizResult" component={DppQuizResult} options={{ headerShown: false }} />
+        <Stack.Screen name="DppQuizSolution" component={DppQuizSolution} options={{ headerShown: false }} />
         <Stack.Screen name="OldPDFViewer" component={PDFViewer} options={{ headerShown: false }} />
         <Stack.Screen name="PDFViewer" component={PDFTronViewer} options={{ headerShown: false }} />
         <Stack.Screen name="Offline" component={Offline} options={{ headerShown: false }} />
         <Stack.Screen name="OfflineDetails" component={OfflineDetails} options={{ headerShown: false }} />
         <Stack.Screen name="MP4Player" component={MP4Player} options={{ headerShown: false }} />
         <Stack.Screen name="Intro" component={Intro} options={{ headerShown: false }} />
-        <Stack.Screen name="MobileControlQR" component={MobileControlQR} options={{ headerShown: false }} />
+        <Stack.Screen name="MobileControl" component={MobileControl} options={{ headerShown: false }} />
         <Stack.Screen name="VideoPlayer" component={VideoPlayer} options={{ headerShown: false }} />
       </Stack.Navigator>
       {/* <StatusBar hidden /> */}

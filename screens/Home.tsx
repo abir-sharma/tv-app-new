@@ -1,9 +1,9 @@
 /// <reference types="nativewind/types" />
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { ScrollView, View } from 'react-native';
-import Navbar from '../components/Navbar';
-import Batches from '../components/Batches';
-import Recent from '../components/Recent';
+import Navbar from '../components/Global/Navbar';
+import Batches from '../components/Home/Batches';
+import Recent from "../components/Home/Recent";
 import { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';

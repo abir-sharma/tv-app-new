@@ -1,6 +1,6 @@
 import React from 'react'
 import { useKeepAwake } from 'expo-keep-awake';
-import VideoPlayer from '../components/video-player/player'
+import VideoPlayer from '../components/Global/video-player/player'
 
 const Videos = ({ route }: any) => {
   useKeepAwake();

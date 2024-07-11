@@ -6,7 +6,7 @@ import Svg, { Path } from "react-native-svg";
 import axios from "axios";
 import { Video, ResizeMode } from "expo-av";
 import { cookieSplitter } from "./cookie-splitter";
-import { useGlobalContext } from "../../context/MainContext";
+import { useGlobalContext } from "../../../context/MainContext";
 import { Slider } from "@miblanchard/react-native-slider";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -404,7 +404,7 @@ export default function VideoPlayer(props: any) {
         className="bg-black/40 overflow-hidden rounded-full z-[3] p-2 absolute top-2 left-2"
       >
         <Image
-          source={require("../../assets/exit.png")}
+          source={require("../../../assets/exit.png")}
           width={30}
           height={30}
           className="h-[30] w-[30]"
@@ -592,7 +592,7 @@ export default function VideoPlayer(props: any) {
               className="bg-black/90 overflow-hidden rounded-full p-2"
             >
               <Image
-                source={require("../../assets/30b.png")}
+                source={require("../../../assets/30b.png")}
                 width={30}
                 height={30}
                 className="h-[30] w-[30]"
@@ -612,7 +612,7 @@ export default function VideoPlayer(props: any) {
               className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
             >
               <Image
-                source={require("../../assets/10b.png")}
+                source={require("../../../assets/10b.png")}
                 width={30}
                 height={30}
                 className="h-[30] w-[30]"
@@ -634,8 +634,8 @@ export default function VideoPlayer(props: any) {
               <Image
                 source={
                   isPlaying
-                    ? require("../../assets/pause.png")
-                    : require("../../assets/play.png")
+                    ? require("../../../assets/pause.png")
+                    : require("../../../assets/play.png")
                 }
                 width={30}
                 height={30}
@@ -656,7 +656,7 @@ export default function VideoPlayer(props: any) {
               className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
             >
               <Image
-                source={require("../../assets/10f.png")}
+                source={require("../../../assets/10f.png")}
                 width={30}
                 height={30}
                 className="h-[30] w-[30]"
@@ -676,7 +676,7 @@ export default function VideoPlayer(props: any) {
               className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
             >
               <Image
-                source={require("../../assets/30f.png")}
+                source={require("../../../assets/30f.png")}
                 width={30}
                 height={30}
                 className="h-[30] w-[30]"

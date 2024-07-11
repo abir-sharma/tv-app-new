@@ -8,11 +8,11 @@ import {
   TouchableWithoutFeedback,
   View,
 } from "react-native";
-import { useGlobalContext } from "../context/MainContext";
+import { useGlobalContext } from "../../context/MainContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
+import sendGoogleAnalytics from "../../hooks/sendGoogleAnalytics";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Navbar() {
@@ -79,7 +79,7 @@ export default function Navbar() {
         className="flex-row justify-center items-center rounded-xl overflow-hidden px-2 gap-x-5"
       >
         <Image
-          source={require("../assets/pw-logo.png")}
+          source={require("../../assets/pw-logo.png")}
           className="w-10 h-10"
           width={10}
           height={10}
@@ -132,7 +132,7 @@ export default function Navbar() {
           }}
           onPress={() => {
             // @ts-expect-error
-            navigation.navigate("MobileControlQR");
+            navigation.navigate("MobileControl");
             sendGoogleAnalytics("mobile_control_clicked", {});
           }}
           className="flex-row justify-center overflow-hidden rounded-full items-center"
@@ -151,7 +151,7 @@ export default function Navbar() {
           onPress={()=>{setIsDropdownVisible(prev=>!prev)}}
           className="flex-row justify-center overflow-hidden rounded-full items-center"
         >
-          <Image source={require('../assets/dp.png')} className='w-10 h-10' width={40} height={40} />
+          <Image source={require('../../assets/dp.png')} className='w-10 h-10' width={40} height={40} />
         </Pressable>
       </View>
     </View>

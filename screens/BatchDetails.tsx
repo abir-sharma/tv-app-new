@@ -1,31 +1,26 @@
 /// <reference types="nativewind/types" />
 
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
-import NavbarDetails from '../components/NavbarDetails';
+import NavbarDetails from '../components/BatchDetails/NavbarDetails';
 import { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import { NoteType, VideoType } from '../types/types';
-import Chapters from '../components/Chapters';
+import Chapters from '../components/BatchDetails/Chapters';
 import axios from 'axios';
-import { VideoComponent } from '../components/Options/VideoComponent';
-import { NoteComponent } from '../components/Options/NoteComponent';
-import { DppComponent } from '../components/Options/DppComponent';
+import { VideoComponent } from '../components/BatchDetails/VideoComponent';
+import { NoteComponent } from '../components/BatchDetails/NoteComponent';
+import { DppComponent } from '../components/BatchDetails/DppComponent';
 
 export default function Details({ navigation }: any) {
-
   const { fetchDetails, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, selectedMenu, setSelectedMenu } = useGlobalContext();
-
-
+ 
   const [contentType, setContentType] = useState<string>('videos');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [showLoader, setShowLoader] = useState<boolean>(true);
-
-
   const [videoList, setVideoList] = useState<VideoType[] | null>(null);
   const [noteList, setNoteList] = useState<NoteType[] | null>(null);
   const [dppNoteList, setDppNoteList] = useState<NoteType[] | null>(null);
   const [dppVideoList, setDppVideoList] = useState<VideoType[] | null>(null);
-
   const [showLoadMoreVideos, setShowLoadMoreVideos] = useState<boolean>(true);
   const [showLoadMoreNotes, setShowLoadMoreNotes] = useState<boolean>(true);
   const [showLoadMoreDppNotes, setShowLoadMoreDppNotes] = useState<boolean>(true);
@@ -109,7 +104,7 @@ export default function Details({ navigation }: any) {
           <Chapters />
         </View>
 
-          <View className=' flex-[3] pt-5'>
+          <View className='flex-[3] pt-5'>
             {selectedMenu == 0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreVideos} />}
             {selectedMenu == 1 && <NoteComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreNotes} />}
             {selectedMenu == 2 && <DppComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreNotes} />}
