@@ -7,7 +7,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Home from "./screens/Home";
 import Login from "./screens/Login";
 import BatchDetails from "./screens/BatchDetails";
-import Videos from "./screens/Videos";
 import DppQuiz from "./screens/DppQuiz";
 import DppQuizSolution from "./screens/DppQuizSolution";
 import PDFViewer from "./components/Global/pdf-viewer/pdf-viewer";
@@ -16,7 +15,7 @@ import { OfflineHome } from "./screens/OfflineHome";
 import OfflineBatchDetails from "./screens/OfflineBatchDetails";
 import { DppQuizResult } from "./screens/DppQuizResult";
 import Intro from "./screens/Splash";
-import RecentVideos from "./screens/RecentVideos";
+import Video from "./screens/Video";
 import MobileControl from "./screens/MobileControl";
 import VideoPlayer from "./components/Global/video-player/player";
 import useUdpServer from "./hooks/useUdpServer";
@@ -116,8 +115,7 @@ export default function App() {
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="BatchDetails" component={BatchDetails} options={{ headerShown: false }} />
-        <Stack.Screen name="Videos" component={Videos} options={{ headerShown: false }} />
-        <Stack.Screen name="RecentVideos" component={RecentVideos} options={{ headerShown: false }} />
+        <Stack.Screen name="Video" component={Video} options={{ headerShown: false }} />
         <Stack.Screen name="DppQuiz" component={DppQuiz} options={{ headerShown: false }} />
         <Stack.Screen name="DppQuizResult" component={DppQuizResult} options={{ headerShown: false }} />
         <Stack.Screen name="DppQuizSolution" component={DppQuizSolution} options={{ headerShown: false }} />

@@ -67,7 +67,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
           chapter_name: selectedChapter?.name,
         });
         //@ts-expect-error
-        navigation.navigate("Videos", {
+        navigation.navigate("Video", {
           lectureDetails: item?.videoDetails,
           scheduleDetails: item,
         });

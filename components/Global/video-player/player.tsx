@@ -168,7 +168,7 @@ export default function VideoPlayer(props: any) {
   };
 
   useEffect(() => {
-    if(props.scheduleDetails.videoContentId) {
+    if(props?.scheduleDetails?.videoContentId) {
       const { videoUrl } = props.scheduleDetails.videoContentId.content[0];
       let m3u8Url = convertMPDToM3U8(videoUrl);
       if(!m3u8Url) return;
@@ -287,8 +287,8 @@ export default function VideoPlayer(props: any) {
 
   useEffect(() => {
     if(!isYoutubeVideo){
-      if(props.scheduleDetails.videoContentId)
-        setSrc(convertMPDToM3U8(props.scheduleDetails.videoContentId.content[0].videoUrl));
+      if(props?.scheduleDetails?.videoContentId)
+        setSrc(convertMPDToM3U8(props?.scheduleDetails?.videoContentId?.content[0]?.videoUrl));
       else
         setSrc(convertMPDToM3U8(props?.lectureDetails?.videoUrl));
     }
@@ -421,7 +421,7 @@ export default function VideoPlayer(props: any) {
         onPress={()=>{
           setIsPlaying(false);
           // @ts-expect-error
-          navigation.navigate("Videos", {
+          navigation.navigate("Video", {
           lectureDetails: props.lectureDetails,
           scheduleDetails: props.scheduleDetails,
           });}}

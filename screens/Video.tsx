@@ -5,7 +5,7 @@ import VideoPlayer from '../components/Global/video-player/player';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { VideoType } from '../types/types';
 
-const RecentVideos = ({ route }: any) => {
+const Video = ({ route }: any) => {
   useKeepAwake();
   const [recentVideos, setRecentVideos] = useState<{ [key: string]: VideoType[] } | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -56,11 +56,14 @@ const RecentVideos = ({ route }: any) => {
     }
   };
 
-  return (
+  if(route.params.isRecentVideo) return (
     <View>
       {playingVideo && <VideoPlayer smallPlayer={false} currentIndex={currentIndex} currentVideos={currentVideos} handlePrevious={handlePrevious} handleNext={handleNext} lectureDetails={playingVideo?.videoDetails} scheduleDetails={playingVideo} isLive={false} />}
     </View>
   );
+  else return (
+    <VideoPlayer smallPlayer={false} lectureDetails={route?.params?.lectureDetails} scheduleDetails={route?.params?.scheduleDetails} isLive={false} />
+)
 };
 
 const styles = StyleSheet.create({
@@ -86,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RecentVideos;
+export default Video;

@@ -49,9 +49,10 @@ export default function Recent() {
                 }}
                 onPress={async () => {
                   // @ts-expect-error
-                  navigation.navigate("RecentVideos", {
+                  navigation.navigate("Video", {
                     lectureDetails: videos[0]?.videoDetails,
                     subject: subject,
+                    isRecentVideo: true
                   });
                 }}
                 className=" rounded-lg h-fit w-72 overflow-hidden"
@@ -108,9 +109,10 @@ export default function Recent() {
                 }}
                 onPress={async () => {
                   // @ts-expect-error
-                  navigation.navigate("RecentVideos", {
+                  navigation.navigate("Video", {
                     lectureDetails: videos[0]?.videoDetails,
                     subject: subject,
+                    isRecentVideo: true
                   });
                 }}
                 className=" rounded-lg h-fit w-72 overflow-hidden"
