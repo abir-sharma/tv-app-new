@@ -1,12 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  StatusBar,
-  Modal,
-  Image,
-  ActivityIndicator,
-  View,
-  Button,
-} from "react-native";
+import { StatusBar, Modal, Image, ActivityIndicator } from "react-native";
 import Providers from "./utils/Providers";
 import getYouTubeID from "get-youtube-id";
 import { NavigationContainer } from "@react-navigation/native";
@@ -18,7 +11,6 @@ import Videos from "./screens/Videos";
 import Tests from "./screens/Tests";
 import TestSolutions from "./screens/TestSolutions";
 import PDFViewer from "./components/pdf-viewer/pdf-viewer";
-// import PDFViewer2 from "./components/pdf-viewer/pdf-viewer-2";
 import MP4Player from "./components/mp4-player/mp4-player";
 import AiTeacher from "./screens/AiTecher";
 import { Offline } from "./screens/Offline";
@@ -29,17 +21,12 @@ import Intro from "./screens/Intro";
 import RecentVideos from "./screens/RecentVideos";
 import MobileControlQR from "./screens/MobileControlQR";
 import VideoPlayer from "./components/video-player/player";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import useUdpServer from "./hooks/useUdpServer";
-import WebView from "react-native-webview";
-import { useGlobalContext } from "./context/MainContext";
 import PDFTronViewer from "./components/pdf-viewer/pdf-viewer-2";
 import { createNavigationContainerRef } from "@react-navigation/native";
 import axios from "axios";
-import Pdf from "react-native-pdf";
 import YoutubePlayer from "react-native-youtube-iframe";
 import ModalPDFViewer from "./components/pdf-viewer/modal-pdf-viewer";
-import analytics from "@react-native-firebase/analytics";
 import sendGoogleAnalytics from "./hooks/sendGoogleAnalytics";
 
 const Stack = createNativeStackNavigator();
@@ -50,10 +37,6 @@ export default function App() {
   // modals
   const [showYoutubeModal, setShowYoutubeModal] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState("");
-  // const [pdfUrl, setPdfUrl] = useState("");
-  // const [showPdfModal, setShowPdfModal] = useState(false);
-  const [pdfChunks, setPdfChunks] = useState([]);
-  const [imgChunks, setImgChunks] = useState([]);
   const [showImgModal, setShowImgModal] = useState(false);
   const [imgUrl, setImgUrl] = useState("");
   const [showPdfModal, setShowPdfModal] = useState(false);
@@ -148,10 +131,8 @@ export default function App() {
         <Stack.Screen name="OfflineDetails" component={OfflineDetails} options={{ headerShown: false }} />
         <Stack.Screen name="MP4Player" component={MP4Player} options={{ headerShown: false }} />
         <Stack.Screen name="Intro" component={Intro} options={{ headerShown: false }} />
-        <Stack.Screen name="QrTest" component={QRCodeGenerator} options={{ headerShown: false }} />
+        <Stack.Screen name="MobileControlQR" component={MobileControlQR} options={{ headerShown: false }} />
         <Stack.Screen name="VideoPlayer" component={VideoPlayer} options={{ headerShown: false }} />
-        <Stack.Screen name="VideoTest" component={VideoTest} options={{ headerShown: false }} />
-        <Stack.Screen name="UDPClient" component={UDPClient} options={{ headerShown: false, orientation: "portrait" }} />
       </Stack.Navigator>
       {/* <StatusBar hidden /> */}
       <StatusBar backgroundColor="#000" barStyle="light-content" />
@@ -228,7 +209,6 @@ export default function App() {
           />
         )}
         {pdfUrl && (
-          // <Pdf source={{ uri: pdfUrl }} style={{ flex: 1 }} />
           <ModalPDFViewer pdfUrl={pdfUrl} />
         )}
       </Modal>
