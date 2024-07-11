@@ -4,6 +4,8 @@ import { NoteType } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
+import sendGoogleAnalytics from '../../hooks/sendGoogleAnalytics';
+import { useGlobalContext } from '../../context/MainContext';
 
 type NotePropType = {
   noteList: NoteType[] | null,
@@ -13,7 +15,7 @@ type NotePropType = {
 }
 
 export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NotePropType) => {
-
+  const { selectedBatch, selectedChapter, selectedSubject, selectedMenu } = useGlobalContext();
   const navigation = useNavigation();
 
   const renderGridItem = ({ item }: any) => (
@@ -26,10 +28,19 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NotePropTy
         radius: 1000,
         foreground: true
       }}
-      hasTVPreferredFocus onPress={() => {
+      hasTVPreferredFocus 
+      onPress={() => {
         // @ts-expect-error
         navigation.navigate('PDFViewer', {
           pdfUrl: item?.homeworkIds[0]?.attachmentIds[0]?.baseUrl + item?.homeworkIds[0]?.attachmentIds[0]?.key
+        });
+        sendGoogleAnalytics("note_opened", {
+          note_name: item?.homeworkIds[0]?.topic,
+          note_id: item?._id,
+          batch_name: selectedBatch?.name,
+          subject_name: selectedSubject?.subject,
+          chapter_name: selectedChapter?.name,
+          isDppPdf: selectedMenu === 3 ? true : false,
         });
       }}>
       <LinearGradient {...fromCSS(`linear-gradient(179deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`)}

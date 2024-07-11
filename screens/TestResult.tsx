@@ -3,6 +3,7 @@ import { useGlobalContext } from "../context/MainContext"
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, TouchableHighlight, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
 
 
 
@@ -25,6 +26,16 @@ export const TestResult = () => {
       const data = res?.data?.data;
       console.log("Test Result Data: ", data);
       setResult(data);
+      sendGoogleAnalytics("dpp_quiz_submitted", {
+        test_name: testData?.test?.name,
+        test_id: testData?.test?._id,
+        batch_name: selectedBatch?.name,
+        subject_name: selectedBatch?.name,
+        correct_questions: data?.yourPerformance?.correctQuestions,
+        incorrect_questions: data?.yourPerformance?.inCorrectQuestions,
+        skipped_questions: data?.yourPerformance?.unAttemptedQuestions,
+        accuracy: data?.yourPerformance?.accuracy,
+    });
 
     } catch (err: any) {
       console.log("Error while fetching test result data: ", err?.resposne);

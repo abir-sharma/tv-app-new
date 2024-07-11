@@ -112,6 +112,7 @@ export default function Navbar() {
           }}
           onPress={async () => {
             setIsOnline(true);
+            sendGoogleAnalytics("online_mode_clicked", {});
             mainNavigation.navigate("Home");
           }}
           // className={`w-52 h-10 overflow-hidden rounded-xl items-center justify-center ${isOnline ? "bg-white/10 border-[1px] border-white/20 " : ''}`}
@@ -148,6 +149,7 @@ export default function Navbar() {
           onPress={() => {
             // setIsQrModalVisible(true);
             mainNavigation?.navigate("QrTest");
+            sendGoogleAnalytics("mobile_control_clicked", {});
           }}
           className="flex-row justify-center overflow-hidden rounded-full items-center"
         >

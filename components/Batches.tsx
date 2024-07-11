@@ -34,7 +34,7 @@ export default function Batches() {
                             console.log("Batch iD: ", order?._id);
                             setSelectedBatch(order);
                             sendGoogleAnalytics("batch_opened", { 
-                                // batch_name: order?.name,
+                                batch_name: order?.name,
                                 batch_id: order?._id,
                             });
                             // @ts-expect-error

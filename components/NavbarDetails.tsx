@@ -61,9 +61,6 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
     </Pressable>
   );
 
-
-
-
   return (
 
     <View className=" flex-row justify-between items-center p-4 bg-[#111111]">

@@ -13,11 +13,10 @@ import { DppComponent } from '../components/Options/DppComponent';
 
 export default function Details({ navigation }: any) {
 
-  const { setMainNavigation, setLogs, fetchDetails, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter } = useGlobalContext();
+  const { setMainNavigation, setLogs, fetchDetails, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, selectedMenu, setSelectedMenu } = useGlobalContext();
 
 
   const [contentType, setContentType] = useState<string>('videos');
-  const [selectedMenu, setSelectedMenu] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [showLoader, setShowLoader] = useState<boolean>(true);
 

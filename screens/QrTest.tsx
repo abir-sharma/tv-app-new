@@ -1,20 +1,16 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   View,
   Text,
-  TextInput,
-  TouchableOpacity,
   Image,
   StyleSheet,
   TouchableHighlight,
-  Pressable,
 } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { useGlobalContext } from "../context/MainContext";
 import useUdpServer from "../hooks/useUdpServer";
 import { useNavigation } from "@react-navigation/native";
+import sendGoogleAnalytics from "../hooks/sendGoogleAnalytics";
 
 export default function QRCodeGenerator({ setIsQrModalVisible }: any) {
   const { setMainNavigation, messageFromRemote } = useGlobalContext();
@@ -23,7 +19,6 @@ export default function QRCodeGenerator({ setIsQrModalVisible }: any) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    // navigation.setOptions({ headerShown: false });
     setMainNavigation(navigation);
   }, []);
 
@@ -32,57 +27,33 @@ export default function QRCodeGenerator({ setIsQrModalVisible }: any) {
     try {
       if (messageFromRemote && JSON.parse(messageFromRemote)?.type == "qrscan") {
         navigation.goBack();
-        // sendMessageToClient(`{"type": "qrscan-success"}`);
+        sendGoogleAnalytics("mobile_control_connected", {});
       }
     } catch (err) {
       console.log("err while parsing", err);
     }
   }, [messageFromRemote]);
 
-
-
-  useEffect(() => {
-	// try {
-	// 	if (message && JSON.parse(message)?.type == "qrscan") {
-	// 		AsyncStorage.setItem("token", JSON.parse(message)?.token);
-	// 		navigation.navigate("Home");
-	// 	}
-	// } catch (err) {
-	// 	console.log("err while parsing", err);
-	// }
-  }, [message]);
-
   return (
     <View className="flex-1 justify-center items-center bg-[#111111]">
       <TouchableHighlight
-            onPress={() => {
-              // setIsQrModalVisible(false);
-              navigation.goBack();
-            }}
-            className="overflow-hidden rounded-full p-2 absolute top-4 left-4"
-          >
-            <View className='flex-row'>
-              <Image source={require('../assets/back.png')} className='w-8 h-8' width={10} height={10} />
-            </View>
-          </TouchableHighlight>
+        onPress={() => {
+          // setIsQrModalVisible(false);
+          navigation.goBack();
+        }}
+        className="overflow-hidden rounded-full p-2 absolute top-4 left-4"
+      >
+        <View className="flex-row">
+          <Image
+            source={require("../assets/back.png")}
+            className="w-8 h-8"
+            width={10}
+            height={10}
+          />
+        </View>
+      </TouchableHighlight>
       <View className="bg-white/5 p-5 rounded-xl">
-		<Text className="text-white text-center">{ipAddress}</Text>
-		{/* <Text className="text-white text-center">{message}</Text> */}
-
-        {/* <Text className="border-[1px] text-xl border-white/50 text-center rounded-xl px-5 py-2 text-white mb-5 w-80">
-          {ipAddress}
-        </Text> */}
-
-        {/* <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            generateQRCode(ipAddress);
-            console.log("ipAddress", ipAddress);
-          }}
-        >
-          <Text style={styles.buttonText}>Generate QR Code</Text>
-        </TouchableOpacity> */}
-
+        <Text className="text-white text-center">{ipAddress}</Text>
         {ipAddress && (
           <>
             <Text style={styles.description}>Scan QR Code in your app</Text>
@@ -98,7 +69,9 @@ export default function QRCodeGenerator({ setIsQrModalVisible }: any) {
           </>
         )}
       </View>
-      <Text className="text-center mx-auto text-red-500 text-base mt-10 bg-red-400/10 rounded-lg px-4 py-2">* Make sure you are connected to the same WiFi network</Text>
+      <Text className="text-center mx-auto text-red-500 text-base mt-10 bg-red-400/10 rounded-lg px-4 py-2">
+        * Make sure you are connected to the same WiFi network
+      </Text>
     </View>
   );
 }

@@ -5,6 +5,7 @@ import { useGlobalContext } from '../../context/MainContext';
 import axios from 'axios';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
+import sendGoogleAnalytics from '../../hooks/sendGoogleAnalytics';
 
 type DPPPropType = {
   noteList: NoteType[] | null,
@@ -15,12 +16,11 @@ type DPPPropType = {
 
 export const DppComponent = ({ }: DPPPropType) => {
 
-  const { mainNavigation, setLogs, setTestData, dppList, setSelectedTestMapping, setTestSections, setSelectedDpp, headers, selectedBatch, } = useGlobalContext();
+  const { mainNavigation, setLogs, setTestData, dppList, setSelectedTestMapping, setTestSections, setSelectedDpp, headers, selectedBatch, selectedSubject } = useGlobalContext();
 
   console.log("dppList: ", dppList);
 
   const handleDppClick = async (item: any) => {
-    console.log("Selected quiz", item);
     setSelectedDpp(item);
     try {
       const options = {
@@ -50,7 +50,15 @@ export const DppComponent = ({ }: DPPPropType) => {
         foreground: true
       }}
       hasTVPreferredFocus
-      onPress={() => { handleDppClick(item) }}>
+      onPress={() => { 
+        handleDppClick(item)
+        sendGoogleAnalytics("dpp_quiz_opened", {
+          dpp_name: item?.test?.name,
+          dpp_id: item?.test?._id,
+          batch_name: selectedBatch?.name,
+          subject_name: selectedBatch?.name,
+        });
+      }}>
         <LinearGradient {...fromCSS(`linear-gradient(179deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%)`)}
           className='rounded-xl overflow-hidden'>
       <View className='w-full h-full flex-row justify-between items-center px-5'>

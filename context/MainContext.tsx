@@ -87,6 +87,8 @@ type GlobalContextType = {
   fetchDetails: boolean;
   setFetchDetails: Dispatch<SetStateAction<boolean>>;
   fetchDetailTrigger: () => void;
+  selectedMenu: number;
+  setSelectedMenu: Dispatch<SetStateAction<number>>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -163,6 +165,8 @@ const GlobalContext = createContext<GlobalContextType>({
   fetchDetails: false,
   setFetchDetails: () => { },
   fetchDetailTrigger: () => { },
+  selectedMenu: 0,
+  setSelectedMenu: () => { },
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
@@ -216,6 +220,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [logs, setLogs] = useState<string[]>([]);
   const [headers, setHeaders] = useState<any>(null)
   const [messageFromRemote, setMessageFromRemote] = useState<string>("");
+  const [selectedMenu, setSelectedMenu] = useState<number>(0);
 
   useEffect(() => {
     const getIP = async () => {
@@ -347,7 +352,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         recentVideoLoad, setRecentVideoLoad,
         logs, setLogs,
         messageFromRemote, setMessageFromRemote,
-        fetchDetails, setFetchDetails, fetchDetailTrigger
+        fetchDetails, setFetchDetails, fetchDetailTrigger,
+        selectedMenu, setSelectedMenu,
       } as GlobalContextType}>
       {children}
     </GlobalContext.Provider>

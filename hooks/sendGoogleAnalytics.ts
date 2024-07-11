@@ -15,11 +15,11 @@ const sendGoogleAnalytics = async (eventName: string, data: EventData) => {
 
   if (!data.registered_phone_number) {
     const phoneNumber = await AsyncStorage.getItem('phone');
-    data.registered_phone_number = phoneNumber || "not_available";
+    data.registered_phone_number = phoneNumber || "not_logged_in";
   }
   
   console.log("Sending Google Analytics Event: ", eventName + ",", data);
-  // await analytics().logEvent(eventName, data);
+  await analytics().logEvent(eventName, data);
 };
 
 export default sendGoogleAnalytics;

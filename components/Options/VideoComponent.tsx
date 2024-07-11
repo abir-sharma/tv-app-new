@@ -7,6 +7,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useGlobalContext } from '../../context/MainContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
+import sendGoogleAnalytics from '../../hooks/sendGoogleAnalytics';
 
 type VideoPropType = {
   videoList: VideoType[] | null,
@@ -59,8 +60,13 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoPro
       }}
       hasTVPreferredFocus
       onPress={() => {
-        console.log("Go to Video Page", item);
-        console.log(item)
+        sendGoogleAnalytics("video_opened", {
+          video_name: item?.videoDetails?.name,
+          video_id: item?._id,
+          batch_name: selectedBatch?.name,
+          subject_name: selectedSubject?.subject,
+          chapter_name: selectedChapter?.name,
+        });
         //@ts-expect-error
         navigation.navigate("Videos", {
           lectureDetails: item?.videoDetails,
