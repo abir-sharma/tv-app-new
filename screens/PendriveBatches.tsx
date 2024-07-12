@@ -4,30 +4,97 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Pressable, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 import { FileSystem } from 'react-native-file-access';
 import Navbar from '../components/Global/Navbar';
-import FastImage from 'react-native-fast-image';
 import { Images } from '../images/images';
+import { useGlobalContext } from '../context/MainContext';
 
 type OfflineBatches = {
   name: string,
   thumbnail: string | null
 }
 
-const PendriveBatches = () => {
+type PendriveBatchesPropType = {
+  navigation: any
+}
+
+const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
   const [offlineBatches, setOfflineBatches] = useState<OfflineBatches[]>([]);
+  const { setOfflineSubjects, setOfflineSelectedSubject, setOfflineChapters, setOfflineSelectedChapter, setOfflineLectures } = useGlobalContext();
 
   const getBatches = async () => {
     const listing = await FileSystem.ls('/storage/emulated/0/Download/Batches/Batches');
     let batches: OfflineBatches[] = [];
-    listing.map((item) => {
-      if (!item?.endsWith('.png')) {
-        const checkThumbnail = listing.includes(item + '.png');
+    listing.map((batch) => {
+      if (!batch?.endsWith('.png')) {
+        if (batch.startsWith('.')) return;
+        const checkThumbnail = listing.includes(batch + '.png');
         batches.push({
-          name: item,
-          thumbnail: checkThumbnail ? '/storage/emulated/0/Download/Batches/Batches/' + item + '.png' : null,
+          name: batch,
+          thumbnail: checkThumbnail ? '/storage/emulated/0/Download/Batches/Batches/' + batch + '.png' : null,
         });
       }
     })
     setOfflineBatches(batches);
+  }
+
+  const getSubjects = async (path: string) => {
+    let listing = await FileSystem.ls(path);
+    listing = listing.filter((subject) => !subject.startsWith('.'));
+    let subjects: ItemType[] = [];
+    listing.map((subject, index) => {
+      // if (subject.startsWith('.')) return;
+      subjects.push({
+        name: subject,
+        id: index,
+        path: path + subject,
+      });
+    })
+    setOfflineSubjects(subjects);
+    setOfflineSelectedSubject(0);
+    getChapters(path + subjects[0].name + '/');
+  }
+
+  const getChapters = async (path: string) => {
+    let listing = await FileSystem.ls(path);
+    listing = listing.filter((chapter) => !chapter.startsWith('.'));
+    let chapters: ItemType[] = [];
+    listing.map((chapter, index) => {
+      chapters.push({
+        name: chapter,
+        id: index,
+        path: path + chapter,
+      });
+    })
+    setOfflineChapters(chapters);
+    setOfflineSelectedChapter(0);
+    getLectures(path + chapters[0].name + '/Lectures');
+  }
+
+  const getLectures = async (path: string) => {
+    let directoryItems: any[] = await FileSystem.ls(path);
+    directoryItems = directoryItems.filter((lecture) => !lecture.startsWith('.'));
+    const lecturesData: ItemType2[] = [];
+    directoryItems?.map((lecture, index) => {
+      if (!lecture?.name?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, lecture?.name?.slice(0, -4) + '.png');
+        lecturesData?.push({
+          name: lecture,
+          path: path + "/" + lecture,
+          id: index,
+          thumbnail: checkThumbnail ? path + lecture?.name + '.png' : Images.tv,
+          defaultThumbnail: checkThumbnail
+        })
+      }
+    })
+    setOfflineLectures(lecturesData);
+  }
+
+  const isThumbnailAvailable = (directoryItems: any[], toFind: string) => {
+    for (let i = 0; i < directoryItems.length; i++) {
+      if (directoryItems[i].name === toFind) {
+        return true;
+      }
+    }
+    return false;
   }
 
   useEffect(() => {
@@ -39,16 +106,6 @@ const PendriveBatches = () => {
       {...fromCSS(`linear-gradient(276.29deg, #2D3A41 6.47%, #2D3A41 47.75%, #000000 100%)`)}
       className=" flex-1">
       <Navbar />
-      {
-        offlineBatches.map((batch, index) => {
-          return (
-            <View key={index} className="flex-row justify-between items-center p-4">
-              <Text className="text-white">{batch.name}</Text>
-            </View>
-          )
-        })
-      }
-
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
         {offlineBatches?.map((batch: any, index: number) => (
           console.log(batch),
@@ -62,7 +119,10 @@ const PendriveBatches = () => {
               foreground: true
             }}
             onPress={() => {
-              
+              getSubjects('/storage/emulated/0/Download/Batches/Batches/' + batch?.name + '/');
+              navigation.navigate('PendriveBatchDetails', { 
+                batch: batch
+              });
             }}
             className='bg-white/10 rounded-xl h-52 w-72 overflow-hidden'
           >

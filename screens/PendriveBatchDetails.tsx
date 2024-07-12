@@ -3,12 +3,12 @@
 import { ActivityIndicator, ScrollView, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
-import OfflineNavbarDetails from '../components/Offline/OfflineNavbarDetails';
-import { OfflineVideoComponent } from '../components/Offline/OfflineVideoComponent';
-import { OfflineNoteComponent } from '../components/Offline/OfflineNoteComponent';
-import OfflineChapters from '../components/Offline/OfflineChapters';
+import PendriveChapters from '../components/Pendrive/PendriveChapters';
+import PendriveNavbarDetails from '../components/Pendrive/PendriveNavbarDetails/PendriveNavbarDetails';
+import { PendriveNoteComponent } from '../components/Pendrive/PendriveNoteComponent';
+import { PendriveVideoComponent } from '../components/Pendrive/PendriveVideoComponent';
 
-export default function OfflineBatchDetails({ navigation }: any) {
+export default function PendriveBatchDetails({ navigation, route }: any) {
   const { offlineLectures, offlineNotes, offlineDpp, offlineDppPdf, offlineDppVideos, offlineSelectedSection } = useGlobalContext();
   const [showLoader, setshowLoader] = useState<boolean>(false);
 
@@ -21,7 +21,7 @@ export default function OfflineBatchDetails({ navigation }: any) {
 
   return (
     <View className="bg-[#1B2124] flex-1">
-      <OfflineNavbarDetails />
+      <PendriveNavbarDetails />
 
       <View className='flex-1 flex-row'>
         {showLoader && <View
@@ -32,14 +32,14 @@ export default function OfflineBatchDetails({ navigation }: any) {
         </View>}
 
         <View className='flex-1 '>
-          <OfflineChapters />
+          <PendriveChapters />
         </View>
         <View className=' flex-[3] pt-5'>
-          {offlineSelectedSection == 0 && <OfflineNoteComponent noteList={offlineDpp} />}
-          {offlineSelectedSection == 1 && <OfflineNoteComponent noteList={offlineDppPdf} />}
-          {offlineSelectedSection == 2 && <OfflineVideoComponent videoList={offlineDppVideos} />}
-          {offlineSelectedSection == 3 && <OfflineVideoComponent videoList={offlineLectures} />}
-          {offlineSelectedSection == 4 && <OfflineNoteComponent noteList={offlineNotes} />}
+          {offlineSelectedSection == 0 && <PendriveNoteComponent noteList={offlineDpp} />}
+          {offlineSelectedSection == 1 && <PendriveNoteComponent noteList={offlineDppPdf} />}
+          {offlineSelectedSection == 2 && <PendriveVideoComponent videoList={offlineDppVideos} />}
+          {offlineSelectedSection == 3 && <PendriveVideoComponent videoList={offlineLectures} />}
+          {offlineSelectedSection == 4 && <PendriveNoteComponent noteList={offlineNotes} />}
         </View>
 
       </View>

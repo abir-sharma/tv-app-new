@@ -22,7 +22,7 @@ const sendGoogleAnalytics = async (eventName: string, data: EventData) => {
   }
 
   const isConnected = await NetInfo.fetch().then((state: any) => state.isConnected);
-  console.log('offline_analytics_events:', isConnected);
+  console.log('isInternetConnected:', isConnected);
 
   if (isConnected) {
     await analytics().logEvent(eventName, data);
@@ -46,9 +46,9 @@ const storeOfflineEvent = async (eventName: string, data: EventData) => {
 const sendOfflineEvents = async () => {
   try {
     const storedEvents = await AsyncStorage.getItem(OFFLINE_EVENTS_KEY);
-    console.log('sending_offline_analytics_events');
     if (storedEvents) {
       const events = JSON.parse(storedEvents);
+      console.log('sending_offline_analytics_events');
       for (const event of events) {
         await analytics().logEvent(event.eventName, event.data);
       }

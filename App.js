@@ -25,7 +25,8 @@ import axios from "axios";
 import YoutubePlayer from "react-native-youtube-iframe";
 import ModalPDFViewer from "./components/Global/pdf-viewer/modal-pdf-viewer";
 import sendGoogleAnalytics from "./utils/sendGoogleAnalytics";
-import PendriveBatches from "./testing/PendriveBatches";
+import PendriveBatches from "./screens/PendriveBatches";
+import PendriveBatchDetails from "./screens/PendriveBatchDetails";
 import * as Updates from 'expo-updates';
 
 const Stack = createNativeStackNavigator();
@@ -144,6 +145,7 @@ export default function App() {
         <Stack.Screen name="MobileControl" component={MobileControl} options={{ headerShown: false }} />
         <Stack.Screen name="VideoPlayer" component={VideoPlayer} options={{ headerShown: false }} />
         <Stack.Screen name="PendriveBatches" component={PendriveBatches} options={{ headerShown: false }} />
+        <Stack.Screen name="PendriveBatchDetails" component={PendriveBatchDetails} options={{ headerShown: false }} />
       </Stack.Navigator>
       {/* <StatusBar hidden /> */}
       <StatusBar backgroundColor="#000" barStyle="light-content" />

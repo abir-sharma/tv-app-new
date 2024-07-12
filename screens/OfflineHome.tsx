@@ -61,7 +61,7 @@ export const OfflineHome = () => {
       }
     })
     setOfflineSubjects(subjectNames);
-    setOfflineSelectedSubject(0);
+    setOfflineSelectedSubject(0); // setting 0th index as a default selected subject
     setDirectoryLevel(2);
     setOfflineCurrentDirectory(subjectNames[0]?.path);
   }
