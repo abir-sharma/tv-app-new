@@ -25,6 +25,7 @@ import axios from "axios";
 import YoutubePlayer from "react-native-youtube-iframe";
 import ModalPDFViewer from "./components/Global/pdf-viewer/modal-pdf-viewer";
 import sendGoogleAnalytics from "./utils/sendGoogleAnalytics";
+import PendriveBatches from "./testing/PendriveBatches";
 
 const Stack = createNativeStackNavigator();
 
@@ -111,7 +112,7 @@ export default function App() {
   return (
     <Providers>
       <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="PendriveBatches">
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="BatchDetails" component={BatchDetails} options={{ headerShown: false }} />
@@ -127,6 +128,7 @@ export default function App() {
         <Stack.Screen name="Intro" component={Intro} options={{ headerShown: false }} />
         <Stack.Screen name="MobileControl" component={MobileControl} options={{ headerShown: false }} />
         <Stack.Screen name="VideoPlayer" component={VideoPlayer} options={{ headerShown: false }} />
+        <Stack.Screen name="PendriveBatches" component={PendriveBatches} options={{ headerShown: false }} />
       </Stack.Navigator>
       {/* <StatusBar hidden /> */}
       <StatusBar backgroundColor="#000" barStyle="light-content" />

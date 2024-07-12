@@ -7,7 +7,10 @@ import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
-
+import android.os.Environment
+import android.provider.Settings
+import android.content.Intent
+import android.net.Uri
 import expo.modules.ReactActivityDelegateWrapper
 
 class MainActivity : ReactActivity() {
@@ -15,8 +18,18 @@ class MainActivity : ReactActivity() {
     // Set the theme to AppTheme BEFORE onCreate to support
     // coloring the background, status bar, and navigation bar.
     // This is required for expo-splash-screen.
+    
     setTheme(R.style.AppTheme);
-    super.onCreate(null)
+    super.onCreate(savedInstanceState)
+
+     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && 
+!Environment.isExternalStorageManager()) {
+       val intent = 
+   Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION)
+       val uri = Uri.fromParts("package", packageName, null)
+       intent.data = uri
+       startActivity(intent)
+     }
   }
 
   /**
