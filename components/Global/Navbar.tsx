@@ -105,7 +105,7 @@ export default function Navbar() {
           >
           <Text className={`text-white ${isOnline && "font-bold "}`}>Online Batches</Text>
         </Pressable>
-        <Pressable
+        {/* <Pressable
           android_ripple={{
             color: "rgba(255,255,255,0.4)",
             borderless: false,
@@ -117,6 +117,26 @@ export default function Navbar() {
             sendGoogleAnalytics("offline_mode_clicked", {});
             // @ts-expect-error
             navigation.navigate("OfflineHome");
+          }}
+          // className="w-36 h-10 rounded-xl items-center justify-center overflow-hidden"
+          className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${!isOnline && "bg-[#414347]"} `}
+        >
+          <Text className={`text-white ${!isOnline && " font-bold "}`}>Offline Batches</Text>
+        </Pressable> */}
+        <Pressable
+          android_ripple={{
+            color: "rgba(255,255,255,0.4)",
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          onPress={async () => {
+            setIsOnline(false);
+            sendGoogleAnalytics("offline_mode_clicked", {
+              mode: "pendrive"
+            });
+            // @ts-expect-error
+            navigation.navigate("PendriveBatches");
           }}
           // className="w-36 h-10 rounded-xl items-center justify-center overflow-hidden"
           className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${!isOnline && "bg-[#414347]"} `}
