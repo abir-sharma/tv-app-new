@@ -226,10 +226,10 @@ export default function Login({ navigation }: any) {
             ><Image source={Images.back2} className='w-5 h-5' width={10} height={10} /></Pressable>}
 
           <Text className="text-white text-lg font-normal mt-5"> Welcome to</Text>
-          <Text className="text-white text-2xl font-medium mt-2">PhysicsWallah AI-powered </Text>
-          <Text className="text-white text-2xl font-medium mt-2">Smart Classroom </Text>
+          <Text className="text-white text-2xl font-medium mt-2">PhysicsWallah AI-Powered</Text>
+          <Text className="text-white text-2xl font-medium mt-2">Smart Classroom</Text>
           {!otpSent ?
-          <Text className="text-white text-sm font-normal mt-6"> Please enter your mobile no. to Login  / Register </Text>:
+          <Text className="text-white text-sm font-normal mt-6"> Please enter your mobile number to Login / Register </Text>:
           <Text className="text-white text-sm font-normal mt-6"> A 6 Digit OTP has been sent to {phone} </Text>}
           {!otpSent && <Pressable
             android_ripple={{

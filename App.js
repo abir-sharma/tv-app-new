@@ -26,6 +26,7 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import ModalPDFViewer from "./components/Global/pdf-viewer/modal-pdf-viewer";
 import sendGoogleAnalytics from "./utils/sendGoogleAnalytics";
 import PendriveBatches from "./testing/PendriveBatches";
+import * as Updates from 'expo-updates';
 
 const Stack = createNativeStackNavigator();
 
@@ -50,9 +51,19 @@ export default function App() {
     }
   }, []);
 
-  const togglePlaying = useCallback(() => {
-    setPlaying((prev) => !prev);
-  }, []);
+  async function onFetchUpdateAsync() {
+    try {
+      const update = await Updates.checkForUpdateAsync();
+      console.log('update', update)
+
+      if (update.isAvailable) {
+        await Updates.fetchUpdateAsync();
+        await Updates.reloadAsync();
+      }
+    } catch (error) {
+      alert(`Error fetching latest Expo update: ${error}`);
+    }
+  }
 
   useEffect(() => {
     sendGoogleAnalytics("app_open", {});
@@ -109,10 +120,14 @@ export default function App() {
     }
   }, [message]);
 
+  useEffect(() => {
+    onFetchUpdateAsync()
+  }, [])
+
   return (
     <Providers>
       <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator initialRouteName="PendriveBatches">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="BatchDetails" component={BatchDetails} options={{ headerShown: false }} />

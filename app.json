@@ -16,7 +16,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "co.penpencil.aitvapp"
+      "bundleIdentifier": "co.penpencil.aitvapp",
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "package": "co.penpencil.aitvapp",
@@ -25,7 +28,12 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "versionCode": 2
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -51,8 +59,17 @@
         }
       ],
       "@react-native-firebase/app",
-      "@react-native-firebase/crashlytics"
+      "@react-native-firebase/crashlytics",
+      [
+        "expo-updates",
+        {
+          "username": "physicswallah"
+        }
+      ]
     ],
-    "owner": "physicswallah"
+    "owner": "physicswallah",
+    "updates": {
+      "url": "https://u.expo.dev/74f57a78-7057-434e-8173-22ac81e672fa"
+    }
   }
 }
