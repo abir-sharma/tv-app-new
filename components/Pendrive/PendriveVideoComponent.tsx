@@ -21,6 +21,7 @@ export const PendriveVideoComponent = ({ videoList }: OfflineVideoComponentPropT
       }}
       hasTVPreferredFocus
       onPress={() => {
+        console.log('PendriveVideoComponent.tsx', item);
         //@ts-expect-error
         navigation.navigate('MP4Player', { videoUrl: item?.path });
       }}>
@@ -33,11 +34,12 @@ export const PendriveVideoComponent = ({ videoList }: OfflineVideoComponentPropT
       <View className='relative'>
           <View className="w-full aspect-video rounded-xl overflow-hidden relative">
           {item.defaultThumbnail ? <Image
-          className='w-full h-full rounded-t-lg'
-            source={{ uri: `${item?.thumbnail}` }}
+            className='w-full h-full rounded-t-lg'
+            source={{ uri: `file://${item?.thumbnail}` }}
           /> : <Image
             className='w-full h-full rounded-t-lg'
-            source={Images.defaultt}
+            source={{ uri: `file://${item?.path}` }}
+            // source={Images.defaultt}
           />}
           </View>
           <View className='p-2 relative px-5 pt-3'>

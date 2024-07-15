@@ -12,7 +12,7 @@ import { FileSystem } from 'react-native-file-access';
 
 export default function PendriveNavbarDetails() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const { offlineSections, setDirectoryLevel, offlineSelectedSection, headers, setHeaders, setOfflineCurrentDirectory, setOfflineSelectedSection, offlineSubjects, setOfflineSelectedBatch, setOfflineSelectedSubject, offlineSelectedSubject, setOfflineChapters, setOfflineLectures, setOfflineSelectedChapter } = useGlobalContext();
+  const { offlineSections, setDirectoryLevel, offlineSelectedSection, headers, setHeaders, setOfflineCurrentDirectory, setOfflineSelectedSection, offlineSubjects, setOfflineSelectedBatch, setOfflineSelectedSubject, offlineSelectedSubject, setOfflineChapters, setOfflineLectures, setOfflineSelectedChapter, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos } = useGlobalContext();
   const navigation = useNavigation();
 
   const handleLogout = async () => {
@@ -44,6 +44,9 @@ export default function PendriveNavbarDetails() {
     setOfflineChapters(chapters);
     setOfflineSelectedChapter(0);
     getLectures(path + chapters[0].name + '/Lectures');
+    getNotes(path + chapters[0].name + '/Notes');
+    getDppPdf(path + chapters[0].name + '/DPP');
+    getDppVideos(path + chapters[0].name + '/DPP Videos');
   }
 
   const getLectures = async (path: string) => {
@@ -51,13 +54,13 @@ export default function PendriveNavbarDetails() {
     directoryItems = directoryItems.filter((lecture) => !lecture.startsWith('.'));
     const lecturesData: ItemType2[] = [];
     directoryItems?.map((lecture, index) => {
-      if (!lecture?.name?.endsWith('.png')) {
-        const checkThumbnail = isThumbnailAvailable(directoryItems, lecture?.name?.slice(0, -4) + '.png');
+      if (!lecture?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, String(lecture?.slice(0, -4) + '.png'));
         lecturesData?.push({
           name: lecture,
           path: path + "/" + lecture,
           id: index,
-          thumbnail: checkThumbnail ? path + lecture?.name + '.png' : Images.tv,
+          thumbnail: checkThumbnail ? path + "/" + lecture?.slice(0, -4) + '.png' : Images.tv,
           defaultThumbnail: checkThumbnail
         })
       }
@@ -65,13 +68,66 @@ export default function PendriveNavbarDetails() {
     setOfflineLectures(lecturesData);
   }
 
-  const isThumbnailAvailable = (directoryItems: any[], toFind: string) => {
-    for (let i = 0; i < directoryItems.length; i++) {
-      if (directoryItems[i].name === toFind) {
-        return true;
+  const getNotes = async (path: string) => {
+    let directoryItems: any[] = await FileSystem.ls(path);
+    directoryItems = directoryItems.filter((note) => !note.startsWith('.'));
+    const notesData: ItemType2[] = [];
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, item?.name?.slice(0, -4) + '.png');
+        notesData?.push({
+          name: item,
+          path: path + "/" + item,
+          id: index,
+          thumbnail: checkThumbnail ? path + item + '.png' : Images.tv,
+          defaultThumbnail: checkThumbnail
+        })
       }
-    }
-    return false;
+    })
+    setOfflineNotes(notesData);
+  }
+
+  const getDppPdf = async (path: string) => {
+    let directoryItems: any[] = await FileSystem.ls(path);
+    directoryItems = directoryItems.filter((dpp) => !dpp.startsWith('.'));
+    const dppPdfData: ItemType2[] = [];
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, item?.name?.slice(0, -4) + '.png');
+        dppPdfData?.push({
+          name: item,
+          path: path + "/" + item,
+          id: index,
+          thumbnail: checkThumbnail ? path + item + '.png' : Images.tv,
+          defaultThumbnail: checkThumbnail
+        })
+      }
+    })
+    setOfflineDppPdf(dppPdfData);
+  }
+
+  const getDppVideos = async (path: string) => {
+    let directoryItems: any[] = await FileSystem.ls(path);
+    directoryItems = directoryItems.filter((video) => !video.startsWith('.'));
+    const dppVideosData: ItemType2[] = [];
+    directoryItems?.map((item, index) => {
+      if (!item?.name?.endsWith('.png')) {
+        const checkThumbnail = isThumbnailAvailable(directoryItems, item?.name?.slice(0, -4) + '.png');
+        dppVideosData?.push({
+          name: item,
+          path: path + "/" + item,
+          id: index,
+          thumbnail: checkThumbnail ? path + item + '.png' : Images.tv,
+          defaultThumbnail: checkThumbnail
+        })
+      }
+    })
+    setOfflineDppVideos(dppVideosData);
+  }
+
+  const isThumbnailAvailable = (directoryItems: any[], toFind: string) => {
+    let flag = directoryItems.find((item) => item === toFind) ? true : false;
+    return flag;
   }
 
   const renderItem = ({ item }: any) => (

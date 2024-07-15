@@ -22,7 +22,6 @@ const sendGoogleAnalytics = async (eventName: string, data: EventData) => {
   }
 
   const isConnected = await NetInfo.fetch().then((state: any) => state.isConnected);
-  console.log('isInternetConnected:', isConnected);
 
   if (isConnected) {
     await analytics().logEvent(eventName, data);
