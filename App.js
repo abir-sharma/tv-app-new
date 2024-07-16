@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { StatusBar, Modal, Image, ActivityIndicator } from "react-native";
+import { StatusBar, Modal, Image, ActivityIndicator, Alert } from "react-native";
 import Providers from "./utils/Providers";
 import getYouTubeID from "get-youtube-id";
 import { NavigationContainer } from "@react-navigation/native";
@@ -55,11 +55,27 @@ export default function App() {
   async function onFetchUpdateAsync() {
     try {
       const update = await Updates.checkForUpdateAsync();
-      console.log('update', update)
-
+      console.log('update', update);
+  
       if (update.isAvailable) {
-        await Updates.fetchUpdateAsync();
-        await Updates.reloadAsync();
+        Alert.alert(
+          "Update Available",
+          "A new version of the app is available. Would you like to update now?",
+          [
+            {
+              text: "Not Now",
+              onPress: () => console.log("Update deferred"),
+              style: "cancel"
+            },
+            { 
+              text: "Update", 
+              onPress: async () => {
+                await Updates.fetchUpdateAsync();
+                await Updates.reloadAsync();
+              }
+            }
+          ]
+        );
       }
     } catch (error) {
       alert(`Error fetching latest Expo update: ${error}`);
