@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useGlobalContext } from "../context/MainContext"
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Image, TouchableHighlight, Text, View } from "react-native";
+import { ActivityIndicator, Image, TouchableHighlight, Text, View, BackHandler } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import sendGoogleAnalytics from "../utils/sendGoogleAnalytics";
 import { Images } from "../images/images";
@@ -59,10 +59,6 @@ export const DppQuizResult = () => {
     }
   }
 
-  useEffect(() => {
-    fetchResult();
-  }, []);
-
   const formatTime = (seconds: any) => {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
@@ -74,6 +70,22 @@ export const DppQuizResult = () => {
 
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   };
+
+  useEffect(() => {
+    fetchResult();
+    const backAction = () => {
+      navigation.navigate('BatchDetails');
+      fetchDetailTrigger();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <View className="bg-[#111111] h-full">
