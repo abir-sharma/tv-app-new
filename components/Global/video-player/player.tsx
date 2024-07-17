@@ -405,7 +405,7 @@ export default function VideoPlayer(props: any) {
         onPress={() => {
           navigation.goBack();
         }}
-        className="bg-black/40 overflow-hidden rounded-full z-[3] p-2 absolute top-2 left-2"
+        className="bg-black/40 overflow-hidden rounded-full z-[10] p-2 absolute top-2 left-2"
       >
         <Image
           source={Images.exit}
