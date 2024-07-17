@@ -40,31 +40,32 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
   };
 
   const renderGridItem = ({ item }: any) => (
-    <Pressable
-      style={{ flex: 1 / 4 }}
-      className=' m-2 overflow-hidden rounded-xl bg-white/5 h-52'
-      android_ripple={{
-        color: "rgba(255,255,255,0.1)",
-        borderless: false,
-        radius: 1000,
-        foreground: true
-      }}
-      hasTVPreferredFocus
-      onPress={() => {
-        sendGoogleAnalytics("video_opened", {
-          video_name: item?.videoDetails?.name,
-          video_id: item?._id,
-          batch_name: selectedBatch?.name,
-          subject_name: selectedSubject?.subject,
-          chapter_name: selectedChapter?.name,
-        });
-        //@ts-expect-error
-        navigation.navigate("Video", {
-          lectureDetails: item?.videoDetails,
-          scheduleDetails: item,
-        });
-        saveToRecentVideos(item);
-      }}>
+    <View
+      className=' h-52 w-[25%] px-1 my-1'
+      >
+        <Pressable
+    android_ripple={{
+      color: "rgba(255,255,255,0.4)",
+      borderless: false,
+      radius: 1000,
+      foreground: true
+    }} className=' overflow-hidden rounded-xl'
+    
+    onPress={() => {
+      sendGoogleAnalytics("video_opened", {
+        video_name: item?.videoDetails?.name,
+        video_id: item?._id,
+        batch_name: selectedBatch?.name,
+        subject_name: selectedSubject?.subject,
+        chapter_name: selectedChapter?.name,
+      });
+      //@ts-expect-error
+      navigation.navigate("Video", {
+        lectureDetails: item?.videoDetails,
+        scheduleDetails: item,
+      });
+      saveToRecentVideos(item);
+    }}>
         <LinearGradient
             {...fromCSS(
                 `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
@@ -85,13 +86,14 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
           </View>
       </View>
       </LinearGradient>
-    </Pressable>
+      </Pressable>
+    </View>
   );
 
   return (
-    <View className='pt-5'>
+    <View className='p-5'>
       {/* <Text style={styles.subjectText}>Physics</Text> */}
-      {videoList?.length === 0 && <Text className='text-white text-2xl self-center items-center'>No videos available!!</Text>}
+      {videoList?.length === 0 && <Text className='text-white flex flex-wrap text-2xl self-center items-center'>No videos available!!</Text>}
       <FlatList
         data={videoList?.sort((a, b) => {
           const dateA = new Date(a?.videoDetails?.createdAt);
@@ -100,6 +102,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
           // @ts-ignore
           return dateA - dateB;
         })}
+        style={{gap: 5}}
         renderItem={renderGridItem}
         keyExtractor={(item: VideoType) => item._id}
         numColumns={4}

@@ -12,9 +12,11 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
   const navigation = useNavigation();
 
   const renderGridItem = ({ item }: any) => (
+    <View
+      className=' w-[25%] px-1 my-1'
+      >
     <Pressable
-      style={{ flex: 1 / 4 }}
-      className=' m-1 overflow-hidden rounded-xl border-[1px] border-white/30'
+      className=' overflow-hidden rounded-xl border-[1px] border-white/30'
       android_ripple={{
         color: "rgba(255,255,255,0.1)",
         borderless: false,
@@ -54,6 +56,7 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
         </View>
       </LinearGradient>
     </Pressable>
+    </View>
   );
 
   return (

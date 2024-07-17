@@ -30,9 +30,11 @@ export const DppComponent = ({ }: DPPPropType) => {
   }
 
   const renderGridItem = ({ item }: any) => (
+    <View
+      className=' w-[50%] px-1 my-1'
+      >
     <Pressable
-      style={{ flex: 1 / 2 }}
-      className=' my-1 mr-5 overflow-hidden h-24 rounded-xl bg-[#111111] border-[1px] border-white/30'
+      className=' overflow-hidden h-24 rounded-xl bg-[#111111] border-[1px] border-white/30'
       android_ripple={{
         color: "rgba(255,255,255,0.4)",
         borderless: false,
@@ -60,6 +62,7 @@ export const DppComponent = ({ }: DPPPropType) => {
       </View>
       </LinearGradient>
     </Pressable>
+    </View>
   );
 
   return (
