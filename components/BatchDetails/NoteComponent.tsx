@@ -60,11 +60,13 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
     <View className='p-5'>
       {noteList?.length === 0 && <Text className='text-white text-2xl self-center items-center' >No notes available!!</Text>}
       <FlatList
-        data={noteList?.sort((a, b) => {
+        data={
+          noteList?.sort((a, b) => {
           const topicA = a?.homeworkIds[0]?.topic || '';
           const topicB = b?.homeworkIds[0]?.topic || '';
           return topicA?.localeCompare(topicB);
-        })}
+        })
+      }
         renderItem={renderGridItem}
         keyExtractor={(item: NoteType) => item?._id}
         numColumns={4}

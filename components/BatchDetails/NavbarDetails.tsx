@@ -56,6 +56,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             setSelectedSubject(null);
             setSelectedChapter(null);
             setTopicList(null);
+            setSelectedMenu(0);
           }}
           className='flex-row justify-center items-center rounded-xl overflow-hidden px-2'>
           <Image source={Images.home} className='w-8 h-8' width={10} height={10} />
