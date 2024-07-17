@@ -35,7 +35,7 @@ export default function VideoPlayer(props: any) {
   const [playbackSpeed, setPlaybackSpeed] = useState(1);
   const [duration, setDuration] = useState<number>(0);
   const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState<number>(0.8);
+  const [volume, setVolume] = useState<number>(1.0);
   const [quality, setQuality] = useState(720);
   const [storedTimestamp, setStoredTimestamp] = useState(0);
 
