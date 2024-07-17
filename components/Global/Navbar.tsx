@@ -88,7 +88,6 @@ export default function Navbar() {
       </Pressable>
       <View className="flex flex-row gap-2 absolute top-5 left-1/2 -translate-x-32">
         <Pressable
-          hasTVPreferredFocus={true}
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
             borderless: false,
