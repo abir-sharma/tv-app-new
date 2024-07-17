@@ -14,6 +14,9 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { useNavigation } from "@react-navigation/native";
 import { Images } from "../../../images/images";
+import getYouTubeID from "get-youtube-id";
+import YoutubePlayer from "react-native-youtube-iframe";
+
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -736,11 +739,15 @@ export default function VideoPlayer(props: any) {
         </View>
       )}
       {isYoutubeVideo && (
-        <View style={{ height: "100%", zIndex: 10 }}>
-          <WebView
+        <View className={`z-[10] h-full ${(src && props.smallPlayer)&& 'mt-4' }`} >
+          {(src && !props.smallPlayer)? <WebView
             style={{ flex: 1 }}
             source={{ uri: src }}
-          />
+          />:
+           <YoutubePlayer
+            height={285}
+            videoId={`${getYouTubeID(src)}`}
+          />}
         </View>
       )}
       <View

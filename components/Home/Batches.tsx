@@ -12,7 +12,7 @@ import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 
 export default function Batches() {
 
-    const { subscribedBatches, setSelectedBatch, } = useGlobalContext();
+    const { subscribedBatches, setSelectedBatch, setSelectedMenu } = useGlobalContext();
     const navigation = useNavigation();
 
     return (
@@ -31,6 +31,7 @@ export default function Batches() {
                         }}
                         onPress={() => {
                             setSelectedBatch(order);
+                            setSelectedMenu(0);
                             sendGoogleAnalytics("batch_opened", { 
                                 batch_name: order?.name,
                                 batch_id: order?._id,

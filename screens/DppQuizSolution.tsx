@@ -258,7 +258,7 @@ const DppQuizSolution = ({ route }: any) => {
                     <Text className='text-white text-2xl font-medium'> Solution</Text>
                     </View>
                     {
-                      currentQuestion && smallPlayer &&
+                      currentQuestion && smallPlayer && currentQuestion?.question?.solutionDescription[0]?.videoDetails &&
                       <View className=' w-full h-[100%] rounded-lg overflow-hidden'>
                           <VideoPlayer smallPlayer={smallPlayer} setSmallPlayer={setSmallPlayer} lectureDetails={currentQuestion?.question?.solutionDescription[0]?.videoDetails} scheduleDetails={{lectureDetails: currentQuestion?.question?.solutionDescription[0]?.videoDetails}} isLive={false}/>
                       </View>
@@ -267,7 +267,7 @@ const DppQuizSolution = ({ route }: any) => {
                 </View>
             </View>
             {
-              currentQuestion && !smallPlayer &&
+              currentQuestion && !smallPlayer && currentQuestion?.question?.solutionDescription[0]?.videoDetails &&
               <View className='w-screen h-[100%] absolute top-0 left-0 z-50 rounded-lg overflow-hidden'>
                   <VideoPlayer smallPlayer={smallPlayer} setSmallPlayer={setSmallPlayer} lectureDetails={currentQuestion?.question?.solutionDescription[0]?.videoDetails} scheduleDetails={{lectureDetails: currentQuestion?.question?.solutionDescription[0]?.videoDetails}} isLive={false}/>
               </View>
