@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { View, Text, Image, Pressable, ToastAndroid, ActivityIndicator, TextInput, TouchableHighlight } from 'react-native'
 import { useGlobalContext } from '../context/MainContext'
 import axios from 'axios';
-// import { ReviewOrSubmitModal } from '../components/modals/ReviewOrSubmit';
+import { ReviewOrSubmitModal } from '../components/Modals/ReviewOrSubmit';
 import { Images } from '../images/images';
 
 const DppQuiz = ({ navigation, route }: any) => {
@@ -299,7 +299,7 @@ const DppQuiz = ({ navigation, route }: any) => {
             >
                 <ActivityIndicator color={"#FFFFFF"} size={80} />
             </View>}
-            {/* <ReviewOrSubmitModal showModal={showModal} seconds={seconds} setShowModal={setShowModal} responses={responses} handleSubmitTest={handleSubmitTest} /> */}
+            <ReviewOrSubmitModal showModal={showModal} seconds={seconds} setShowModal={setShowModal} responses={responses} handleSubmitTest={handleSubmitTest} />
             <View className='flex-row justify-between items-center'>
                 <View>
                     {testData && <Text className='text-white text-xl font-medium'>{testData?.test?.name}</Text>}
