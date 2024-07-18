@@ -12,6 +12,7 @@ import useUdpServer from "../hooks/useUdpServer";
 import { useNavigation } from "@react-navigation/native";
 import sendGoogleAnalytics from "../utils/sendGoogleAnalytics";
 import { Images } from "../images/images";
+import sendMongoAnalytics from "../utils/sendMongoAnalytics";
 
 export default function MobileControl({ setIsQrModalVisible }: any) {
   const { messageFromRemote } = useGlobalContext();
@@ -23,6 +24,7 @@ export default function MobileControl({ setIsQrModalVisible }: any) {
       if (messageFromRemote && JSON.parse(messageFromRemote)?.type == "qrscan") {
         navigation.goBack();
         sendGoogleAnalytics("mobile_control_connected", {});
+        sendMongoAnalytics("mobile_control_connected", {});
       }
     } catch (err) {
       console.error("err while parsing", err);

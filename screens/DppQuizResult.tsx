@@ -5,6 +5,7 @@ import { ActivityIndicator, Image, TouchableHighlight, Text, View, BackHandler }
 import { useNavigation } from "@react-navigation/native";
 import sendGoogleAnalytics from "../utils/sendGoogleAnalytics";
 import { Images } from "../images/images";
+import sendMongoAnalytics from "../utils/sendMongoAnalytics";
 
 export const DppQuizResult = () => {
   const { testData, headers, selectedBatch, fetchDetailTrigger, setTestData, setTestSections, setSelectedTestMapping, selectedDpp } = useGlobalContext();
@@ -32,6 +33,16 @@ export const DppQuizResult = () => {
         correct_questions: data?.yourPerformance?.correctQuestions,
         incorrect_questions: data?.yourPerformance?.inCorrectQuestions,
         skipped_questions: data?.yourPerformance?.unAttemptedQuestions,
+        accuracy: data?.yourPerformance?.accuracy,
+    });
+    sendMongoAnalytics("dpp_quiz_submitted", {
+        testName: testData?.test?.name,
+        testId: testData?.test?._id,
+        batchName: selectedBatch?.name,
+        subjectName: selectedBatch?.name,
+        correctQuestions: data?.yourPerformance?.correctQuestions,
+        incorrectQuestions: data?.yourPerformance?.inCorrectQuestions,
+        skippedQuestions: data?.yourPerformance?.unAttemptedQuestions,
         accuracy: data?.yourPerformance?.accuracy,
     });
 

@@ -7,6 +7,7 @@ import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 import { useNavigation } from '@react-navigation/native';
 import { Images } from '../../images/images';
+import sendMongoAnalytics from '../../utils/sendMongoAnalytics';
 
 export const DppComponent = ({ }: DPPPropType) => {
   const navigation = useNavigation();
@@ -49,6 +50,12 @@ export const DppComponent = ({ }: DPPPropType) => {
           dpp_id: item?.test?._id,
           batch_name: selectedBatch?.name,
           subject_name: selectedBatch?.name,
+        });
+        sendMongoAnalytics("dpp_quiz_opened", {
+          dppName: item?.test?.name,
+          dppId: item?.test?._id,
+          batchName: selectedBatch?.name,
+          subjectName: selectedBatch?.name,
         });
       }}>
         <LinearGradient {...fromCSS(`linear-gradient(179deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%)`)}

@@ -6,6 +6,7 @@ import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 import { useGlobalContext } from '../../context/MainContext';
 import { Images } from '../../images/images';
+import sendMongoAnalytics from '../../utils/sendMongoAnalytics';
 
 export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteComponentPropType) => {
   const { selectedBatch, selectedChapter, selectedSubject, selectedMenu } = useGlobalContext();
@@ -35,6 +36,14 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
           batch_name: selectedBatch?.name,
           subject_name: selectedSubject?.subject,
           chapter_name: selectedChapter?.name,
+          isDppPdf: selectedMenu === 3 ? true : false,
+        });
+        sendMongoAnalytics("note_opened", {
+          noteName: item?.homeworkIds[0]?.topic,
+          noteId: item?._id,
+          batchName: selectedBatch?.name,
+          subjectName: selectedSubject?.subject,
+          chapterName: selectedChapter?.name,
           isDppPdf: selectedMenu === 3 ? true : false,
         });
       }}>

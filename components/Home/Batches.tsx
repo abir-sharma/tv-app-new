@@ -7,6 +7,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
+import sendMongoAnalytics from '../../utils/sendMongoAnalytics';
 // import { BlurView } from 'expo-blur';
 
 
@@ -35,6 +36,10 @@ export default function Batches() {
                             sendGoogleAnalytics("batch_opened", { 
                                 batch_name: order?.name,
                                 batch_id: order?._id,
+                            });
+                            sendMongoAnalytics("batch_opened", {
+                                batchName: order?.name,
+                                batchId: order?._id,
                             });
                             // @ts-expect-error
                             navigation.navigate('BatchDetails');

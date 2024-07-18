@@ -28,6 +28,7 @@ import sendGoogleAnalytics from "./utils/sendGoogleAnalytics";
 import PendriveBatches from "./screens/PendriveBatches";
 import PendriveBatchDetails from "./screens/PendriveBatchDetails";
 import * as Updates from 'expo-updates';
+import sendMongoAnalytics from "./utils/sendMongoAnalytics";
 
 const Stack = createNativeStackNavigator();
 
@@ -77,12 +78,13 @@ export default function App() {
         );
       }
     } catch (error) {
-      alert(`Error fetching latest Expo update: ${error}`);
+      console.error('Error fetching latest Expo update: ', error)
     }
   }
 
   useEffect(() => {
     sendGoogleAnalytics("app_open", {});
+    sendMongoAnalytics("app_open", {});
   }, []);
 
   useEffect(() => {

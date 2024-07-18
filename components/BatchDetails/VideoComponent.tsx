@@ -7,6 +7,7 @@ import { useGlobalContext } from '../../context/MainContext';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
+import sendMongoAnalytics from '../../utils/sendMongoAnalytics';
 
 export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoComponentPropType) => {
 
@@ -58,6 +59,13 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
         batch_name: selectedBatch?.name,
         subject_name: selectedSubject?.subject,
         chapter_name: selectedChapter?.name,
+      });
+      sendMongoAnalytics("video_opened", {
+        videoName: item?.videoDetails?.name,
+        videoId: item?._id,
+        batchName: selectedBatch?.name,
+        subjectName: selectedSubject?.subject,
+        chapterName: selectedChapter?.name,
       });
       //@ts-expect-error
       navigation.navigate("Video", {

@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import sendGoogleAnalytics from "../../utils/sendGoogleAnalytics";
 import { useNavigation } from "@react-navigation/native";
 import { Images } from "../../images/images";
+import sendMongoAnalytics from "../../utils/sendMongoAnalytics";
 
 export default function Navbar() {
   const { isOnline, setLogs, setIsOnline, headers, setHeaders } = useGlobalContext();
@@ -98,6 +99,7 @@ export default function Navbar() {
           onPress={async () => {
             setIsOnline(true);
             sendGoogleAnalytics("online_mode_clicked", {});
+            sendMongoAnalytics("online_mode_clicked", {});
             // @ts-expect-error
             navigation.navigate("Home");
           }}
@@ -115,6 +117,7 @@ export default function Navbar() {
           onPress={async () => {
             setIsOnline(false);
             sendGoogleAnalytics("offline_mode_clicked", {});
+            sendMongoAnalytics("offline_mode_clicked", {});
             // @ts-expect-error
             navigation.navigate("OfflineHome");
           }}
@@ -133,6 +136,9 @@ export default function Navbar() {
           onPress={async () => {
             setIsOnline(false);
             sendGoogleAnalytics("offline_mode_clicked", {
+              mode: "pendrive"
+            });
+            sendMongoAnalytics("offline_mode_clicked", {
               mode: "pendrive"
             });
             // @ts-expect-error
@@ -156,6 +162,7 @@ export default function Navbar() {
             // @ts-expect-error
             navigation.navigate("MobileControl");
             sendGoogleAnalytics("mobile_control_clicked", {});
+            sendMongoAnalytics("mobile_control_clicked", {});
           }}
           className="flex-row justify-center overflow-hidden rounded-full items-center"
         >
