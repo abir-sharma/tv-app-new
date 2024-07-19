@@ -2,7 +2,7 @@
   "expo": {
     "name": "PW AI-School",
     "slug": "pw-tv-app-v2",
-    "version": "1.0.1aa",
+    "version": "1.0.1",
     "orientation": "landscape",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -33,7 +33,7 @@
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS"
       ],
-      "runtimeVersion": "1.0.0"
+      "runtimeVersion": "1.0.1"
     },
     "web": {
       "favicon": "./assets/favicon.png"
