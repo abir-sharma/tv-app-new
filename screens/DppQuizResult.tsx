@@ -26,8 +26,8 @@ export const DppQuizResult = () => {
       
       setResult(data);
       sendGoogleAnalytics("dpp_quiz_submitted", {
-        test_name: testData?.test?.name,
-        test_id: testData?.test?._id,
+        quiz_name: testData?.test?.name,
+        quiz_id: testData?.test?._id,
         batch_name: selectedBatch?.name,
         subject_name: selectedBatch?.name,
         correct_questions: data?.yourPerformance?.correctQuestions,
@@ -36,8 +36,8 @@ export const DppQuizResult = () => {
         accuracy: data?.yourPerformance?.accuracy,
     });
     sendMongoAnalytics("dpp_quiz_submitted", {
-        testName: testData?.test?.name,
-        testId: testData?.test?._id,
+        quizName: testData?.test?.name,
+        quizId: testData?.test?._id,
         batchName: selectedBatch?.name,
         subjectName: selectedBatch?.name,
         correctQuestions: data?.yourPerformance?.correctQuestions,
