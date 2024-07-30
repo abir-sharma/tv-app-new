@@ -175,7 +175,7 @@ const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
               foreground: true
             }}
             onPress={() => {
-              getSubjects('/storage/emulated/0/Download/Batches/' + batch?.name + '/');
+              getSubjects(BASE_URL + '/' + batch?.name + '/');
               navigation.navigate('PendriveBatchDetails', { 
                 batch: batch
               });
