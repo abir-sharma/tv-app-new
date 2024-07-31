@@ -29,6 +29,7 @@ import PendriveBatches from "./screens/PendriveBatches";
 import PendriveBatchDetails from "./screens/PendriveBatchDetails";
 import * as Updates from 'expo-updates';
 import sendMongoAnalytics from "./utils/sendMongoAnalytics";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
@@ -140,6 +141,11 @@ export default function App() {
 
   useEffect(() => {
     onFetchUpdateAsync()
+    const init = async () => {
+      const schoolData = await AsyncStorage.getItem('schoolData');
+      console.log('schoolData', schoolData);
+    }
+    init();
   }, [])
 
   return (

@@ -8,7 +8,7 @@ import { Images } from "../images/images";
 import sendMongoAnalytics from "../utils/sendMongoAnalytics";
 
 export const DppQuizResult = () => {
-  const { testData, headers, selectedBatch, fetchDetailTrigger, setTestData, setTestSections, setSelectedTestMapping, selectedDpp } = useGlobalContext();
+  const { testData, headers, selectedBatch, fetchDetailTrigger, setTestData, setTestSections, setSelectedTestMapping, selectedDpp, selectedSubject } = useGlobalContext();
   const [result, setResult] = useState<any>(null);
   const [showLoader, setShowLoader] = useState<boolean>(false);
   const navigation = useNavigation<any>();
@@ -29,7 +29,7 @@ export const DppQuizResult = () => {
         quiz_name: testData?.test?.name,
         quiz_id: testData?.test?._id,
         batch_name: selectedBatch?.name,
-        subject_name: selectedBatch?.name,
+        subject_name: selectedSubject?.subject,
         correct_questions: data?.yourPerformance?.correctQuestions,
         incorrect_questions: data?.yourPerformance?.inCorrectQuestions,
         skipped_questions: data?.yourPerformance?.unAttemptedQuestions,
@@ -39,7 +39,7 @@ export const DppQuizResult = () => {
         quizName: testData?.test?.name,
         quizId: testData?.test?._id,
         batchName: selectedBatch?.name,
-        subjectName: selectedBatch?.name,
+        subjectName: selectedSubject?.subject,
         correctQuestions: data?.yourPerformance?.correctQuestions,
         incorrectQuestions: data?.yourPerformance?.inCorrectQuestions,
         skippedQuestions: data?.yourPerformance?.unAttemptedQuestions,

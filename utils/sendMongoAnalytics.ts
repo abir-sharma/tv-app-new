@@ -9,17 +9,20 @@ const sendMongoAnalytics = async (eventName: string, data: any) => {
         .replace(/\b\w/g, c => c.toUpperCase());  
   }
 
+  const schoolData: any = await AsyncStorage.getItem('schoolData');
+
   try {
     const res = await axios.post("https://tv-app-analytics-backend.betterpw.live/v1/events/store", {
       "name": eventName,
       "title": formatEventName(eventName),
       "registeredNumber": await AsyncStorage.getItem('phone') || "not_logged_in",
       "createdAt": moment().format(),
+      "school": JSON.parse(schoolData)._id,
       ...data
     });
-    console.log("Mongo analytics sent successfully: ", res);
-  } catch (error) {
-    console.error("Error sending mongo analytics: ", error);
+    console.log("Mongo analytics sent successfully:", eventName);
+  } catch (error: any) {
+    console.error("Error sending mongo analytics: ", error.response.data);
   }
 }
 
