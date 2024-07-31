@@ -59,6 +59,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
         batch_name: selectedBatch?.name,
         subject_name: selectedSubject?.subject,
         chapter_name: selectedChapter?.name,
+        batchId: selectedBatch?._id,
       });
       sendMongoAnalytics("video_opened", {
         videoName: item?.videoDetails?.name,
@@ -66,6 +67,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
         batchName: selectedBatch?.name,
         subjectName: selectedSubject?.subject,
         chapterName: selectedChapter?.name,
+        batchId: selectedBatch?._id,
       });
       //@ts-expect-error
       navigation.navigate("Video", {

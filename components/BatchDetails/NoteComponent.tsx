@@ -37,6 +37,7 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
           subject_name: selectedSubject?.subject,
           chapter_name: selectedChapter?.name,
           isDppPdf: selectedMenu === 3 ? true : false,
+          batchId: selectedBatch?._id,
         });
         sendMongoAnalytics("note_opened", {
           noteName: item?.homeworkIds[0]?.topic,
@@ -45,6 +46,7 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
           subjectName: selectedSubject?.subject,
           chapterName: selectedChapter?.name,
           isDppPdf: selectedMenu === 3 ? true : false,
+          batchId: selectedBatch?._id,
         });
       }}>
       <LinearGradient {...fromCSS(`linear-gradient(179deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`)}

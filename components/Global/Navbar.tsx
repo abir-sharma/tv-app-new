@@ -22,6 +22,7 @@ export default function Navbar() {
   const navigation = useNavigation();
   const [phone, setPhone] = useState<string|null>(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const [offlineSourceDropdown, setOfflineSourceDropdown] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -73,6 +74,22 @@ export default function Navbar() {
                 <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">{phone || "---"}</Text></View>
                 <Seperator />
                 <Pressable onPress={handleLogout} className="w-full px-5 py-2 rounded-b-lg"><Text className="text-white font-bold text-sm">Logout</Text></Pressable>
+              </ScrollView>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={offlineSourceDropdown}
+          onRequestClose={() => setOfflineSourceDropdown(false)}
+        >
+          <TouchableWithoutFeedback onPress={() => setOfflineSourceDropdown(false)}>
+            <View style={{ flex: 1 }}>
+              <ScrollView className='bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[70] right-[150] z-[2]'>
+                <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">Pendrive</Text></View>
+                <Seperator />
+                <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">SD Card</Text></View>
               </ScrollView>
             </View>
           </TouchableWithoutFeedback>
@@ -157,6 +174,23 @@ export default function Navbar() {
         </Pressable>
       </View>
       <View className="flex flex-row gap-2 items-center">
+        {/* offline source dropdown */}
+        <Pressable
+          android_ripple={{
+            color: "rgba(255,255,255,0.5)",
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          onPress={()=>{setOfflineSourceDropdown(prev=>!prev)}}
+          className="flex-row justify-center overflow-hidden rounded-full items-center"
+        >
+          <Text className="bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3">
+            Dropdown
+          </Text>
+        </Pressable>
+
+        {/* mobile control button */}
         <Pressable
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
@@ -176,6 +210,8 @@ export default function Navbar() {
             Mobile Control
           </Text>
         </Pressable>
+
+        {/* profile picture (dropdown) */}
         <Pressable
           android_ripple={{
             color: "rgba(255,255,255,0.5)",

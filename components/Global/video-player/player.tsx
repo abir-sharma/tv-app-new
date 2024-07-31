@@ -16,13 +16,14 @@ import { useNavigation } from "@react-navigation/native";
 import { Images } from "../../../images/images";
 import getYouTubeID from "get-youtube-id";
 import YoutubePlayer from "react-native-youtube-iframe";
+import sendMongoAnalytics from "../../../utils/sendMongoAnalytics";
 
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 export default function VideoPlayer(props: any) {
   const navigation = useNavigation();
-  const { headers } = useGlobalContext();
+  const { headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
   const playerRef = useRef<Video | null>(null);
   const [spinner, setSpinner] = useState<any>();
   const [src, setSrc] = useState<any>(undefined);
@@ -404,6 +405,14 @@ export default function VideoPlayer(props: any) {
         }}
         onPress={() => {
           navigation.goBack();
+          sendMongoAnalytics("video_closed", {
+            videoName: props?.lectureDetails?.name,
+            videoId: props?.lectureDetails?._id,
+            batchName: selectedBatch?.name,
+            subjectName: selectedSubject?.subject,
+            chapterName: selectedChapter?.name,
+            batchId: selectedBatch?._id,
+          });
         }}
         className="bg-black/40 overflow-hidden rounded-full z-[10] p-2 absolute top-2 left-2"
       >

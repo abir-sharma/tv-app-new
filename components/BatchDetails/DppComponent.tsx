@@ -56,6 +56,7 @@ export const DppComponent = ({ }: DPPPropType) => {
           dppId: item?.test?._id,
           batchName: selectedBatch?.name,
           subjectName: selectedBatch?.name,
+          batchId: selectedBatch?._id,
         });
       }}>
         <LinearGradient {...fromCSS(`linear-gradient(179deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%)`)}

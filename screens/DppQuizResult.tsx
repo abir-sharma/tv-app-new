@@ -44,6 +44,7 @@ export const DppQuizResult = () => {
         incorrectQuestions: data?.yourPerformance?.inCorrectQuestions,
         skippedQuestions: data?.yourPerformance?.unAttemptedQuestions,
         accuracy: data?.yourPerformance?.accuracy,
+        batchId: selectedBatch?._id,
     });
 
     } catch (err: any) {
