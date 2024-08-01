@@ -5,6 +5,7 @@ import {
   Pressable,
   ScrollView,
   Text,
+  ToastAndroid,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -16,9 +17,10 @@ import sendGoogleAnalytics from "../../utils/sendGoogleAnalytics";
 import { useNavigation } from "@react-navigation/native";
 import { Images } from "../../images/images";
 import sendMongoAnalytics from "../../utils/sendMongoAnalytics";
+import { FileSystem } from "react-native-file-access";
 
 export default function Navbar() {
-  const { isOnline, setLogs, setIsOnline, headers, setHeaders } = useGlobalContext();
+  const { isOnline, setLogs, setIsOnline, headers, setHeaders, setPENDRIVE_BASE_URL } = useGlobalContext();
   const navigation = useNavigation();
   const [phone, setPhone] = useState<string|null>(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
@@ -87,9 +89,28 @@ export default function Navbar() {
           <TouchableWithoutFeedback onPress={() => setOfflineSourceDropdown(false)}>
             <View style={{ flex: 1 }}>
               <ScrollView className='bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[70] right-[150] z-[2]'>
-                <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">Pendrive</Text></View>
+                <Pressable onPress={() => {
+                  setPENDRIVE_BASE_URL("/storage/emulated/0/Download/Batches");
+                  setOfflineSourceDropdown(false);
+                }} className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">SD Card</Text></Pressable>
                 <Seperator />
-                <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">SD Card</Text></View>
+                <Pressable onPress={() => {
+                  FileSystem.ls("/mnt/media_rw")
+                  .then((files) => {
+                    if (files.length > 0) {
+                      const url = `/mnt/media_rw${files[0]}`;
+                      setPENDRIVE_BASE_URL(url);
+                      setOfflineSourceDropdown(false);
+                      console.log(`PENDRIVE_BASE_URL set to: ${url}`);
+                    } else {
+                      ToastAndroid.show("No pendrive detected", ToastAndroid.SHORT);
+                      setOfflineSourceDropdown(false);
+                    }
+                  })
+                  .catch((error) => {
+                    console.error("Error reading /mnt/media_rw:", error);
+                  });
+                }} className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">Pendrive</Text></Pressable>
               </ScrollView>
             </View>
           </TouchableWithoutFeedback>
@@ -175,20 +196,22 @@ export default function Navbar() {
       </View>
       <View className="flex flex-row gap-2 items-center">
         {/* offline source dropdown */}
-        <Pressable
-          android_ripple={{
-            color: "rgba(255,255,255,0.5)",
-            borderless: false,
-            radius: 1000,
-            foreground: true,
-          }}
-          onPress={()=>{setOfflineSourceDropdown(prev=>!prev)}}
-          className="flex-row justify-center overflow-hidden rounded-full items-center"
-        >
-          <Text className="bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3">
-            Dropdown
-          </Text>
-        </Pressable>
+        { !isOnline &&
+          <Pressable
+            android_ripple={{
+              color: "rgba(255,255,255,0.5)",
+              borderless: false,
+              radius: 1000,
+              foreground: true,
+            }}
+            onPress={()=>{setOfflineSourceDropdown(prev=>!prev)}}
+            className="flex-row justify-center overflow-hidden rounded-full items-center"
+          >
+            <Text className="bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3">
+              Offline Source
+            </Text>
+          </Pressable>
+        }       
 
         {/* mobile control button */}
         <Pressable

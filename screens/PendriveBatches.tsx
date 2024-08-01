@@ -6,7 +6,6 @@ import { FileSystem } from 'react-native-file-access';
 import Navbar from '../components/Global/Navbar';
 import { Images } from '../images/images';
 import { useGlobalContext } from '../context/MainContext';
-const BASE_URL = '/storage/emulated/0/Download/Batches';
 
 type OfflineBatches = {
   name: string,
@@ -19,10 +18,10 @@ type PendriveBatchesPropType = {
 
 const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
   const [offlineBatches, setOfflineBatches] = useState<OfflineBatches[]>([]);
-  const { setOfflineSubjects, setOfflineSelectedSubject, setOfflineChapters, setOfflineSelectedChapter, setOfflineLectures, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos } = useGlobalContext();
+  const { setOfflineSubjects, setOfflineSelectedSubject, setOfflineChapters, setOfflineSelectedChapter, setOfflineLectures, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, PENDRIVE_BASE_URL } = useGlobalContext();
 
   const getBatches = async () => {
-    const listing = await FileSystem.ls(BASE_URL);
+    const listing = await FileSystem.ls(PENDRIVE_BASE_URL);
     let batches: OfflineBatches[] = [];
     listing.map(async (batch) => {
       if (!batch?.endsWith('.png')) {
@@ -30,7 +29,7 @@ const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
         const checkThumbnail = listing.includes(batch + '.png');
         batches.push({
           name: batch,
-          thumbnail: checkThumbnail ? `${BASE_URL}/${batch}.png` : null,
+          thumbnail: checkThumbnail ? `${PENDRIVE_BASE_URL}/${batch}.png` : null,
         });
       }
     })
@@ -175,7 +174,7 @@ const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
               foreground: true
             }}
             onPress={() => {
-              getSubjects(BASE_URL + '/' + batch?.name + '/');
+              getSubjects(PENDRIVE_BASE_URL + '/' + batch?.name + '/');
               navigation.navigate('PendriveBatchDetails', { 
                 batch: batch
               });
