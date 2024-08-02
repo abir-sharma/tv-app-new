@@ -157,6 +157,10 @@ const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
     getBatches();
   }, []);
 
+  useEffect(() => {
+    getBatches();
+  }, [PENDRIVE_BASE_URL])
+
   return (
     <LinearGradient
       {...fromCSS(`linear-gradient(276.29deg, #2D3A41 6.47%, #2D3A41 47.75%, #000000 100%)`)}

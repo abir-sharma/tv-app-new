@@ -71,7 +71,7 @@ export default function Navbar() {
           <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
             <View style={{ flex: 1 }}>
               <ScrollView className='bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[70] right-[20] z-[2]'>
-                <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">v1.0.1</Text></View>
+                <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">v1.0.2</Text></View>
                 <Seperator />
                 <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">{phone || "---"}</Text></View>
                 <Seperator />
@@ -95,10 +95,22 @@ export default function Navbar() {
                 }} className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">SD Card</Text></Pressable>
                 <Seperator />
                 <Pressable onPress={() => {
-                  FileSystem.ls("/mnt/media_rw")
-                  .then((files) => {
+                FileSystem.ls("/mnt/media_rw")
+                  .then(async (files) => {
                     if (files.length > 0) {
-                      const url = `/mnt/media_rw${files[0]}`;
+                      let batchesPd: string = '';
+                      for (const pd of files) {
+                        const ls = await FileSystem.ls(`/mnt/media_rw/${pd}`);
+                        if (ls.includes("Batches")) {
+                          batchesPd = pd;
+                          break;
+                        }
+                      }
+                      if (batchesPd === '') {
+                        ToastAndroid.show("No Batches folder found in any pendrive", ToastAndroid.SHORT);
+                        return;
+                      }
+                      const url = `/mnt/media_rw/${batchesPd}/Batches`;
                       setPENDRIVE_BASE_URL(url);
                       setOfflineSourceDropdown(false);
                       console.log(`PENDRIVE_BASE_URL set to: ${url}`);
@@ -110,7 +122,8 @@ export default function Navbar() {
                   .catch((error) => {
                     console.error("Error reading /mnt/media_rw:", error);
                   });
-                }} className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">Pendrive</Text></Pressable>
+              }} className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">Pendrive</Text>
+              </Pressable>
               </ScrollView>
             </View>
           </TouchableWithoutFeedback>
