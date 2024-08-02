@@ -12,7 +12,7 @@ import sendMongoAnalytics from '../../utils/sendMongoAnalytics';
 export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoComponentPropType) => {
 
   const navigation = useNavigation();
-  const {selectedSubject, selectedChapter, selectedBatch} = useGlobalContext();
+  const { selectedSubject, selectedChapter, selectedBatch, selectedMenu } = useGlobalContext();
 
   const saveToRecentVideos = async (item: VideoType) => {
     try {
@@ -68,6 +68,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
         subjectName: selectedSubject?.subject,
         chapterName: selectedChapter?.name,
         batchId: selectedBatch?._id,
+        isSolutionVideo: selectedMenu === 3 ? true : false
       });
       //@ts-expect-error
       navigation.navigate("Video", {
