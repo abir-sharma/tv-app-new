@@ -10,6 +10,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import axios from "axios";
 
 export default function Home({ navigation }: any) {
   const { setHeaders } = useGlobalContext();
@@ -27,20 +28,51 @@ export default function Home({ navigation }: any) {
         })
         try {
           const headers = { 'Authorization': `Bearer ${await AsyncStorage.getItem("token")}`, 'randomId': randu }
-          const res = await fetch("https://api.penpencil.co/v3/oauth/verify-token", {
-            method: "POST",
-            headers: headers,
-            body: '',
-          });
+          const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", {}, { headers });
         } catch (err: any) {
-          await AsyncStorage.removeItem("token");
-          navigation?.navigate('Login')
+          console.log("LOGGING HERE....", err.response.data.code);
+
+          if(err.response.data.code === 401){
+
+          const storedRefreshToken = await AsyncStorage.getItem("refreshToken");
+          if(storedRefreshToken) {
+            try{
+              console.log("resfresh token there...");
+            const response = await axios.post("https://api.penpencil.co/v3/oauth/refresh-token", 
+              {
+                client_id: "system-admin",
+                client_secret: "KjPXuAVfC5xbmgreETNMaL7z",
+                refresh_token: storedRefreshToken,
+              }
+            );
+            
+            console.log("ref res:  ",response.data.data);
+            await AsyncStorage.setItem("token", response.data.data.access_token);
+            await AsyncStorage.setItem("refreshToken", response.data.data.refresh_token);
+
+            await handleLogin();
+          }catch(err){
+            // @ts-ignore
+            console.log("err: ", err);
+            await AsyncStorage.removeItem("token");
+            await AsyncStorage.removeItem("refreshToken");
+            navigation?.navigate('Login')
+          }
+          }
+          else{
+            await AsyncStorage.removeItem("token");
+            navigation?.navigate('Login')
+          }
+
+
         }
-        navigation?.navigate('Home')
+          navigation?.navigate('Home')
+        }
       }
       else {
         navigation?.navigate('Login')
       }
+      
     })
   }
 
