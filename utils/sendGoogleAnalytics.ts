@@ -23,7 +23,7 @@ const sendGoogleAnalytics = async (eventName: string, data: EventData) => {
   }
 
   if (!data.app_version) {
-    const appVersion = require('../../app.json').expo.version;
+    const appVersion = '1.0.2';
     data.app_version = appVersion;
   }
 
