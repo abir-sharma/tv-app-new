@@ -15,7 +15,7 @@ import { Images } from "../images/images";
 import sendMongoAnalytics from "../utils/sendMongoAnalytics";
 
 export default function MobileControl({ setIsQrModalVisible }: any) {
-  const { messageFromRemote } = useGlobalContext();
+  const { messageFromRemote, setMessageFromRemote } = useGlobalContext();
   const { ipAddress } = useUdpServer();
 
   const navigation = useNavigation();
@@ -25,6 +25,7 @@ export default function MobileControl({ setIsQrModalVisible }: any) {
         navigation.goBack();
         sendGoogleAnalytics("mobile_control_connected", {});
         sendMongoAnalytics("mobile_control_connected", {});
+        setMessageFromRemote("");
       }
     } catch (err) {
       console.error("err while parsing", err);
