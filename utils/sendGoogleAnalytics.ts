@@ -6,6 +6,7 @@ import NetInfo from "@react-native-community/netinfo";
 interface EventData {
   timestamp?: string;
   registered_phone_number?: string;
+  app_version?: string;
   [key: string]: any;
 }
 
@@ -19,6 +20,11 @@ const sendGoogleAnalytics = async (eventName: string, data: EventData) => {
   if (!data.registered_phone_number) {
     const phoneNumber = await AsyncStorage.getItem('phone');
     data.registered_phone_number = phoneNumber || "not_logged_in";
+  }
+
+  if (!data.app_version) {
+    const appVersion = require('../../app.json').expo.version;
+    data.app_version = appVersion;
   }
 
   const isConnected = await NetInfo.fetch().then((state: any) => state.isConnected);
