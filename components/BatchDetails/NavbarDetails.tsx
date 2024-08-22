@@ -13,7 +13,6 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
 
   const handleDropdownPress = () => {
     setIsDropdownVisible(prev => !prev);
-    setSelectedChapter(null);
   };
 
   const renderItem = ({ item }: any) => (
