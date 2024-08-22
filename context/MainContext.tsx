@@ -242,7 +242,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       setSubscribedBatches(res?.data?.data);
       setSelectedBatch(res?.data?.data[0]);
       setSelectSubjectSlug(res?.data?.data[0]?.subjects[0]?.slug);
-      console.log("subsububs:", res?.data?.data[0]?.subjects[0]);
       setSelectedSubject(res?.data?.data[0]?.subjects[0]);
 
       getChaptersData();
@@ -277,11 +276,9 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   }
 
   useEffect(() => {
-    console.log("toopiccc:", topicList);
     if(topicList){
       if(topicList?.length<=0){
         const index = batchDetails?.subjects.findIndex((subject) => subject.slug === selectSubjectSlug) || 0;
-        console.log("index that has 0 notice:", index);
         batchDetails?.subjects[0]?.slug && setSelectSubjectSlug(batchDetails?.subjects[index+1]?.slug);
         batchDetails?.subjects[0] && setSelectedSubject(batchDetails?.subjects[index+1]);
       }
@@ -325,7 +322,6 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   useEffect(() => {
     batchDetails && setSelectSubjectSlug(batchDetails?.subjects[1]?.slug);
     batchDetails && setSelectedSubject(batchDetails?.subjects[1]);
-    console.log("subsub0000:", batchDetails?.subjects[1]);
   }, [batchDetails])
 
   return (

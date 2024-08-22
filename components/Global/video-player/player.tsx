@@ -179,6 +179,7 @@ export default function VideoPlayer(props: any) {
       if(!m3u8Url) return;
       setSrc(m3u8Url);
       sendAnalyticsData(m3u8Url);
+      setDuration(convertToSeconds(props?.lectureDetails?.duration));
       setRenderVideo(true);
       setSpinner(false);
       return;
@@ -367,6 +368,13 @@ export default function VideoPlayer(props: any) {
       }
     };
   }, [isPlaying]);
+
+  useEffect(()=>{
+    console.log("playingVideo");
+    if(props.scheduleDetails){
+      console.log("videooo---:", props.scheduleDetails);
+    }
+  },[props.lectureDetails])
 
   return (
     <View
