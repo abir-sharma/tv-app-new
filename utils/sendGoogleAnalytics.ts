@@ -23,7 +23,7 @@ const sendGoogleAnalytics = async (eventName: string, data: EventData) => {
   }
 
   if (!data.app_version) {
-    const appVersion = '1.0.5';
+    const appVersion = '1.0.6';
     data.app_version = appVersion;
   }
 
