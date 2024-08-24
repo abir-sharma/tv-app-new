@@ -38,10 +38,6 @@ export default function Details({ navigation }: any) {
 
   }, [batchDetails, selectSubjectSlug, selectedSubject, selectedBatch])
 
-  useEffect(() => {
-    getDetails();
-  }, [fetchDetails])
-
   const getDetails = async () => {
     setShowLoader(true);
     try {
@@ -52,13 +48,13 @@ export default function Details({ navigation }: any) {
       }
       if (selectedMenu === 0) {
         setVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
-        if (res?.data?.data?.length <= 0) {
+        if (res?.data?.data?.length <= 12) {
           setShowLoadMoreVideos(false);
         }
       }
       if (selectedMenu === 1) {
         setNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
-        if (res?.data?.data?.length <= 0) {
+        if (res?.data?.data?.length <= 12) {
           setShowLoadMoreNotes(false);
         }
       }
@@ -68,13 +64,13 @@ export default function Details({ navigation }: any) {
       }
       if (selectedMenu === 3) {
         setDppNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
-        if (res?.data?.data?.length <= 0) {
+        if (res?.data?.data?.length <= 12) {
           setShowLoadMoreDppNotes(false);
         }
       }
       if (selectedMenu === 4) {
         setDppVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
-        if (res?.data?.data?.length <= 0) {
+        if (res?.data?.data?.length <= 12) {
           setShowLoadMoreDppVideos(false);
         }
       }
@@ -86,7 +82,12 @@ export default function Details({ navigation }: any) {
 
   useEffect(() => {
     getDetails();
-  }, [selectedChapter, currentPage, selectedMenu])
+    console.log("getDetails called");
+  }, [selectedChapter, currentPage, selectedMenu, fetchDetails])
+
+  // useEffect(()=>{
+  //   console.log("change hua video yaha");
+  // }, [videoList]);
 
   return (
     <View className="bg-[#1B2124] flex-1">

@@ -275,15 +275,15 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
   }
 
-  useEffect(() => {
-    if(topicList){
-      if(topicList?.length<=0){
-        const index = batchDetails?.subjects.findIndex((subject) => subject.slug === selectSubjectSlug) || 0;
-        batchDetails?.subjects[0]?.slug && setSelectSubjectSlug(batchDetails?.subjects[index+1]?.slug);
-        batchDetails?.subjects[0] && setSelectedSubject(batchDetails?.subjects[index+1]);
-      }
-    }
-  }, [topicList])
+  // useEffect(() => {
+  //   if(topicList){
+  //     if(topicList?.length<=0){
+  //       const index = batchDetails?.subjects.findIndex((subject) => subject.slug === selectSubjectSlug) || 0;
+  //       batchDetails?.subjects[0]?.slug && setSelectSubjectSlug(batchDetails?.subjects[index+1]?.slug);
+  //       batchDetails?.subjects[0] && setSelectedSubject(batchDetails?.subjects[index+1]);
+  //     }
+  //   }
+  // }, [topicList])
 
   const getChaptersData = async () => {
 

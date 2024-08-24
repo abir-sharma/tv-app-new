@@ -101,6 +101,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
     </View>
   );
 
+
   return (
     <View className='p-5'>
       {/* <Text style={styles.subjectText}>Physics</Text> */}
