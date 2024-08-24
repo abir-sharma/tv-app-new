@@ -1,4 +1,9 @@
 import { registerRootComponent } from 'expo';
+import * as Sentry from "@sentry/react-native";
+
+Sentry.init({
+  dsn: "https://0bf0a11f33a04e9eb156f83b04394bc3@glitchtip.betterpw.live/1",
+});
 
 import App from './App';
 
