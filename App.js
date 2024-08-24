@@ -30,6 +30,7 @@ import PendriveBatchDetails from "./screens/PendriveBatchDetails";
 import * as Updates from 'expo-updates';
 import sendMongoAnalytics from "./utils/sendMongoAnalytics";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Sentry from "@sentry/react-native";
 
 const Stack = createNativeStackNavigator();
 
@@ -54,9 +55,11 @@ export default function App() {
   }, []);
 
   async function onFetchUpdateAsync() {
+    Sentry.captureMessage('Checking for updates');
     try {
       const update = await Updates.checkForUpdateAsync();
       console.log('update', update);
+      Sentry.captureMessage('Update checked: ', update);
   
       if (update.isAvailable) {
         Alert.alert(
@@ -79,6 +82,7 @@ export default function App() {
         );
       }
     } catch (error) {
+      Sentry.captureException(error);
       console.error('Error fetching latest Expo update: ', error)
     }
   }

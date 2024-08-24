@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Images } from "../../images/images";
 import sendMongoAnalytics from "../../utils/sendMongoAnalytics";
 import { FileSystem } from "react-native-file-access";
+import * as Sentry from "@sentry/react-native";
 
 export default function Navbar() {
   const { isOnline, setLogs, setIsOnline, headers, setHeaders, setPENDRIVE_BASE_URL } = useGlobalContext();
@@ -38,6 +39,7 @@ export default function Navbar() {
       if (res?.data?.success) {
       }
     } catch (err: any) {
+      Sentry.captureException(err);
       setLogs((logs) => [
         ...logs,
         "Error in LOGOUT API 2( Navbar component):" +
@@ -120,6 +122,7 @@ export default function Navbar() {
                     }
                   })
                   .catch((error) => {
+                    Sentry.captureException(error);
                     console.error("Error reading /mnt/media_rw:", error);
                   });
               }} className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">Pendrive</Text>
@@ -239,6 +242,7 @@ export default function Navbar() {
             navigation.navigate("MobileControl");
             sendGoogleAnalytics("mobile_control_clicked", {});
             sendMongoAnalytics("mobile_control_clicked", {});
+            Sentry.captureMessage("Mobile Control clicked");
           }}
           className="flex-row justify-center overflow-hidden rounded-full items-center"
         >

@@ -17,6 +17,7 @@ import { Images } from "../../../images/images";
 import getYouTubeID from "get-youtube-id";
 import YoutubePlayer from "react-native-youtube-iframe";
 import sendMongoAnalytics from "../../../utils/sendMongoAnalytics";
+import * as Sentry from "@sentry/react-native";
 
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
@@ -169,6 +170,7 @@ export default function VideoPlayer(props: any) {
       if(!m3u8url) return;
       const res = await axios.get(m3u8url);
     } catch (err) {
+      Sentry.captureException(err);
     }
   };
 
