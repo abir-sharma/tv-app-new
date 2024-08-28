@@ -66,7 +66,7 @@ export default function App() {
         await Updates.reloadAsync();
         Sentry.captureMessage('Successfully Updated');
       }
-  
+       
 
         // Alert.alert(
         //   "Update Available",

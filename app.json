@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "PW AI-School",
-    "slug": "pw-tv-app-v2",
-    "version": "1.1.0",
+    "slug": "pw-tv-app-2",
+    "version": "1.0.0",
     "orientation": "landscape",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -40,7 +40,7 @@
     },
     "extra": {
       "eas": {
-        "projectId": "74f57a78-7057-434e-8173-22ac81e672fa"
+        "projectId": "7af1a3d2-6123-4a43-a58d-371841a31194"
       }
     },
     "plugins": [
@@ -69,7 +69,7 @@
     ],
     "owner": "physicswallah",
     "updates": {
-      "url": "https://u.expo.dev/74f57a78-7057-434e-8173-22ac81e672fa"
+      "url": "https://u.expo.dev/7af1a3d2-6123-4a43-a58d-371841a31194"
     }
   }
 }
