@@ -61,32 +61,32 @@ export default function App() {
       console.log('update', update);
       Sentry.captureMessage('Update checked: ', update);
       
-      if (update.isAvailable) {
-        await Updates.fetchUpdateAsync();
-        await Updates.reloadAsync();
-        Sentry.captureMessage('Successfully Updated');
-      }
+      // if (update.isAvailable) {
+      //   await Updates.fetchUpdateAsync();
+      //   await Updates.reloadAsync();
+      //   Sentry.captureMessage('Successfully Updated');
+      // }
        
-
-        // Alert.alert(
-        //   "Update Available",
-        //   "A new version of the app is available. Would you like to update now?",
-        //   [
-        //     {
-        //       text: "Not Now",
-        //       onPress: () => console.log("Update deferred"),
-        //       style: "cancel"
-        //     },
-        //     { 
-        //       text: "Update", 
-        //       onPress: async () => {
-        //         await Updates.fetchUpdateAsync();
-        //         await Updates.reloadAsync();
-        //       }
-        //     }
-        //   ]
-        // );
-      
+      if (update.isAvailable) {
+        Alert.alert(
+          "Update Available",
+          "A new version of the app is available. Would you like to update now?",
+          [
+            {
+              text: "Not Now",
+              onPress: () => console.log("Update deferred"),
+              style: "cancel"
+            },
+            { 
+              text: "Update", 
+              onPress: async () => {
+                await Updates.fetchUpdateAsync();
+                await Updates.reloadAsync();
+              }
+            }
+          ]
+        );
+      }
     } catch (error) {
       Sentry.captureException(error);
       console.error('Error fetching latest Expo update: ', error)
@@ -156,6 +156,7 @@ export default function App() {
       console.log('schoolData', schoolData);
     }
     init();
+    console.log('this is a test mesage 5.0')
   }, [])
 
   return (

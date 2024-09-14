@@ -73,7 +73,7 @@ export default function Navbar() {
           <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
             <View style={{ flex: 1 }}>
               <ScrollView className='bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[70] right-[20] z-[2]'>
-                <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">v1.0.1</Text></View>
+                <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">v1.0.2</Text></View>
                 <Seperator />
                 <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">{phone || "---"}</Text></View>
                 <Seperator />
