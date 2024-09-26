@@ -36,8 +36,8 @@ export const DppQuizResult = () => {
         accuracy: data?.yourPerformance?.accuracy,
     });
     sendMongoAnalytics("dpp_quiz_submitted", {
-        quizName: testData?.test?.name,
-        quizId: testData?.test?._id,
+        dppName: testData?.test?.name,
+        dppId: testData?.test?._id,
         batchName: selectedBatch?.name,
         subjectName: selectedSubject?.subject,
         correctQuestions: data?.yourPerformance?.correctQuestions,
