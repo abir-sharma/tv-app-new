@@ -90,7 +90,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             <View style={{ flex: 1 }}>
               <ScrollView className='bg-[#111111] border-white/20 border-[1px] max-h-[200] overflow-hidden w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
                 <FlatList
-                  data={batchDetails?.subjects?.slice(1)}
+                  data={batchDetails?.subjects}
                   renderItem={renderItem}
                   keyExtractor={(item) => item?._id}
                 />
