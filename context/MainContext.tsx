@@ -312,7 +312,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       // find the index of the currently selected Subject
       
       // console.log("res that caused error: ", res);
-      console.log('topics', res.data)
+      console.log('chapters ', res.data.paginate)
       setChapterPagination(res.data.paginate);
       
     }
@@ -324,13 +324,12 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const loadMoreChaptersData = async () => {
     try {
-      if(topicList && (chapterPagination.totalPages <= topicList.length)) return;
+      if(topicList && (chapterPagination.totalCount <= topicList.length)) return;
       const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentChapterPage+1}`, { headers });
       setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
       setCurrentChapterPage(currentChapterPage+1);
       // find the index of the currently selected Subject
       // console.log("res that caused error: ", res);
-      console.log('topics', res.data.paginate)
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
