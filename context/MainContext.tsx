@@ -35,6 +35,11 @@ type GlobalContextType = {
   setSelectedSubject: Dispatch<SetStateAction<Subject[] | null>>;
   selectedChapter: TopicType | null;
   setSelectedChapter: Dispatch<SetStateAction<TopicType | null>>;
+  getChaptersData: () => void;
+  chapterPagination: any;
+  currentChapterPage: number;
+  setCurrentChapterPage: Dispatch<SetStateAction<number>>;
+  loadMoreChaptersData: () => void;
   isOnline: boolean;
   setIsOnline: Dispatch<SetStateAction<boolean>>;
   showIpInput: boolean;
@@ -88,6 +93,7 @@ type GlobalContextType = {
   setSelectedMenu: Dispatch<SetStateAction<number>>;
   PENDRIVE_BASE_URL: string;
   setPENDRIVE_BASE_URL: Dispatch<SetStateAction<string>>;
+
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -113,6 +119,14 @@ const GlobalContext = createContext<GlobalContextType>({
   setSelectedSubject: () => { },
   selectedChapter: null,
   setSelectedChapter: () => { },
+
+  loadMoreChaptersData: () => { },
+  getChaptersData: () => { },
+  chapterPagination: null,
+  currentChapterPage: 1,
+  setCurrentChapterPage: () => { },
+
+
   isOnline: true,
   setIsOnline: () => { },
   showIpInput: true,
@@ -189,7 +203,9 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [batchDetails, setBatchDetails] = useState<BatchDetails | null>(null);
 
   const [topicList, setTopicList] = useState<TopicType[] | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [chapterPagination, setChapterPagination] = useState<any>(null);
+  const [currentChapterPage, setCurrentChapterPage] = useState<number>(1);
+
   const [isOnline, setIsOnline] = useState<boolean>(true);
   const [selectedDpp, setSelectedDpp] = useState<QuizItemType | null>(null);
   const [testData, setTestData] = useState<any>(null);
@@ -197,6 +213,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [selectedTestMapping, setSelectedTestMapping] = useState<any>(null);
 
   const [recentVideoLoad, setRecentVideoLoad] = useState<boolean>(false);
+
 
 
   const [directoryLevel, setDirectoryLevel] = useState<number>(0);
@@ -287,14 +304,16 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const getChaptersData = async () => {
 
+    setCurrentChapterPage(1);
     try {
-      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentPage}`, { headers });
+      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentChapterPage}`, { headers });
       setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
 
       // find the index of the currently selected Subject
       
       // console.log("res that caused error: ", res);
-
+      console.log('topics', res.data)
+      setChapterPagination(res.data.paginate);
       
     }
     catch (err: any) {
@@ -302,6 +321,22 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       console.error("error in chapter fetch:", err);
     }
   }
+
+  const loadMoreChaptersData = async () => {
+    try {
+      if(topicList && (chapterPagination.totalPages <= topicList.length)) return;
+      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentChapterPage+1}`, { headers });
+      setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
+      setCurrentChapterPage(currentChapterPage+1);
+      // find the index of the currently selected Subject
+      // console.log("res that caused error: ", res);
+      console.log('topics', res.data.paginate)
+    }
+    catch (err: any) {
+      setLogs((logs) => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
+      console.error("error in chapter fetch:", err);
+    }
+  } 
 
   useEffect(() => {
     getPaidBatches();
@@ -338,6 +373,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         selectedDpp, setSelectedDpp,
         selectedSubject, setSelectedSubject,
         selectedChapter, setSelectedChapter,
+        getChaptersData, chapterPagination, currentChapterPage, setCurrentChapterPage, loadMoreChaptersData,
         isOnline, setIsOnline,
         testData, setTestData,
         testSections, setTestSections,
