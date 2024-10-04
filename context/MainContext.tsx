@@ -306,7 +306,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
     setCurrentChapterPage(1);
     try {
-      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentChapterPage}`, { headers });
+      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=1`, { headers });
       setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
 
       // find the index of the currently selected Subject
