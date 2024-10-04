@@ -53,9 +53,10 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
     }} className=' overflow-hidden rounded-xl'
     
     onPress={() => {
+      console.log("video_opened _id", item.videoDetails._id);
       sendGoogleAnalytics("video_opened", {
         video_name: item?.videoDetails?.name,
-        video_id: item?._id,
+        video_id: item?.videoDetails?._id,
         batch_name: selectedBatch?.name,
         subject_name: selectedSubject?.subject,
         chapter_name: selectedChapter?.name,
@@ -63,7 +64,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
       });
       sendMongoAnalytics("video_opened", {
         videoName: item?.videoDetails?.name,
-        videoId: item?._id,
+        videoId: item?.videoDetails?._id,
         batchName: selectedBatch?.name,
         subjectName: selectedSubject?.subject,
         chapterName: selectedChapter?.name,
