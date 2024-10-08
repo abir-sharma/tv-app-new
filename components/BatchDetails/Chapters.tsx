@@ -6,7 +6,7 @@ import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 
 export default function Chapters() {
 
-  const { topicList, setSelectedChapter, selectedChapter } = useGlobalContext();
+  const { topicList, setSelectedChapter, selectedChapter, loadMoreChaptersData } = useGlobalContext();
 
   const sortedList = topicList?.sort((a:any, b:any) => {
     if (a.videos === 0 && b.videos !== 0) {
@@ -63,6 +63,7 @@ export default function Chapters() {
           renderItem={renderItem}
           keyExtractor={(item: TopicType) => item?._id}
           numColumns={1}
+          onEndReached={() => { loadMoreChaptersData() }}
         />
       </View>
     </View>
