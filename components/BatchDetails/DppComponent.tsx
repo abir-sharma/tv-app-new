@@ -49,13 +49,13 @@ export const DppComponent = ({ }: DPPPropType) => {
           dpp_name: item?.test?.name,
           dpp_id: item?.test?._id,
           batch_name: selectedBatch?.name,
-          subject_name: selectedBatch?.name,
+          subject_name: selectedSubject?.subject,
         });
         sendMongoAnalytics("dpp_quiz_opened", {
           dppName: item?.test?.name,
           dppId: item?.test?._id,
           batchName: selectedBatch?.name,
-          subjectName: selectedBatch?.name,
+          subjectName: selectedSubject?.subject,
           batchId: selectedBatch?._id,
         });
       }}>
