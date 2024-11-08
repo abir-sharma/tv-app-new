@@ -206,7 +206,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [chapterPagination, setChapterPagination] = useState<any>(null);
   const [currentChapterPage, setCurrentChapterPage] = useState<number>(1);
 
-  const [isOnline, setIsOnline] = useState<boolean>(true);
+  const [isOnline, setIsOnline] = useState<boolean>(false);
   const [selectedDpp, setSelectedDpp] = useState<QuizItemType | null>(null);
   const [testData, setTestData] = useState<any>(null);
   const [testSections, setTestSections] = useState<any>(null);

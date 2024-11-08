@@ -162,7 +162,7 @@ export default function App() {
   return (
     <Providers>
       <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="PendriveBatches">
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="BatchDetails" component={BatchDetails} options={{ headerShown: false }} />

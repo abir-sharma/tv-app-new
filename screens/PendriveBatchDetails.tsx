@@ -13,6 +13,7 @@ export default function PendriveBatchDetails({ navigation, route }: any) {
   const [showLoader, setshowLoader] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log("PendriveBatchDetails")
     setshowLoader(true);
     if (offlineLectures) {
       setshowLoader(false);
