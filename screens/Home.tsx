@@ -15,10 +15,6 @@ import axios from "axios";
 export default function Home({ navigation }: any) {
   const { setHeaders } = useGlobalContext();
 
-  useEffect(() =>
-      navigation.addListener("beforeRemove", (e: any) => {e.preventDefault()})
-  [navigation]);
-
   const handleLogin = async () => {
     const randu = uuidv4();
     AsyncStorage.getItem("token").then(async (res)=>{

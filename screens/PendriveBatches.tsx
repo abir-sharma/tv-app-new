@@ -7,20 +7,15 @@ import Navbar from '../components/Global/Navbar';
 import { Images } from '../images/images';
 import { useGlobalContext } from '../context/MainContext';
 import * as Sentry from "@sentry/react-native";
-import { v4 as uuidv4 } from 'uuid';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 type OfflineBatches = {
   name: string,
   thumbnail: string | null
 }
 
-type PendriveBatchesPropType = {
-  navigation: any
-}
-
-const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
+const PendriveBatches = () => {
+  const navigation = useNavigation()
   const [offlineBatches, setOfflineBatches] = useState<OfflineBatches[]>([]);
   const { setOfflineSubjects, setOfflineSelectedSubject, setOfflineChapters, setOfflineSelectedChapter, setOfflineLectures, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL, isOnline } = useGlobalContext();
 
@@ -37,7 +32,6 @@ const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
         });
       }
     })
-    console.log("batches", batches)
     setOfflineBatches(batches);
   }
 
@@ -159,7 +153,6 @@ const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
   }
 
   const detectPendriveSource = () => {
-    console.log("check pd")
     FileSystem.ls("/mnt/media_rw")
       .then(async (files) => {
         if (files.length > 0) {
@@ -196,80 +189,13 @@ const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
     getBatches();
   }, [PENDRIVE_BASE_URL])
 
-  const { setHeaders } = useGlobalContext();
-
-  useEffect(() =>
-      navigation.addListener("beforeRemove", (e: any) => {e.preventDefault()})
-  [navigation]);
-
-  const handleLogin = async () => {
-    const randu = uuidv4();
-    AsyncStorage.getItem("token").then(async (res)=>{
-      if (res) {
-        setHeaders({
-          Authorization: `Bearer ${res}`
-        })
-        try {
-          const headers = { 'Authorization': `Bearer ${await AsyncStorage.getItem("token")}`, 'randomId': randu }
-          const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", {}, { headers });
-        } catch (err: any) {
-          console.log("LOGGING HERE....", err.response.data.code);
-
-          if(err.response.data.code === 401){
-
-          const storedRefreshToken = await AsyncStorage.getItem("refreshToken");
-          if(storedRefreshToken) {
-            try{
-              console.log("resfresh token there...");
-            const response = await axios.post("https://api.penpencil.co/v3/oauth/refresh-token", 
-              {
-                client_id: "system-admin",
-                client_secret: "KjPXuAVfC5xbmgreETNMaL7z",
-                refresh_token: storedRefreshToken,
-              }
-            );
-            
-            console.log("ref res:  ",response.data.data);
-            await AsyncStorage.setItem("token", response.data.data.access_token);
-            await AsyncStorage.setItem("refreshToken", response.data.data.refresh_token);
-
-            await handleLogin();
-          }catch(err){
-            // @ts-ignore
-            console.log("err: ", err);
-            await AsyncStorage.removeItem("token");
-            await AsyncStorage.removeItem("refreshToken");
-            navigation?.navigate('Login')
-          }
-          }
-          else{
-            await AsyncStorage.removeItem("token");
-            navigation?.navigate('Login')
-          }
-
-
-        }
-          navigation?.navigate('Home')
-        }
-      }
-      else {
-        navigation?.navigate('Login')
-      }
-      
-    })
-  }
-
-  useEffect(() => {
-    handleLogin();
-  }, []);
-
   return (
     <LinearGradient
       {...fromCSS(`linear-gradient(276.29deg, #2D3A41 6.47%, #2D3A41 47.75%, #000000 100%)`)}
       className=" flex-1">
-      {/* <Navbar />
+      <Navbar />
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
-        {offlineBatches.length ? offlineBatches.map((batch: any, index: number) => (
+        {offlineBatches.map((batch: any, index: number) => (
           <Pressable
             key={index}
             hasTVPreferredFocus={true}
@@ -281,6 +207,7 @@ const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
             }}
             onPress={() => {
               getSubjects(PENDRIVE_BASE_URL + '/' + batch?.name + '/');
+              // @ts-ignore
               navigation.navigate('PendriveBatchDetails', {
                 batch: batch
               });
@@ -309,8 +236,8 @@ const PendriveBatches = ({ navigation }: PendriveBatchesPropType) => {
               </View>
             </LinearGradient>
           </Pressable>
-        )) : null}
-      </ScrollView> */}
+        ))}
+      </ScrollView>
     </LinearGradient>
   );
 }
