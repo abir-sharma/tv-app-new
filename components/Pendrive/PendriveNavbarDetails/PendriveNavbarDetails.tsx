@@ -167,7 +167,7 @@ export default function PendriveNavbarDetails() {
         }}
         onPress={() => {
           // @ts-expect-error
-          navigation.navigate('Home');
+          navigation.navigate('PendriveBatches');
           setOfflineSelectedBatch(-1);
         }}
         className='flex-row justify-center items-center rounded-xl overflow-hidden px-2'>

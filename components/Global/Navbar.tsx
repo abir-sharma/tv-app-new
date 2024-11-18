@@ -148,7 +148,7 @@ export default function Navbar() {
           height={10}
         />
       </Pressable>
-      <View className="flex flex-row gap-2 absolute top-5 left-1/2 -translate-x-32">
+      {/* <View className="flex flex-row gap-2 absolute top-5 left-1/2 -translate-x-32">
         <Pressable
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
@@ -167,25 +167,6 @@ export default function Navbar() {
           >
           <Text className={`text-white ${isOnline && "font-bold "}`}>Online Batches</Text>
         </Pressable>
-        {/* <Pressable
-          android_ripple={{
-            color: "rgba(255,255,255,0.4)",
-            borderless: false,
-            radius: 1000,
-            foreground: true,
-          }}
-          onPress={async () => {
-            setIsOnline(false);
-            sendGoogleAnalytics("offline_mode_clicked", {});
-            sendMongoAnalytics("offline_mode_clicked", {});
-            // @ts-expect-error
-            navigation.navigate("OfflineHome");
-          }}
-          // className="w-36 h-10 rounded-xl items-center justify-center overflow-hidden"
-          className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${!isOnline && "bg-[#414347]"} `}
-        >
-          <Text className={`text-white ${!isOnline && " font-bold "}`}>Offline Batches</Text>
-        </Pressable> */}
         <Pressable
           android_ripple={{
             color: "rgba(255,255,255,0.4)",
@@ -209,10 +190,10 @@ export default function Navbar() {
         >
           <Text className={`text-white ${!isOnline && " font-bold "}`}>Offline Batches</Text>
         </Pressable>
-      </View>
+      </View> */}
       <View className="flex flex-row gap-2 items-center">
         {/* offline source dropdown */}
-        { !isOnline &&
+        {/* { !isOnline &&
           <Pressable
             android_ripple={{
               color: "rgba(255,255,255,0.5)",
@@ -227,10 +208,10 @@ export default function Navbar() {
               Offline Source
             </Text>
           </Pressable>
-        }       
+        }        */}
 
         {/* mobile control button */}
-        <Pressable
+        {/* <Pressable
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
             borderless: false,
@@ -249,7 +230,7 @@ export default function Navbar() {
           <Text className="bg-white/10 overflow-hidden rounded-xm text-white px-5 py-3">
             Mobile Control
           </Text>
-        </Pressable>
+        </Pressable> */}
 
         {/* profile picture (dropdown) */}
         <Pressable
