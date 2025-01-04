@@ -32,6 +32,7 @@ const PendriveBatches = () => {
         });
       }
     })
+    batches.sort((a, b) => a?.name?.localeCompare(b?.name));
     setOfflineBatches(batches);
   }
 
@@ -153,32 +154,35 @@ const PendriveBatches = () => {
   }
 
   const detectPendriveSource = () => {
-    FileSystem.ls("/mnt/media_rw")
-      .then(async (files) => {
-        if (files.length > 0) {
-          let batchesPd: string = '';
-          for (const pd of files) {
-            const ls = await FileSystem.ls(`/mnt/media_rw/${pd}`);
-            if (ls.includes("Batches")) {
-              batchesPd = pd;
-              break;
-            }
-          }
-          if (batchesPd === '') {
-            ToastAndroid.show("No Batches folder found in any pendrive", ToastAndroid.SHORT);
-            return;
-          }
-          const url = `/mnt/media_rw/${batchesPd}/Batches`;
-          setPENDRIVE_BASE_URL(url);
-          console.log(`PENDRIVE_BASE_URL set to: ${url}`);
-        } else {
-          ToastAndroid.show("No pendrive detected", ToastAndroid.SHORT);
-        }
-      })
-      .catch((error) => {
-        Sentry.captureException(error);
-        console.error("Error reading /mnt/media_rw:", error);
-      });
+    const url = `/sdcard/Batches`;
+    setPENDRIVE_BASE_URL(url);
+    // FileSystem.ls("/mnt/media_rw")
+    //   .then(async (files) => {
+    //     if (files.length > 0) {
+    //       let batchesPd: string = '';
+    //       for (const pd of files) {
+    //         const ls = await FileSystem.ls(`/mnt/media_rw/${pd}`);
+    //         if (ls.includes("Batches")) {
+    //           batchesPd = pd;
+    //           break;
+    //         }
+    //       }
+    //       if (batchesPd === '') {
+    //         ToastAndroid.show("No Batches folder found in any pendrive", ToastAndroid.SHORT);
+    //         return;
+    //       }
+    //       // const url = `/mnt/media_rw/${batchesPd}/Batches`;
+    //       const url = `/sdcard/Batches`;
+    //       setPENDRIVE_BASE_URL(url);
+    //       console.log(`PENDRIVE_BASE_URL set to: ${url}`);
+    //     } else {
+    //       ToastAndroid.show("No pendrive detected", ToastAndroid.SHORT);
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     Sentry.captureException(error);
+    //     console.error("Error reading /mnt/media_rw:", error);
+    //   });
   }
 
   useEffect(() => {
@@ -194,7 +198,7 @@ const PendriveBatches = () => {
       {...fromCSS(`linear-gradient(276.29deg, #2D3A41 6.47%, #2D3A41 47.75%, #000000 100%)`)}
       className=" flex-1">
       <Navbar />
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4 mx-2'>
         {offlineBatches.map((batch: any, index: number) => (
           <Pressable
             key={index}
