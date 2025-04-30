@@ -117,7 +117,7 @@ export default function Navbar() {
                       setOfflineSourceDropdown(false);
                       console.log(`PENDRIVE_BASE_URL set to: ${url}`);
                     } else {
-                      ToastAndroid.show("No pendrive detected", ToastAndroid.SHORT);
+                      // ToastAndroid.show("No pendrive detected", ToastAndroid.SHORT);
                       setOfflineSourceDropdown(false);
                     }
                   })

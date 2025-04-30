@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Pressable, ScrollView, StyleSheet, Text, View, Image, ToastAndroid } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View, Image, ToastAndroid, Button } from 'react-native';
 import { FileSystem } from 'react-native-file-access';
 import Navbar from '../components/Global/Navbar';
 import { Images } from '../images/images';
 import { useGlobalContext } from '../context/MainContext';
 import * as Sentry from "@sentry/react-native";
 import { useNavigation } from '@react-navigation/native';
+import * as ExpoFS from 'expo-file-system';
+import RNFS from 'react-native-fs';
 
 type OfflineBatches = {
   name: string,
@@ -153,36 +155,88 @@ const PendriveBatches = () => {
     return flag;
   }
 
-  const detectPendriveSource = () => {
-    const url = `/sdcard/Batches`;
-    setPENDRIVE_BASE_URL(url);
-    // FileSystem.ls("/mnt/media_rw")
-    //   .then(async (files) => {
-    //     if (files.length > 0) {
-    //       let batchesPd: string = '';
-    //       for (const pd of files) {
-    //         const ls = await FileSystem.ls(`/mnt/media_rw/${pd}`);
-    //         if (ls.includes("Batches")) {
-    //           batchesPd = pd;
-    //           break;
-    //         }
-    //       }
-    //       if (batchesPd === '') {
-    //         ToastAndroid.show("No Batches folder found in any pendrive", ToastAndroid.SHORT);
-    //         return;
-    //       }
-    //       // const url = `/mnt/media_rw/${batchesPd}/Batches`;
-    //       const url = `/sdcard/Batches`;
-    //       setPENDRIVE_BASE_URL(url);
-    //       console.log(`PENDRIVE_BASE_URL set to: ${url}`);
-    //     } else {
-    //       ToastAndroid.show("No pendrive detected", ToastAndroid.SHORT);
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     Sentry.captureException(error);
-    //     console.error("Error reading /mnt/media_rw:", error);
-    //   });
+  // const detectPendriveSource = async () => {
+  //   FileSystem.ls("/mnt/media_rw")
+  //     .then(async (files) => {
+  //       if (files.length > 0) {
+  //         let batchesPd: string = '';
+  //         for (const pd of files) {
+  //           const ls = await FileSystem.ls(/mnt/media_rw/${pd});
+  //           if (ls.includes("Batches")) {
+  //             batchesPd = pd;
+  //             break;
+  //           }
+  //         }
+  //         if (batchesPd === '') {
+  //           ToastAndroid.show("No Batches folder found in any pendrive", ToastAndroid.SHORT);
+  //           return;
+  //         }
+  //         const url = /mnt/media_rw/${batchesPd}/Batches;
+  //         // const url = /sdcard/Batches;
+  //         setPENDRIVE_BASE_URL(url);
+  //         console.log(PENDRIVE_BASE_URL set to: ${url});
+  //       } else {
+  //         ToastAndroid.show("No pendrive detected", ToastAndroid.SHORT);
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       Sentry.captureException(error);
+  //       console.error("Error reading /mnt/media_rw:", error);
+  //     });
+  // }
+
+
+  const detectPendriveSource = async () => {
+    // Solution if the pendrive is listed under /storage
+    const externalDirs = await RNFS.getAllExternalFilesDirs();
+    for (const dir of externalDirs) {
+      const externalDirPath = dir.split('/').slice(0, 3).join('/');
+      const batchesFolderPath = `${externalDirPath}/Batches`;
+      const exists = await RNFS.exists(batchesFolderPath);
+      if (exists) {
+        setPENDRIVE_BASE_URL(batchesFolderPath);
+        console.log(`PENDRIVE_BASE_URL set to: ${batchesFolderPath}`);
+        return;
+      }
+    }
+
+    // Solution if the pendrive is listed under /mnt/media_rw
+    const mediaRW = await RNFS.readDir("/mnt/media_rw");
+    if (mediaRW.length === 0) {
+      ToastAndroid.show("No pendrive detected", ToastAndroid.SHORT);
+      return;
+    } else {
+      const filesInsideMediaRW = await RNFS.readDir("/mnt/media_rw");
+      for (const file of filesInsideMediaRW) {
+        const batchesFolderPath = `${file.path}/Batches`;
+        const exists = await RNFS.exists(batchesFolderPath);
+        if (exists) {
+          setPENDRIVE_BASE_URL(batchesFolderPath);
+          console.log(`PENDRIVE_BASE_URL set to: ${batchesFolderPath}`);
+          return;
+        }
+      }
+    }
+
+    // const files = await RNFS.readDir("/mnt/media_rw/3218-08B4");
+    // // console.log('files', files);
+
+    // let batchesFolderPath: string = '';
+    // for (const file of files) {
+    //   console.log('file', file?.name);
+    //   if (file?.name === 'Batches') {
+    //     batchesFolderPath = file?.path;
+    //     break;
+    //   }
+    // }
+    // if (batchesFolderPath === '') {
+    //   ToastAndroid.show("No Batches folder found in any pendrive", ToastAndroid.SHORT);
+    //   return;
+    // } else {
+    //   const url = batchesFolderPath;
+    //   setPENDRIVE_BASE_URL(url);
+    //   console.log(`PENDRIVE_BASE_URL set to: ${url}`);
+    // }
   }
 
   useEffect(() => {
@@ -197,6 +251,12 @@ const PendriveBatches = () => {
     <LinearGradient
       {...fromCSS(`linear-gradient(276.29deg, #2D3A41 6.47%, #2D3A41 47.75%, #000000 100%)`)}
       className=" flex-1">
+        {/* <Button title='play video' onPress={() => {
+          // @ts-expect-error
+          navigation.navigate('MP4Player', {
+            videoUrl: '/storage/sda1/test.mp4'
+          })
+        }} /> */}
       <Navbar />
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4 mx-2'>
         {offlineBatches.map((batch: any, index: number) => (
