@@ -141,7 +141,7 @@ export default function Login({ navigation }: any) {
         }).catch((err) => {
           console.error(err.response.data);
         });
-        navigation.navigate('Intro');
+        navigation.navigate('PendriveBatches');
       }
     }
     catch (err) {

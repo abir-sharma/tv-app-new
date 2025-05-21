@@ -3,9 +3,11 @@ import { View, Text, Image, FlatList, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
-import { Images } from '../../images/images';
+import { useGlobalContext } from '../../context/MainContext';
+import sendOfflineAnalytics from '../../utils/sendOfflineAnalytics';
 
 export const PendriveVideoComponent = ({ videoList }: OfflineVideoComponentPropType) => {
+  const { selectedSubject, selectedChapter, selectedClassName, selectedMenu } = useGlobalContext();
 
   const navigation = useNavigation();
 
@@ -21,6 +23,16 @@ export const PendriveVideoComponent = ({ videoList }: OfflineVideoComponentPropT
       }}
       hasTVPreferredFocus
       onPress={() => {
+        console.log('PendriveVideoComponent.tsx', item);
+        const itemPath = item?.path;
+        sendOfflineAnalytics("video_opened", {
+          videoName: item?.name,
+          // videoId: String(item?.id),
+          subjectName: itemPath?.split('/')[5],
+          chapterName: itemPath?.split('/')[6],
+          isSolutionVideo: selectedMenu === 3 ? true : false,
+          className: selectedClassName,
+        });
         console.log('PendriveVideoComponent.tsx', item);
         //@ts-expect-error
         navigation.navigate('MP4Player', { videoUrl: item?.path });

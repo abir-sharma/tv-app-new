@@ -93,7 +93,8 @@ type GlobalContextType = {
   setSelectedMenu: Dispatch<SetStateAction<number>>;
   PENDRIVE_BASE_URL: string;
   setPENDRIVE_BASE_URL: Dispatch<SetStateAction<string>>;
-
+  selectedClassName: string;
+  setSelectedClassName: Dispatch<SetStateAction<string>>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -180,6 +181,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setSelectedMenu: () => { },
   PENDRIVE_BASE_URL: '/storage/emulated/0/Download/Batches',
   setPENDRIVE_BASE_URL: () => { },
+  selectedClassName: "",
+  setSelectedClassName: () => { },
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
@@ -236,6 +239,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [headers, setHeaders] = useState<any>(null)
   const [messageFromRemote, setMessageFromRemote] = useState<string>("");
   const [selectedMenu, setSelectedMenu] = useState<number>(0);
+  const [selectedClassName, setSelectedClassName] = useState<string>("");
 
   const [PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL] = useState<string>('/storage/emulated/0/Download/Batches');
 
@@ -398,7 +402,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         messageFromRemote, setMessageFromRemote,
         fetchDetails, setFetchDetails, fetchDetailTrigger,
         selectedMenu, setSelectedMenu,
-        PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL
+        PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL,
+        selectedClassName, setSelectedClassName,
       } as GlobalContextType}>
       {children}
     </GlobalContext.Provider>

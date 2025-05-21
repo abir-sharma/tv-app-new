@@ -10,6 +10,7 @@ import * as Sentry from "@sentry/react-native";
 import { useNavigation } from '@react-navigation/native';
 import * as ExpoFS from 'expo-file-system';
 import RNFS from 'react-native-fs';
+import sendOfflineAnalytics from '../utils/sendOfflineAnalytics';
 
 type OfflineBatches = {
   name: string,
@@ -19,7 +20,7 @@ type OfflineBatches = {
 const PendriveBatches = () => {
   const navigation = useNavigation()
   const [offlineBatches, setOfflineBatches] = useState<OfflineBatches[]>([]);
-  const { setOfflineSubjects, setOfflineSelectedSubject, setOfflineChapters, setOfflineSelectedChapter, setOfflineLectures, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL, isOnline } = useGlobalContext();
+  const { setOfflineSubjects, setOfflineSelectedSubject, setOfflineChapters, setOfflineSelectedChapter, setOfflineLectures, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL, isOnline, setSelectedClassName } = useGlobalContext();
 
   const getBatches = async () => {
     const listing = await FileSystem.ls(PENDRIVE_BASE_URL);
@@ -270,6 +271,10 @@ const PendriveBatches = () => {
               foreground: true
             }}
             onPress={() => {
+              setSelectedClassName(batch?.name);
+              sendOfflineAnalytics("batch_opened", {
+                className: batch?.name,
+              });
               getSubjects(PENDRIVE_BASE_URL + '/' + batch?.name + '/');
               // @ts-ignore
               navigation.navigate('PendriveBatchDetails', {

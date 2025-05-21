@@ -4,8 +4,11 @@ import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import { Images } from '../../images/images';
+import sendOfflineAnalytics from '../../utils/sendOfflineAnalytics';
+import { useGlobalContext } from '../../context/MainContext';
 
 export const PendriveNoteComponent = ({ noteList }: OfflineNoteComponentPropType) => {
+  const { selectedBatch, selectedSubject, selectedChapter, selectedClassName, selectedMenu } = useGlobalContext();
 
   const navigation = useNavigation();
 
@@ -20,6 +23,16 @@ export const PendriveNoteComponent = ({ noteList }: OfflineNoteComponentPropType
         foreground: true
       }}
       hasTVPreferredFocus onPress={() => {
+        console.log('PendriveNoteComponent.tsx', item);
+        const itemPath = item?.path;
+        sendOfflineAnalytics("note_opened", {
+            noteName: item?.name,
+            // noteId: String(item?.id),
+            subjectName: itemPath?.split('/')[7],
+            chapterName: itemPath?.split('/')[8],
+            isDppPdf: selectedMenu === 3 ? true : false,
+            className: selectedClassName,
+          });
         // @ts-expect-error
         navigation.navigate('PDFViewer', { pdfUrl: item?.path });
       }}>
