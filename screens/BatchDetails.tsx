@@ -9,6 +9,7 @@ import axios from 'axios';
 import { VideoComponent } from '../components/BatchDetails/VideoComponent';
 import { NoteComponent } from '../components/BatchDetails/NoteComponent';
 import { DppComponent } from '../components/BatchDetails/DppComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Details({ navigation }: any) {
   const { fetchDetails, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, selectedMenu, setSelectedMenu, getChaptersData } = useGlobalContext();
@@ -39,10 +40,15 @@ export default function Details({ navigation }: any) {
   }, [batchDetails, selectSubjectSlug, selectedSubject, selectedBatch])
 
   const getDetails = async () => {
+    const header = {
+      Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      organizationId: "5eb393ee95fab7468a79d189"
+    };
     setShowLoader(true);
+    // setShowLoader(false);
     try {
-      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/contents?page=${currentPage}&contentType=${contentType}&tag=${selectedChapter?.slug}`, { headers });
-      const resDpp = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, { headers });
+      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/contents?page=${currentPage}&contentType=${contentType}&tag=${selectedChapter?.slug}`, { headers: header });
+      const resDpp = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, { headers: header });
       if (res) {
         setShowLoader(false);
       }
@@ -82,7 +88,6 @@ export default function Details({ navigation }: any) {
 
   useEffect(() => {
     getDetails();
-    console.log("-->getDetails called");
   }, [selectedChapter, currentPage, selectedMenu, fetchDetails])
 
   // useEffect(()=>{

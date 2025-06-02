@@ -243,94 +243,118 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const [PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL] = useState<string>('/storage/emulated/0/Download/Batches');
 
-  const getPaidBatches = async () => {
-    try {
-      const header = {
-        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-        organizationId: "5eb393ee95fab7468a79d189"
-      }
-      const res = await axios.get("https://api.penpencil.co/v3/batches/my-batches?mode=1&page=1&limit=50", { headers: header });
-      setSubscribedBatches(res?.data?.data);
-      setSelectedBatch(res?.data?.data[0]);
-      setSelectSubjectSlug(res?.data?.data[0]?.subjects[0]?.slug);
-      setSelectedSubject(res?.data?.data[0]?.subjects[0]);
+  const getPaidBatches = () => {
+  const header = {
+    Authorization: `Bearer ${AsyncStorage.getItem("token").then(token => token)}`,
+    organizationId: "5eb393ee95fab7468a79d189"
+  };
 
-      getChaptersData();
-    }
-    catch (err: any) {
-      setLogs((logs) => [...logs, "Error in BATCHES API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
-      console.error("Error in BATCHES API(MAIN CONTEXT): " + JSON.stringify(err?.response?.data?.message));
-    }
-  }
+  AsyncStorage.getItem("token").then(token => {
+    header.Authorization = `Bearer ${token}`;
+    axios
+      .get("https://api.penpencil.co/v3/batches/my-batches?mode=1&page=1&limit=50", { headers: header })
+      .then(res => {
+        setSubscribedBatches(res?.data?.data);
+        setSelectedBatch(res?.data?.data[0]);
+        setSelectSubjectSlug(res?.data?.data[0]?.subjects[0]?.slug);
+        setSelectedSubject(res?.data?.data[0]?.subjects[0]);
 
-  const getPaidBatchesWithDetails = async () => {
-    try {
-      const header = {
-        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-        organizationId: "5eb393ee95fab7468a79d189"
-      }
-      const res = await axios.get("https://api.penpencil.co/v2/orders/myPurchaseOrders?page=1&limit=50&status=ALL", { headers: header });
-      setOrders(res?.data?.data?.data);
-    }
-    catch (err: any) {
-      console.error("Err:", err);
-    }
-  }
+        getChaptersData();
+      })
+      .catch(err => {
+        setLogs(logs => [...logs, "Error in BATCHES API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
+        console.error("Error in BATCHES API(MAIN CONTEXT): " + JSON.stringify(err?.response?.data?.message));
+      });
+  });
+};
 
-  const getBatchDetails = async () => {
-    const header = {
-      Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-      organizationId: "5eb393ee95fab7468a79d189"
-    }
-    try {
-      const res = await axios.get(`https://api.penpencil.co/v3/batches/${selectedBatch?._id}/details`, { headers: header });
-      setBatchDetails(res?.data?.data)
+const getPaidBatchesWithDetails = () => {
+  const header = {
+    Authorization: `Bearer ${AsyncStorage.getItem("token").then(token => token)}`,
+    organizationId: "5eb393ee95fab7468a79d189"
+  };
 
-      batchDetails && setSelectedSubject(batchDetails?.subjects ? batchDetails?.subjects[0] : null);
-    }
-    catch (err: any) {
-      setLogs((logs) => [...logs, "Error in BATCH DETAIL API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
-      console.error("err:", err);
-    }
-  }
+  AsyncStorage.getItem("token").then(token => {
+    header.Authorization = `Bearer ${token}`;
+    axios
+      .get("https://api.penpencil.co/v2/orders/myPurchaseOrders?page=1&limit=50&status=ALL", { headers: header })
+      .then(res => {
+        setOrders(res?.data?.data?.data);
+      })
+      .catch(err => {
+        console.error("Err:", err);
+      });
+  });
+};
 
-  const getChaptersData = async () => {
-    const header = {
-      Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-      organizationId: "5eb393ee95fab7468a79d189"
-    }
-    setCurrentChapterPage(1);
-    try {
-      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=1`, { headers: header });
-      setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
+const getBatchDetails = () => {
+  const header = {
+    Authorization: `Bearer ${AsyncStorage.getItem("token").then(token => token)}`,
+    organizationId: "5eb393ee95fab7468a79d189"
+  };
 
-      setChapterPagination(res.data.paginate);
-      
-    }
-    catch (err: any) {
-      setLogs((logs) => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
-      console.error("error in chapter fetch:", err);
-    }
-  }
+  AsyncStorage.getItem("token").then(token => {
+    header.Authorization = `Bearer ${token}`;
+    axios
+      .get(`https://api.penpencil.co/v3/batches/${selectedBatch?._id}/details`, { headers: header })
+      .then(res => {
+        setBatchDetails(res?.data?.data);
+        batchDetails && setSelectedSubject(batchDetails?.subjects ? batchDetails?.subjects[0] : null);
+      })
+      .catch(err => {
+        setLogs(logs => [...logs, "Error in BATCH DETAIL API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
+        console.error("error at getBatchDetails:", err);
+      });
+  });
+};
 
-  const loadMoreChaptersData = async () => {
-    const header = {
-      Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-      organizationId: "5eb393ee95fab7468a79d189"
-    }
-    try {
-      if(topicList && (chapterPagination.totalCount <= topicList.length)) return;
-      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentChapterPage+1}`, { headers: header });
-      setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
-      setCurrentChapterPage(currentChapterPage+1);
-      // find the index of the currently selected Subject
-      // console.log("res that caused error: ", res);
-    }
-    catch (err: any) {
-      setLogs((logs) => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
-      console.error("error in chapter fetch:", err);
-    }
-  } 
+const getChaptersData = () => {
+  const header = {
+    Authorization: `Bearer ${AsyncStorage.getItem("token").then(token => token)}`,
+    organizationId: "5eb393ee95fab7468a79d189"
+  };
+
+  setCurrentChapterPage(1);
+
+  AsyncStorage.getItem("token").then(token => {
+    header.Authorization = `Bearer ${token}`;
+    axios
+      .get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=1`, { headers: header })
+      .then(res => {
+        console.log("chapters data:", res.data);
+        setTopicList(prev => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
+        setChapterPagination(res.data.paginate);
+      })
+      .catch(err => {
+        setLogs(logs => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
+        console.error("error in chapter fetch:", err);
+      });
+  });
+};
+
+const loadMoreChaptersData = () => {
+  const header = {
+    Authorization: `Bearer ${AsyncStorage.getItem("token").then(token => token)}`,
+    organizationId: "5eb393ee95fab7468a79d189"
+  };
+
+  if (topicList && chapterPagination.totalCount <= topicList.length) return;
+
+  AsyncStorage.getItem("token").then(token => {
+    header.Authorization = `Bearer ${token}`;
+    axios
+      .get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentChapterPage + 1}`, { headers: header })
+      .then(res => {
+        setTopicList(prev => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
+        setCurrentChapterPage(currentChapterPage + 1);
+      })
+      .catch(err => {
+        setLogs(logs => [...logs, "Error in CHAPTER API(MAIN CONTEXT):" + JSON.stringify(err.response)]);
+        console.error("error in chapter fetch:", err);
+      });
+  });
+};
+
 
   useEffect(() => {
     getPaidBatches();
