@@ -53,7 +53,6 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
     }} className=' overflow-hidden rounded-xl'
     
     onPress={() => {
-      console.log("video_opened _id", item.videoDetails._id);
       sendGoogleAnalytics("video_opened", {
         video_name: item?.videoDetails?.name,
         video_id: item?.videoDetails?._id,

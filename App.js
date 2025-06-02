@@ -58,7 +58,7 @@ export default function App() {
     Sentry.captureMessage('Checking for updates');
     try {
       const update = await Updates.checkForUpdateAsync();
-      console.log('update', update);
+      // console.log('update', update);
       Sentry.captureMessage('Update checked: ', update);
       
       // if (update.isAvailable) {
@@ -153,10 +153,9 @@ export default function App() {
     onFetchUpdateAsync()
     const init = async () => {
       const schoolData = await AsyncStorage.getItem('schoolData');
-      console.log('schoolData', schoolData);
+      // console.log('schoolData', schoolData);
     }
     init();
-    console.log('this is a test mesage 5.0')
   }, [])
 
   return (

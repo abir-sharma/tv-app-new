@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 import { useState } from 'react';
-import { Image, Text, Pressable, View, Modal, FlatList } from 'react-native';
+import { Image, Text, Pressable, View, FlatList, Modal } from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
 import styles from './OfflineNavbarDetails.style'
 import Entypo from '@expo/vector-icons/Entypo';

@@ -148,7 +148,7 @@ export default function Navbar() {
           height={10}
         />
       </Pressable>
-      {/* <View className="flex flex-row gap-2 absolute top-5 left-1/2 -translate-x-32">
+      <View className="flex flex-row gap-2 absolute top-5 left-1/2 -translate-x-32">
         <Pressable
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
@@ -190,7 +190,7 @@ export default function Navbar() {
         >
           <Text className={`text-white ${!isOnline && " font-bold "}`}>Offline Batches</Text>
         </Pressable>
-      </View> */}
+      </View>
       <View className="flex flex-row gap-2 items-center">
         {/* offline source dropdown */}
         {/* { !isOnline &&

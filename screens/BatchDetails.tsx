@@ -11,7 +11,7 @@ import { NoteComponent } from '../components/BatchDetails/NoteComponent';
 import { DppComponent } from '../components/BatchDetails/DppComponent';
 
 export default function Details({ navigation }: any) {
-  const { fetchDetails, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, selectedMenu, setSelectedMenu } = useGlobalContext();
+  const { fetchDetails, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, selectedMenu, setSelectedMenu, getChaptersData } = useGlobalContext();
  
   const [contentType, setContentType] = useState<string>('videos');
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -82,7 +82,7 @@ export default function Details({ navigation }: any) {
 
   useEffect(() => {
     getDetails();
-    console.log("getDetails called");
+    console.log("-->getDetails called");
   }, [selectedChapter, currentPage, selectedMenu, fetchDetails])
 
   // useEffect(()=>{

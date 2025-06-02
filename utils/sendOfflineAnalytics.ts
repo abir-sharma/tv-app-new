@@ -70,17 +70,17 @@ const sendOfflineAnalytics = async (eventName: string, data: EventData) => {
     try {
       // Send the current event
       const res = await axios.post("https://tv-app-analytics-backend.betterpw.live/v1/events/store", eventPayload);
-      console.log("Analytics sent successfully:", eventName, createdAt);
+      // console.log("Analytics sent successfully:", eventName, createdAt);
       
       // Try to send any stored offline events
       await sendStoredOfflineEvents();
     } catch (error: any) {
-      console.error("Error sending analytics: ", error?.response?.data || error.message);
+      // console.error("Error sending analytics: ", error?.response?.data || error.message);
     }
   } else {
     // Store the event for later when offline
     await storeOfflineEvent(eventPayload);
-    console.log("Stored offline event for later:", eventName);
+    // console.log("Stored offline event for later:", eventName);
   }
 };
 
@@ -107,13 +107,11 @@ const sendStoredOfflineEvents = async () => {
     
     if (storedEvents) {
       const events = JSON.parse(storedEvents);
-      console.log(`Attempting to send ${events.length} stored offline analytics events`);
       
       // Try to send each event
       for (const event of events) {
         try {
           await axios.post("https://tv-app-analytics-backend.betterpw.live/v1/events/store", event);
-          console.log("Successfully sent stored event:", event.name, event.createdAt);
         } catch (error: any) {
           console.error("Failed to send stored event:", error?.response?.data || error.message);
           // If we fail, stop the process and keep remaining events for next attempt
@@ -123,7 +121,6 @@ const sendStoredOfflineEvents = async () => {
       
       // If all events were sent successfully, clear the storage
       await AsyncStorage.removeItem(OFFLINE_EVENTS_KEY);
-      console.log("All stored offline events sent successfully");
     }
   } catch (error) {
     console.error('Error processing stored offline events:', error);

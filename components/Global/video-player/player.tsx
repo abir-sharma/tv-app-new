@@ -371,13 +371,6 @@ export default function VideoPlayer(props: any) {
     };
   }, [isPlaying]);
 
-  useEffect(()=>{
-    console.log("playingVideo");
-    if(props.scheduleDetails){
-      console.log("videooo---:", props.scheduleDetails);
-    }
-  },[props.lectureDetails])
-
   return (
     <View
       onTouchStart={onTouchStart}
@@ -415,7 +408,6 @@ export default function VideoPlayer(props: any) {
         }}
         onPress={() => {
           navigation.goBack();
-          console.log("video_closed _id", props?.lectureDetails?._id);
           sendMongoAnalytics("video_closed", {
             videoName: props?.lectureDetails?.name,
             videoId: props?.lectureDetails?._id,

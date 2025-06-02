@@ -195,7 +195,7 @@ export default function PendriveNavbarDetails() {
         </Pressable>
         </View>
 
-        <Modal
+        {/* <Modal
           transparent={true}
           animationType="fade"
           visible={isDropdownVisible}
@@ -211,7 +211,36 @@ export default function PendriveNavbarDetails() {
               </View>
             </View>
           </Pressable>
+        </Modal> */}
+        <Modal
+          transparent={true}
+          animationType="fade"
+          visible={isDropdownVisible}
+          onRequestClose={() => setIsDropdownVisible(false)}
+        >
+          {/* Fullscreen backdrop that closes the modal on press */}
+          <Pressable
+            style={{ flex: 1 }}
+            onPress={() => setIsDropdownVisible(false)}
+          >
+            {/* Empty view just to satisfy Pressable children */}
+            <View style={{ flex: 1 }} />
+          </Pressable>
+
+          {/* Dropdown on top of the backdrop */}
+          <View
+            className='bg-[#444444] max-h-[200] overflow-hidden w-[20%] rounded-lg absolute top-[70] left-[130] z-[2]'
+          >
+            {offlineSubjects && (
+              <FlatList
+                data={offlineSubjects}
+                renderItem={renderItem}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            )}
+          </View>
         </Modal>
+
       </View>
 
       <View className=' rounded-xl flex-row gap-x-5 py-2 pr-5' >

@@ -133,10 +133,7 @@ export default function Login({ navigation }: any) {
         })
         await AsyncStorage.setItem("token", res?.data?.data?.access_token);
         await AsyncStorage.setItem("phone", phone);
-        console.log('verify otp and get schoolData')
-        console.log('phone', phone)
         axios.get(`https://tv-app-analytics-backend.betterpw.live/v1/school?registeredNumber=${phone}`).then(async (res) => {
-          console.log('response', res.data.data);
           await AsyncStorage.setItem("schoolData", JSON.stringify(res.data.data));
         }).catch((err) => {
           console.error(err.response.data);
@@ -331,3 +328,7 @@ export default function Login({ navigation }: any) {
     </ImageBackground>
   );
 }
+function uuidv4() {
+  throw new Error('Function not implemented.');
+}
+

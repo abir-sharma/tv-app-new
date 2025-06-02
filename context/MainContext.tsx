@@ -95,6 +95,7 @@ type GlobalContextType = {
   setPENDRIVE_BASE_URL: Dispatch<SetStateAction<string>>;
   selectedClassName: string;
   setSelectedClassName: Dispatch<SetStateAction<string>>;
+  getPaidBatches: () => void;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -126,8 +127,6 @@ const GlobalContext = createContext<GlobalContextType>({
   chapterPagination: null,
   currentChapterPage: 1,
   setCurrentChapterPage: () => { },
-
-
   isOnline: true,
   setIsOnline: () => { },
   showIpInput: true,
@@ -183,6 +182,7 @@ const GlobalContext = createContext<GlobalContextType>({
   setPENDRIVE_BASE_URL: () => { },
   selectedClassName: "",
   setSelectedClassName: () => { },
+  getPaidBatches: () => { }
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
@@ -243,23 +243,13 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const [PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL] = useState<string>('/storage/emulated/0/Download/Batches');
 
-  useEffect(() => {
-    const getIP = async () => {
-      try {
-        const ip = await AsyncStorage.getItem("iP")
-        setOfflineCurrentDirectory(`http://${ip}/Batches/`);
-        const response = await axios.get(`http://${ip}/Batches/`)
-      } catch (err) {
-        console.error("Error while fetchin Ip from local storage : ", err)
-        setShowIpInput(true);
-      }
-    };
-    getIP();
-  }, []);
-
   const getPaidBatches = async () => {
     try {
-      const res = await axios.get("https://api.penpencil.co/v3/batches/my-batches?mode=1&page=1&limit=50", { headers });
+      const header = {
+        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+        organizationId: "5eb393ee95fab7468a79d189"
+      }
+      const res = await axios.get("https://api.penpencil.co/v3/batches/my-batches?mode=1&page=1&limit=50", { headers: header });
       setSubscribedBatches(res?.data?.data);
       setSelectedBatch(res?.data?.data[0]);
       setSelectSubjectSlug(res?.data?.data[0]?.subjects[0]?.slug);
@@ -269,13 +259,17 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
     catch (err: any) {
       setLogs((logs) => [...logs, "Error in BATCHES API(MAIN CONTEXT):" + JSON.stringify(err?.response)]);
-      console.error("error:", err);
+      console.error("Error in BATCHES API(MAIN CONTEXT): " + JSON.stringify(err?.response?.data?.message));
     }
   }
 
   const getPaidBatchesWithDetails = async () => {
     try {
-      const res = await axios.get("https://api.penpencil.co/v2/orders/myPurchaseOrders?page=1&limit=50&status=ALL", { headers });
+      const header = {
+        Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+        organizationId: "5eb393ee95fab7468a79d189"
+      }
+      const res = await axios.get("https://api.penpencil.co/v2/orders/myPurchaseOrders?page=1&limit=50&status=ALL", { headers: header });
       setOrders(res?.data?.data?.data);
     }
     catch (err: any) {
@@ -284,8 +278,12 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   }
 
   const getBatchDetails = async () => {
+    const header = {
+      Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      organizationId: "5eb393ee95fab7468a79d189"
+    }
     try {
-      const res = await axios.get(`https://api.penpencil.co/v3/batches/${selectedBatch?._id}/details`, { headers });
+      const res = await axios.get(`https://api.penpencil.co/v3/batches/${selectedBatch?._id}/details`, { headers: header });
       setBatchDetails(res?.data?.data)
 
       batchDetails && setSelectedSubject(batchDetails?.subjects ? batchDetails?.subjects[0] : null);
@@ -296,27 +294,16 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
   }
 
-  // useEffect(() => {
-  //   if(topicList){
-  //     if(topicList?.length<=0){
-  //       const index = batchDetails?.subjects.findIndex((subject) => subject.slug === selectSubjectSlug) || 0;
-  //       batchDetails?.subjects[0]?.slug && setSelectSubjectSlug(batchDetails?.subjects[index+1]?.slug);
-  //       batchDetails?.subjects[0] && setSelectedSubject(batchDetails?.subjects[index+1]);
-  //     }
-  //   }
-  // }, [topicList])
-
   const getChaptersData = async () => {
-
+    const header = {
+      Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      organizationId: "5eb393ee95fab7468a79d189"
+    }
     setCurrentChapterPage(1);
     try {
-      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=1`, { headers });
+      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=1`, { headers: header });
       setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
 
-      // find the index of the currently selected Subject
-      
-      // console.log("res that caused error: ", res);
-      console.log('chapters ', res.data.paginate)
       setChapterPagination(res.data.paginate);
       
     }
@@ -327,9 +314,13 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   }
 
   const loadMoreChaptersData = async () => {
+    const header = {
+      Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      organizationId: "5eb393ee95fab7468a79d189"
+    }
     try {
       if(topicList && (chapterPagination.totalCount <= topicList.length)) return;
-      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentChapterPage+1}`, { headers });
+      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=${currentChapterPage+1}`, { headers: header });
       setTopicList((prev) => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
       setCurrentChapterPage(currentChapterPage+1);
       // find the index of the currently selected Subject
@@ -404,6 +395,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
         selectedMenu, setSelectedMenu,
         PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL,
         selectedClassName, setSelectedClassName,
+        getPaidBatches
       } as GlobalContextType}>
       {children}
     </GlobalContext.Provider>

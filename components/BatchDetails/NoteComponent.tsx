@@ -71,10 +71,6 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
     </View>
   );
 
-  useEffect(() => {
-    console.log("noteList", noteList);
-  }, []);
-
   const getHomeWorkList = (noteList: NoteType[] | null) => {
     const homeworkList: HomeworkItem[] = [];
     noteList?.map((note: NoteType) => {

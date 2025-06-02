@@ -23,7 +23,6 @@ export const PendriveVideoComponent = ({ videoList }: OfflineVideoComponentPropT
       }}
       hasTVPreferredFocus
       onPress={() => {
-        console.log('PendriveVideoComponent.tsx', item);
         const itemPath = item?.path;
         sendOfflineAnalytics("video_opened", {
           videoName: item?.name,

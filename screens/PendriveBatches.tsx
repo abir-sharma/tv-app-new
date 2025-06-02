@@ -11,6 +11,9 @@ import { useNavigation } from '@react-navigation/native';
 import * as ExpoFS from 'expo-file-system';
 import RNFS from 'react-native-fs';
 import sendOfflineAnalytics from '../utils/sendOfflineAnalytics';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 type OfflineBatches = {
   name: string,
@@ -20,7 +23,23 @@ type OfflineBatches = {
 const PendriveBatches = () => {
   const navigation = useNavigation()
   const [offlineBatches, setOfflineBatches] = useState<OfflineBatches[]>([]);
-  const { setOfflineSubjects, setOfflineSelectedSubject, setOfflineChapters, setOfflineSelectedChapter, setOfflineLectures, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL, isOnline, setSelectedClassName } = useGlobalContext();
+  const { setOfflineSubjects, setOfflineSelectedSubject, setOfflineChapters, setOfflineSelectedChapter, setOfflineLectures, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL, isOnline, setSelectedClassName, setHeaders } = useGlobalContext();
+
+  const checkToken = async () => {
+    const schoolData = await AsyncStorage.getItem('schoolData');
+    const phone = await AsyncStorage.getItem('phone');
+    if (!schoolData || !phone) {
+      navigation.reset({
+        index: 0,
+        // @ts-expect-error
+        routes: [{ name: 'Login' }],
+      });
+    }
+  }
+
+  useEffect(() => {
+    checkToken();
+  }, []);
 
   const getBatches = async () => {
     const listing = await FileSystem.ls(PENDRIVE_BASE_URL);
@@ -213,7 +232,6 @@ const PendriveBatches = () => {
         const exists = await RNFS.exists(batchesFolderPath);
         if (exists) {
           setPENDRIVE_BASE_URL(batchesFolderPath);
-          console.log(`PENDRIVE_BASE_URL set to: ${batchesFolderPath}`);
           return;
         }
       }

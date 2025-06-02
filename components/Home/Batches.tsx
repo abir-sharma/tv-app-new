@@ -8,6 +8,7 @@ import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
 import { useNavigation } from '@react-navigation/native';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 import sendMongoAnalytics from '../../utils/sendMongoAnalytics';
+import { useEffect } from 'react';
 // import { BlurView } from 'expo-blur';
 
 
@@ -15,7 +16,7 @@ export default function Batches() {
 
     const { subscribedBatches, setSelectedBatch, setSelectedMenu } = useGlobalContext();
     const navigation = useNavigation();
-
+    
     return (
         <View className=''>
         <View className='p-5 w-full mx-auto mb-3 mt-2 flex-none overflow-hidden'>

@@ -20,7 +20,7 @@ const sendMongoAnalytics = async (eventName: string, data: any) => {
       "school": JSON.parse(schoolData)._id,
       ...data
     });
-    console.log("Mongo analytics sent successfully:", eventName);
+    // console.log("Mongo analytics sent successfully:", eventName);
   } catch (error: any) {
     console.error("Error sending mongo analytics: ", error.response.data);
   }
