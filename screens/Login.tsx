@@ -133,7 +133,7 @@ export default function Login({ navigation }: any) {
         })
         await AsyncStorage.setItem("token", res?.data?.data?.access_token);
         await AsyncStorage.setItem("phone", phone);
-        axios.get(`https://tv-app-analytics-backend.betterpw.live/v1/school?registeredNumber=${phone}`).then(async (res) => {
+        axios.get(`https://pibox-backend.betterpw.live/v1/clicker/school/by-phone?phone=${phone}`).then(async (res) => {
           await AsyncStorage.setItem("schoolData", JSON.stringify(res.data.data));
         }).catch((err) => {
           console.error(err.response.data);

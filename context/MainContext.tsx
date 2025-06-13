@@ -321,7 +321,7 @@ const getChaptersData = () => {
     axios
       .get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/topics?page=1`, { headers: header })
       .then(res => {
-        console.log("chapters data:", res.data);
+        // console.log("chapters data:", res.data);
         setTopicList(prev => (prev != null ? [...prev, ...res?.data?.data] : res?.data?.data));
         setChapterPagination(res.data.paginate);
       })

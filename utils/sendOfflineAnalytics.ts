@@ -14,7 +14,7 @@
 //   const createdAt = moment().format();
 
 //   try {
-//     const res = await axios.post("https://tv-app-analytics-backend.betterpw.live/v1/events/store", {
+//     const res = await axios.post("https://pibox-backend.betterpw.live/v1/events/store", {
 //       "name": eventName,
 //       "title": formatEventName(eventName),
 //       "registeredNumber": await AsyncStorage.getItem('phone') || "not_logged_in",
@@ -59,7 +59,7 @@ const sendOfflineAnalytics = async (eventName: string, data: EventData) => {
     "title": formatEventName(eventName),
     "registeredNumber": registeredNumber,
     "createdAt": createdAt,
-    "school": school,
+    "schoolId": school,
     ...data
   };
 
@@ -69,18 +69,20 @@ const sendOfflineAnalytics = async (eventName: string, data: EventData) => {
   if (isConnected) {
     try {
       // Send the current event
-      const res = await axios.post("https://tv-app-analytics-backend.betterpw.live/v1/events/store", eventPayload);
-      // console.log("Analytics sent successfully:", eventName, createdAt);
+      const res = await axios.post("https://pibox-backend.betterpw.live/v1/events/store", eventPayload);
+      console.log("Offline Analytics sent successfully:", eventName, createdAt);
       
       // Try to send any stored offline events
       await sendStoredOfflineEvents();
+      console.log("Stored offline events sent successfully.");
     } catch (error: any) {
-      // console.error("Error sending analytics: ", error?.response?.data || error.message);
+      console.error("Error sending analytics: ", error?.response?.data || error.message);
+      await storeOfflineEvent(eventPayload);            //lookout 1
     }
   } else {
     // Store the event for later when offline
     await storeOfflineEvent(eventPayload);
-    // console.log("Stored offline event for later:", eventName);
+    console.log("Stored offline event for later:", eventName);
   }
 };
 
@@ -104,23 +106,31 @@ const sendStoredOfflineEvents = async () => {
   try {
     // Get stored events
     const storedEvents = await AsyncStorage.getItem(OFFLINE_EVENTS_KEY);
+    console.log("OFFLINE stored events", storedEvents);
     
     if (storedEvents) {
       const events = JSON.parse(storedEvents);
+      const failedEvents = [];                    //lookout 2
       
       // Try to send each event
       for (const event of events) {
         try {
-          await axios.post("https://tv-app-analytics-backend.betterpw.live/v1/events/store", event);
+          await axios.post("https://pibox-backend.betterpw.live/v1/events/store", event);
+          console.log("Sent stored event Successfully:", event.name);  
+
         } catch (error: any) {
           console.error("Failed to send stored event:", error?.response?.data || error.message);
           // If we fail, stop the process and keep remaining events for next attempt
-          throw error;
+          failedEvents.push(event);                //lookout 3
         }
       }
-      
-      // If all events were sent successfully, clear the storage
-      await AsyncStorage.removeItem(OFFLINE_EVENTS_KEY);
+         if (failedEvents.length > 0) {
+        await AsyncStorage.setItem(OFFLINE_EVENTS_KEY, JSON.stringify(failedEvents));            //lookout 4
+      } else { 
+            // If all events were sent successfully, clear the storage
+            await AsyncStorage.removeItem(OFFLINE_EVENTS_KEY);                              //lokkout 5 -> original 
+      }
+     
     }
   } catch (error) {
     console.error('Error processing stored offline events:', error);
