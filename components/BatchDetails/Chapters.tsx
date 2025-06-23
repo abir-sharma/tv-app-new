@@ -28,10 +28,10 @@ export default function Chapters() {
   const renderItem = ({ item }: any) => (
     <Pressable
       key={item?._id}
-      className={` overflow-hidden rounded-xl bg-white/5 my-1`}
+      className={` overflow-hidden rounded-xl bg-[#111111] my-1`}
       hasTVPreferredFocus={true}
       android_ripple={{
-        color: "rgba(255,255,255,0.5)",
+        color: "rgba(0,0,0,0)",                                     //recent hover colour change here is required 
         borderless: false,
         radius: 1000,
         foreground: true
@@ -42,12 +42,12 @@ export default function Chapters() {
     >
       {
         selectedChapter?._id === item?._id ?
-        <LinearGradient {...fromCSS(`linear-gradient(90deg, #0368FF 0%, #5899FF 100%)`)}
+        <LinearGradient {...fromCSS(`linear-gradient(90deg, #F9C545 0%, #222222 100%)`)}
           className='py-4 px-4 rounded-xl overflow-hidden'>
-          <Text className='text-white text-sm'>{item?.name}</Text>
+          <Text className='text-black font-semibold text-sm'>{item?.name}</Text>
         </LinearGradient>
         :
-        <LinearGradient {...fromCSS(`linear-gradient(102.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`)}
+        <LinearGradient {...fromCSS(`linear-gradient(102.97deg, rgba(17, 17, 17, 0.2) 0%, rgba(17, 17, 17, 0) 100%)`)}
         className='py-4 px-4 rounded-xl overflow-hidden'>
         <Text className='text-white text-sm'>{item?.name}</Text>
       </LinearGradient>}

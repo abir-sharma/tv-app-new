@@ -19,6 +19,7 @@ export default function Batches() {
     
     return (
         <View className=''>
+            <Text className='text-black text-2xl font-medium ml-5 mt-5'>Online Batches</Text>
         <View className='p-5 w-full mx-auto mb-3 mt-2 flex-none overflow-hidden'>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
                 {subscribedBatches?.map((order, index) => order.isPurchased &&(
@@ -50,18 +51,18 @@ export default function Batches() {
                                 {...fromCSS(
                                     `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
                                   )}
-                                  className='rounded-xl overflow-hidden h-52 border-[1px] border-white/30'
+                                  className='rounded-xl overflow-hidden h-52 border-[1px] border-black bg-[#fffbe6]'
                             >
-                        <View className="w-full aspect-video rounded-t-xl overflow-hidden relative">
+                        <View className="w-[95%] aspect-video rounded-xl overflow-hidden relative mt-2 ml-2 mr-2">
                         <FastImage
                                 key={index}
-                                className="w-full h-full rounded-t-lg"
+                                className="w-full h-full rounded-t-lg "
                                 source={{ uri: `${order?.previewImage?.baseUrl + order?.previewImage?.key}` }}
                                 />
                         </View>
                         <View className='p-2 relative px-5'>
                             <View className='flex flex-row items-center justify-center gap-3'>
-                                <Text className='text-white text-lg font-base text-center'>{order?.name?.length > 20 ? `${order?.name?.substring(0, 20)}...` : order?.name}</Text>
+                                <Text className='text-black text-lg font-base text-center'>{order?.name?.length > 20 ? `${order?.name?.substring(0, 20)}...` : order?.name}</Text>
                             </View>                            
                         </View>
                         </LinearGradient>
