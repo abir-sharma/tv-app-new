@@ -10,6 +10,8 @@ import { VideoComponent } from '../components/BatchDetails/VideoComponent';
 import { NoteComponent } from '../components/BatchDetails/NoteComponent';
 import { DppComponent } from '../components/BatchDetails/DppComponent';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Image } from 'react-native';
+import { Images } from '../images/images';
 
 export default function Details({ navigation }: any) {
   const { fetchDetails, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, selectedMenu, setSelectedMenu, getChaptersData } = useGlobalContext();
@@ -95,28 +97,40 @@ export default function Details({ navigation }: any) {
   // }, [videoList]);
 
   return (
-    <View className="bg-[#1B2124] flex-1">
-      <NavbarDetails selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} setContentType={setContentType} setCurrentPage={setCurrentPage} />
-
+    <View className="flex-1">
+      <Image 
+          source={Images.LoginBg} 
+          className='bg-[#fefaee]'                               
+          style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          resizeMode: 'cover', 
+            }}
+      />
+      
       <View className='flex-1 flex-row'>
 
         {showLoader && <View
           style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
-          className='bg-[#1B2124] '
+          className='bg-[#fefaee]'
         >
-          <ActivityIndicator color={"#FFFFFF"} size={80} />
+          <ActivityIndicator color={"#f9c545"} size={80} />
         </View>}
-        <View className='flex-1 '>
+        <View className='flex-1 rounded-r-xl bg-[#111111] pt-20'>
           <Chapters />
         </View>
+        <View className='flex-[3]'>
+          <NavbarDetails selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} setContentType={setContentType} setCurrentPage={setCurrentPage} />
 
-          <View className='flex-[3] pt-5'>
+          <View className='flex-1 pt-5'>
             {selectedMenu == 0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreVideos} />}
             {selectedMenu == 1 && <NoteComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreNotes} />}
             {selectedMenu == 2 && <DppComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreNotes} />}
             {selectedMenu == 3 && <NoteComponent noteList={dppNoteList} setNoteList={setDppNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreDppNotes} />}
             {selectedMenu == 4 && <VideoComponent videoList={dppVideoList} setVideoList={setDppVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreDppVideos} />}
           </View>
+        </View>
       </View>
     </View>
   );

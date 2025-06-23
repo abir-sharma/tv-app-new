@@ -36,6 +36,13 @@ import pwLogo from './pw-logo.png';
 import skipped from './skipped.png';
 import time from './time.png';
 import tv from './TV.png';
+import welcome from './welcome.gif';
+import LoginBg from './LoginBg.png';
+import Vector75 from './Vector75.png';
+import molecular from './molecular.png';
+import nucleus from './nucleus.png';
+import chemistry from './chemistry.png';
+import Dropdown from './Dropdown.png';
 
 export const Images = {
     tenB,
@@ -75,5 +82,12 @@ export const Images = {
     pwLogo,
     skipped,
     time,
-    tv
+    tv,
+    welcome,
+    LoginBg,
+    Vector75,
+    chemistry,
+    molecular,
+    nucleus,
+    Dropdown
 }

@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 import { fromCSS } from "@bacons/css-to-expo-linear-gradient";
-import { ScrollView, ToastAndroid, View } from 'react-native';
+import { ScrollView, ToastAndroid, View, Image } from 'react-native';
 import Navbar from '../components/Global/Navbar';
 import Batches from '../components/Home/Batches';
 import Recent from "../components/Home/Recent";
@@ -12,6 +12,8 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import axios from "axios";
 import NetInfo from "@react-native-community/netinfo";
+import { Images } from "../images/images";
+
 
 export default function Home({ navigation }: any) {
   const { setHeaders, getPaidBatches } = useGlobalContext();
@@ -106,7 +108,17 @@ export default function Home({ navigation }: any) {
       className=" flex-1"
     >
       <Navbar />
-      <ScrollView>
+      <ScrollView className="flex-1">
+         <Image 
+            source={Images.LoginBg} 
+            className='bg-[#fefaee]'                               //-->Color adjust Background ke liye
+            style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            resizeMode: 'cover', 
+      }}
+    />
         <Batches />
         <Recent />
       </ScrollView>

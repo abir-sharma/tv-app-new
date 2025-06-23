@@ -63,7 +63,7 @@ export default function Navbar() {
   }, [isDropdownVisible])
 
   return (
-    <View className=" flex-row justify-between items-center p-4 ">
+    <View className=" flex-row justify-between items-center p-6 bg-[#fffbe6] border-b-[1px] border-gray-400">
         <Modal
           transparent={true}
           animationType="fade"
@@ -142,13 +142,14 @@ export default function Navbar() {
         className="flex-row justify-center items-center rounded-xl overflow-hidden px-2 gap-x-5"
       >
         <Image
-          source={Images.pwLogo}
+          source={Images.pwBlack}
           className="w-10 h-10"
           width={10}
           height={10}
         />
+        <Text className="text-black text-lg">AI School</Text>
       </Pressable>
-      <View className="flex flex-row gap-2 absolute top-5 left-1/2 -translate-x-32">
+      <View className="flex flex-row absolute top-5 left-1/2 -translate-x-32">
         <Pressable
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
@@ -163,9 +164,9 @@ export default function Navbar() {
             // @ts-expect-error
             navigation.navigate("Home");
           }}
-          className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${isOnline && "bg-[#414347]"} `}
+          className={`w-32 h-12 rounded-l-xl items-center justify-center overflow-hidden border-r-[1px] border-b-[3px] ${isOnline ? "bg-[#f9c545]" : "bg-white"} `}
           >
-          <Text className={`text-white ${isOnline && "font-bold "}`}>Online Batches</Text>
+          <Text className={`text-black ${isOnline && "font-bold "}`}>Online Batches</Text>
         </Pressable>
         <Pressable
           android_ripple={{
@@ -186,12 +187,25 @@ export default function Navbar() {
             navigation.navigate("PendriveBatches");
           }}
           // className="w-36 h-10 rounded-xl items-center justify-center overflow-hidden"
-          className={`w-36 h-10 rounded-xl items-center justify-center overflow-hidden ${!isOnline && "bg-[#414347]"} `}
+          className={`w-32 h-12 rounded-r-xl items-center justify-center overflow-hidden border-r-[3px] border-b-[3px] ${!isOnline ? "bg-[#f9c545]" : "bg-white"} `}
         >
-          <Text className={`text-white ${!isOnline && " font-bold "}`}>Offline Batches</Text>
+          <Text className={`text-black ${!isOnline && " font-bold "}`}>Offline Batches</Text>
         </Pressable>
       </View>
-      <View className="flex flex-row gap-2 items-center">
+      <View className="flex flex-row gap-10 items-center">
+
+        <Pressable
+          android_ripple={{
+          color: "rgba(255,255,255,0.5)",
+          borderless: false,
+          radius: 1000,
+          foreground: true,
+        }}
+        className="w-32 h-12 rounded-xl items-center justify-center overflow-hidden border border-black border-b-[3px] bg-white"
+      >
+      <Text className="text-black">Class 12th</Text>
+      </Pressable>
+        
         {/* offline source dropdown */}
         {/* { !isOnline &&
           <Pressable
@@ -241,9 +255,9 @@ export default function Navbar() {
             foreground: true,
           }}
           onPress={()=>{setIsDropdownVisible(prev=>!prev)}}
-          className="flex-row justify-center overflow-hidden rounded-full items-center"
+          className="flex-row justify-center overflow-hidden rounded-full items-center right-6"
         >
-          <Image source={Images.dp} className='w-10 h-10' width={40} height={40} />
+          <Image source={Images.Dropdown} className='w-14 h-12' width={40} height={40} />
         </Pressable>
       </View>
     </View>
