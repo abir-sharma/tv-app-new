@@ -105,22 +105,25 @@ export default function Home({ navigation }: any) {
       {...fromCSS(
         `linear-gradient(276.29deg, #2D3A41 6.47%, #2D3A41 47.75%, #000000 100%)`
       )}
-      className=" flex-1"
+      className="flex-1"
     >
-      <Navbar />
-      <ScrollView className="flex-1">
-         <Image 
-            source={Images.LoginBg} 
-            className='bg-[#fefaee]'                               //-->Color adjust Background ke liye
-            style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            resizeMode: 'cover', 
-      }}
+    <Image 
+      source={Images.LoginBg} 
+      className='bg-[#fefaee]'                               //-->Color adjust Background ke liye
+      style={{
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      resizeMode: 'cover', 
+    }}
     />
+      <Navbar />
+      
+      <ScrollView className="flex-1">
+  
         <Batches />
         <Recent />
+        
       </ScrollView>
     </LinearGradient>
   );

@@ -42,7 +42,7 @@ export default function Chapters() {
     >
       {
         selectedChapter?._id === item?._id ?
-        <LinearGradient {...fromCSS(`linear-gradient(90deg, #F9C545 0%, #222222 100%)`)}
+        <LinearGradient {...fromCSS(`linear-gradient(90deg, #F9C545 0%, #F9C545 100%)`)}
           className='py-4 px-4 rounded-xl overflow-hidden'>
           <Text className='text-black font-semibold text-sm'>{item?.name}</Text>
         </LinearGradient>
