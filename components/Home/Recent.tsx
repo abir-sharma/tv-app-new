@@ -29,7 +29,6 @@ export default function Recent() {
 
          return Math.floor(Math.random() * 80) + 10; 
   };
-
   return (
     <View className="">
       <Text className="text-black text-2xl font-medium ml-5">
@@ -137,7 +136,7 @@ export default function Recent() {
                   {...fromCSS(
                     `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
                   )}
-                  className="rounded-xl overflow-hidden border-[1px] border-white/30"
+                  className="rounded-xl overflow-hidden border-[1px] border-black bg-[#fffbe6]"
                 >
                   <View className="relative">
                     <View className="w-full aspect-video rounded-t-xl overflow-hidden relative">
@@ -147,14 +146,19 @@ export default function Recent() {
                           source={{ uri: `${videos[0]?.videoDetails?.image}` }}
                         />
                       )}
+                       <View className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded">
+                        <Text className="text-white text-xs font-medium">
+                          {videos[0]?.videoDetails?.duration}
+                        </Text>
+                       </View>                      
                     </View>
                     <View className="p-2 relative px-5">
                       <View className="flex flex-col items-center justify-start gap-1">
-                        <Text className="text-white text-xs font-bold">
+                        <Text className="text-black text-xs font-bold">
                           {subject}-({videos?.length})
                         </Text>
 
-                        <Text className="text-base text-white font-normal mb-0">
+                        <Text className="text-base text-black font-normal mb-0">
                           {videos[0]?.videoDetails?.name?.length >= 25
                             ? `${videos[0]?.videoDetails?.name?.substring(
                                 0,
@@ -162,6 +166,11 @@ export default function Recent() {
                               )}...`
                             : videos[0]?.videoDetails?.name}
                         </Text>
+                        <View className="w-full">
+                          <View className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                            <View className="h-full bg-[#f9c545] rounded-full" style={{ width: `${getProgressPercentage(videos)}%` }}/>
+                          </View>
+                        </View>                        
                       </View>
                     </View>
                   </View>

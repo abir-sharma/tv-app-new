@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import sendGoogleAnalytics from '../../utils/sendGoogleAnalytics';
 import sendMongoAnalytics from '../../utils/sendMongoAnalytics';
+import { Ionicons } from '@expo/vector-icons';
 
 export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoComponentPropType) => {
 
@@ -81,19 +82,22 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
             {...fromCSS(
                 `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
               )}
-              className='rounded-xl overflow-hidden h-52 border-[1px] border-white/30'
+              className='rounded-xl overflow-hidden h-48 border-[1px] border-black bg-[#fbfaef]'
         >
       <View className='relative'>
-          <View className="w-full aspect-video rounded-xl overflow-hidden relative">
+          <View className="w-[92%] aspect-video rounded-xl overflow-hidden relative mt-2 ml-2 mr-2">
               {item?.videoDetails?.image && <Image
                   className=' w-full h-full rounded-t-lg '
                   source={{ uri: `${item?.videoDetails?.image}` }}
               />}
           </View>
           <View className='p-2 relative px-5 pt-3'>
-              <View className='flex flex-row items-center justify-start gap-3'>
-              <Text className='text-base text-white font-normal mb-0'>{item?.videoDetails?.name?.length >= 40 ? `${item?.videoDetails?.name?.substring(0, 40)}...` : item?.videoDetails?.name}</Text>
-              </View>                            
+              <View className='flex flex-row items-center justify-start gap-2 right-2'>
+               <View style={{ elevation: 6, shadowColor: '#9CA3AF'}}>
+                   <Ionicons name="play" size={16} color="black"/>
+                </View>
+              <Text className='text-sm text-black/80 font-semibold mb-0'>{item?.videoDetails?.name?.length >= 40 ? `${item?.videoDetails?.name?.substring(0, 40)}...` : item?.videoDetails?.name}</Text>
+             </View>                            
           </View>
       </View>
       </LinearGradient>
@@ -105,7 +109,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
   return (
     <View className='p-5'>
       {/* <Text style={styles.subjectText}>Physics</Text> */}
-      {videoList?.length === 0 && <Text className='text-white flex flex-wrap text-2xl self-center items-center'>No videos available!!</Text>}
+      {videoList?.length === 0 && <Text className='text-black flex flex-wrap text-2xl self-center items-center'>No videos available!!</Text>}
       <FlatList
         data={videoList?.sort((a, b) => {
           const dateA = new Date(a?.videoDetails?.createdAt);

@@ -32,10 +32,10 @@ export const DppComponent = ({ }: DPPPropType) => {
 
   const renderGridItem = ({ item }: any) => (
     <View
-      className=' w-[50%] px-1 my-1'
+      className='w-[25%] px-2 py-2'
       >
     <Pressable
-      className=' overflow-hidden h-24 rounded-xl bg-[#111111] border-[1px] border-white/30'
+      className='overflow-hidden rounded-xl border-[1px] border-black bg-[#fbfaef]'
       android_ripple={{
         color: "rgba(255,255,255,0.4)",
         borderless: false,
@@ -61,12 +61,18 @@ export const DppComponent = ({ }: DPPPropType) => {
       }}>
         <LinearGradient {...fromCSS(`linear-gradient(179deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.08) 100%)`)}
           className='rounded-xl overflow-hidden'>
-      <View className='w-full h-full flex-row justify-between items-center px-5'>
-        <View>
-          <Text className='text-white font-medium text-lg'>{item?.test?.name?.length >= 35 ? `${item?.test?.name?.substring(0, 35)}...` : item?.test?.name}</Text>
-          <View className='flex-row mt-2'><Image source={Images.noteIcon} className='w-5 h-5 mr-2' width={10} height={10} /><Text className='text-white font-normal text-sm'>{`${item?.test?.totalQuestions} Questions  |  ${item?.test?.totalMarks} Marks`}</Text></View>
-        </View>
-        <Image source={Images.goto} className='w-7 h-7' width={40} height={40} />
+      <View style={{padding: 16}}>
+        <Text className='text-sm text-black font-semibold'>{item?.test?.name?.length >= 35 ? `${item?.test?.name?.substring(0, 35)}...` : item?.test?.name}</Text>
+        <Text className='text-[#757575] font-normal text-xs'>{`${item?.test?.totalQuestions} Questions  |  ${item?.test?.totalMarks} Marks`}</Text>
+          <LinearGradient {...fromCSS(`linear-gradient(179deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 1) 100%))`)}
+                             className='overflow-hidden rounded-xl flex-row justify-between items-center px-3 py-2 mt-2 border border-b-[4px]'>
+
+            <View className='flex-row justify-center gap-x-2 overflow-hidden rounded-xl w-fit items-center '>
+              <Image source={Images.notesVector} className='w-5 h-5 top-1'  width={10} height={10} />
+              <Text className=' overflow-hidden rounded-xl text-black'>Quiz</Text>
+            </View>
+               <Image source={Images.arrowRight} className='w-2 h-2' width={40} height={40} />
+          </LinearGradient>        
       </View>
       </LinearGradient>
     </Pressable>
@@ -75,12 +81,12 @@ export const DppComponent = ({ }: DPPPropType) => {
 
   return (
     <View className='p-5'>
-      {dppList?.length === 0 && <Text className='text-white text-2xl self-center items-center'>No DPP Quiz Available!</Text>}
+      {dppList?.length === 0 && <Text className='text-black text-2xl self-center items-center'>No DPP Quiz Available!</Text>}
       {dppList && <FlatList
         data={dppList}
         renderItem={renderGridItem}
         keyExtractor={(item: any) => item?.test?._id}
-        numColumns={2}
+        numColumns={4}
       />}
     </View>
   );

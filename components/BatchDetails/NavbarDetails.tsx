@@ -30,13 +30,13 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         setIsDropdownVisible(false);
       }}
     >
-      <Text className='text-white text-xs text-md bg-white/10 py-3 rounded-md px-4'>{item?.subject}</Text>
+      <Text className='text-white text-xs text-md bg-[#111111] py-3 rounded-md px-4'>{item?.subject}</Text>
     </Pressable>
   );
 
   return (
 
-    <View className=" flex-row justify-between items-center p-4 bg-[#fffbe6] border-b-[1px] border-gray-400">
+    <View className=" flex-row justify-between items-center p-4 bg-[#E1BD6433] border-b-[1px] border-gray-400">
       <View className='flex flex-row items-center justify-center gap-2'>
         <Pressable
           hasTVPreferredFocus={true}
@@ -63,7 +63,7 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
 
         <Pressable
           onPress={() => { handleDropdownPress() }}
-          className='rounded-xl bg-[#f9c545] border border-gray-400 px-5 py-2 overflow-hidden'
+          className='rounded-xl bg-[#333333] border border-gray-400 px-5 py-2 overflow-hidden'
           hasTVPreferredFocus={true}
           android_ripple={{
             color: "rgba(255,255,255,0.5)",
@@ -72,8 +72,8 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
             foreground: true
           }}>
           <View className='flex-row items-center justify-center gap-2'>
-            <Text className='text-black font-semibold text-sm'>{selectedSubject && (selectedSubject?.subject?.length > 20) ? `${selectedSubject?.subject.substring(0, 20)}...` : selectedSubject?.subject || "Select Subject"}</Text>
-            <Entypo name="chevron-down" size={20} color="#222222" />
+            <Text className='text-white font-semibold text-sm'>{selectedSubject && (selectedSubject?.subject?.length > 20) ? `${selectedSubject?.subject.substring(0, 20)}...` : selectedSubject?.subject || "Select Subject"}</Text>
+            <Entypo name="chevron-down" size={20} color="white" />
           </View>
         </Pressable>
       </View>
@@ -88,19 +88,19 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
         >
           <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
             <View style={{ flex: 1 }}>
-              <ScrollView className='bg-[#111111] border-white/20 border-[1px] max-h-[200] overflow-hidden w-[20%] rounded-lg absolute top-[70] left-[110] z-[2]'>
+              <View className='bg-[#111111] border-white/20 border-[1px] max-h-[200] overflow-hidden w-[20%] rounded-lg absolute top-[70] left-[450] z-[2]'>
                 <FlatList
                   data={batchDetails?.subjects}
                   renderItem={renderItem}
                   keyExtractor={(item) => item?._id}
                 />
-              </ScrollView>
+              </View>
             </View>
           </TouchableWithoutFeedback>
         </Modal>
       </View>
 
-      <View className=' rounded-xl flex-row py-2 pr-5' >
+      <View className=' rounded-xl flex-row py-2 pr-20' >
         <Pressable hasTVPreferredFocus={true}
           android_ripple={{
             color: "rgba(255,255,255,0.4)",
@@ -149,8 +149,8 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
 
       </View>
 
-      <View className='flex-row opacity-0 justify-center overflow-hidden rounded-full items-center'>
-        <Text className='bg-white/10 overflow-hidden rounded-xm text-black px-5 py-3'>Logout</Text>
+      <View className='flex-row justify-center overflow-hidden rounded-full items-center'>
+        <Image source={Images.Dropdown} className='w-10 h-10' width={40} height={40} />
       </View>
     </View>
   );
