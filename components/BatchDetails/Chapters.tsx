@@ -25,7 +25,7 @@ export default function Chapters() {
     
     Animated.timing(rotateAnim, {
       toValue: willOpen ? 1 : 0,
-      duration: 300,
+      duration: 800,
       useNativeDriver: true,
     }).start();
   };
@@ -156,3 +156,6 @@ export default function Chapters() {
     </View>
   );
 }
+
+
+

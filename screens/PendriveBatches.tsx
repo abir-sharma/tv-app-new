@@ -270,7 +270,7 @@ const PendriveBatches = () => {
     <View className="flex-1">
       <Image 
        source={Images.LoginBg} 
-       className='bg-[#fefaee]'                               //-->Color adjust Background ke liye
+       className='bg-[#fefaee]'                               
        style={{
        position: 'absolute',
        width: '100%',

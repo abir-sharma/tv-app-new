@@ -135,7 +135,7 @@ export default function Login({ navigation }: any) {
 
   }
 
-  const handleVerifyOTP = async () => {
+  const handleVerifyOTP = async () => {   //Revamped
     if (otp?.length <= 0) {
       ToastAndroid.showWithGravity(
         "Please enter a valid OTP",
@@ -164,12 +164,27 @@ export default function Login({ navigation }: any) {
         })
         await AsyncStorage.setItem("token", res?.data?.data?.access_token);
         await AsyncStorage.setItem("phone", phone);
-        axios.get(`https://pibox-backend.betterpw.live/v1/clicker/school/by-phone?phone=${phone}`).then(async (res) => {
-          await AsyncStorage.setItem("schoolData", JSON.stringify(res.data.data));
+      if (rememberMe) {
+        await AsyncStorage.setItem("rememberMe", "true");
+        await AsyncStorage.setItem("savedPhone", phone);
+      } else {
+        await AsyncStorage.removeItem("rememberMe");
+        await AsyncStorage.removeItem("savedPhone");
+      }
+       await axios.get(`https://pibox-backend.betterpw.live/v1/clicker/school/by-phone?phone=${phone}`)
+        .then(async (schoolRes) => {
+          await AsyncStorage.setItem("schoolData", JSON.stringify(schoolRes.data.data));
         }).catch((err) => {
-          console.error(err.response.data);
+          console.error("School data fetch error", err.response.data);
         });
         navigation.navigate('PendriveBatches');
+      setOtpDigits(['', '', '', '', '', '']); 
+      setOtp(''); 
+      setOtpSent(false); 
+      setOtpReSent(false); 
+      setNewUser(false); 
+      setPhone(''); 
+      setRememberMe(false); 
       }
     }
     catch (err) {
@@ -180,7 +195,9 @@ export default function Login({ navigation }: any) {
         ToastAndroid.CENTER,
       );
     }
-    setShowLoader(false);
+    finally {
+      setShowLoader(false);
+    }
   }
 
   const handleRegisterUser = async () => {

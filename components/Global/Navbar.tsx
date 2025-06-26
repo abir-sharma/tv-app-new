@@ -27,26 +27,34 @@ export default function Navbar() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [offlineSourceDropdown, setOfflineSourceDropdown] = useState(false);
 
-  const handleLogout = async () => {
-    try {
-      // @ts-expect-error
-      navigation.navigate("Login");
-      AsyncStorage.clear();
-      setHeaders(null);
-      const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", {
-        headers,
-      });
-      if (res?.data?.success) {
-      }
-    } catch (err: any) {
-      Sentry.captureException(err);
-      setLogs((logs) => [
-        ...logs,
-        "Error in LOGOUT API 2( Navbar component):" +
-          JSON.stringify(err?.response),
-      ]);
-    }
-  };
+const handleLogout = async () => {
+  let logoutApiSuccess = false;
+  try {
+    const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", {}, { headers: headers });
+    logoutApiSuccess = res?.data?.success;
+  } catch (err: any) {
+    Sentry.captureException(err);
+    setLogs((logs) => [ ...logs, "Logout API failed (continuing with local cleanup): " + JSON.stringify(err?.response?.data || err?.message),]);
+  }
+  try {
+    await AsyncStorage.clear();
+    setHeaders(null); 
+  } catch (clearError) {
+    console.error("Critical: Failed to clear local storage:", clearError);
+    Sentry.captureException(clearError);
+  }
+  try {
+    // @ts-expect-error
+    navigation.navigate("Login");
+  } catch (navError) {
+    console.error("Navigation error:", navError);
+  }
+  if (logoutApiSuccess) {
+    console.log("Logout successfully");
+  } else {
+    console.log("Logout completed but server logout may have failed)");
+  }
+};
 
   const Seperator = () => {
     return (

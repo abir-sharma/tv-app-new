@@ -3,11 +3,44 @@ import { Image, Text, Pressable, View} from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
 import { useNavigation } from '@react-navigation/native';
 import { Images } from '../../images/images';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import * as Sentry from "@sentry/react-native";
 
 export default function NavbarDetails({ selectedMenu, setSelectedMenu, setContentType, setCurrentPage }: NavbarDetailsPropType) {
   const navigation = useNavigation();
  
-  const { setSelectedSubject, batchDetails, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter } = useGlobalContext(); 
+  const { setSelectedSubject, batchDetails, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter, headers, setHeaders, setLogs } = useGlobalContext(); 
+
+
+const handleLogout = async () => {
+  let logoutApiSuccess = false;
+  try {
+    const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", {}, { headers: headers });
+    logoutApiSuccess = res?.data?.success;
+  } catch (err: any) {
+    Sentry.captureException(err);
+    setLogs((logs) => [ ...logs, "Logout API failed (continuing with local cleanup): " + JSON.stringify(err?.response?.data || err?.message),]);
+  }
+  try {
+    await AsyncStorage.clear();
+    setHeaders(null); 
+  } catch (clearError) {
+    console.error("Critical: Failed to clear local storage:", clearError);
+    Sentry.captureException(clearError);
+  }
+  try {
+    // @ts-expect-error
+    navigation.navigate("Login");
+  } catch (navError) {
+    console.error("Navigation error:", navError);
+  }
+  if (logoutApiSuccess) {
+    console.log("Logout successfully");
+  } else {
+    console.log("Logout completed but server logout may have failed)");
+  }
+};
 
     return (
 
@@ -89,9 +122,17 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
 
       </View>
 
-      <View className='flex-row justify-center overflow-hidden rounded-full items-center'>
-        <Image source={Images.Dropdown} className='w-10 h-10' width={40} height={40} />
-      </View>
+      <Pressable
+        android_ripple={{
+          color: "rgba(255,255,255,0.4)",
+          borderless: false,
+          radius: 1000,
+          foreground: true
+        }}
+        onPress={handleLogout}
+        className='flex-row justify-center overflow-hidden rounded-full items-center '>
+        <Image source={Images.Dropdown} className='w-10 h-10 ' width={40} height={40} />
+      </Pressable>
     </View>
   );
 }
