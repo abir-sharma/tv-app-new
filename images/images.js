@@ -45,6 +45,7 @@ import chemistry from './chemistry.png';
 import Dropdown from './Dropdown.png';
 import arrowRight from './arrowRight.png';
 import notesVector from './notesVector.png';
+import arrowLeft from './arrowLeft.png';
 
 export const Images = {
     tenB,
@@ -93,5 +94,6 @@ export const Images = {
     nucleus,
     Dropdown,
     arrowRight,
-    notesVector
+    notesVector,
+    arrowLeft
 }
