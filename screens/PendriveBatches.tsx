@@ -267,17 +267,20 @@ const PendriveBatches = () => {
   }, [PENDRIVE_BASE_URL])
 
   return (
-    <LinearGradient
-      {...fromCSS(`linear-gradient(276.29deg, #2D3A41 6.47%, #2D3A41 47.75%, #000000 100%)`)}
-      className=" flex-1">
-        {/* <Button title='play video' onPress={() => {
-          // @ts-expect-error
-          navigation.navigate('MP4Player', {
-            videoUrl: '/storage/sda1/test.mp4'
-          })
-        }} /> */}
+    <View className="flex-1">
+      <Image 
+       source={Images.LoginBg} 
+       className='bg-[#fefaee]'                               //-->Color adjust Background ke liye
+       style={{
+       position: 'absolute',
+       width: '100%',
+       height: '100%',
+      resizeMode: 'cover', 
+    }}
+    />
+      
       <Navbar />
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4 mx-2'>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4 mx-2 mt-2'>
         {offlineBatches.map((batch: any, index: number) => (
           <Pressable
             key={index}
@@ -299,13 +302,13 @@ const PendriveBatches = () => {
                 batch: batch
               });
             }}
-            className='bg-white/10 rounded-xl h-52 w-72 overflow-hidden'
+            className='rounded-xl h-52 w-72 overflow-hidden '
           >
             <LinearGradient
               {...fromCSS(
                 `linear-gradient(152.97deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`
               )}
-              className='rounded-xl overflow-hidden h-52 border-[1px] border-white/30'
+              className='rounded-xl overflow-hidden h-52 border-[1px] border-black bg-[#fffbe6]'
             >
               <View className="w-full aspect-video rounded-t-xl overflow-hidden relative">
                 <Image
@@ -318,14 +321,14 @@ const PendriveBatches = () => {
               </View>
               <View className='p-2 relative px-5'>
                 <View className='flex flex-row items-center justify-center gap-3'>
-                  <Text className='text-white text-lg font-base text-center'>{batch?.name >= 20 ? `${batch?.name?.substring(0, 20)}...` : batch?.name}</Text>
+                  <Text className='text-black text-lg font-base text-center'>{batch?.name >= 20 ? `${batch?.name?.substring(0, 20)}...` : batch?.name}</Text>
                 </View>
               </View>
             </LinearGradient>
           </Pressable>
         ))}
       </ScrollView>
-    </LinearGradient>
+    </View>
   );
 }
 

@@ -117,7 +117,7 @@ export default function Details({ navigation }: any) {
         >
           <ActivityIndicator color={"#f9c545"} size={80} />
         </View>}
-        <View className='flex-1 rounded-r-xl bg-[#111111] pt-20'>
+        <View className='flex-1'>
           <Chapters />
         </View>
         <View className='flex-[3]'>
@@ -135,3 +135,4 @@ export default function Details({ navigation }: any) {
     </View>
   );
 }
+
