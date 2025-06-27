@@ -1,6 +1,6 @@
 /// <reference types="nativewind/types" />
 
-import { View, Text, Image, TextInput, ImageBackground, Pressable, TouchableOpacity, Alert, TouchableHighlight, ToastAndroid, ActivityIndicator, BackHandler, Button, ScrollView } from 'react-native';
+import { View, Text, Image, TextInput, Pressable, Alert, ToastAndroid, ActivityIndicator, BackHandler, Animated } from 'react-native';
 import { useEffect, useRef, useState } from 'react';
 import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
@@ -21,7 +21,9 @@ export default function Login({ navigation }: any) {
 
   
   const [rememberMe, setRememberMe] = useState<boolean>(false); 
-  const [otpDigits, setOtpDigits] = useState<string[]>(['', '', '', '', '', ''])          //new change here
+  const [otpDigits, setOtpDigits] = useState<string[]>(['', '', '', '', '', '']);          
+  const otpSlideAnimation = useRef(new Animated.Value(0)).current; 
+  const otpOpacityAnimation = useRef(new Animated.Value(0)).current; 
 
 
   useEffect(() => {
@@ -49,6 +51,26 @@ export default function Login({ navigation }: any) {
       return () => clearInterval(interval);
     }
   }, [otpReSent, otpSent]);
+
+  useEffect(() => {
+  if (otpSent) {
+    Animated.parallel([
+      Animated.timing(otpSlideAnimation, {
+        toValue: 1, 
+        duration: 1200, 
+        useNativeDriver: true, 
+      }),
+      Animated.timing(otpOpacityAnimation, {
+        toValue: 1, 
+        duration: 2500, 
+        useNativeDriver: true, 
+      }),
+    ]).start();
+  } else {
+    otpSlideAnimation.setValue(0); 
+    otpOpacityAnimation.setValue(0);  
+  }
+}, [otpSent]);
 
   const handleOTPDigitChange = (value: string, index: number) => {    //new state manage changes here made
   if (value.length > 1) return; 
@@ -94,7 +116,7 @@ export default function Login({ navigation }: any) {
         ToastAndroid.SHORT,
         ToastAndroid.CENTER,
       );
-      return
+      return;
     }
 
     setShowLoader(true);
@@ -272,14 +294,11 @@ export default function Login({ navigation }: any) {
 
   return (
 
-    //------------------------------------- NEW  UI here ->
-  
-    //Background Layer
      <View className="flex-1">
                                         
     <Image 
       source={Images.LoginBg} 
-      className='bg-[#fefaee]'                               //-->Color adjust Background ke liye
+      className='bg-[#fefaee]'                               
       style={{
         position: 'absolute',
         width: '100%',
@@ -365,16 +384,14 @@ export default function Login({ navigation }: any) {
                 <Image source={Images.pwBlack} className='w-16 h-16' width={10} height={10} />
               </View>
               
-              {/* PRESERVED: Dynamic Title */}
+              
               <Text className="text-gray-900 text-2xl font-bold text-center">
                 {otpSent ? "Enter OTP" : "Login to Continue"}
               </Text>
             </View>
 
-            {/* PRESERVED: Login Form - ALL FUNCTIONALITY INTACT */}
             <View className="w-full max-w-sm">
               
-              {/* PRESERVED: Phone Input */}
               {!otpSent && (
                 <>
                   <Pressable
@@ -405,11 +422,22 @@ export default function Login({ navigation }: any) {
               
               {otpSent && (
                 <>
-                  
                   <View className="bg-white w-full h-14 flex-row rounded-xl px-4 items-center justify-center mb-6 border border-black">
                     <Text className="text-gray-600 text-lg font-medium">{phone}</Text>
                   </View>
-                  
+                    <Animated.View
+                          style={{
+                          transform: [
+                              {
+                                  translateY: otpSlideAnimation.interpolate({
+                                  inputRange: [0, 1],
+                                  outputRange: [-50, 0], 
+                                  }),
+                            },
+                         ],
+                            opacity: otpOpacityAnimation,
+                        }}
+                    >
                   
                   <View className="flex-row justify-between mb-6">
                     {otpDigits.map((digit, index) => (
@@ -429,6 +457,7 @@ export default function Login({ navigation }: any) {
                       </Pressable>
                     ))}
                   </View>
+                  </Animated.View>
                 </>
               )}
 
@@ -535,4 +564,6 @@ export default function Login({ navigation }: any) {
 function uuidv4() {
   throw new Error('Function not implemented.');
 }
+
+
 
