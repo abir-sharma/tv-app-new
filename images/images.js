@@ -46,6 +46,7 @@ import Dropdown from './Dropdown.png';
 import arrowRight from './arrowRight.png';
 import notesVector from './notesVector.png';
 import arrowLeft from './arrowLeft.png';
+import notesVector2 from './notesVector2.png';
 
 export const Images = {
     tenB,
@@ -95,5 +96,6 @@ export const Images = {
     Dropdown,
     arrowRight,
     notesVector,
-    arrowLeft
+    arrowLeft,
+    notesVector2
 }

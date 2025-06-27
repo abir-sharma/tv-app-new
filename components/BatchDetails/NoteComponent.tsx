@@ -60,7 +60,7 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
               className='overflow-hidden rounded-xl flex-row justify-between items-center px-3 py-2 mt-3 border border-b-[4px]'>
               <View
                 className='flex-row justify-center gap-x-2 overflow-hidden rounded-xl w-fit items-center '>
-                <Image source={Images.notesVector} className='w-5 h-5 top-1' width={10} height={10} />
+                <Image source={Images.notesVector2} className='w-5 h-5 top-1' width={10} height={10} />
                 <Text className=' overflow-hidden rounded-xl text-black'>Notes</Text>
               </View>
               <Image source={Images.arrowRight} className='w-2 h-2' width={40} height={40} />

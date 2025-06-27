@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, Image, FlatList, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
@@ -11,11 +11,11 @@ export const PendriveNoteComponent = ({ noteList }: OfflineNoteComponentPropType
   const { selectedBatch, selectedSubject, selectedChapter, selectedClassName, selectedMenu } = useGlobalContext();
 
   const navigation = useNavigation();
-
+  
   const renderGridItem = ({ item }: any) => (
     <Pressable
       style={{ flex: 1 / 4 }}
-      className=' m-1 overflow-hidden rounded-xl border-[1px] border-white/30'
+      className=' m-1 overflow-hidden rounded-xl border-[1px] border-black bg-[#fbfaef]'
       android_ripple={{
         color: "rgba(255,255,255,0.4)",
         borderless: false,
@@ -39,17 +39,17 @@ export const PendriveNoteComponent = ({ noteList }: OfflineNoteComponentPropType
       <LinearGradient {...fromCSS(`linear-gradient(179deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`)}
           className='rounded-xl overflow-hidden'>
         <View style={{ padding: 16 }}>
-          <Text className='text-sm text-white font-medium my-2'>{item?.name?.length >= 60 ? `${item?.name?.substring(0, 60)}...` : item?.name}</Text>
+          <Text className='text-sm text-black font-semibold my-2'>{item?.name?.length >= 60 ? `${item?.name?.substring(0, 60)}...` : item?.name}</Text>
 
           <LinearGradient {...fromCSS(`linear-gradient(179deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)
 )`)}
-          className=' overflow-hidden rounded-xl flex-row justify-between items-center px-3 py-2 mt-3'>
+          className=' overflow-hidden rounded-xl flex-row justify-between items-center px-3 py-2 mt-3 border border-b-[4px]'>
           <View
           className='flex-row justify-center gap-x-2 overflow-hidden rounded-xl w-fit items-center '>
-            <Image source={Images.notesIcon2} className='w-5 h-5' width={10} height={10} />
-            <Text className=' overflow-hidden rounded-xl text-white'>Notes</Text>
+            <Image source={Images.notesVector2} className='w-5 h-5 top-1' width={10} height={10} />
+            <Text className=' overflow-hidden rounded-xl text-black'>Notes</Text>
         </View>      
-              <Image source={Images.goto} className='w-7 h-7' width={40} height={40} />
+              <Image source={Images.arrowRight} className='w-2 h-2' width={40} height={40} />
           </LinearGradient>
         </View>
       </LinearGradient>
@@ -57,8 +57,8 @@ export const PendriveNoteComponent = ({ noteList }: OfflineNoteComponentPropType
   );
 
   return (
-    <View className='pt-5'>
-      {/* <Text style={styles.subjectText}>Physics</Text> */}
+    <View className='p-5'>
+      {noteList?.length === 0 && <Text className='text-black text-2xl self-center items-center'>No notes available!!</Text>}
       <FlatList
         data={noteList?.sort((a, b) => {
           const nameA = a?.name?.toUpperCase(); // Ignore case
