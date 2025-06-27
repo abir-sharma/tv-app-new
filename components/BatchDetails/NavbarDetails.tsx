@@ -49,7 +49,7 @@ const handleLogout = async () => {
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
-            color: "rgba(255,255,255,0.4)",
+            color: "rgba(255,255,255,0.1)",
             borderless: false,
             radius: 1000,
             foreground: true
