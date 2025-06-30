@@ -1,0 +1,138 @@
+/// <reference types="nativewind/types" />
+
+import { ActivityIndicator, ScrollView, Text, View } from 'react-native';
+import NavbarDetails from '../components/BatchDetails/NavbarDetails';
+import { useEffect, useState } from 'react';
+import { useGlobalContext } from '../context/MainContext';
+import Chapters from '../components/BatchDetails/Chapters';
+import axios from 'axios';
+import { VideoComponent } from '../components/BatchDetails/VideoComponent';
+import { NoteComponent } from '../components/BatchDetails/NoteComponent';
+import { DppComponent } from '../components/BatchDetails/DppComponent';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Image } from 'react-native';
+import { Images } from '../images/images';
+
+export default function Details({ navigation }: any) {
+  const { fetchDetails, setDppList, batchDetails, selectSubjectSlug, selectedSubject, selectedBatch, headers, selectedChapter, selectedMenu, setSelectedMenu, getChaptersData } = useGlobalContext();
+ 
+  const [contentType, setContentType] = useState<string>('videos');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [showLoader, setShowLoader] = useState<boolean>(true);
+  const [videoList, setVideoList] = useState<VideoType[] | null>(null);
+  const [noteList, setNoteList] = useState<NoteType[] | null>(null);
+  const [dppNoteList, setDppNoteList] = useState<NoteType[] | null>(null);
+  const [dppVideoList, setDppVideoList] = useState<VideoType[] | null>(null);
+  const [showLoadMoreVideos, setShowLoadMoreVideos] = useState<boolean>(true);
+  const [showLoadMoreNotes, setShowLoadMoreNotes] = useState<boolean>(true);
+  const [showLoadMoreDppNotes, setShowLoadMoreDppNotes] = useState<boolean>(true);
+  const [showLoadMoreDppVideos, setShowLoadMoreDppVideos] = useState<boolean>(true);
+
+  useEffect(() => {
+    setVideoList(null);
+    setNoteList(null);
+    setDppNoteList(null);
+    setDppVideoList(null);
+    setCurrentPage(1);
+    setShowLoadMoreVideos(true);
+    setShowLoadMoreNotes(true);
+    setShowLoadMoreDppNotes(true);
+    setShowLoadMoreDppVideos(true);
+
+  }, [batchDetails, selectSubjectSlug, selectedSubject, selectedBatch])
+
+  const getDetails = async () => {
+    const header = {
+      Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+      organizationId: "5eb393ee95fab7468a79d189"
+    };
+    setShowLoader(true);
+    // setShowLoader(false);
+    try {
+      const res = await axios.get(`https://api.penpencil.co/v2/batches/${batchDetails?.slug}/subject/${selectSubjectSlug}/contents?page=${currentPage}&contentType=${contentType}&tag=${selectedChapter?.slug}`, { headers: header });
+      const resDpp = await axios.get(`https://api.penpencil.co/v3/test-service/tests/dpp?page=1&limit=50&batchId=${selectedBatch?._id}&batchSubjectId=${selectedSubject?._id}&isSubjective=false&chapterId=${selectedChapter?._id}`, { headers: header });
+      if (res) {
+        setShowLoader(false);
+      }
+      if (selectedMenu === 0) {
+        setVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
+        if (res?.data?.data?.length <= 12) {
+          setShowLoadMoreVideos(false);
+        }
+      }
+      if (selectedMenu === 1) {
+        setNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
+        if (res?.data?.data?.length <= 12) {
+          setShowLoadMoreNotes(false);
+        }
+      }
+      if (selectedMenu === 2) {
+        const data = resDpp?.data?.data;
+        setDppList(data);
+      }
+      if (selectedMenu === 3) {
+        setDppNoteList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
+        if (res?.data?.data?.length <= 12) {
+          setShowLoadMoreDppNotes(false);
+        }
+      }
+      if (selectedMenu === 4) {
+        setDppVideoList((prev: any) => ((currentPage > 1 && prev !== null) ? [...prev, ...res?.data?.data] : res?.data?.data));
+        if (res?.data?.data?.length <= 12) {
+          setShowLoadMoreDppVideos(false);
+        }
+      }
+    }
+    catch (err: any) {
+      console.error("error:", err);
+    }
+  }
+
+  useEffect(() => {
+    getDetails();
+  }, [selectedChapter, currentPage, selectedMenu, fetchDetails])
+
+  // useEffect(()=>{
+  //   console.log("change hua video yaha");
+  // }, [videoList]);
+
+  return (
+    <View className="flex-1">
+      <Image 
+          source={Images.LoginBg} 
+          className='bg-[#fefaee]'                               
+          style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          resizeMode: 'cover', 
+            }}
+      />
+      
+      <View className='flex-1 flex-row'>
+
+        {showLoader && <View
+          style={{ position: 'absolute', left: 0, top: 0, zIndex: 10, height: '100%', width: '100%', alignContent: 'center', flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          className='bg-[#fefaee]'
+        >
+          <ActivityIndicator color={"#f9c545"} size={80} />
+        </View>}
+        <View className='flex-1'>
+          <Chapters />
+        </View>
+        <View className='flex-[3]'>
+          <NavbarDetails selectedMenu={selectedMenu} setSelectedMenu={setSelectedMenu} setContentType={setContentType} setCurrentPage={setCurrentPage} />
+
+          <View className='flex-1 pt-5'>
+            {selectedMenu == 0 && <VideoComponent videoList={videoList} setVideoList={setVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreVideos} />}
+            {selectedMenu == 1 && <NoteComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreNotes} />}
+            {selectedMenu == 2 && <DppComponent noteList={noteList} setNoteList={setNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreNotes} />}
+            {selectedMenu == 3 && <NoteComponent noteList={dppNoteList} setNoteList={setDppNoteList} getPaidBatches={getDetails} loadMore={showLoadMoreDppNotes} />}
+            {selectedMenu == 4 && <VideoComponent videoList={dppVideoList} setVideoList={setDppVideoList} getPaidBatches={getDetails} loadMore={showLoadMoreDppVideos} />}
+          </View>
+        </View>
+      </View>
+    </View>
+  );
+}
+
