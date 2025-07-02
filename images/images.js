@@ -5,7 +5,7 @@ import thirtyF from './30f.png';
 import accuracy from './accuracy.png';
 import back from './back.png';
 import back2 from './back2.png';
-import bg from './bg.png';
+import dp from './dp.png';
 import cardgrad from './cardgrad.png';
 import cardgrad2 from './cardgrad2.png';
 import clock from './clock.png';
@@ -15,19 +15,11 @@ import completed from './completed.png';
 import correct from './correct.png';
 import defaultt from './default.jpg';
 import download from './download.png';
-import dp from './dp.png';
 import exit from './exit.png';
-import goto from './goto.png';
 import grad3 from './grad3.png';
-import home from './home.png';
 import icon1 from './icon1.png';
 import icon2 from './icon2.png';
 import incorrect from './incorrect.png';
-import india from './india.png';
-import intro from './intro.gif';
-import noteIcon from './noteIcon.png';
-import notesIcon2 from './notesicon2.png';
-import otpIllustration from './otpIllustration.png';
 import pause from './pause.png';
 import pdf from './pdf.png';
 import play from './play.png';
@@ -47,6 +39,7 @@ import arrowRight from './arrowRight.png';
 import notesVector from './notesVector.png';
 import arrowLeft from './arrowLeft.png';
 import notesVector2 from './notesVector2.png';
+import intro from './intro.gif';
 
 export const Images = {
     tenB,
@@ -56,7 +49,7 @@ export const Images = {
     accuracy,
     back,
     back2,
-    bg,
+    dp,
     cardgrad,
     cardgrad2,
     clock,
@@ -66,19 +59,11 @@ export const Images = {
     correct,
     defaultt,
     download,
-    dp,
     exit,
-    goto,
     grad3,
-    home,
     icon1,
     icon2,
     incorrect,
-    india,
-    intro,
-    noteIcon,
-    notesIcon2,
-    otpIllustration,
     pause,
     pdf,
     play,
@@ -97,5 +82,6 @@ export const Images = {
     arrowRight,
     notesVector,
     arrowLeft,
-    notesVector2
+    notesVector2,
+    intro
 }

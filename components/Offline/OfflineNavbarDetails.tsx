@@ -69,7 +69,7 @@ export default function OfflineNavbarDetails() {
           setOfflineSelectedBatch(-1);
         }}
         className='flex-row justify-center items-center rounded-xl overflow-hidden px-2'>
-        <Image source={Images.home} className='w-8 h-8' width={10} height={10} />
+        <Image source={Images.arrowLeft} className='w-8 h-8' width={10} height={10} />
       </Pressable>
 
       <View>
