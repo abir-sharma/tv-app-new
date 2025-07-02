@@ -199,7 +199,7 @@ export default function Login({ navigation }: any) {
         }).catch((err) => {
           console.error("School data fetch error", err.response.data);
         });
-        navigation.navigate('PendriveBatches');
+        navigation.navigate('Intro');                 //Intro added
       setOtpDigits(['', '', '', '', '', '']); 
       setOtp(''); 
       setOtpSent(false); 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { View, Text, ActivityIndicator, Pressable, Image, TouchableOpacity, StyleSheet, Modal, FlatList, TouchableWithoutFeedback } from "react-native";
+import { View, Text, ActivityIndicator, Pressable, Image, TouchableOpacity, StyleSheet, Modal, FlatList, TouchableWithoutFeedback, AppState } from "react-native";
 import { WebView } from "react-native-webview";
 import styles from "./player.style";
 import Svg, { Path } from "react-native-svg";
@@ -18,6 +18,7 @@ import getYouTubeID from "get-youtube-id";
 import YoutubePlayer from "react-native-youtube-iframe";
 import sendMongoAnalytics from "../../../utils/sendMongoAnalytics";
 import * as Sentry from "@sentry/react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
@@ -52,6 +53,8 @@ export default function VideoPlayer(props: any) {
 
   const [isPlaying, setIsPlaying] = useState<boolean>(props.smallPlayer ? false : true);
   const [showControls, setShowControls] = useState<boolean>(true);
+
+
 
   const onTouchStart = (event: any) => {
     if (!allowAnnotations) return;
@@ -250,6 +253,7 @@ export default function VideoPlayer(props: any) {
   const pauseVideo = () => {
     setIsPlaying(false);
     (playerRef.current as Video | null)?.pauseAsync();
+                                
   };
 
   const skipForward = (skipTime: number) => {
@@ -325,11 +329,12 @@ export default function VideoPlayer(props: any) {
       });
   }
 
-  const handlePlaybackStatusUpdate = useCallback((status: any) => {
+  const handlePlaybackStatusUpdate = useCallback((status: any) => {      
     if (status.isPlaying) {
       setCurrentTime(status.positionMillis);
     }
   }, []);
+
 
   useEffect(() => {
     const interval = setInterval(() => setShowControls(false), 15000);
@@ -371,6 +376,8 @@ export default function VideoPlayer(props: any) {
     };
   }, [isPlaying]);
 
+  
+
   return (
     <View
       onTouchStart={onTouchStart}
@@ -406,7 +413,7 @@ export default function VideoPlayer(props: any) {
           radius: 1000,
           foreground: true,
         }}
-        onPress={() => {
+        onPress={() => {                                    
           navigation.goBack();
           sendMongoAnalytics("video_closed", {
             videoName: props?.lectureDetails?.name,
@@ -755,11 +762,8 @@ export default function VideoPlayer(props: any) {
           {(src && !props.smallPlayer)? <WebView
             style={{ flex: 1 }}
             source={{ uri: src }}
-          />:
-           <YoutubePlayer
-            height={285}
-            videoId={`${getYouTubeID(src)}`}
-          />}
+          /> :  <YoutubePlayer height={285} videoId={`${getYouTubeID(src)}`}/> 
+               }
         </View>
       )}
       <View
@@ -845,3 +849,4 @@ const styles2 = StyleSheet.create({
     fontSize: 12,
   },
 });
+

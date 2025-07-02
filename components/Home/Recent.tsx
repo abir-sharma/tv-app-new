@@ -26,8 +26,9 @@ export default function Recent() {
   
 
     const getProgressPercentage = (videos: VideoType[]) => {               //Yaha pe Logic dalna hai ki video ka progress kaise nikalna hai                          
-
+      
          return Math.floor(Math.random() * 80) + 10; 
+         
   };
   return (
     <View className="">
