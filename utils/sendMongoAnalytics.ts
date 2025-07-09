@@ -23,6 +23,7 @@ const sendMongoAnalytics = async (eventName: string, data: any) => {
     });
 
     console.log("Mongo analytics sent successfully:", eventName);
+   
     
    
   } catch (error: any) {

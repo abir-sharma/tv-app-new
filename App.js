@@ -30,6 +30,7 @@ import PendriveBatchDetails from "./screens/PendriveBatchDetails";
 import * as Updates from 'expo-updates';
 import sendMongoAnalytics from "./utils/sendMongoAnalytics";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import StatusUpdater from "./utils/statusUpdater";
 import * as Sentry from "@sentry/react-native";
 
 const Stack = createNativeStackNavigator();
@@ -45,6 +46,7 @@ export default function App() {
   const [showPdfModal, setShowPdfModal] = useState(false);
   const [pdfUrl, setPdfUrl] = useState("");
   const navigationRef = createNavigationContainerRef();
+    const [schoolId, setSchoolId] = useState('');
 
   const [playing, setPlaying] = useState(false);
 
@@ -152,15 +154,23 @@ export default function App() {
   useEffect(() => {
     onFetchUpdateAsync()
     const init = async () => {
+      try {
       const schoolData = await AsyncStorage.getItem('schoolData');
-      // console.log('schoolData', schoolData);
-    }
+      if (schoolData) {
+        const school = JSON.parse(schoolData);
+        setSchoolId(school._id);
+      }
+    } catch (error) {
+      console.error('Error fetching school data from AsyncStorage:', error);
+     }
+  }
     init();
   }, [])
 
   return (
     <Providers>
       <NavigationContainer ref={navigationRef}>
+         {schoolId && <StatusUpdater schoolId={schoolId} />}
       <Stack.Navigator initialRouteName="PendriveBatches">
         <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />

@@ -45,16 +45,24 @@ export const DppComponent = ({ }: DPPPropType) => {
       hasTVPreferredFocus
       onPress={() => { 
         handleDppClick(item)
+        function extractClassName(data: string | undefined) {
+          if(!data) return "Unknown";
+          const classPattern = /\b([1-9]|1[0-2])(-[A-Z])?\b/;    //idhar classname dekhlna ekbar
+          const matchClass = data.match(classPattern);
+          return matchClass ? matchClass[0] : data.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 10);
+  }
         sendGoogleAnalytics("dpp_quiz_opened", {
           dpp_name: item?.test?.name,
           dpp_id: item?.test?._id,
           batch_name: selectedBatch?.name,
+          class_name: extractClassName(selectedBatch?.name),
           subject_name: selectedSubject?.subject,
         });
         sendMongoAnalytics("dpp_quiz_opened", {
           dppName: item?.test?.name,
           dppId: item?.test?._id,
           batchName: selectedBatch?.name,
+          className: extractClassName(selectedBatch?.name),        //------classname added ----------
           subjectName: selectedSubject?.subject,
           batchId: selectedBatch?._id,
         });

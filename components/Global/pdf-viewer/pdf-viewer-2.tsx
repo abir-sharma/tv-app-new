@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";                          //for note analytics send on goback
 import {
   Platform,
   StyleSheet,

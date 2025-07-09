@@ -39,7 +39,7 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
             chapter_name: selectedChapter?.name,
             isDppPdf: selectedMenu === 3 ? true : false,
             batchId: selectedBatch?._id,
-          });
+          });                                                        //changes here required for the notes closed is not called to calculate duration
           sendMongoAnalytics("note_opened", {
             noteName: item?.topic,
             noteId: item?._id,

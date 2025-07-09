@@ -56,9 +56,8 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
     onPress={() => {
       function extractClassName(data: string | undefined) {
       if(!data) return "Unknown";
-      const classPattern = /\b([1-9]|1[0-2])(-[A-Z])?\b/;
+      const classPattern = /\b([1-9]|1[0-2])(-[A-Z])?\b/;    //idhar classname dekhlna ekbar
       const matchClass = data.match(classPattern);
-      console.log("Extracted class name:", matchClass ? matchClass[0] : data.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 10));
       return matchClass ? matchClass[0] : data.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 10);
   }
       sendGoogleAnalytics("video_opened", {
