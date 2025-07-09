@@ -9,6 +9,7 @@ const sendMongoAnalytics = async (eventName: string, data: any) => {
         .replace(/\b\w/g, c => c.toUpperCase());  
   }
 
+
   const schoolData: any = await AsyncStorage.getItem('schoolData');
 
   try {
@@ -20,7 +21,10 @@ const sendMongoAnalytics = async (eventName: string, data: any) => {
       "schoolId": JSON.parse(schoolData)._id,
       ...data
     });
+
     console.log("Mongo analytics sent successfully:", eventName);
+    
+   
   } catch (error: any) {
     console.error("Error sending mongo analytics: ", error.response.data);
   }

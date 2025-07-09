@@ -54,10 +54,18 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
     }} className=' overflow-hidden rounded-xl'
     
     onPress={() => {
+      function extractClassName(data: string | undefined) {
+      if(!data) return "Unknown";
+      const classPattern = /\b([1-9]|1[0-2])(-[A-Z])?\b/;
+      const matchClass = data.match(classPattern);
+      console.log("Extracted class name:", matchClass ? matchClass[0] : data.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 10));
+      return matchClass ? matchClass[0] : data.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 10);
+  }
       sendGoogleAnalytics("video_opened", {
         video_name: item?.videoDetails?.name,
         video_id: item?.videoDetails?._id,
         batch_name: selectedBatch?.name,
+        class_name: extractClassName(selectedBatch?.name),       //------classname added ----------
         subject_name: selectedSubject?.subject,
         chapter_name: selectedChapter?.name,
         batchId: selectedBatch?._id,
@@ -66,6 +74,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
         videoName: item?.videoDetails?.name,
         videoId: item?.videoDetails?._id,
         batchName: selectedBatch?.name,
+        className: extractClassName(selectedBatch?.name),
         subjectName: selectedSubject?.subject,
         chapterName: selectedChapter?.name,
         batchId: selectedBatch?._id,
