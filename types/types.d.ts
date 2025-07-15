@@ -11,6 +11,7 @@
   batch: BatchInfoType;
   isPurchased: boolean;
   name: string;
+  class: string | null;
 }
 
  type Order = {

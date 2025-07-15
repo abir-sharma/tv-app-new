@@ -7,6 +7,8 @@ import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Entypo from '@expo/vector-icons/Entypo';
 import { useNavigation } from '@react-navigation/native';
 import { Images } from '../../../images/images';
+// import sendMongoAnalytics from "../../../utils/sendMongoAnalytics";
+// import { useGlobalContext } from "../../../context/MainContext";
 
 export default function PDFViewer({ route }: any) {
   let pdfUrl = route?.params?.pdfUrl;
@@ -18,6 +20,7 @@ export default function PDFViewer({ route }: any) {
   const [currentPath, setCurrentPath] = useState<string>('');
   const [tool, setTool] = useState<string | null>(null);
   const [allowAnnotations, setAllowAnnotations] = useState<boolean>(false);
+  // const { selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
 
   const onTouchStart = (event: any) => {
     if (!allowAnnotations) return;
@@ -114,7 +117,18 @@ export default function PDFViewer({ route }: any) {
             radius: 1000,
             foreground: true,
           }}
-          onPress={() => {
+          onPress={() => {                    //--------------note closed event added here----------------
+          // sendMongoAnalytics('note_closed', {
+          //   noteId: props.noteId,
+          //   noteName: props.noteName,
+          //   subjectName: selectedSubject?.subject,
+          //   chapterName: selectedChapter?.name,
+          //   batchId: selectedBatch?._id,
+          //   batchName: selectedBatch?.name,
+          //  });  
+
+           console.log('Note closed event sent to MongoDB');
+
             navigation.goBack();
           }}
           className="bg-black/80 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2"

@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Config, DocumentView, RNPdftron } from "react-native-pdftron";
+import sendMongoAnalytics from '../../../utils/sendMongoAnalytics';
+import { useGlobalContext } from "../../../context/MainContext";
 
 const myToolItem = {
     [Config.CustomToolItemKey.Id]: 'add_page',
@@ -39,6 +41,7 @@ const myToolItem = {
 const PDFTronViewer = ({ route }: any) => {
 
   const navigation = useNavigation();
+  const { selectedSubject, selectedChapter, selectedBatch, selectedMenu } = useGlobalContext();
   let pdfUrl = route?.params?.pdfUrl;
   useEffect(() => {
     RNPdftron.initialize("Insert commercial license key here after purchase");
@@ -82,7 +85,19 @@ const PDFTronViewer = ({ route }: any) => {
       annotationMenuItems={[Config.AnnotationMenu.search, Config.AnnotationMenu.share]}
       onLeadingNavButtonPressed={onLeadingNavButtonPressed}
     />
-    <Pressable className="w-10 h-10 rounded-full absolute top-1 left-1" onPress={()=>{navigation.goBack()}}></Pressable>
+    <Pressable className="w-10 h-10 rounded-full absolute top-1 left-1"
+     onPress={()=>{ 
+        sendMongoAnalytics('note_closed', {
+            noteId: route?.params?.noteId,
+            noteName: route?.params?.noteName,
+            subjectName: selectedSubject?.subject,
+            chapterName: selectedChapter?.name,
+            batchId: selectedBatch?._id,
+            batchName: selectedBatch?.name,
+            className: selectedBatch?.name.replace(/[^a-zA-Z0-9-]/g, '').toUpperCase().slice(0, 10),     //class regex
+           });       
+      navigation.goBack()
+      }}></Pressable>
     </>
   );
 };

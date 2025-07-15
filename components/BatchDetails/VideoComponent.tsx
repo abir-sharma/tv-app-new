@@ -54,12 +54,10 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
     }} className=' overflow-hidden rounded-xl'
     
     onPress={() => {
-      function extractClassName(data: string | undefined) {
-      if(!data) return "Unknown";
-      const classPattern = /\b([1-9]|1[0-2])(-[A-Z])?\b/;    //idhar classname dekhlna ekbar
-      const matchClass = data.match(classPattern);
-      return matchClass ? matchClass[0] : data.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 10);
-  }
+        function extractClassName(data: string | undefined) {
+          if (!data) return "Unknown";
+           return data.replace(/[^a-zA-Z0-9-]/g, '').toUpperCase().slice(0, 10);  //class regex
+    }
       sendGoogleAnalytics("video_opened", {
         video_name: item?.videoDetails?.name,
         video_id: item?.videoDetails?._id,

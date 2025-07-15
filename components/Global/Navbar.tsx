@@ -21,124 +21,167 @@ import { FileSystem } from "react-native-file-access";
 import * as Sentry from "@sentry/react-native";
 
 export default function Navbar() {
-  const { isOnline, setLogs, setIsOnline, headers, setHeaders, setPENDRIVE_BASE_URL } = useGlobalContext();
+  const { isOnline, setLogs, setIsOnline, headers, setHeaders, setPENDRIVE_BASE_URL, subscribedBatches, setSelectedClassNameOnline } = useGlobalContext();
   const navigation = useNavigation();
-  const [phone, setPhone] = useState<string|null>(null);
+  const [phone, setPhone] = useState<string | null>(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [offlineSourceDropdown, setOfflineSourceDropdown] = useState(false);
+  const [showClassDropdown, setShowClassDropdown] = useState(false); 
+  const [selectedClass, setSelectedClass] = useState<string | null>(null);
 
-const handleLogout = async () => {
-  let logoutApiSuccess = false;
-  try {
-    const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", {}, { headers: headers });
-    logoutApiSuccess = res?.data?.success;
-  } catch (err: any) {
-    Sentry.captureException(err);
-    setLogs((logs) => [ ...logs, "Logout API failed (continuing with local cleanup): " + JSON.stringify(err?.response?.data || err?.message),]);
-  }
-  try {
-    await AsyncStorage.clear();
-    setHeaders(null); 
-  } catch (clearError) {
-    console.error("Critical: Failed to clear local storage:", clearError);
-    Sentry.captureException(clearError);
-  }
-  try {
-    // @ts-expect-error
-    navigation.navigate("Login");
-  } catch (navError) {
-    console.error("Navigation error:", navError);
-  }
-  if (logoutApiSuccess) {
-    console.log("Logout successfully");
-  } else {
-    console.log("Logout completed but server logout may have failed)");
-  }
-};
+  const classList = Array.from(
+    new Set(subscribedBatches?.map((item: any) => item.class).filter(Boolean)) 
+  );
+
+  const handleClassSelect = (className: string | null) => {
+    setSelectedClass(className);
+    setSelectedClassNameOnline(className); 
+    setShowClassDropdown(false); 
+  };
+
+  const handleLogout = async () => {
+    let logoutApiSuccess = false;
+    try {
+      const res = await axios.post(
+        "https://api.penpencil.co/v1/oauth/logout",
+        {},
+        { headers: headers }
+      );
+      logoutApiSuccess = res?.data?.success;
+    } catch (err: any) {
+      Sentry.captureException(err);
+      setLogs((logs) => [
+        ...logs,
+        "Logout API failed (continuing with local cleanup): " +
+          JSON.stringify(err?.response?.data || err?.message),
+      ]);
+    }
+    try {
+      await AsyncStorage.clear();
+      setHeaders(null);
+    } catch (clearError) {
+      console.error("Critical: Failed to clear local storage:", clearError);
+      Sentry.captureException(clearError);
+    }
+    try {
+      // @ts-expect-error
+      navigation.navigate("Login");
+    } catch (navError) {
+      console.error("Navigation error:", navError);
+    }
+    if (logoutApiSuccess) {
+      console.log("Logout successfully");
+    } else {
+      console.log("Logout completed but server logout may have failed)");
+    }
+  };
 
   const Seperator = () => {
-    return (
-      <View className="w-full h-[1px] bg-white/40"></View>
-    )
-  }
+    return <View className="w-full h-[1px] bg-white/40"></View>;
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     const getPhone = async () => {
-      const temp = await AsyncStorage.getItem('phone');
+      const temp = await AsyncStorage.getItem("phone");
       setPhone(temp);
-    }
+    };
     getPhone();
-  }, [isDropdownVisible])
+  }, [isDropdownVisible]);
 
   return (
     <View className=" flex-row justify-between items-center p-6 bg-[#fffbe6] border-b-[1px] border-gray-400">
-        <Modal
-          transparent={true}
-          animationType="fade"
-          visible={isDropdownVisible}
-          onRequestClose={() => setIsDropdownVisible(false)}
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={isDropdownVisible}
+        onRequestClose={() => setIsDropdownVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
+          <View style={{ flex: 1 }}>
+            <ScrollView className="bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[80] right-[2] z-[2]">
+              <View className="w-full px-5 py-2">
+                <Text className="text-white text-sm font-bold">v1.0.2</Text>
+              </View>
+              <Seperator />
+              <View className="w-full px-5 py-2">
+                <Text className="text-white text-sm font-bold">
+                  {phone || "---"}
+                </Text>
+              </View>
+              <Seperator />
+              <Pressable
+                onPress={handleLogout}
+                className="w-full px-5 py-2 rounded-b-lg"
+              >
+                <Text className="text-white font-bold text-sm">Logout</Text>
+              </Pressable>
+            </ScrollView>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={offlineSourceDropdown}
+        onRequestClose={() => setOfflineSourceDropdown(false)}
+      >
+        <TouchableWithoutFeedback
+          onPress={() => setOfflineSourceDropdown(false)}
         >
-          <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
-            <View style={{ flex: 1 }}>
-              <ScrollView className='bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[80] right-[2] z-[2]'>
-                <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">v1.0.2</Text></View>
-                <Seperator />
-                <View className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">{phone || "---"}</Text></View>
-                <Seperator />
-                <Pressable onPress={handleLogout} className="w-full px-5 py-2 rounded-b-lg"><Text className="text-white font-bold text-sm">Logout</Text></Pressable>
-              </ScrollView>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
-        <Modal
-          transparent={true}
-          animationType="fade"
-          visible={offlineSourceDropdown}
-          onRequestClose={() => setOfflineSourceDropdown(false)}
-        >
-          <TouchableWithoutFeedback onPress={() => setOfflineSourceDropdown(false)}>
-            <View style={{ flex: 1 }}>
-              <ScrollView className='bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[70] right-[150] z-[2]'>
-                <Pressable onPress={() => {
+          <View style={{ flex: 1 }}>
+            <ScrollView className="bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[70] right-[150] z-[2]">
+              <Pressable
+                onPress={() => {
                   setPENDRIVE_BASE_URL("/storage/emulated/0/Download/Batches");
                   setOfflineSourceDropdown(false);
-                }} className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">SD Card</Text></Pressable>
-                <Seperator />
-                <Pressable onPress={() => {
-                FileSystem.ls("/mnt/media_rw")
-                  .then(async (files) => {
-                    if (files.length > 0) {
-                      let batchesPd: string = '';
-                      for (const pd of files) {
-                        const ls = await FileSystem.ls(`/mnt/media_rw/${pd}`);
-                        if (ls.includes("Batches")) {
-                          batchesPd = pd;
-                          break;
-                        }
-                      }
-                      if (batchesPd === '') {
-                        ToastAndroid.show("No Batches folder found in any pendrive", ToastAndroid.SHORT);
-                        return;
-                      }
-                      const url = `/mnt/media_rw/${batchesPd}/Batches`;
-                      setPENDRIVE_BASE_URL(url);
-                      setOfflineSourceDropdown(false);
-                      console.log(`PENDRIVE_BASE_URL set to: ${url}`);
-                    } else {
-                      // ToastAndroid.show("No pendrive detected", ToastAndroid.SHORT);
-                      setOfflineSourceDropdown(false);
-                    }
-                  })
-                  .catch((error) => {
-                    Sentry.captureException(error);
-                    console.error("Error reading /mnt/media_rw:", error);
-                  });
-              }} className="w-full px-5 py-2"><Text className="text-white text-sm font-bold">Pendrive</Text>
+                }}
+                className="w-full px-5 py-2"
+              >
+                <Text className="text-white text-sm font-bold">SD Card</Text>
               </Pressable>
-              </ScrollView>
-            </View>
-          </TouchableWithoutFeedback>
-        </Modal>
+              <Seperator />
+              <Pressable
+                onPress={() => {
+                  FileSystem.ls("/mnt/media_rw")
+                    .then(async (files) => {
+                      if (files.length > 0) {
+                        let batchesPd: string = "";
+                        for (const pd of files) {
+                          const ls = await FileSystem.ls(`/mnt/media_rw/${pd}`);
+                          if (ls.includes("Batches")) {
+                            batchesPd = pd;
+                            break;
+                          }
+                        }
+                        if (batchesPd === "") {
+                          ToastAndroid.show(
+                            "No Batches folder found in any pendrive",
+                            ToastAndroid.SHORT
+                          );
+                          return;
+                        }
+                        const url = `/mnt/media_rw/${batchesPd}/Batches`;
+                        setPENDRIVE_BASE_URL(url);
+                        setOfflineSourceDropdown(false);
+                        console.log(`PENDRIVE_BASE_URL set to: ${url}`);
+                      } else {
+                        // ToastAndroid.show("No pendrive detected", ToastAndroid.SHORT);
+                        setOfflineSourceDropdown(false);
+                      }
+                    })
+                    .catch((error) => {
+                      Sentry.captureException(error);
+                      console.error("Error reading /mnt/media_rw:", error);
+                    });
+                }}
+                className="w-full px-5 py-2"
+              >
+                <Text className="text-white text-sm font-bold">Pendrive</Text>
+              </Pressable>
+            </ScrollView>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
       <Pressable
         hasTVPreferredFocus={true}
         android_ripple={{
@@ -172,9 +215,13 @@ const handleLogout = async () => {
             // @ts-expect-error
             navigation.navigate("Home");
           }}
-          className={`w-32 h-12 rounded-l-xl items-center justify-center overflow-hidden border-r-[1px] border-b-[3px] ${isOnline ? "bg-[#f9c545]" : "bg-white"} `}
-          >
-          <Text className={`text-black ${isOnline && "font-bold "}`}>Online Batches</Text>
+          className={`w-32 h-12 rounded-l-xl items-center justify-center overflow-hidden border-r-[1px] border-b-[3px] ${
+            isOnline ? "bg-[#f9c545]" : "bg-white"
+          } `}
+        >
+          <Text className={`text-black ${isOnline && "font-bold "}`}>
+            Online Batches
+          </Text>
         </Pressable>
         <Pressable
           android_ripple={{
@@ -186,34 +233,84 @@ const handleLogout = async () => {
           onPress={async () => {
             setIsOnline(false);
             sendGoogleAnalytics("offline_mode_clicked", {
-              mode: "pendrive"
+              mode: "pendrive",
             });
             sendMongoAnalytics("offline_mode_clicked", {
-              mode: "pendrive"
+              mode: "pendrive",
             });
             // @ts-expect-error
             navigation.navigate("PendriveBatches");
           }}
           // className="w-36 h-10 rounded-xl items-center justify-center overflow-hidden"
-          className={`w-32 h-12 rounded-r-xl items-center justify-center overflow-hidden border-r-[3px] border-b-[3px] ${!isOnline ? "bg-[#f9c545]" : "bg-white"} `}
+          className={`w-32 h-12 rounded-r-xl items-center justify-center overflow-hidden border-r-[3px] border-b-[3px] ${
+            !isOnline ? "bg-[#f9c545]" : "bg-white"
+          } `}
         >
-          <Text className={`text-black ${!isOnline && " font-bold "}`}>Offline Batches</Text>
+          <Text className={`text-black ${!isOnline && " font-bold "}`}>
+            Offline Batches
+          </Text>
         </Pressable>
       </View>
       <View className="flex flex-row gap-10 items-center">
+        {isOnline && (
+          <Pressable
+            android_ripple={{
+              color: "rgba(249, 197, 69, 0.4)",
+              borderless: false,
+              radius: 1000,
+              foreground: true,
+            }}
+            onPress={() => setShowClassDropdown((prev) => !prev)}
+            className="w-32 h-12 rounded-xl items-center justify-center overflow-hidden border border-black border-b-[3px] bg-white"
+          >
+            <Text className="text-black">{selectedClass || "All Batches"}</Text>
+          </Pressable>
+        )}
 
-        <Pressable
-          android_ripple={{
-          color: "rgba(255,255,255,0.5)",
-          borderless: false,
-          radius: 1000,
-          foreground: true,
-        }}
-        className="w-32 h-12 rounded-xl items-center justify-center overflow-hidden border border-black border-b-[3px] bg-white"
-      >
-      <Text className="text-black">Class 12th</Text>
-      </Pressable>
-        
+        <Modal
+          visible={showClassDropdown}
+          transparent={true}
+          animationType="fade"
+          onRequestClose={() => setShowClassDropdown(false)}
+        >
+          <TouchableWithoutFeedback onPress={() => setShowClassDropdown(false)}>
+            <View className="flex-1">
+              <View className="absolute top-[80] right-[100] w-40 max-h-[200] bg-[#111111]/90 border-white/20 border-[1px] rounded-xl shadow-md z-50">
+                <ScrollView>
+                  <Pressable
+                    android_ripple={{
+                      color: "rgba(249, 197, 69, 0.4)",
+                      borderless: false,
+                      radius: 1000,
+                    }}
+                    onPress={() => handleClassSelect(null)}
+                    className="p-3 border-b  border-gray-300"
+                  >
+                    <Text className="text-white font-semibold">
+                      All Batches
+                    </Text>
+                  </Pressable>
+
+                  {classList.map((cls) => (
+                    <Pressable
+                      key={cls}
+                      android_ripple={{
+                        color: "rgba(249, 197, 69, 0.4)",
+                        borderless: false,
+                        radius: 1000,
+                      }}
+                      onPress={() => handleClassSelect(cls)}
+                      className="p-3 border-b rounded-xl border-gray-300"
+                    >
+                      <Text className="text-white">{cls}</Text>
+                    </Pressable>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+          </TouchableWithoutFeedback>
+        </Modal>
+
         {/* offline source dropdown */}
         {/* { !isOnline &&
           <Pressable
@@ -262,10 +359,17 @@ const handleLogout = async () => {
             radius: 1000,
             foreground: true,
           }}
-          onPress={()=>{setIsDropdownVisible(prev=>!prev)}}
+          onPress={() => {
+            setIsDropdownVisible((prev) => !prev);
+          }}
           className="flex-row justify-center overflow-hidden rounded-full items-center right-6"
         >
-          <Image source={Images.Dropdown} className='w-14 h-12' width={40} height={40} />
+          <Image
+            source={Images.Dropdown}
+            className="w-14 h-12"
+            width={40}
+            height={40}
+          />
         </Pressable>
       </View>
     </View>

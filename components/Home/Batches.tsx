@@ -14,7 +14,7 @@ import { useEffect } from 'react';
 
 export default function Batches() {
 
-    const { subscribedBatches, setSelectedBatch, setSelectedMenu } = useGlobalContext();
+    const { subscribedBatches, setSelectedBatch, setSelectedMenu, selectedClassNameOnline } = useGlobalContext();
     const navigation = useNavigation();
     
     return (
@@ -22,7 +22,7 @@ export default function Batches() {
             <Text className='text-black text-2xl font-medium ml-5 mt-5'>Online Batches</Text>
         <View className='p-5 w-full mx-auto mb-3 mt-2 flex-none overflow-hidden'>
             <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4'>
-                {subscribedBatches?.map((order, index) => order.isPurchased &&(
+                {subscribedBatches?.filter(order => !selectedClassNameOnline?.trim() || order.class === selectedClassNameOnline).map((order, index) => order.isPurchased &&(
                     <Pressable
                         key={index}
                         hasTVPreferredFocus={true}

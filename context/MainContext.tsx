@@ -95,6 +95,8 @@ type GlobalContextType = {
   setPENDRIVE_BASE_URL: Dispatch<SetStateAction<string>>;
   selectedClassName: string;
   setSelectedClassName: Dispatch<SetStateAction<string>>;
+  selectedClassNameOnline: string | null;                                   //can be used for both online and offline
+  setSelectedClassNameOnline: Dispatch<SetStateAction<string | null>>;
   getPaidBatches: () => void;
 }
 
@@ -182,6 +184,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setPENDRIVE_BASE_URL: () => { },
   selectedClassName: "",
   setSelectedClassName: () => { },
+  selectedClassNameOnline: "",
+  setSelectedClassNameOnline: () => { },
   getPaidBatches: () => { }
 });
 
@@ -240,8 +244,32 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [messageFromRemote, setMessageFromRemote] = useState<string>("");
   const [selectedMenu, setSelectedMenu] = useState<number>(0);
   const [selectedClassName, setSelectedClassName] = useState<string>("");
+  const [selectedClassNameOnline, setSelectedClassNameOnline] = useState<string | null>("");
 
   const [PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL] = useState<string>('/storage/emulated/0/Download/Batches');
+
+
+    useEffect(() => {
+    
+    const initializeHeaders = async () => {
+      try {
+        const token = await AsyncStorage.getItem("token");
+        if (token) {
+          
+          setHeaders({
+            Authorization: `Bearer ${token}`,
+            organizationId: "5eb393ee95fab7468a79d189"
+          });
+        } else {
+          console.log("No token found in storage");
+        }
+      } catch (err) {
+        console.error("Failed to initialize headers:", err);
+      }
+    };
+
+    initializeHeaders();
+  }, []);
 
   const getPaidBatches = () => {
   const header = {
@@ -419,6 +447,7 @@ const loadMoreChaptersData = () => {
         selectedMenu, setSelectedMenu,
         PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL,
         selectedClassName, setSelectedClassName,
+        selectedClassNameOnline, setSelectedClassNameOnline,
         getPaidBatches
       } as GlobalContextType}>
       {children}

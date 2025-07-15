@@ -46,11 +46,9 @@ export const DppComponent = ({ }: DPPPropType) => {
       onPress={() => { 
         handleDppClick(item)
         function extractClassName(data: string | undefined) {
-          if(!data) return "Unknown";
-          const classPattern = /\b([1-9]|1[0-2])(-[A-Z])?\b/;    //idhar classname dekhlna ekbar
-          const matchClass = data.match(classPattern);
-          return matchClass ? matchClass[0] : data.replace(/[^a-zA-Z]/g, '').toUpperCase().slice(0, 10);
-  }
+          if (!data) return "Unknown";
+           return data.replace(/[^a-zA-Z0-9-]/g, '').toUpperCase().slice(0, 10);  //class regex
+    }
         sendGoogleAnalytics("dpp_quiz_opened", {
           dpp_name: item?.test?.name,
           dpp_id: item?.test?._id,

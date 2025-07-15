@@ -26,15 +26,22 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
         }}
         hasTVPreferredFocus
         onPress={() => {
+        function extractClassName(data: string | undefined) {
+          if (!data) return "Unknown";
+           return data.replace(/[^a-zA-Z0-9-]/g, '').toUpperCase().slice(0, 10);  //class regex
+          }          
           // @ts-expect-error
           navigation.navigate('PDFViewer', {
             // pdfUrl: item?.homeworkIds[0]?.attachmentIds[0]?.baseUrl + item?.homeworkIds[0]?.attachmentIds[0]?.key
-            pdfUrl: item.attachmentIds[0]?.baseUrl + item.attachmentIds[0]?.key
+            pdfUrl: item.attachmentIds[0]?.baseUrl + item.attachmentIds[0]?.key,
+            noteId: item?._id,
+            noteName: item?.topic  //further for offline need
           });
           sendGoogleAnalytics("note_opened", {
             note_name: item?.topic,
             note_id: item?._id,
             batch_name: selectedBatch?.name,
+            class_name: extractClassName(selectedBatch?.name),
             subject_name: selectedSubject?.subject,
             chapter_name: selectedChapter?.name,
             isDppPdf: selectedMenu === 3 ? true : false,
@@ -44,6 +51,7 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
             noteName: item?.topic,
             noteId: item?._id,
             batchName: selectedBatch?.name,
+            className: extractClassName(selectedBatch?.name),
             subjectName: selectedSubject?.subject,
             chapterName: selectedChapter?.name,
             isDppPdf: selectedMenu === 3 ? true : false,

@@ -24,6 +24,7 @@ export default function Login({ navigation }: any) {
   const [otpDigits, setOtpDigits] = useState<string[]>(['', '', '', '', '', '']);          
   const otpSlideAnimation = useRef(new Animated.Value(0)).current; 
   const otpOpacityAnimation = useRef(new Animated.Value(0)).current; 
+  
 
 
   useEffect(() => {
@@ -72,7 +73,7 @@ export default function Login({ navigation }: any) {
   }
 }, [otpSent]);
 
-  const handleOTPDigitChange = (value: string, index: number) => {    //new state manage changes here made
+  const handleOTPDigitChange = (value: string, index: number) => {    
   if (value.length > 1) return; 
   
   const newOtpDigits = [...otpDigits];
@@ -179,7 +180,6 @@ export default function Login({ navigation }: any) {
         longitude: 0,
         // "Client-Type": "WEB",
       })
-
       if (res?.data?.success) {
         setHeaders({
           "Authorization": `Bearer ${res?.data?.data?.access_token}`

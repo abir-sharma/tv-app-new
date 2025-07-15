@@ -1,5 +1,18 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { View, Text, ActivityIndicator, Pressable, Image, TouchableOpacity, StyleSheet, Modal, FlatList, TouchableWithoutFeedback, AppState } from "react-native";
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  Pressable,
+  Image,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+  FlatList,
+  TouchableWithoutFeedback,
+  Platform,
+  Dimensions,
+} from "react-native";
 import { WebView } from "react-native-webview";
 import styles from "./player.style";
 import Svg, { Path } from "react-native-svg";
@@ -11,7 +24,7 @@ import { Slider } from "@miblanchard/react-native-slider";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
 import { Images } from "../../../images/images";
 import getYouTubeID from "get-youtube-id";
@@ -19,13 +32,16 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import sendMongoAnalytics from "../../../utils/sendMongoAnalytics";
 import * as Sentry from "@sentry/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { parent } from "cheerio/lib/api/traversing";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 export default function VideoPlayer(props: any) {
   const navigation = useNavigation();
-  const { headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
+  const { headers, selectedBatch, selectedChapter, selectedSubject } =
+    useGlobalContext();
   const playerRef = useRef<Video | null>(null);
   const [spinner, setSpinner] = useState<any>();
   const [src, setSrc] = useState<any>(undefined);
@@ -45,16 +61,18 @@ export default function VideoPlayer(props: any) {
   const [quality, setQuality] = useState(720);
   const [storedTimestamp, setStoredTimestamp] = useState(0);
 
-  const [annotations, setAnnotations] = useState<{ [key: number]: string[] }>({});
+  const [annotations, setAnnotations] = useState<{ [key: number]: string[] }>(
+    {}
+  );
   const [currentPath, setCurrentPath] = useState<string>("");
   const [tool, setTool] = useState<string | null>(null);
   const [allowAnnotations, setAllowAnnotations] = useState<boolean>(false);
   const [token, setToken] = useState<string | null>(null);
 
-  const [isPlaying, setIsPlaying] = useState<boolean>(props.smallPlayer ? false : true);
+  const [isPlaying, setIsPlaying] = useState<boolean>(
+    props.smallPlayer ? false : true
+  );
   const [showControls, setShowControls] = useState<boolean>(true);
-
-
 
   const onTouchStart = (event: any) => {
     if (!allowAnnotations) return;
@@ -125,11 +143,11 @@ export default function VideoPlayer(props: any) {
     }
   };
 
-  useEffect(()=>{
-    if(allowAnnotations){
+  useEffect(() => {
+    if (allowAnnotations) {
       pauseVideo();
     }
-  }, [allowAnnotations])
+  }, [allowAnnotations]);
 
   const [modalVisible, setModalVisible] = useState(false);
   const qualityOptions = [240, 360, 480, 720];
@@ -170,7 +188,7 @@ export default function VideoPlayer(props: any) {
   const MPDTesting = async (mpdUrl: string) => {
     const m3u8url = convertMPDToM3U8(mpdUrl);
     try {
-      if(!m3u8url) return;
+      if (!m3u8url) return;
       const res = await axios.get(m3u8url);
     } catch (err) {
       Sentry.captureException(err);
@@ -178,10 +196,10 @@ export default function VideoPlayer(props: any) {
   };
 
   useEffect(() => {
-    if(props?.scheduleDetails?.videoContentId) {
+    if (props?.scheduleDetails?.videoContentId) {
       const { videoUrl } = props.scheduleDetails.videoContentId.content[0];
       let m3u8Url = convertMPDToM3U8(videoUrl);
-      if(!m3u8Url) return;
+      if (!m3u8Url) return;
       setSrc(m3u8Url);
       sendAnalyticsData(m3u8Url);
       setDuration(convertToSeconds(props?.lectureDetails?.duration));
@@ -215,7 +233,7 @@ export default function VideoPlayer(props: any) {
       return;
     } else {
       let m3u8Url = convertMPDToM3U8(props?.lectureDetails?.videoUrl);
-      if(!m3u8Url) return;
+      if (!m3u8Url) return;
       setSrc(m3u8Url);
       sendAnalyticsData(m3u8Url);
       // getSignedUrlCookie(m3u8Url);
@@ -234,8 +252,7 @@ export default function VideoPlayer(props: any) {
           true
         );
       setPlaybackSpeed(playbackSpeedOptions[nextSpeedIndex]);
-    }
-    else {
+    } else {
       playerRef.current &&
         playerRef.current.setRateAsync(playbackSpeedOptions[0], true);
       setPlaybackSpeed(playbackSpeedOptions[0]);
@@ -247,13 +264,12 @@ export default function VideoPlayer(props: any) {
     (playerRef.current as Video | null)?.playAsync();
     setAllowAnnotations(false);
     setTool(null);
-    setAnnotations({})
+    setAnnotations({});
   };
 
   const pauseVideo = () => {
     setIsPlaying(false);
     (playerRef.current as Video | null)?.pauseAsync();
-                                
   };
 
   const skipForward = (skipTime: number) => {
@@ -277,13 +293,12 @@ export default function VideoPlayer(props: any) {
   };
 
   function convertMPDToM3U8(mpdUrl: string) {
-    if(!mpdUrl) return;
+    if (!mpdUrl) return;
     let match;
     try {
       const idRegex = /\/([0-9a-f-]+)\/master\.mpd$/i;
       match = mpdUrl.match(idRegex);
-    }
-    catch (e) {
+    } catch (e) {
       console.error("Unexpected error occured!", e);
       return;
     }
@@ -298,27 +313,115 @@ export default function VideoPlayer(props: any) {
   }
 
   useEffect(() => {
-    if(!isYoutubeVideo){
-      if(props?.scheduleDetails?.videoContentId)
-        setSrc(convertMPDToM3U8(props?.scheduleDetails?.videoContentId?.content[0]?.videoUrl));
-      else
-        setSrc(convertMPDToM3U8(props?.lectureDetails?.videoUrl));
+    if (!isYoutubeVideo) {
+      if (props?.scheduleDetails?.videoContentId)
+        setSrc(
+          convertMPDToM3U8(
+            props?.scheduleDetails?.videoContentId?.content[0]?.videoUrl
+          )
+        );
+      else setSrc(convertMPDToM3U8(props?.lectureDetails?.videoUrl));
     }
   }, [quality]);
 
+  // here change  for  working
   async function sendAnalyticsData(uri: string) {
+    // const newHeaders = {
+    //   "content-Type": "application/json",
+    //   authorization: headers.Authorization,
+    //   "client-type": "WEB",
+    //   "client-version": "200",
+    //   "random-id": uuidv4(),
+    //   "client-id": headers.organizationId ? headers.organizationId : "5eb393ee95fab7468a79d189",
+    // };
     const newHeaders = {
-      "Content-Type": "application/json",
-      Authorization: headers.Authorization,
-      "Client-Type": "WEB",
+      "content-type": "application/json",
+      authorization: headers.Authorization,
+      "client-type": "WEB",
+      "client-version": "200",
+      "random-id": uuidv4(),
+      "client-id": headers.organizationId || "5eb393ee95fab7468a79d189",
+      devicememory: "8192",
+      devicetype: Platform.OS === "ios" ? "ios" : "desktop",
+      screenresolution: `${Dimensions.get("window").width} x ${
+        Dimensions.get("window").height
+      }`,
+      "user-agent": "ReactNativeApp/1.0",
+      origin: "https://www.pw.live",
+      referer: "https://www.pw.live/",
+      audiocodeccapability: JSON.stringify({
+        "AAC-LC": {
+          isSupported: true,
+          Profile: [{ container: "audio/mp4", supported: true }],
+        },
+        "HE-AAC v1": {
+          isSupported: true,
+          Profile: [{ container: "audio/mp4", supported: true }],
+        },
+        "HE-AAC v2": {
+          isSupported: true,
+          Profile: [{ container: "audio/mp4", supported: true }],
+        },
+      }),
+      videocodeccapability: JSON.stringify({
+        Hevc: {
+          isSupported: "true",
+          Profile: [{ name: "Main" }, { name: "Main 10" }],
+        },
+        AV1: {
+          isSupported: "true",
+          Profile: [{ name: "Main" }],
+        },
+      }),
+      drmcapability: JSON.stringify({
+        aesSupport: "yes",
+        fairPlayDrmSupport: "no",
+        playreadyDrmSupport: "no",
+        widevineDRMSupport: "yes",
+      }),
+      devicestreamingtechnology: JSON.stringify({
+        dash: {
+          isSupported: true,
+          formats: ["mp4", "m4a"],
+          codecs: ["avc1", "aac"],
+        },
+        hls: {
+          isSupported: false,
+          formats: [],
+          codecs: [],
+        },
+      }),
+      frameratecapability: JSON.stringify({
+        videoQuality: "720p (HD)",
+      }),
+      networktype: "4g",
     };
     const data = {
-      url: uri,
+      type: props?.scheduleDetails?.lectureType,
+      videoUrl: uri,
+      parentId: selectedBatch?._id,
+      childId:
+        props?.scheduleDetails?.lectureType === "RECORDED"
+          ? props?.scheduleDetails?._id
+          : props?.lectureDetails?._id,
+      videoContainerType: "DASH",
+      clientVersion: "201",
+      reqType: "query",
     };
-    axios.post("https://api.penpencil.co/v3/files/send-analytics-data", data, {
-        headers: newHeaders,
-      })
+
+    console.log("analytics headers --->", newHeaders);
+    console.log("---------------------------------------------");
+    console.log("analytics data --->", data);
+
+    axios
+      .get(
+        `https://api.penpencil.co/v1/videos/video-url-details?type=${data.type}&videoContainerType=DASH&reqType=query&childId=${data.childId}&parentId=${data.parentId}&clientVersion=201`,
+        {
+          headers: newHeaders,
+        }
+      )
       .then((response) => {
+        console.log("analytics response --->", response?.data);
         const cookie = cookieSplitter(response?.data?.data);
         getM3U8WithCookie(uri, cookieSplitter(response?.data?.data));
         setCookieParams(cookie);
@@ -329,12 +432,11 @@ export default function VideoPlayer(props: any) {
       });
   }
 
-  const handlePlaybackStatusUpdate = useCallback((status: any) => {      
+  const handlePlaybackStatusUpdate = useCallback((status: any) => {
     if (status.isPlaying) {
       setCurrentTime(status.positionMillis);
     }
   }, []);
-
 
   useEffect(() => {
     const interval = setInterval(() => setShowControls(false), 15000);
@@ -348,10 +450,8 @@ export default function VideoPlayer(props: any) {
           cookie: cookieParams,
         },
       })
-      .then((res) => {
-      })
-      .catch((err) => {
-      });
+      .then((res) => {})
+      .catch((err) => {});
   }
 
   useEffect(() => {
@@ -364,11 +464,11 @@ export default function VideoPlayer(props: any) {
         }
       });
     };
-  
+
     if (isPlaying) {
       updateTime();
     }
-  
+
     return () => {
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
@@ -376,15 +476,15 @@ export default function VideoPlayer(props: any) {
     };
   }, [isPlaying]);
 
-  
-
   return (
     <View
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
       style={{ minHeight: "100%" }}
-      className={` h-full ${props.smallPlayer == 1 ? "bg-white": "bg-[#1a1a1a]"}`}
+      className={` h-full ${
+        props.smallPlayer == 1 ? "bg-white" : "bg-[#1a1a1a]"
+      }`}
     >
       {showLoader && (
         <View
@@ -406,53 +506,58 @@ export default function VideoPlayer(props: any) {
         </View>
       )}
 
-      {props.smallPlayer == 0 && <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.5)",
-          borderless: false,
-          radius: 1000,
-          foreground: true,
-        }}
-        onPress={() => {                                    
-          navigation.goBack();
-          sendMongoAnalytics("video_closed", {
-            videoName: props?.lectureDetails?.name,
-            videoId: props?.lectureDetails?._id,
-            batchName: selectedBatch?.name,
-            subjectName: selectedSubject?.subject,
-            chapterName: selectedChapter?.name,
-            batchId: selectedBatch?._id,
-          });
-        }}
-        className="bg-black/40 overflow-hidden rounded-full z-[10] p-2 absolute top-2 left-2"
-      >
-        <Image
-          source={Images.exit}
-          width={30}
-          height={30}
-          className="h-[30] w-[30]"
-        />
-      </Pressable>}
+      {props.smallPlayer == 0 && (
+        <Pressable
+          android_ripple={{
+            color: "rgba(255,255,255,0.5)",
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          onPress={() => {
+            navigation.goBack();
+            sendMongoAnalytics("video_closed", {
+              videoName: props?.lectureDetails?.name,
+              videoId: props?.lectureDetails?._id,
+              batchName: selectedBatch?.name,
+              subjectName: selectedSubject?.subject,
+              chapterName: selectedChapter?.name,
+              batchId: selectedBatch?._id,
+            });
+          }}
+          className="bg-black/40 overflow-hidden rounded-full z-[10] p-2 absolute top-2 left-2"
+        >
+          <Image
+            source={Images.exit}
+            width={30}
+            height={30}
+            className="h-[30] w-[30]"
+          />
+        </Pressable>
+      )}
 
-      {!isYoutubeVideo && props.smallPlayer && showControls && <Pressable
-        android_ripple={{
-          color: "rgba(255,255,255,0.5)",
-          borderless: false,
-          radius: 1000,
-          foreground: true,
-        }}
-        onPress={()=>{
-          setIsPlaying(false);
-          // @ts-expect-error
-          navigation.navigate("Video", {
-          lectureDetails: props.lectureDetails,
-          scheduleDetails: props.scheduleDetails,
-          });}}
-        className="bg-black/40 overflow-hidden rounded-full z-[3] p-2 absolute top-2 left-2"
-      >
-        <MaterialIcons name="fullscreen" size={28} color="white" />
-      </Pressable>}
-      {!isYoutubeVideo && showControls && (props.smallPlayer == 0 ) && (
+      {!isYoutubeVideo && props.smallPlayer && showControls && (
+        <Pressable
+          android_ripple={{
+            color: "rgba(255,255,255,0.5)",
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          onPress={() => {
+            setIsPlaying(false);
+            // @ts-expect-error
+            navigation.navigate("Video", {
+              lectureDetails: props.lectureDetails,
+              scheduleDetails: props.scheduleDetails,
+            });
+          }}
+          className="bg-black/40 overflow-hidden rounded-full z-[3] p-2 absolute top-2 left-2"
+        >
+          <MaterialIcons name="fullscreen" size={28} color="white" />
+        </Pressable>
+      )}
+      {!isYoutubeVideo && showControls && props.smallPlayer == 0 && (
         <View className="flex-row absolute top-2 right-2 z-[5]">
           <Pressable
             android_ripple={{
@@ -492,7 +597,7 @@ export default function VideoPlayer(props: any) {
           </Pressable>
         </View>
       )}
-      { !isYoutubeVideo && showControls && props?.currentVideos?.length > 1 && (
+      {!isYoutubeVideo && showControls && props?.currentVideos?.length > 1 && (
         <View className="bg-black/60 overflow-hidden rounded-xl z-[3] p-1.5 absolute bottom-12 mb-1 left-2">
           <View className="flex flex-row gap-2 items-center justify-center">
             <TouchableOpacity
@@ -519,8 +624,7 @@ export default function VideoPlayer(props: any) {
           setShowControls((prev) => !prev);
         }}
         className={`bg-transparent overflow-hidden w-screen h-screen absolute top-0 left-0 duration-300  z-[2]`}
-      >
-      </Pressable>
+      ></Pressable>
       {!isYoutubeVideo && showControls && props.smallPlayer == 0 && (
         <Pressable
           className={`bg-black/80 absolute overflow-hidden rounded-xl flex flex-row items-center px-1 pl-2 py-1  duration-300 bottom-12 mb-1 z-[3] right-2`}
@@ -570,15 +674,21 @@ export default function VideoPlayer(props: any) {
         </Pressable>
       )}
       {!isYoutubeVideo && showControls && (
-        <View className={`absolute ${props.smallPlayer == 1 && " scale-90 "} bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2`}>
+        <View
+          className={`absolute ${
+            props.smallPlayer == 1 && " scale-90 "
+          } bottom-2 left-0 z-[2] w-full rounded-xl flex-col items-center justify-center px-2`}
+        >
           <View className="flex-row bg-black/50 rounded-xl p-2">
             <View>
-              {props.smallPlayer == 0 && <Pressable
-                onPress={() => setModalVisible(true)}
-                className="bg-black/90 overflow-hidden rounded-full w-12 h-12 flex mr-2 items-center justify-center"
-              >
-                <Text className="text-sm text-[#7363FC] font-bold mb-1 overflow-hidden">{`${quality}p`}</Text>
-              </Pressable>}
+              {props.smallPlayer == 0 && (
+                <Pressable
+                  onPress={() => setModalVisible(true)}
+                  className="bg-black/90 overflow-hidden rounded-full w-12 h-12 flex mr-2 items-center justify-center"
+                >
+                  <Text className="text-sm text-[#7363FC] font-bold mb-1 overflow-hidden">{`${quality}p`}</Text>
+                </Pressable>
+              )}
 
               <Modal
                 visible={modalVisible}
@@ -655,11 +765,7 @@ export default function VideoPlayer(props: any) {
               className="bg-black/90 overflow-hidden rounded-full ml-2 p-2"
             >
               <Image
-                source={
-                  isPlaying
-                    ? Images.pause
-                    : Images.play
-                }
+                source={isPlaying ? Images.pause : Images.play}
                 width={30}
                 height={30}
                 className="h-[30] w-[30]"
@@ -706,14 +812,16 @@ export default function VideoPlayer(props: any) {
               />
             </Pressable>
 
-            {props.smallPlayer == 0 && <Pressable
-              onPress={() => {
-                togglePlaybackSpeed();
-              }}
-              className="bg-black/90 overflow-hidden rounded-full w-12 h-12 flex ml-2 items-center justify-center"
-            >
-              <Text className=" text-sm text-[#7363FC] font-bold mb-1 overflow-hidden">{`${playbackSpeed}x`}</Text>
-            </Pressable>}
+            {props.smallPlayer == 0 && (
+              <Pressable
+                onPress={() => {
+                  togglePlaybackSpeed();
+                }}
+                className="bg-black/90 overflow-hidden rounded-full w-12 h-12 flex ml-2 items-center justify-center"
+              >
+                <Text className=" text-sm text-[#7363FC] font-bold mb-1 overflow-hidden">{`${playbackSpeed}x`}</Text>
+              </Pressable>
+            )}
           </View>
           <View className="flex-row bg-black/50 rounded-xl mt-2 px-5 w-full mx-5">
             <View className="flex flex-row justify-between items-center w-full">
@@ -758,12 +866,12 @@ export default function VideoPlayer(props: any) {
         </View>
       )}
       {isYoutubeVideo && (
-        <View className={`z-[10] h-full ${(src && props.smallPlayer)&& 'mt-4' }`} >
-          {(src && !props.smallPlayer)? <WebView
-            style={{ flex: 1 }}
-            source={{ uri: src }}
-          /> :  <YoutubePlayer height={285} videoId={`${getYouTubeID(src)}`}/> 
-               }
+        <View className={`z-[10] h-full ${src && props.smallPlayer && "mt-4"}`}>
+          {src && !props.smallPlayer ? (
+            <WebView style={{ flex: 1 }} source={{ uri: src }} />
+          ) : (
+            <YoutubePlayer height={285} videoId={`${getYouTubeID(src)}`} />
+          )}
         </View>
       )}
       <View
@@ -773,45 +881,50 @@ export default function VideoPlayer(props: any) {
         onTouchEnd={onTouchEnd}
       >
         {renderVideo && (
-        <Video
-          source={{
-            uri: src,
-            headers: {
-              cookie: cookieParams,
-              Authorization: headers?.Authorization,
-            },
-          }}
-          onLoadStart={() => {
-            playerRef.current &&
-              playerRef.current.setPositionAsync(storedTimestamp);
-            setCurrentTime(storedTimestamp);
-          }}
-          style={styles.backgroundVideo}
-          ref={playerRef}
-          useNativeControls={false}
-          onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
-          resizeMode={ResizeMode.CONTAIN}
-          onError={(err: string) => {
-            console.error("Video Player Error --->", err, `${cookieParams}`)
-          }}
-          isMuted={isMuted}
-          shouldPlay={isPlaying}
-          volume={volume}
-          onLoad={() => setShowLoader(false)}
-        />
-      )}
+          <Video
+            source={{
+              uri: src,
+              headers: {
+                cookie: cookieParams,
+                Authorization: headers?.Authorization,
+              },
+            }}
+            onLoadStart={() => {
+              playerRef.current &&
+                playerRef.current.setPositionAsync(storedTimestamp);
+              setCurrentTime(storedTimestamp);
+            }}
+            style={styles.backgroundVideo}
+            ref={playerRef}
+            useNativeControls={false}
+            onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
+            resizeMode={ResizeMode.CONTAIN}
+            onError={(err: string) => {
+              console.error("Video Player Error --->", err, `${cookieParams}`);
+            }}
+            isMuted={isMuted}
+            shouldPlay={isPlaying}
+            volume={volume}
+            onLoad={() => setShowLoader(false)}
+          />
+        )}
         {allowAnnotations && (
           <Svg className=" absolute top-0 left-0 right-0 bottom-0">
             {(annotations[currentPage] || []).map((path, index) => (
-              <Path key={index} d={path} stroke="red" strokeWidth={3} fill="none" />
+              <Path
+                key={index}
+                d={path}
+                stroke="red"
+                strokeWidth={3}
+                fill="none"
+              />
             ))}
-            {currentPath !== '' && (
+            {currentPath !== "" && (
               <Path d={currentPath} stroke="red" strokeWidth={3} fill="none" />
             )}
           </Svg>
         )}
       </View>
-      
     </View>
   );
 }
@@ -849,4 +962,3 @@ const styles2 = StyleSheet.create({
     fontSize: 12,
   },
 });
-
