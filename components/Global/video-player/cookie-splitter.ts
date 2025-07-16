@@ -53,6 +53,26 @@ export function cookieSplitter(cookie: string) {
   return decryptedCookie;
 }
 
+export function cookieSplitterFromSignedUrl(signedUrl: string) {
+ const params = new URLSearchParams((signedUrl.replace(/^\?/, '')));
+
+  const cloudfrontMap = {
+    'Key-Pair-Id': 'CloudFront-Key-Pair-Id',
+    'Policy': 'CloudFront-Policy',
+    'Signature': 'CloudFront-Signature',
+  };
+
+  let result = [];
+
+  for (const [key, value] of params.entries()) {
+    if (cloudfrontMap[key]) {
+      result.push(`${cloudfrontMap[key]}=${value}`);
+    }
+  }
+  return result.join('; ');
+}
+
+
 function getDecryptCookie(cookie: any) {
   const key = crypto.enc.Utf8.parse(KEYS.VIDEO_ENCRYPTION_KEY);
   const iv = crypto.enc.Utf8.parse(KEYS.INITIALISATION_VECTOR);

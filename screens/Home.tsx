@@ -9,7 +9,6 @@ import { useGlobalContext } from '../context/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
 import axios from "axios";
 import NetInfo from "@react-native-community/netinfo";
 import { Images } from "../images/images";
@@ -78,7 +77,7 @@ export default function Home({ navigation }: any) {
       ToastAndroid.show("No internet connection", ToastAndroid.SHORT);
       return;
     }
-    const randu = uuidv4();
+    const randu = await AsyncStorage.getItem("randomId");
     const token = await AsyncStorage.getItem("token");
     if (token) {
       const headers: any = { 'Authorization': `Bearer ${token}`, 'randomId': randu }

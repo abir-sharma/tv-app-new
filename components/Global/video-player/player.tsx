@@ -10,15 +10,13 @@ import {
   Modal,
   FlatList,
   TouchableWithoutFeedback,
-  Platform,
-  Dimensions,
 } from "react-native";
 import { WebView } from "react-native-webview";
 import styles from "./player.style";
 import Svg, { Path } from "react-native-svg";
 import axios from "axios";
 import { Video, ResizeMode } from "expo-av";
-import { cookieSplitter } from "./cookie-splitter";
+import { cookieSplitter, cookieSplitterFromSignedUrl } from "./cookie-splitter";
 import { useGlobalContext } from "../../../context/MainContext";
 import { Slider } from "@miblanchard/react-native-slider";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
@@ -32,9 +30,9 @@ import YoutubePlayer from "react-native-youtube-iframe";
 import sendMongoAnalytics from "../../../utils/sendMongoAnalytics";
 import * as Sentry from "@sentry/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { parent } from "cheerio/lib/api/traversing";
+
 import "react-native-get-random-values";
-import { v4 as uuidv4 } from "uuid";
+
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -67,7 +65,6 @@ export default function VideoPlayer(props: any) {
   const [currentPath, setCurrentPath] = useState<string>("");
   const [tool, setTool] = useState<string | null>(null);
   const [allowAnnotations, setAllowAnnotations] = useState<boolean>(false);
-  const [token, setToken] = useState<string | null>(null);
 
   const [isPlaying, setIsPlaying] = useState<boolean>(
     props.smallPlayer ? false : true
@@ -185,37 +182,13 @@ export default function VideoPlayer(props: any) {
     return number.toString().padStart(2, "0");
   }
 
-  const MPDTesting = async (mpdUrl: string) => {
-    const m3u8url = convertMPDToM3U8(mpdUrl);
-    try {
-      if (!m3u8url) return;
-      const res = await axios.get(m3u8url);
-    } catch (err) {
-      Sentry.captureException(err);
-    }
-  };
-
   useEffect(() => {
-    if (props?.scheduleDetails?.videoContentId) {
-      const { videoUrl } = props.scheduleDetails.videoContentId.content[0];
-      let m3u8Url = convertMPDToM3U8(videoUrl);
-      if (!m3u8Url) return;
-      setSrc(m3u8Url);
-      sendAnalyticsData(m3u8Url);
-      setDuration(convertToSeconds(props?.lectureDetails?.duration));
-      setRenderVideo(true);
-      setSpinner(false);
-      return;
-    }
-    // MPD testing
-    MPDTesting(props?.lectureDetails?.videoUrl);
-    setDuration(convertToSeconds(props?.lectureDetails?.duration));
-    setSpinner(true);
-    if (!props?.lectureDetails?.videoUrl && props?.lectureDetails?.types) {
+  if (!props?.lectureDetails?.videoUrl && props?.lectureDetails?.types) {
       setNoVideoAvailable(true);
       setSpinner(false);
       return;
     }
+
     if (isYoutubeVideo) {
       setShowControls(false);
       setShowLoader(false);
@@ -225,21 +198,21 @@ export default function VideoPlayer(props: any) {
       setSpinner(false);
       return;
     }
+
+
+
     if (props.isLive) {
-      setSrc(props?.lectureDetails?.videoUrl);
-      // sendAnalyticsData(props?.lectureDetails?.videoUrl);
+     
+      sendAnalyticsData();
+     
       setRenderVideo(true);
       setSpinner(false);
       return;
-    } else {
-      let m3u8Url = convertMPDToM3U8(props?.lectureDetails?.videoUrl);
-      if (!m3u8Url) return;
-      setSrc(m3u8Url);
-      sendAnalyticsData(m3u8Url);
-      // getSignedUrlCookie(m3u8Url);
-      setRenderVideo(true);
-      setSpinner(false);
     }
+
+    setDuration(convertToSeconds(props?.lectureDetails?.duration));
+    
+    sendAnalyticsData();
   }, [quality, props]);
 
   const togglePlaybackSpeed = () => {
@@ -304,8 +277,7 @@ export default function VideoPlayer(props: any) {
     }
     if (match) {
       const id = match[1];
-      const m3u8Url = `https://sec1.pw.live/${id}/hls/${quality}/main.m3u8`;
-      // const m3u8Url = `https://sec1.pw.live/${id}/master.m3u8`;
+      const m3u8Url = `https://d1d34p8vz63oiq.cloudfront.net/${id}/hls/${quality}/main.m3u8`;
       return m3u8Url;
     } else {
       return "Invalid MPD URL";
@@ -324,31 +296,23 @@ export default function VideoPlayer(props: any) {
     }
   }, [quality]);
 
-  // here change  for  working
-  async function sendAnalyticsData(uri: string) {
+  async function sendAnalyticsData() {
+    const rId = await AsyncStorage.getItem("randomId");
     // const newHeaders = {
     //   "content-Type": "application/json",
     //   authorization: headers.Authorization,
-    //   "client-type": "WEB",
+    //   "client-type": "ANDROID",
     //   "client-version": "200",
-    //   "random-id": uuidv4(),
-    //   "client-id": headers.organizationId ? headers.organizationId : "5eb393ee95fab7468a79d189",
+    //    randomid: rId,
+    //   "client-id": headers.organizationId || "5eb393ee95fab7468a79d189",
     // };
     const newHeaders = {
       "content-type": "application/json",
       authorization: headers.Authorization,
-      "client-type": "WEB",
-      "client-version": "200",
-      "random-id": uuidv4(),
       "client-id": headers.organizationId || "5eb393ee95fab7468a79d189",
-      devicememory: "8192",
-      devicetype: Platform.OS === "ios" ? "ios" : "desktop",
-      screenresolution: `${Dimensions.get("window").width} x ${
-        Dimensions.get("window").height
-      }`,
-      "user-agent": "ReactNativeApp/1.0",
-      origin: "https://www.pw.live",
-      referer: "https://www.pw.live/",
+      "client-type": "ANDROID",
+      "client-version": "200",
+      randomid: rId,
       audiocodeccapability: JSON.stringify({
         "AAC-LC": {
           isSupported: true,
@@ -363,16 +327,9 @@ export default function VideoPlayer(props: any) {
           Profile: [{ container: "audio/mp4", supported: true }],
         },
       }),
-      videocodeccapability: JSON.stringify({
-        Hevc: {
-          isSupported: "true",
-          Profile: [{ name: "Main" }, { name: "Main 10" }],
-        },
-        AV1: {
-          isSupported: "true",
-          Profile: [{ name: "Main" }],
-        },
-      }),
+      devicememory: "8192",
+      devicetype: "mobile",
+      networktype: "4g",
       drmcapability: JSON.stringify({
         aesSupport: "yes",
         fairPlayDrmSupport: "no",
@@ -391,27 +348,49 @@ export default function VideoPlayer(props: any) {
           codecs: [],
         },
       }),
-      frameratecapability: JSON.stringify({
-        videoQuality: "720p (HD)",
+      frameratecapability: JSON.stringify({ videoQuality: "720p (HD)" }),
+      videocodeccapability: JSON.stringify({
+        Hevc: {
+          isSupported: "true",
+          Profile: [
+            { name: "Main" },
+            { name: "Main 10" },
+            { name: "Main 12" },
+            { name: "Main 4:2:2 10" },
+            { name: "Main 4:2:2 12" },
+            { name: "Main 4:4:4" },
+            { name: "Main 4:4:4 10" },
+            { name: "Main 4:4:4 12" },
+            { name: "Main 4:4:4 16 Intra" },
+          ],
+        },
+        AV1: {
+          isSupported: "true",
+          Profile: [
+            { name: "Main" },
+            { name: "High" },
+            { name: "Professional" },
+          ],
+        },
       }),
-      networktype: "4g",
     };
+
     const data = {
-      type: props?.scheduleDetails?.lectureType,
-      videoUrl: uri,
+      // type: props?.scheduleDetails?.lectureType,
+      type: "BATCHES",
       parentId: selectedBatch?._id,
-      childId:
-        props?.scheduleDetails?.lectureType === "RECORDED"
-          ? props?.scheduleDetails?._id
-          : props?.lectureDetails?._id,
+      childId: props?.scheduleDetails?._id,
       videoContainerType: "DASH",
       clientVersion: "201",
       reqType: "query",
     };
 
-    console.log("analytics headers --->", newHeaders);
+    // console.log("analytics headers --->", JSON.stringify(props?.scheduleDetails));
     console.log("---------------------------------------------");
-    console.log("analytics data --->", data);
+
+    console.log("DATA FOR ANALYTICS --->", data);
+    console.log("comparison data --->",props?.scheduleDetails);
+    console.log("---------------------------------------------");
 
     axios
       .get(
@@ -421,11 +400,22 @@ export default function VideoPlayer(props: any) {
         }
       )
       .then((response) => {
-        console.log("analytics response --->", response?.data);
-        const cookie = cookieSplitter(response?.data?.data);
-        getM3U8WithCookie(uri, cookieSplitter(response?.data?.data));
-        setCookieParams(cookie);
-        setRenderVideo(true);
+        try {
+          const uri = response?.data?.data?.url.split("?")[0] || "";
+          const m3u8Url = convertMPDToM3U8(uri);
+
+          const params = new URLSearchParams(
+            response?.data?.data?.url.split("?")[1] || ""
+          );
+          const cookie = cookieSplitterFromSignedUrl(params.toString());
+          setSrc(m3u8Url);
+          setCookieParams(cookie);
+          setRenderVideo(true);
+          setSpinner(false);
+        } catch (error) {
+          console.error("Error processing analytics response:", error);
+          Sentry.captureException(error);
+        }
       })
       .catch((error) => {
         console.error("analytics failed --->", error?.response?.data);
@@ -443,16 +433,16 @@ export default function VideoPlayer(props: any) {
     return () => clearInterval(interval);
   }, [isActive]);
 
-  function getM3U8WithCookie(src: string, cookieParams: string) {
-    axios
-      .get(src, {
-        headers: {
-          cookie: cookieParams,
-        },
-      })
-      .then((res) => {})
-      .catch((err) => {});
-  }
+  // function getM3U8WithCookie(src: string, cookieParams: string) {
+  //   axios
+  //     .get(src, {
+  //       headers: {
+  //         cookie: cookieParams,
+  //       },
+  //     })
+  //     .then((res) => {})
+  //     .catch((err) => {});
+  // }
 
   useEffect(() => {
     let animationFrameId: number;
@@ -880,7 +870,7 @@ export default function VideoPlayer(props: any) {
         onTouchMove={onTouchMove}
         onTouchEnd={onTouchEnd}
       >
-        {renderVideo && (
+        {renderVideo && !isYoutubeVideo && (
           <Video
             source={{
               uri: src,

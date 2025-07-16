@@ -6,6 +6,10 @@ import { useGlobalContext } from '../context/MainContext';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Images } from '../images/images';
+import { v4 as uuidv4 } from 'uuid';
+
+ 
+
 
 export default function Login({ navigation }: any) {
 
@@ -169,6 +173,7 @@ export default function Login({ navigation }: any) {
     }
     setShowLoader(true);
     try {
+      const randu = uuidv4();
       const res = await axios.post("https://api.penpencil.co/v3/oauth/token", {
         username: phone,
         otp: otp,
@@ -178,7 +183,11 @@ export default function Login({ navigation }: any) {
         organizationId: "5eb393ee95fab7468a79d189",
         latitude: 0,
         longitude: 0,
-        // "Client-Type": "WEB",
+      }, {
+        headers: {
+          'client-type': "WEB",
+           randomId: randu
+        }
       })
       if (res?.data?.success) {
         setHeaders({
@@ -186,6 +195,7 @@ export default function Login({ navigation }: any) {
         })
         await AsyncStorage.setItem("token", res?.data?.data?.access_token);
         await AsyncStorage.setItem("phone", phone);
+        await AsyncStorage.setItem("randomId", randu);
       if (rememberMe) {
         await AsyncStorage.setItem("rememberMe", "true");
         await AsyncStorage.setItem("savedPhone", phone);
@@ -561,9 +571,9 @@ export default function Login({ navigation }: any) {
   </View>
 );
 }
-function uuidv4() {
-  throw new Error('Function not implemented.');
-}
+// function uuidv4() {
+//   throw new Error('Function not implemented.');
+// }
 
 
 
