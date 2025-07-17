@@ -97,6 +97,10 @@ type GlobalContextType = {
   setSelectedClassName: Dispatch<SetStateAction<string>>;
   selectedClassNameOnline: string | null;                                   //can be used for both online and offline
   setSelectedClassNameOnline: Dispatch<SetStateAction<string | null>>;
+  offlineClassNames: string[] | null;
+  setOfflineClassNames: Dispatch<SetStateAction<string[] | null>>;
+  selectedClassNameOffline: string;
+  setSelectedClassNameOffline: Dispatch<SetStateAction<string | null>>;
   getPaidBatches: () => void;
 }
 
@@ -186,6 +190,10 @@ const GlobalContext = createContext<GlobalContextType>({
   setSelectedClassName: () => { },
   selectedClassNameOnline: "",
   setSelectedClassNameOnline: () => { },
+  offlineClassNames: null,
+  setOfflineClassNames: () => { },
+  selectedClassNameOffline: "",
+  setSelectedClassNameOffline: () => { },
   getPaidBatches: () => { }
 });
 
@@ -245,6 +253,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [selectedMenu, setSelectedMenu] = useState<number>(0);
   const [selectedClassName, setSelectedClassName] = useState<string>("");
   const [selectedClassNameOnline, setSelectedClassNameOnline] = useState<string | null>("");
+  const [offlineClassNames, setOfflineClassNames] = useState<string[] | null>(null);
+  const [selectedClassNameOffline, setSelectedClassNameOffline] = useState<string | null>("");
 
   const [PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL] = useState<string>('/storage/emulated/0/Download/Batches');
 
@@ -448,6 +458,8 @@ const loadMoreChaptersData = () => {
         PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL,
         selectedClassName, setSelectedClassName,
         selectedClassNameOnline, setSelectedClassNameOnline,
+        offlineClassNames, setOfflineClassNames,
+        selectedClassNameOffline, setSelectedClassNameOffline,
         getPaidBatches
       } as GlobalContextType}>
       {children}

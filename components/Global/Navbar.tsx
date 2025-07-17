@@ -21,32 +21,41 @@ import { FileSystem } from "react-native-file-access";
 import * as Sentry from "@sentry/react-native";
 
 export default function Navbar() {
-  const { isOnline, setLogs, setIsOnline, headers, setHeaders, setPENDRIVE_BASE_URL, subscribedBatches, setSelectedClassNameOnline } = useGlobalContext();
+  const { isOnline, setLogs, setIsOnline, headers, setHeaders, setPENDRIVE_BASE_URL, subscribedBatches, setSelectedClassNameOnline, offlineClassNames, setSelectedClassNameOffline } = useGlobalContext();
   const navigation = useNavigation();
   const [phone, setPhone] = useState<string | null>(null);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [offlineSourceDropdown, setOfflineSourceDropdown] = useState(false);
-  const [showClassDropdown, setShowClassDropdown] = useState(false); 
+
   const [selectedClass, setSelectedClass] = useState<string | null>(null);
+
+  const [isClassDropdownVisible, setIsClassDropdownVisible] = useState(false);
 
   const classList = Array.from(
     new Set(subscribedBatches?.map((item: any) => item.class).filter(Boolean)) 
   );
 
+  const offlineClassList = Array.from(
+    new Set((offlineClassNames || []).filter(Boolean))
+  );
+  
+
   const handleClassSelect = (className: string | null) => {
     setSelectedClass(className);
-    setSelectedClassNameOnline(className); 
-    setShowClassDropdown(false); 
+    if (isOnline) {
+     setSelectedClassNameOnline(className);
+   } else {
+     setSelectedClassNameOffline(className);
+   }
+    setIsClassDropdownVisible(false);
   };
+
+
 
   const handleLogout = async () => {
     let logoutApiSuccess = false;
     try {
-      const res = await axios.post(
-        "https://api.penpencil.co/v1/oauth/logout",
-        {},
-        { headers: headers }
-      );
+      const res = await axios.post("https://api.penpencil.co/v1/oauth/logout",{},{ headers: headers });
       logoutApiSuccess = res?.data?.success;
     } catch (err: any) {
       Sentry.captureException(err);
@@ -252,7 +261,7 @@ export default function Navbar() {
         </Pressable>
       </View>
       <View className="flex flex-row gap-10 items-center">
-        {isOnline && (
+        
           <Pressable
             android_ripple={{
               color: "rgba(249, 197, 69, 0.4)",
@@ -260,20 +269,22 @@ export default function Navbar() {
               radius: 1000,
               foreground: true,
             }}
-            onPress={() => setShowClassDropdown((prev) => !prev)}
-            className="w-32 h-12 rounded-xl items-center justify-center overflow-hidden border border-black border-b-[3px] bg-white"
-          >
-            <Text className="text-black">{selectedClass || "All Batches"}</Text>
-          </Pressable>
-        )}
+            onPress={() => setIsClassDropdownVisible(prev => !prev)}
+            className="w-32 h-12 rounded-xl items-center justify-center overflow-hidden border border-black border-b-[3px] bg-white">
+              <Text className="text-black">{selectedClass || (isOnline ? "All Batches" : "All Classes")}</Text>
 
+          </Pressable>
+    
         <Modal
-          visible={showClassDropdown}
+           visible={isClassDropdownVisible}
           transparent={true}
           animationType="fade"
-          onRequestClose={() => setShowClassDropdown(false)}
+          onRequestClose={() => setIsClassDropdownVisible(false)}
         >
-          <TouchableWithoutFeedback onPress={() => setShowClassDropdown(false)}>
+            <TouchableWithoutFeedback onPress={() => {
+              setIsClassDropdownVisible(false);
+             }}
+          >
             <View className="flex-1">
               <View className="absolute top-[80] right-[100] w-40 max-h-[200] bg-[#111111]/90 border-white/20 border-[1px] rounded-xl shadow-md z-50">
                 <ScrollView>
@@ -284,14 +295,11 @@ export default function Navbar() {
                       radius: 1000,
                     }}
                     onPress={() => handleClassSelect(null)}
-                    className="p-3 border-b  border-gray-300"
-                  >
-                    <Text className="text-white font-semibold">
-                      All Batches
-                    </Text>
+                    className="p-3 border-b  border-gray-300">
+                     <Text className="text-white font-semibold">{isOnline ? "All Batches" : "All Classes"}</Text>
                   </Pressable>
 
-                  {classList.map((cls) => (
+                  {(isOnline ? classList : offlineClassList).map((cls) => (
                     <Pressable
                       key={cls}
                       android_ripple={{
@@ -299,9 +307,8 @@ export default function Navbar() {
                         borderless: false,
                         radius: 1000,
                       }}
-                      onPress={() => handleClassSelect(cls)}
-                      className="p-3 border-b rounded-xl border-gray-300"
-                    >
+                      onPress={() => handleClassSelect(cls) }
+                      className="p-3 border-b rounded-xl border-gray-300">
                       <Text className="text-white">{cls}</Text>
                     </Pressable>
                   ))}

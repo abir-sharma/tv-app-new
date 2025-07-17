@@ -12,8 +12,7 @@ import * as ExpoFS from 'expo-file-system';
 import RNFS from 'react-native-fs';
 import sendOfflineAnalytics from '../utils/sendOfflineAnalytics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { v4 as uuidv4 } from 'uuid';
+
 
 type OfflineBatches = {
   name: string,
@@ -23,7 +22,7 @@ type OfflineBatches = {
 const PendriveBatches = () => {
   const navigation = useNavigation()
   const [offlineBatches, setOfflineBatches] = useState<OfflineBatches[]>([]);
-  const { setOfflineSubjects, setOfflineSelectedSubject, setOfflineChapters, setOfflineSelectedChapter, setOfflineLectures, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL, isOnline, setSelectedClassName, setHeaders } = useGlobalContext();
+  const { setOfflineSubjects, setOfflineSelectedSubject, setOfflineChapters, setOfflineSelectedChapter, setOfflineLectures, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, PENDRIVE_BASE_URL, setPENDRIVE_BASE_URL, isOnline, setSelectedClassName, setHeaders, setOfflineClassNames,selectedClassNameOffline } = useGlobalContext();
 
   const checkToken = async () => {
     const schoolData = await AsyncStorage.getItem('schoolData');
@@ -56,6 +55,7 @@ const PendriveBatches = () => {
     })
     batches.sort((a, b) => a?.name?.localeCompare(b?.name));
     setOfflineBatches(batches);
+    setOfflineClassNames(batches.map((batch) => batch.name));
   }
 
   const getSubjects = async (path: string) => {
@@ -281,7 +281,7 @@ const PendriveBatches = () => {
       
       <Navbar />
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4 mx-2 mt-2'>
-        {offlineBatches.map((batch: any, index: number) => (
+        {offlineBatches?.filter(batch => !selectedClassNameOffline?.trim() || batch.name === selectedClassNameOffline).map((batch: any, index: number) => (
           <Pressable
             key={index}
             hasTVPreferredFocus={true}

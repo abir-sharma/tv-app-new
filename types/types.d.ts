@@ -368,3 +368,4 @@ type OfflineNoteComponentPropType = {
 type OfflineVideoComponentPropType = {
   videoList: ItemType[] | null,
 }
+

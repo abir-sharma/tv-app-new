@@ -72,7 +72,7 @@ export default function Chapters() {
 
   const renderChapterItem = ({ item }: any) => (
     <Pressable
-      key={item?._id}
+     
       className={` overflow-hidden rounded-xl bg-[#111111] my-1`}
       hasTVPreferredFocus={true}
       android_ripple={{
@@ -131,7 +131,8 @@ export default function Chapters() {
             <FlatList
               data={batchDetails?.subjects}
               renderItem={renderSubjectItem}
-              keyExtractor={(item) => item?._id}
+              // keyExtractor={(item) => item?._id}
+              keyExtractor={(item, index) => `${item._id}-${index}`}
               className="flex-1"
               showsVerticalScrollIndicator={false}
               bounces={false}
@@ -145,7 +146,8 @@ export default function Chapters() {
         <FlatList
           data={sortedList}
           renderItem={renderChapterItem}
-          keyExtractor={(item: TopicType) => item?._id}
+          // keyExtractor={(item: TopicType) => item?._id}
+          keyExtractor={(item, index) => `${item._id}-${index}`}
           numColumns={1}
           onEndReached={() => { loadMoreChaptersData() }}
           showsVerticalScrollIndicator={false}

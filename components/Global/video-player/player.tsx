@@ -374,7 +374,7 @@ export default function VideoPlayer(props: any) {
     const data = {
       // type: props?.scheduleDetails?.lectureType,
       type: "BATCHES",
-      parentId: selectedBatch?._id || props?.scheduleDetails?.batchId, //toogle between batchId and scheduleDetails?.batchId
+      parentId: selectedBatch?._id || props?.scheduleDetails?.batchId,     //toogle between currrent and recent videos
       childId: props?.scheduleDetails?._id,
       videoContainerType: "DASH",
       clientVersion: "201",

@@ -16,7 +16,7 @@ export default function Batches() {
 
     const { subscribedBatches, setSelectedBatch, setSelectedMenu, selectedClassNameOnline } = useGlobalContext();
     const navigation = useNavigation();
-    
+
     return (
         <View className=''>
             <Text className='text-black text-2xl font-medium ml-5 mt-5'>Online Batches</Text>
