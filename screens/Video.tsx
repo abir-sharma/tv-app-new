@@ -22,7 +22,7 @@ const Video = ({ route }: any) => {
         if (videos[subject]) {
           setCurrentVideos(videos[subject]);
           setRecentVideos(videos);
-          setPlayingVideo(videos[subject][0])
+          setPlayingVideo(videos[subject][0]);
         }
       } catch (error) {
         console.error('Error loading recent videos:', error);

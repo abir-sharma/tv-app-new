@@ -279,7 +279,7 @@ export default function Navbar() {
                 <ScrollView>
                   <Pressable
                     android_ripple={{
-                      color: "rgba(249, 197, 69, 0.4)",
+                      color: "rgba(128, 128, 128, 0.4)",
                       borderless: false,
                       radius: 1000,
                     }}
@@ -295,7 +295,7 @@ export default function Navbar() {
                     <Pressable
                       key={cls}
                       android_ripple={{
-                        color: "rgba(249, 197, 69, 0.4)",
+                        color: "rgba(128, 128, 128, 0.4)",
                         borderless: false,
                         radius: 1000,
                       }}

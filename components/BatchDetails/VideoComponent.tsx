@@ -28,6 +28,7 @@ export const VideoComponent = ({ videoList, loadMore, getPaidBatches }: VideoCom
         subject: subject,
         chapter: selectedChapter?.name,
         batch: selectedBatch?.batch?.name,
+        batchId: selectedBatch?._id,
       };
   
       if (recentVideos[subject]) {

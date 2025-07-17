@@ -260,6 +260,7 @@ type VideoDetailsType = {
   videoDetails: VideoDetailsType;
   dRoomId: string;
   isBatchDoubtEnabled: boolean;
+  batchId: string | undefined;
 };
 
 type Attachment = {

@@ -16,7 +16,7 @@ import styles from "./player.style";
 import Svg, { Path } from "react-native-svg";
 import axios from "axios";
 import { Video, ResizeMode } from "expo-av";
-import { cookieSplitter, cookieSplitterFromSignedUrl } from "./cookie-splitter";
+import { cookieSplitterFromSignedUrl } from "./cookie-splitter";
 import { useGlobalContext } from "../../../context/MainContext";
 import { Slider } from "@miblanchard/react-native-slider";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
@@ -32,7 +32,6 @@ import * as Sentry from "@sentry/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import "react-native-get-random-values";
-
 
 const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
@@ -56,7 +55,7 @@ export default function VideoPlayer(props: any) {
   const [duration, setDuration] = useState<number>(0);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState<number>(1.0);
-  const [quality, setQuality] = useState(720);
+  const [quality, setQuality] = useState(360);
   const [storedTimestamp, setStoredTimestamp] = useState(0);
 
   const [annotations, setAnnotations] = useState<{ [key: number]: string[] }>(
@@ -183,7 +182,7 @@ export default function VideoPlayer(props: any) {
   }
 
   useEffect(() => {
-  if (!props?.lectureDetails?.videoUrl && props?.lectureDetails?.types) {
+    if (!props?.lectureDetails?.videoUrl && props?.lectureDetails?.types) {
       setNoVideoAvailable(true);
       setSpinner(false);
       return;
@@ -199,19 +198,16 @@ export default function VideoPlayer(props: any) {
       return;
     }
 
-
-
     if (props.isLive) {
-     
       sendAnalyticsData();
-     
+
       setRenderVideo(true);
       setSpinner(false);
       return;
     }
 
     setDuration(convertToSeconds(props?.lectureDetails?.duration));
-    
+
     sendAnalyticsData();
   }, [quality, props]);
 
@@ -378,19 +374,12 @@ export default function VideoPlayer(props: any) {
     const data = {
       // type: props?.scheduleDetails?.lectureType,
       type: "BATCHES",
-      parentId: selectedBatch?._id,
+      parentId: selectedBatch?._id || props?.scheduleDetails?.batchId, //toogle between batchId and scheduleDetails?.batchId
       childId: props?.scheduleDetails?._id,
       videoContainerType: "DASH",
       clientVersion: "201",
       reqType: "query",
     };
-
-    // console.log("analytics headers --->", JSON.stringify(props?.scheduleDetails));
-    console.log("---------------------------------------------");
-
-    console.log("DATA FOR ANALYTICS --->", data);
-    console.log("comparison data --->",props?.scheduleDetails);
-    console.log("---------------------------------------------");
 
     axios
       .get(
@@ -506,14 +495,17 @@ export default function VideoPlayer(props: any) {
           }}
           onPress={() => {
             navigation.goBack();
-            sendMongoAnalytics("video_closed", {
-              videoName: props?.lectureDetails?.name,
-              videoId: props?.lectureDetails?._id,
-              batchName: selectedBatch?.name,
-              subjectName: selectedSubject?.subject,
-              chapterName: selectedChapter?.name,
-              batchId: selectedBatch?._id,
-            });
+            {
+              selectedBatch?._id &&
+                sendMongoAnalytics("video_closed", {
+                  videoName: props?.lectureDetails?.name,
+                  videoId: props?.lectureDetails?._id,
+                  batchName: selectedBatch?.name,
+                  subjectName: selectedSubject?.subject,
+                  chapterName: selectedChapter?.name,
+                  batchId: selectedBatch?._id,
+                });
+            }
           }}
           className="bg-black/40 overflow-hidden rounded-full z-[10] p-2 absolute top-2 left-2"
         >
