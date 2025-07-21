@@ -7,7 +7,7 @@ import { Images } from '../images/images';
 export default function Intro({ navigation }: any) {
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('Home');
+      navigation.navigate('PendriveBatches');
     }, 4500);
   }, [])
 

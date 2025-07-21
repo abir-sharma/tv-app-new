@@ -271,8 +271,7 @@ export default function Navbar() {
             }}
             onPress={() => setIsClassDropdownVisible(prev => !prev)}
             className="w-32 h-12 rounded-xl items-center justify-center overflow-hidden border border-black border-b-[3px] bg-white">
-              <Text className="text-black">{selectedClass || (isOnline ? "All Batches" : "All Classes")}</Text>
-
+              <Text className="text-black">{selectedClass ? (selectedClass.length > 20 ? selectedClass.slice(0, 20) + '...' : selectedClass) : (isOnline ? "All Batches" : "All Classes")}</Text>
           </Pressable>
     
         <Modal

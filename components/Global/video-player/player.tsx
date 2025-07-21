@@ -48,6 +48,7 @@ export default function VideoPlayer(props: any) {
   const [showLoader, setShowLoader] = useState<boolean>(true);
   const [isActive, setIsActive] = useState<boolean>(true);
   let isYoutubeVideo = !props?.lectureDetails?.types;
+  let skipTimeout: NodeJS.Timeout | null = null;
 
   const [currentTime, setCurrentTime] = useState(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -241,25 +242,25 @@ export default function VideoPlayer(props: any) {
     (playerRef.current as Video | null)?.pauseAsync();
   };
 
-  const skipForward = (skipTime: number) => {
-    (playerRef.current as Video | null)?.getStatusAsync().then((status) => {
-      const newPosition = Math.max(
-        (status as any).positionMillis + skipTime,
-        0
-      );
-      (playerRef.current as Video | null)?.setPositionAsync(newPosition);
+const skipForward = (skipTime: number) => {
+  if (skipTimeout) clearTimeout(skipTimeout);
+  skipTimeout = setTimeout(() => {
+    playerRef.current?.getStatusAsync().then((status) => {
+      const newPosition = Math.max((status as any).positionMillis + skipTime, 0);
+      playerRef.current?.setPositionAsync(newPosition);
     });
-  };
+  }, 100); 
+};
 
-  const skipBackward = (skipTime: number) => {
-    (playerRef.current as Video | null)?.getStatusAsync().then((status) => {
-      const newPosition = Math.min(
-        (status as any).positionMillis - skipTime,
-        (status as any).durationMillis
-      );
-      (playerRef.current as Video | null)?.setPositionAsync(newPosition);
+const skipBackward = (skipTime: number) => {
+  if (skipTimeout) clearTimeout(skipTimeout);
+  skipTimeout = setTimeout(() => {
+    playerRef.current?.getStatusAsync().then((status) => {
+      const newPosition = Math.min((status as any).positionMillis - skipTime, (status as any).durationMillis);
+      playerRef.current?.setPositionAsync(newPosition);
     });
-  };
+  }, 100); 
+};
 
   function convertMPDToM3U8(mpdUrl: string) {
     if (!mpdUrl) return;

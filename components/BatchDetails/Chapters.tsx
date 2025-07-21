@@ -10,12 +10,11 @@ export default function Chapters() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);     
   const dropdownHeight = useRef(new Animated.Value(0)).current;
   const rotateAnim = useRef(new Animated.Value(0)).current;                 
-  const { topicList,batchDetails, selectedSubject, setSelectedSubject, setSelectSubjectSlug, setSelectedChapter, selectedChapter, loadMoreChaptersData } = useGlobalContext();
+  const { topicList ,batchDetails, selectedSubject, setSelectedSubject, setSelectSubjectSlug, setSelectedChapter, selectedChapter, loadMoreChaptersData } = useGlobalContext();
 
     const handleDropdownPress = () => {
       const willOpen = !isDropdownVisible;
       setIsDropdownVisible(willOpen);
-    
    
     Animated.timing(dropdownHeight, {
       toValue: willOpen ? 200 : 0, 
@@ -125,7 +124,7 @@ export default function Chapters() {
             height: dropdownHeight,
             overflow: 'hidden',
           }}
-          className="bg-[#111111] border-l border-r border-b border-[#111111] rounded-b-xl"
+          className="bg-[#1d2228] border-l border-r border-b border-[#111111] rounded-b-xl"
         >
           {isDropdownVisible && (
             <FlatList
@@ -134,7 +133,8 @@ export default function Chapters() {
               // keyExtractor={(item) => item?._id}
               keyExtractor={(item, index) => `${item._id}-${index}`}
               className="flex-1"
-              showsVerticalScrollIndicator={false}
+              showsVerticalScrollIndicator={true}
+              persistentScrollbar={true}
               bounces={false}
             />
           )}

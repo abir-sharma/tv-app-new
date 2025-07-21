@@ -321,7 +321,7 @@ const PendriveBatches = () => {
               </View>
               <View className='p-2 relative px-5'>
                 <View className='flex flex-row items-center justify-center gap-3'>
-                  <Text className='text-black text-lg font-base text-center'>{batch?.name >= 20 ? `${batch?.name?.substring(0, 20)}...` : batch?.name}</Text>
+                  <Text className='text-black text-lg font-base text-center'>{batch?.name?.length >= 20 ? `${batch?.name?.substring(0, 20)}...` : batch?.name}</Text>
                 </View>
               </View>
             </LinearGradient>

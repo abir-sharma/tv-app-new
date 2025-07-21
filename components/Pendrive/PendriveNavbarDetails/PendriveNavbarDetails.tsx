@@ -241,7 +241,7 @@ const handleLogout = async () => {
             radius: 1000,
             foreground: true
           }}
-          className='w-20 items-center h-10 justify-center overflow-hidden border-r border-t border-r-gray-400 border-t-gray-400 '
+          className='w-24 items-center h-10 justify-center overflow-hidden border-r border-t border-t-gray-400 border-r-gray-400'
           style={{ backgroundColor: offlineSelectedSection == 4 ? '#f9c545' : 'white', borderBottomWidth: offlineSelectedSection == 4 ? 4 : 3 }}
           onPress={() => {
             if (offlineSections) {

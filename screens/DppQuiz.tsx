@@ -302,7 +302,7 @@ const DppQuiz = ({ navigation, route }: any) => {
             <ReviewOrSubmitModal showModal={showModal} seconds={seconds} setShowModal={setShowModal} responses={responses} handleSubmitTest={handleSubmitTest} />
             <View className='flex-row justify-between items-center'>
                 <View>
-                    {testData && <Text className='text-white text-xl font-medium'>{testData?.test?.name}</Text>}
+                    {testData && <Text className='text-white text-xl font-medium'>  {testData?.test?.name?.length > 80 ? testData.test.name.slice(0, 80) + '...': testData?.test?.name}</Text>}
                     <View className='flex-row mt-2'>
                         <Image source={Images.clock} className='w-5 h-5' width={10} height={10} />
                         <Text className='text-white ml-2'>{formatTime()}</Text>

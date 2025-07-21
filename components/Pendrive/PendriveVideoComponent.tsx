@@ -44,12 +44,12 @@ export const PendriveVideoComponent = ({ videoList }: OfflineVideoComponentPropT
               className='rounded-xl overflow-hidden h-52 border-[1px] border-black bg-[#fbfaef]'
         >
       <View className='relative'>
-          <View className="w-[92%] aspect-video rounded-xl overflow-hidden relative mt-2 ml-2 mr-2">
+          <View className="w-[92%] aspect-video rounded-md overflow-hidden relative mt-2 ml-2 mr-2">
           {item.defaultThumbnail ? <Image
-            className='w-full h-full rounded-t-lg'
+            className='w-full h-full '
             source={{ uri: `file://${item?.thumbnail}` }}
           /> : <Image
-            className='w-full h-full rounded-t-lg'
+            className='w-full h-full '
             source={{ uri: `file://${item?.path}` }}
             // source={Images.defaultt}
           />}

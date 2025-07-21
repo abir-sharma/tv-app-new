@@ -15,7 +15,7 @@ export default function PendriveChapters() {
   const rotateAnim = useRef(new Animated.Value(0)).current; 
   const { offlineSubjects, setOfflineSelectedSubject, offlineSelectedSubject,setOfflineChapters, offlineSelectedChapter, setDirectoryLevel, offlineChapters, setOfflineCurrentDirectory, setOfflineSelectedChapter, setOfflineLectures, setOfflineDppPdf, setOfflineDppVideos, setOfflineNotes } = useGlobalContext();
 
-  
+  //
 const handleDropdownPress = () => {
     const willOpen = !isDropdownVisible;
     setIsDropdownVisible(willOpen);
@@ -222,7 +222,7 @@ const handleDropdownPress = () => {
             height: dropdownHeight,
             overflow: 'hidden',
           }}
-          className="bg-[#111111] border-l border-r border-b border-[#111111] rounded-b-xl"
+          className="bg-[#1d2228] border-l border-r border-b border-[#111111] rounded-b-xl"
         >
           {isDropdownVisible && ( offlineSubjects && 
             ( <FlatList
@@ -230,7 +230,8 @@ const handleDropdownPress = () => {
               renderItem={renderSubjectItem}
               keyExtractor={(item, index) => index.toString()}
               className="flex-1"
-              showsVerticalScrollIndicator={false}
+              showsVerticalScrollIndicator={true}
+              persistentScrollbar={true}
               bounces={false}
             /> )
           )}
