@@ -31,7 +31,7 @@ export const PendriveVideoComponent = ({ videoList }: OfflineVideoComponentPropT
           subjectName: itemPath?.split('/')[5],
           chapterName: itemPath?.split('/')[6],
           isSolutionVideo: selectedMenu === 3 ? true : false,
-          className: selectedClassName,
+          className: selectedClassName?.replace(/[^a-zA-Z0-9-]/g, '').toUpperCase().slice(0, 10),
         });
         console.log('PendriveVideoComponent.tsx', item);
         //@ts-expect-error

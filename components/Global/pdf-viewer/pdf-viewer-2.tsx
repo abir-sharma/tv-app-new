@@ -9,7 +9,9 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { Config, DocumentView, RNPdftron } from "react-native-pdftron";
 import sendMongoAnalytics from '../../../utils/sendMongoAnalytics';
+import sendOfflineAnalytics from '../../../utils/sendOfflineAnalytics';
 import { useGlobalContext } from "../../../context/MainContext";
+import { is } from "cheerio/lib/api/traversing";
 
 const myToolItem = {
     [Config.CustomToolItemKey.Id]: 'add_page',
@@ -87,6 +89,7 @@ const PDFTronViewer = ({ route }: any) => {
     />
     <Pressable className="w-10 h-10 rounded-full absolute top-1 left-1"
      onPress={()=>{ 
+      if(route?.params?.isOnline) {
         sendMongoAnalytics('note_closed', {
             noteId: route?.params?.noteId,
             noteName: route?.params?.noteName,
@@ -95,7 +98,17 @@ const PDFTronViewer = ({ route }: any) => {
             batchId: selectedBatch?._id,
             batchName: selectedBatch?.name,
             className: selectedBatch?.name.replace(/[^a-zA-Z0-9-]/g, '').toUpperCase().slice(0, 10),     //class regex
-           });       
+           }); 
+          } else {
+        sendOfflineAnalytics('note_closed', {
+            noteName: route?.params?.noteName,
+            subjectName: route?.params?.subjectName,
+            chapterName: route?.params?.chapterName,
+            className: route?.params?.className,
+            isDppPdf: route?.params?.isDppPdf
+        });
+      }  
+
       navigation.goBack()
       }}></Pressable>
     </>

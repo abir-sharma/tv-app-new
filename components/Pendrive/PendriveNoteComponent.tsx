@@ -23,7 +23,6 @@ export const PendriveNoteComponent = ({ noteList }: OfflineNoteComponentPropType
         foreground: true
       }}
       hasTVPreferredFocus onPress={() => {
-        console.log('PendriveNoteComponent.tsx', item);
         const itemPath = item?.path;
         sendOfflineAnalytics("note_opened", {
             noteName: item?.name,
@@ -31,10 +30,10 @@ export const PendriveNoteComponent = ({ noteList }: OfflineNoteComponentPropType
             subjectName: itemPath?.split('/')[7],
             chapterName: itemPath?.split('/')[8],
             isDppPdf: selectedMenu === 3 ? true : false,
-            className: selectedClassName,
+            className: selectedClassName
           });
         // @ts-expect-error
-        navigation.navigate('PDFViewer', { pdfUrl: item?.path });
+        navigation.navigate('PDFViewer', { pdfUrl: item?.path, isOnline: false, noteName: item?.name, subjectName: itemPath?.split('/')[7], chapterName: itemPath?.split('/')[8], className: selectedClassName, isDppPdf: selectedMenu === 3 ? true : false });
       }}>
       <LinearGradient {...fromCSS(`linear-gradient(179deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 100%)`)}
           className='rounded-xl overflow-hidden'>

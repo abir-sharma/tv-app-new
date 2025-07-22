@@ -35,7 +35,8 @@ export const NoteComponent = ({ noteList, loadMore, getPaidBatches }: NoteCompon
             // pdfUrl: item?.homeworkIds[0]?.attachmentIds[0]?.baseUrl + item?.homeworkIds[0]?.attachmentIds[0]?.key
             pdfUrl: item.attachmentIds[0]?.baseUrl + item.attachmentIds[0]?.key,
             noteId: item?._id,
-            noteName: item?.topic  //further for offline need
+            noteName: item?.topic,  //further for offline need
+            isOnline: true
           });
           sendGoogleAnalytics("note_opened", {
             note_name: item?.topic,

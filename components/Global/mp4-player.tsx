@@ -274,7 +274,7 @@ const MP4Player = ({ route }: any) => {
           navigation.goBack();
           sendOfflineAnalytics("video_closed", {
               videoName: route?.params?.videoName,
-              className: route?.params?.className,
+              className: route?.params?.className?.replace(/[^a-zA-Z0-9-]/g, '').toUpperCase().slice(0, 10),
               subjectName: uri?.split('/')[5],
               chapterName: uri?.split('/')[6],
               isSolutionVideo: route?.params?.isSolutionVideo,
