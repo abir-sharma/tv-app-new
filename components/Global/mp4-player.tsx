@@ -8,6 +8,7 @@ import { Slider } from "@miblanchard/react-native-slider";
 import Svg, { Path } from "react-native-svg";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
+import sendOfflineAnalytics from "../../utils/sendOfflineAnalytics";
 
 const MP4Player = ({ route }: any) => {
   const uri = route?.params?.videoUrl;
@@ -271,6 +272,13 @@ const MP4Player = ({ route }: any) => {
         }}
         onPress={() => {
           navigation.goBack();
+          sendOfflineAnalytics("video_closed", {
+              videoName: route?.params?.videoName,
+              className: route?.params?.className,
+              subjectName: uri?.split('/')[5],
+              chapterName: uri?.split('/')[6],
+              isSolutionVideo: route?.params?.isSolutionVideo,
+                });
         }}
         className="bg-black/40 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2"
       >

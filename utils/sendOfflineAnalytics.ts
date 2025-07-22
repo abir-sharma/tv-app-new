@@ -74,7 +74,7 @@ const sendOfflineAnalytics = async (eventName: string, data: EventData) => {
       
       // Try to send any stored offline events
       await sendStoredOfflineEvents();
-      console.log("Stored offline events sent successfully.");
+      
     } catch (error: any) {
       console.error("Error sending analytics: ", error?.response?.data || error.message);
       await storeOfflineEvent(eventPayload);            //lookout 1
@@ -82,7 +82,7 @@ const sendOfflineAnalytics = async (eventName: string, data: EventData) => {
   } else {
     // Store the event for later when offline
     await storeOfflineEvent(eventPayload);
-    console.log("Stored offline event for later:", eventName);
+   
   }
 };
 
@@ -106,7 +106,7 @@ const sendStoredOfflineEvents = async () => {
   try {
     // Get stored events
     const storedEvents = await AsyncStorage.getItem(OFFLINE_EVENTS_KEY);
-    console.log("OFFLINE stored events", storedEvents);
+
     
     if (storedEvents) {
       const events = JSON.parse(storedEvents);

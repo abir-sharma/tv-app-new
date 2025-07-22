@@ -18,6 +18,7 @@ const DppQuizSolution = ({ route }: any) => {
   const [showLoader, setShowLoader] = useState<boolean>(true);
   const [questionType, setQuestionType] = useState<string>('Single');
   const [smallPlayer, setSmallPlayer] = useState(1);
+  
 
   useEffect(() => {
     fetchSolutionData();
@@ -277,8 +278,8 @@ const DppQuizSolution = ({ route }: any) => {
             <Image
               source={{
                 uri:
-                  currentQuestion?.question?.solutionDescription[0]?.imageIds?.en?.baseUrl +
-                  currentQuestion?.question?.solutionDescription[0]?.imageIds?.en?.key,
+                  (currentQuestion?.question?.solutionDescription[0]?.imageIds?.en?.baseUrl +
+                  currentQuestion?.question?.solutionDescription[0]?.imageIds?.en?.key) || null,
               }}
               style={{
                 width: '100%',

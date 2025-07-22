@@ -35,7 +35,7 @@ export const PendriveVideoComponent = ({ videoList }: OfflineVideoComponentPropT
         });
         console.log('PendriveVideoComponent.tsx', item);
         //@ts-expect-error
-        navigation.navigate('MP4Player', { videoUrl: item?.path });
+        navigation.navigate('MP4Player', { videoUrl: item?.path, className: selectedClassName, videoName: item?.name, isSolutionVideo: selectedMenu === 3 ? true : false,});
       }}>
       <LinearGradient
             {...fromCSS(

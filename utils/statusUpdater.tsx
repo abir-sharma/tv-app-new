@@ -6,7 +6,7 @@ const SOCKET_URL = 'https://pibox-backend.betterpw.live';
 
 const StatusUpdater = ({ schoolId }: { schoolId: string }) => {
   useEffect(() => {
-    console.log('📱 StatusUpdater: initializing with schoolId:', schoolId);
+    console.log('StatusUpdater: initializing with schoolId:', schoolId);
    
     const socket = io(SOCKET_URL, {
       transports: ['websocket'],
