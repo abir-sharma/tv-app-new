@@ -191,7 +191,9 @@ export default function Login({ navigation }: any) {
       })
       if (res?.data?.success) {
         setHeaders({
-          "Authorization": `Bearer ${res?.data?.data?.access_token}`
+          "Authorization": `Bearer ${res?.data?.data?.access_token}`,
+          organizationId: "5eb393ee95fab7468a79d189",
+          randomId: randu
         })
         await AsyncStorage.setItem("token", res?.data?.data?.access_token);
         await AsyncStorage.setItem("phone", phone);

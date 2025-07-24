@@ -36,7 +36,8 @@ const myToolItem = {
       Config.Tools.annotationCreateFreeHighlighter,
       Config.Tools.annotationEraserTool,
       Config.Tools.annotationCreateLine,
-      Config.Tools.annotationCreateEllipse
+      Config.Tools.annotationCreateEllipse,
+      Config.Tools.annotationEdit, 
     ]
   };
 
@@ -78,13 +79,14 @@ const PDFTronViewer = ({ route }: any) => {
       hideToolbarsOnTap={true}
       backgroundColor={{red: 0, green: 255, blue: 0}}
       annotationToolbars={[myToolbar]}
+      
       forceAppTheme={Config.ThemeOptions.ThemeLight}
       leadingNavButtonIcon={
         Platform.OS === "ios"
           ? "ic_close_black_24px.png"
           : "ic_arrow_back_white_24dp"
       }
-      annotationMenuItems={[Config.AnnotationMenu.search, Config.AnnotationMenu.share]}
+      annotationMenuItems={[Config.AnnotationMenu.search, Config.AnnotationMenu.share, Config.AnnotationMenu.delete]}
       onLeadingNavButtonPressed={onLeadingNavButtonPressed}
     />
     <Pressable className="w-10 h-10 rounded-full absolute top-1 left-1"

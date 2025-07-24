@@ -1,46 +1,92 @@
 /// <reference types="nativewind/types" />
-import { Image, Text, Pressable, View, Modal, FlatList } from 'react-native';
-import { useGlobalContext } from '../../../context/MainContext';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
-import { useNavigation } from '@react-navigation/native';
-import { Images } from '../../../images/images';
-import { FileSystem } from 'react-native-file-access';
+import {
+  Image,
+  Text,
+  Pressable,
+  View,
+  Modal,
+  TouchableWithoutFeedback,
+  ScrollView,
+} from "react-native";
+import { useGlobalContext } from "../../../context/MainContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
+import { Images } from "../../../images/images";
+import { FileSystem } from "react-native-file-access";
 import * as Sentry from "@sentry/react-native";
+import { useState, useEffect } from "react";
 
 export default function PendriveNavbarDetails() {
   // const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const { offlineSections, setDirectoryLevel, offlineSelectedSection, headers, setHeaders, setOfflineCurrentDirectory, setOfflineSelectedSection, setOfflineSelectedBatch, setOfflineLectures, setOfflineNotes, setOfflineDppPdf, setOfflineDppVideos, selectedClassName, setLogs } = useGlobalContext();
+  const {
+    offlineSections,
+    setDirectoryLevel,
+    offlineSelectedSection,
+    headers,
+    setHeaders,
+    setOfflineCurrentDirectory,
+    setOfflineSelectedSection,
+    setOfflineSelectedBatch,
+    setOfflineLectures,
+    setOfflineNotes,
+    setOfflineDppPdf,
+    setOfflineDppVideos,
+    selectedClassName,
+    setLogs,
+  } = useGlobalContext();
   const navigation = useNavigation();
+  const [phone, setPhone] = useState<string | null>(null);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
-const handleLogout = async () => {
-  let logoutApiSuccess = false;
-  try {
-    const res = await axios.post("https://api.penpencil.co/v1/oauth/logout", {}, { headers: headers });
-    logoutApiSuccess = res?.data?.success;
-  } catch (err: any) {
-    Sentry.captureException(err);
-    setLogs((logs) => [ ...logs, "Logout API failed continuing with local cleanup: " + JSON.stringify(err?.response?.data || err?.message),]);
-  }
-  try {
-    await AsyncStorage.clear();
-    setHeaders(null); 
-  } catch (clearError) {
-    console.error("Failed to clear local storage:", clearError);
-    Sentry.captureException(clearError);
-  }
-  try {
-    // @ts-expect-error
-    navigation.navigate("Login");
-  } catch (navError) {
-    console.error("Navigation error:", navError);
-  }
-  if (logoutApiSuccess) {
-    console.log("Logout successfully");
-  } else {
-    console.log("Logout completed but server logout may have failed)");
-  }
-};
+  const handleLogout = async () => {
+    let logoutApiSuccess = false;
+    try {
+      const res = await axios.post(
+        "https://api.penpencil.co/v1/oauth/logout",
+        {},
+        { headers: headers }
+      );
+      logoutApiSuccess = res?.data?.success;
+    } catch (err: any) {
+      Sentry.captureException(err);
+      setLogs((logs) => [
+        ...logs,
+        "Logout API failed continuing with local cleanup: " +
+          JSON.stringify(err?.response?.data || err?.message),
+      ]);
+    }
+    try {
+      await AsyncStorage.clear();
+      setHeaders(null);
+    } catch (clearError) {
+      console.error("Failed to clear local storage:", clearError);
+      Sentry.captureException(clearError);
+    }
+    try {
+      // @ts-expect-error
+      navigation.navigate("Login");
+    } catch (navError) {
+      console.error("Navigation error:", navError);
+    }
+    if (logoutApiSuccess) {
+      console.log("Logout successfully");
+    } else {
+      console.log("Logout completed but server logout may have failed)");
+    }
+  };
+
+  useEffect(() => {
+    const getPhone = async () => {
+      const temp = await AsyncStorage.getItem("phone");
+      setPhone(temp);
+    };
+    getPhone();
+  }, [isDropdownVisible]);
+
+  const Seperator = () => {
+    return <View className="w-full h-[1px] bg-white/40"></View>;
+  };
 
   // const getChapters = async (path: string) => {
   //   let listing = await FileSystem.ls(path);
@@ -165,32 +211,45 @@ const handleLogout = async () => {
     }
     return -1;
   }
-  
 
   return (
     <View className=" flex-row justify-between items-center p-4 bg-[#E1BD6433] border-b-[1px] border-gray-400">
-      <View className='flex flex-row items-center justify-center gap-2'>
-       <Pressable
+      <View className="flex flex-row items-center justify-center gap-2">
+        <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
-          color: "rgba(255,255,255,0.1)",
-          borderless: false,
-          radius: 1000,
-          foreground: true
-        }}
-        onPress={() => {
-          // @ts-expect-error
-          navigation.navigate('PendriveBatches');
-          setOfflineSelectedBatch(-1);
-        }}
-        className='flex-row justify-center items-center rounded-xl overflow-hidden px-2'>
-        <Image source={Images.arrowLeft} className='w-2 h-3' width={10} height={10} tintColor={"#6B7280"} />
-      </Pressable>
-      <Text className=' text-gray-500'>Home</Text>
-        {selectedClassName && <Text className='font-medium text-black/70'>/ {selectedClassName?.length > 10 ? `${selectedClassName.substring(0,12)}...` : selectedClassName}</Text> }
+            color: "rgba(255,255,255,0.1)",
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          onPress={() => {
+            // @ts-expect-error
+            navigation.navigate("PendriveBatches");
+            setOfflineSelectedBatch(-1);
+          }}
+          className="flex-row justify-center items-center rounded-xl overflow-hidden px-2"
+        >
+          <Image
+            source={Images.arrowLeft}
+            className="w-2 h-3"
+            width={10}
+            height={10}
+            tintColor={"#6B7280"}
+          />
+        </Pressable>
+        <Text className=" text-gray-500">Home</Text>
+        {selectedClassName && (
+          <Text className="font-medium text-black/70">
+            /{" "}
+            {selectedClassName?.length > 10
+              ? `${selectedClassName.substring(0, 12)}...`
+              : selectedClassName}
+          </Text>
+        )}
       </View>
 
-        {/* <Pressable
+      {/* <Pressable
           onPress={() => {
             setIsDropdownVisible(prev => !prev);
           }}
@@ -208,25 +267,31 @@ const handleLogout = async () => {
             <Entypo name="chevron-down" size={20} color="white" />
           </View>
         </Pressable> */}
-        
-         {/*modal wala part */}
-      
 
-      <View className=' rounded-xl flex-row py-2 pr-20' >
+      {/*modal wala part */}
+
+      <View className=" rounded-xl flex-row py-2 pr-20">
         <Pressable
           hasTVPreferredFocus={true}
           android_ripple={{
             color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
-            foreground: true
+            foreground: true,
           }}
-          className='w-24 items-center h-10 justify-center rounded-l-lg overflow-hidden border-l border-r border-t border-r-gray-400 border-t-gray-400 border-l-gray-400'
-          style={{ backgroundColor: offlineSelectedSection == 3 ? '#f9c545' : 'white', borderBottomWidth: offlineSelectedSection == 3 ? 4 : 3 }}
+          className="w-24 items-center h-10 justify-center rounded-l-lg overflow-hidden border-l border-r border-t border-r-gray-400 border-t-gray-400 border-l-gray-400"
+          style={{
+            backgroundColor: offlineSelectedSection == 3 ? "#f9c545" : "white",
+            borderBottomWidth: offlineSelectedSection == 3 ? 4 : 3,
+          }}
           onPress={() => {
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[getIndexByDirectoryName(offlineSections, 'Lectures')]?.path);
+              setOfflineCurrentDirectory(
+                offlineSections[
+                  getIndexByDirectoryName(offlineSections, "Lectures")
+                ]?.path
+              );
               setOfflineSelectedSection(3);
             }
           }}
@@ -239,17 +304,25 @@ const handleLogout = async () => {
             color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
-            foreground: true
+            foreground: true,
           }}
-          className='w-24 items-center h-10 justify-center overflow-hidden border-r border-t border-t-gray-400 border-r-gray-400'
-          style={{ backgroundColor: offlineSelectedSection == 4 ? '#f9c545' : 'white', borderBottomWidth: offlineSelectedSection == 4 ? 4 : 3 }}
+          className="w-24 items-center h-10 justify-center overflow-hidden border-r border-t border-t-gray-400 border-r-gray-400"
+          style={{
+            backgroundColor: offlineSelectedSection == 4 ? "#f9c545" : "white",
+            borderBottomWidth: offlineSelectedSection == 4 ? 4 : 3,
+          }}
           onPress={() => {
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[getIndexByDirectoryName(offlineSections, 'Notes')]?.path);
+              setOfflineCurrentDirectory(
+                offlineSections[
+                  getIndexByDirectoryName(offlineSections, "Notes")
+                ]?.path
+              );
               setOfflineSelectedSection(4);
             }
-          }}>
+          }}
+        >
           <Text className="font-normal text-sm text-black">Notes</Text>
         </Pressable>
 
@@ -259,14 +332,21 @@ const handleLogout = async () => {
             color: "rgba(255,255,255,0.4)",
             borderless: false,
             radius: 1000,
-            foreground: true
+            foreground: true,
           }}
-          className='w-24 items-center h-10 justify-center overflow-hidden border-r border-t border-r-gray-400 border-t-gray-400'
-          style={{ backgroundColor: offlineSelectedSection == 1 ? '#f9c545' : 'white', borderBottomWidth: offlineSelectedSection == 1 ? 4 : 3 }}
+          className="w-24 items-center h-10 justify-center overflow-hidden border-r border-t border-r-gray-400 border-t-gray-400"
+          style={{
+            backgroundColor: offlineSelectedSection == 1 ? "#f9c545" : "white",
+            borderBottomWidth: offlineSelectedSection == 1 ? 4 : 3,
+          }}
           onPress={() => {
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[getIndexByDirectoryName(offlineSections, 'DPP PDF')]?.path);
+              setOfflineCurrentDirectory(
+                offlineSections[
+                  getIndexByDirectoryName(offlineSections, "DPP PDF")
+                ]?.path
+              );
               setOfflineSelectedSection(1);
             }
           }}
@@ -274,27 +354,31 @@ const handleLogout = async () => {
           <Text className="font-normal text-sm text-black">DPP PDF</Text>
         </Pressable>
         <Pressable
-          android_ripple={
-            {
-              color: "rgba(255,255,255,0.4)",
-              borderless: false,
-              radius: 1000,
-              foreground: true
-            }
-          }
-          className='w-24 items-center h-10 justify-center rounded-r-lg overflow-hidden border-t border-r-[3px] border-t-gray-400'
-          style={{ backgroundColor: offlineSelectedSection == 2 ? '#f9c545' : 'white', borderBottomWidth: offlineSelectedSection == 2 ? 4 : 3 }}
+          android_ripple={{
+            color: "rgba(255,255,255,0.4)",
+            borderless: false,
+            radius: 1000,
+            foreground: true,
+          }}
+          className="w-24 items-center h-10 justify-center rounded-r-lg overflow-hidden border-t border-r-[3px] border-t-gray-400"
+          style={{
+            backgroundColor: offlineSelectedSection == 2 ? "#f9c545" : "white",
+            borderBottomWidth: offlineSelectedSection == 2 ? 4 : 3,
+          }}
           onPress={() => {
             if (offlineSections) {
               setDirectoryLevel(4);
-              setOfflineCurrentDirectory(offlineSections[getIndexByDirectoryName(offlineSections, 'DPP Videos')]?.path);
+              setOfflineCurrentDirectory(
+                offlineSections[
+                  getIndexByDirectoryName(offlineSections, "DPP Videos")
+                ]?.path
+              );
               setOfflineSelectedSection(2);
             }
           }}
         >
           <Text className="font-normal text-sm text-black">DPP Videos</Text>
         </Pressable>
-
       </View>
 
       <Pressable
@@ -302,12 +386,50 @@ const handleLogout = async () => {
           color: "rgba(255,255,255,0.4)",
           borderless: false,
           radius: 1000,
-          foreground: true
+          foreground: true,
         }}
-        onPress={handleLogout}
-        className='flex-row justify-center overflow-hidden rounded-full items-center '>
-        <Image source={Images.Dropdown} className='w-10 h-10 ' width={40} height={40} />
+        onPress={() => {
+          setIsDropdownVisible((prev) => !prev);
+        }}
+        className="flex-row justify-center overflow-hidden rounded-full items-center "
+      >
+        <Image
+          source={Images.Dropdown}
+          className="w-14 h-12 "
+          width={40}
+          height={40}
+        />
       </Pressable>
+
+      <Modal
+        transparent={true}
+        animationType="fade"
+        visible={isDropdownVisible}
+        onRequestClose={() => setIsDropdownVisible(false)}
+      >
+        <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
+          <View style={{ flex: 1 }}>
+            <ScrollView className="bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[80] right-[2] z-[2]">
+              <View className="w-full px-5 py-2">
+                <Text className="text-white text-sm font-bold">v1.0.2</Text>
+              </View>
+              <Seperator />
+              <View className="w-full px-5 py-2">
+                <Text className="text-white text-sm font-bold">
+                  {phone || "---"}
+                </Text>
+              </View>
+              <Seperator />
+              <Pressable
+                onPress={handleLogout}
+                className="w-full px-5 py-2 rounded-b-lg"
+              >
+                <Text className="text-white font-bold text-sm">Logout</Text>
+              </Pressable>
+            </ScrollView>
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
     </View>
   );
 }

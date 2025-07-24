@@ -1,8 +1,9 @@
 /// <reference types="nativewind/types" />
-import { Image, Text, Pressable, View} from 'react-native';
+import { Image, Text, Pressable, View, Modal, TouchableWithoutFeedback, ScrollView} from 'react-native';
 import { useGlobalContext } from '../../context/MainContext';
 import { useNavigation } from '@react-navigation/native';
 import { Images } from '../../images/images';
+import { useState, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import * as Sentry from "@sentry/react-native";
@@ -11,6 +12,8 @@ export default function NavbarDetails({ selectedMenu, setSelectedMenu, setConten
   const navigation = useNavigation();
  
   const { setSelectedSubject, batchDetails, setRecentVideoLoad, setTopicList, setSelectSubjectSlug, setSelectedBatch, setSelectedChapter, headers, setHeaders, setLogs } = useGlobalContext(); 
+  const [phone, setPhone] = useState<string | null>(null);
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
 
 const handleLogout = async () => {
@@ -41,6 +44,18 @@ const handleLogout = async () => {
     console.log("Logout completed but server logout may have failed)");
   }
 };
+
+  useEffect(() => {
+    const getPhone = async () => {
+      const temp = await AsyncStorage.getItem("phone");
+      setPhone(temp);
+    };
+    getPhone();
+  }, [isDropdownVisible]);
+
+  const Seperator = () => {
+    return <View className="w-full h-[1px] bg-white/40"></View>;
+  };
 
     return (
 
@@ -129,10 +144,41 @@ const handleLogout = async () => {
           radius: 1000,
           foreground: true
         }}
-        onPress={handleLogout}
+          onPress={() => {
+             setIsDropdownVisible((prev) => !prev);
+          }}
         className='flex-row justify-center overflow-hidden rounded-full items-center '>
-        <Image source={Images.Dropdown} className='w-10 h-10 ' width={40} height={40} />
+        <Image source={Images.Dropdown} className='w-14 h-12 ' width={40} height={40} />
       </Pressable>
+            <Modal
+              transparent={true}
+              animationType="fade"
+              visible={isDropdownVisible}
+              onRequestClose={() => setIsDropdownVisible(false)}
+            >
+              <TouchableWithoutFeedback onPress={() => setIsDropdownVisible(false)}>
+                <View style={{ flex: 1 }}>
+                  <ScrollView className="bg-[#111111]/90 border-white/20 border-[1px] max-h-[200] overflow-hidden w-[10%] rounded-lg absolute top-[80] right-[2] z-[2]">
+                    <View className="w-full px-5 py-2">
+                      <Text className="text-white text-sm font-bold">v1.0.2</Text>
+                    </View>
+                    <Seperator />
+                    <View className="w-full px-5 py-2">
+                      <Text className="text-white text-sm font-bold">
+                        {phone || "---"}
+                      </Text>
+                    </View>
+                    <Seperator />
+                    <Pressable
+                      onPress={handleLogout}
+                      className="w-full px-5 py-2 rounded-b-lg"
+                    >
+                      <Text className="text-white font-bold text-sm">Logout</Text>
+                    </Pressable>
+                  </ScrollView>
+                </View>
+              </TouchableWithoutFeedback>
+            </Modal>
     </View>
   );
 }

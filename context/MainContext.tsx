@@ -394,10 +394,12 @@ const loadMoreChaptersData = () => {
 };
 
 
-  useEffect(() => {
+useEffect(() => {
+  if (headers && headers.Authorization) {
     getPaidBatches();
     getPaidBatchesWithDetails();
-  }, [headers])
+  }
+}, [headers]);
 
 
   useEffect(() => {
