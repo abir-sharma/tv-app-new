@@ -9,6 +9,7 @@ import Svg, { Path } from "react-native-svg";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 import sendOfflineAnalytics from "../../utils/sendOfflineAnalytics";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const MP4Player = ({ route }: any) => {
   const uri = route?.params?.videoUrl;
@@ -18,6 +19,7 @@ const MP4Player = ({ route }: any) => {
   const [isActive, setIsActive] = useState<boolean>(true);
 
   const [currentTime, setCurrentTime] = useState(0);
+  const [storedTimestamp, setStoredTimestamp] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(1.0);
@@ -203,6 +205,40 @@ const MP4Player = ({ route }: any) => {
     }
   }, [isActive]);
 
+const saveWatchTime = async () => {
+  if (uri) {
+    const data = {
+      watchTime: currentTime,
+      duration: duration,
+    };
+    await AsyncStorage.setItem(
+      `video_watch_time_offline${uri}`,
+      JSON.stringify(data)
+    );
+  }
+};
+
+  useEffect(() => {
+  const loadWatchTime = async () => {
+    if (uri) {
+      const savedData = await AsyncStorage.getItem(
+        `video_watch_time_offline${uri}`
+      );
+      if (savedData) {
+        const { watchTime} = JSON.parse(savedData);
+        setStoredTimestamp(Number(watchTime));
+        playerRef.current?.setPositionAsync(Number(watchTime));
+        setCurrentTime(Number(watchTime));
+      } else {
+        setStoredTimestamp(0);
+        setCurrentTime(0);
+      }
+    }
+  };
+  loadWatchTime();
+}, [uri]);
+  
+
   return (
     <View
       style={{ flex: 1, backgroundColor: "#000000" }}
@@ -272,12 +308,13 @@ const MP4Player = ({ route }: any) => {
         }}
         onPress={() => {
           navigation.goBack();
+          saveWatchTime();
           sendOfflineAnalytics("video_closed", {
               videoName: route?.params?.videoName,
               className: route?.params?.className?.replace(/[^a-zA-Z0-9-]/g, '').toUpperCase().slice(0, 10),
-              subjectName: uri?.split('/')[5],
-              chapterName: uri?.split('/')[6],
-              isSolutionVideo: route?.params?.isSolutionVideo,
+              subjectName: uri?.split('/')[6],
+              chapterName: uri?.split('/')[7],
+              isSolutionVideo: route?.params?.isSolutionVideo || false,
                 });
         }}
         className="bg-black/40 overflow-hidden rounded-full z-[2] p-2 absolute top-2 left-2"
@@ -587,6 +624,8 @@ const MP4Player = ({ route }: any) => {
         onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
         onLoadStart={() => {
           setShowLoader(true);
+          playerRef.current && playerRef.current.setPositionAsync(storedTimestamp);
+          setCurrentTime(storedTimestamp);          
         }}
         onLoad={() => {
           setShowLoader(false);

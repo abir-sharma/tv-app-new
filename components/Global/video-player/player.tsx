@@ -37,8 +37,7 @@ const playbackSpeedOptions = [0.5, 0.75, 1, 1.25, 1.5, 2];
 
 export default function VideoPlayer(props: any) {
   const navigation = useNavigation();
-  const { headers, selectedBatch, selectedChapter, selectedSubject } =
-    useGlobalContext();
+  const { headers, selectedBatch, selectedChapter, selectedSubject } = useGlobalContext();
   const playerRef = useRef<Video | null>(null);
   const [spinner, setSpinner] = useState<any>();
   const [src, setSrc] = useState<any>(undefined);
@@ -456,6 +455,31 @@ const skipBackward = (skipTime: number) => {
     };
   }, [isPlaying]);
 
+  const saveWatchTime = async () => {
+  if (props?.lectureDetails?._id) {
+    await AsyncStorage.setItem(`video_watch_time_${props.lectureDetails._id}`,currentTime.toString());
+  }
+};
+
+useEffect(() => {
+  const loadWatchTime = async () => {
+    if (props?.lectureDetails?._id) {
+      const savedTime = await AsyncStorage.getItem(
+        `video_watch_time_${props.lectureDetails._id}`
+      );
+      if (savedTime) {
+        setStoredTimestamp(Number(savedTime));
+        playerRef.current?.setPositionAsync(Number(savedTime));
+        setCurrentTime(Number(savedTime));
+      } else {
+        setStoredTimestamp(0);
+        setCurrentTime(0);
+      }
+    }
+  };
+  loadWatchTime();
+}, [props?.lectureDetails?._id]);
+
   return (
     <View
       onTouchStart={onTouchStart}
@@ -495,6 +519,7 @@ const skipBackward = (skipTime: number) => {
             foreground: true,
           }}
           onPress={() => {
+            saveWatchTime();
             navigation.goBack();
             {
               selectedBatch?._id &&

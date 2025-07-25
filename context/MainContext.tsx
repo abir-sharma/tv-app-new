@@ -82,6 +82,8 @@ type GlobalContextType = {
   setSelectedTestMapping: Dispatch<SetStateAction<any | null>>;
   recentVideoLoad: boolean;
   setRecentVideoLoad: Dispatch<SetStateAction<boolean>>;
+  recentVideoLoadOffline: boolean;
+  setRecentVideoLoadOffline: Dispatch<SetStateAction<boolean>>;
   logs: string[];
   setLogs: Dispatch<SetStateAction<string[]>>;
   messageFromRemote: string;
@@ -175,6 +177,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setSelectedTestMapping: () => { },
   recentVideoLoad: false,
   setRecentVideoLoad: () => { },
+  recentVideoLoadOffline: false,
+  setRecentVideoLoadOffline: () => { },
   logs: [],
   setLogs: () => { },
   messageFromRemote: "",
@@ -228,6 +232,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [selectedTestMapping, setSelectedTestMapping] = useState<any>(null);
 
   const [recentVideoLoad, setRecentVideoLoad] = useState<boolean>(false);
+  const [recentVideoLoadOffline, setRecentVideoLoadOffline] = useState<boolean>(false);
 
 
 
@@ -453,6 +458,7 @@ useEffect(() => {
         offlineSelectedSection, setOfflineSelectedSection,
         showIpInput, setShowIpInput,
         recentVideoLoad, setRecentVideoLoad,
+        recentVideoLoadOffline, setRecentVideoLoadOffline,
         logs, setLogs,
         messageFromRemote, setMessageFromRemote,
         fetchDetails, setFetchDetails, fetchDetailTrigger,

@@ -34,6 +34,7 @@ export default function PendriveNavbarDetails() {
     setOfflineDppVideos,
     selectedClassName,
     setLogs,
+    setRecentVideoLoadOffline,
   } = useGlobalContext();
   const navigation = useNavigation();
   const [phone, setPhone] = useState<string | null>(null);
@@ -227,6 +228,7 @@ export default function PendriveNavbarDetails() {
             // @ts-expect-error
             navigation.navigate("PendriveBatches");
             setOfflineSelectedBatch(-1);
+            setRecentVideoLoadOffline(prev => !prev);
           }}
           className="flex-row justify-center items-center rounded-xl overflow-hidden px-2"
         >

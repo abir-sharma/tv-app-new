@@ -6,11 +6,42 @@ import { fromCSS } from '@bacons/css-to-expo-linear-gradient';
 import { useGlobalContext } from '../../context/MainContext';
 import sendOfflineAnalytics from '../../utils/sendOfflineAnalytics';
 import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const PendriveVideoComponent = ({ videoList }: OfflineVideoComponentPropType) => {
-  const { selectedSubject, selectedChapter, selectedClassName, selectedMenu } = useGlobalContext();
+  const { selectedClassName, selectedMenu } = useGlobalContext();
 
   const navigation = useNavigation();
+
+// const saveToRecentOfflineVideos = async (item: any) => {
+//   try {
+//     const recentVideosStr = await AsyncStorage.getItem('recentOfflineVideos');
+//     const recentVideos: { [key: string]: any[] } = recentVideosStr
+//       ? JSON.parse(recentVideosStr)
+//       : {};
+//     const filtered = recentVideos[selectedClassName]
+//       ? recentVideos[selectedClassName].filter(v => v.path !== item.path)
+//       : [];
+//     const newVideo = { ...item };
+    
+//     recentVideos[selectedClassName] = [newVideo, ...filtered].slice(0, 10);
+//     await AsyncStorage.setItem('recentOfflineVideos', JSON.stringify(recentVideos));
+//   } catch (error) {
+//     console.error('Error saving recent offline video:', error);
+//   }
+// };
+const saveToRecentOfflineVideos = async (item: any) => {
+  try {
+    const recentVideosStr = await AsyncStorage.getItem('recentOfflineVideos');
+    const recentVideos: { [key: string]: any } = recentVideosStr
+      ? JSON.parse(recentVideosStr)
+      : {};
+    recentVideos[selectedClassName] = item; // Replace with latest video
+    await AsyncStorage.setItem('recentOfflineVideos', JSON.stringify(recentVideos));
+  } catch (error) {
+    console.error('Error saving recent offline video:', error);
+  }
+};
 
   const renderGridItem = ({ item }: any) => (
     <Pressable
@@ -28,14 +59,14 @@ export const PendriveVideoComponent = ({ videoList }: OfflineVideoComponentPropT
         sendOfflineAnalytics("video_opened", {
           videoName: item?.name,
           // videoId: String(item?.id),
-          subjectName: itemPath?.split('/')[5],
-          chapterName: itemPath?.split('/')[6],
+          subjectName: itemPath?.split('/')[6],
+          chapterName: itemPath?.split('/')[7],
           isSolutionVideo: selectedMenu === 3 ? true : false,
           className: selectedClassName?.replace(/[^a-zA-Z0-9-]/g, '').toUpperCase().slice(0, 10),
         });
-        console.log('PendriveVideoComponent.tsx', item);
         //@ts-expect-error
         navigation.navigate('MP4Player', { videoUrl: item?.path, className: selectedClassName, videoName: item?.name, isSolutionVideo: selectedMenu === 3 ? true : false,});
+        saveToRecentOfflineVideos(item);
       }}>
       <LinearGradient
             {...fromCSS(

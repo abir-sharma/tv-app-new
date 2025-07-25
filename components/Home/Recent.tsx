@@ -15,6 +15,7 @@ export default function Recent() {
   const [recentVideos, setRecentVideos] = useState<{
     [key: string]: VideoType[];
   } | null>(null);
+  const [progressMap, setProgressMap] = useState<{ [key: string]: number }>({});
 
   useEffect(() => {
     AsyncStorage.getItem("recentVideos").then((value) => {
@@ -25,16 +26,48 @@ export default function Recent() {
   }, [recentVideoLoad]);
   
 
-    const getProgressPercentage = (videos: VideoType[]) => {               //Yaha pe Logic dalna hai ki video ka progress kaise nikalna hai                          
-      
-         return Math.floor(Math.random() * 80) + 10; 
-         
+  useEffect(() => {
+  const fetchProgress = async () => {
+    if (!recentVideos) return;
+    const newProgressMap: { [key: string]: number } = {};
+    for (const videos of Object.values(recentVideos)) {
+      const video = videos[0];
+      if (video?.videoDetails?._id && video?.videoDetails?.duration) {
+        const watchTime = await AsyncStorage.getItem(
+          `video_watch_time_${video.videoDetails._id}`
+        );
+        const duration = parseDuration(video.videoDetails.duration);
+        const watchTimeSeconds = watchTime ? Number(watchTime) / 1000 : 0;
+        const progress = duration > 0
+          ? Math.min(Math.floor((watchTimeSeconds / duration) * 100), 100)
+          : 0;
+        newProgressMap[video.videoDetails._id] = progress;
+      }
+    }
+    setProgressMap(newProgressMap);
   };
+  fetchProgress();
+}, [recentVideos]);
+
+function parseDuration(duration: string | number): number {
+  if (typeof duration === "number") return duration;
+  if (!duration) return 1;
+  if (/^\d+$/.test(duration)) return Number(duration);
+  const parts = duration.split(":").map(Number);
+  if (parts.length === 3) {
+    return parts[0] * 3600 + parts[1] * 60 + parts[2];
+  }
+  if (parts.length === 2) {
+    return parts[0] * 60 + parts[1];
+  }
+  return 1;
+}
+  
   return (
     <View className="">
-      <Text className="text-black text-2xl font-medium ml-5">
+     { recentVideos && <Text className="text-black text-2xl font-medium ml-5">
         Continue Learning
-      </Text>
+      </Text>}
       <View className=" p-5 my-2 flex-none overflow-hidden">
         {recentVideos && Object.entries(recentVideos).length>4 ? <ScrollView
           horizontal={true}
@@ -99,7 +132,7 @@ export default function Recent() {
                         </Text>
                         <View className="w-full">
                           <View className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <View className="h-full bg-[#f9c545] rounded-full" style={{ width: `${getProgressPercentage(videos)}%` }}/>
+                            <View className="h-full bg-[#f9c545] rounded-full" style={{ width: `${progressMap[videos[0]?.videoDetails?._id] || 0}%` }}/>
                           </View>
                         </View>
                       </View>
@@ -169,7 +202,7 @@ export default function Recent() {
                         </Text>
                         <View className="w-full">
                           <View className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <View className="h-full bg-[#f9c545] rounded-full" style={{ width: `${getProgressPercentage(videos)}%` }}/>
+                            <View className="h-full bg-[#f9c545] rounded-full" style={{ width: `${progressMap[videos[0]?.videoDetails?._id] || 0}%` }}/>
                           </View>
                         </View>                        
                       </View>

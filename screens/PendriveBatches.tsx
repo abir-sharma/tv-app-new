@@ -12,6 +12,7 @@ import * as ExpoFS from 'expo-file-system';
 import RNFS from 'react-native-fs';
 import sendOfflineAnalytics from '../utils/sendOfflineAnalytics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RecentOffline from '../components/Home/RecentOffline';
 
 
 type OfflineBatches = {
@@ -280,7 +281,10 @@ const PendriveBatches = () => {
     />
       
       <Navbar />
-      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4 mx-2 mt-2'>
+      <ScrollView className="flex-1">
+      <View className='flex-1'>
+        <Text className='text-black text-2xl font-medium ml-5 mt-5'>Offline Batches</Text>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} className='gap-x-4 mx-2 mt-4'>
         {offlineBatches?.filter(batch => !selectedClassNameOffline?.trim() || batch.name === selectedClassNameOffline).map((batch: any, index: number) => (
           <Pressable
             key={index}
@@ -327,6 +331,9 @@ const PendriveBatches = () => {
             </LinearGradient>
           </Pressable>
         ))}
+      </ScrollView>
+      </View>
+      <RecentOffline />
       </ScrollView>
     </View>
   );
