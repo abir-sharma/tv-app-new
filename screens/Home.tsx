@@ -80,8 +80,8 @@ export default function Home({ navigation }: any) {
     const randu = await AsyncStorage.getItem("randomId");
     const token = await AsyncStorage.getItem("token");
     if (token) {
-      const headers: any = { 'Authorization': `Bearer ${token}`, 'randomId': randu }
-      const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", {}, { headers });
+      const headers: any = { 'Authorization': `Bearer ${token}`, 'randomId': randu , "client-id": '5eb393ee95fab7468a79d189', "client-type": "MOBILE", "content-type": "application/json" }
+      const res = await axios.post("https://api.penpencil.co/v3/oauth/verify-token", { randomId: randu, organizationId: '5eb393ee95fab7468a79d189' }, { headers });
       if (res.data.data.isVerified != true) {
         navigation.reset({
           index: 0,

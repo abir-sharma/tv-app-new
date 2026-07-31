@@ -207,7 +207,7 @@ export default function Navbar() {
           width={10}
           height={10}
         />
-        <Text className="text-black text-lg">AI School</Text>
+        <Text className="text-black text-lg">PW Smart Class</Text>
       </Pressable>
       <View className="flex flex-row absolute top-5 left-1/2 -translate-x-32">
         <Pressable

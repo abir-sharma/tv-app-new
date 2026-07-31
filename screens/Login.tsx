@@ -25,7 +25,7 @@ export default function Login({ navigation }: any) {
 
   
   const [rememberMe, setRememberMe] = useState<boolean>(false); 
-  const [otpDigits, setOtpDigits] = useState<string[]>(['', '', '', '', '', '']);          
+  const [otpDigits, setOtpDigits] = useState<string[]>(['', '', '', '']);
   const otpSlideAnimation = useRef(new Animated.Value(0)).current; 
   const otpOpacityAnimation = useRef(new Animated.Value(0)).current; 
   
@@ -95,7 +95,7 @@ export default function Login({ navigation }: any) {
   newOtpDigits[index] = value;
   setOtpDigits(newOtpDigits);
   setOtp(newOtpDigits.join(''));
-  if (value && index < 5) {
+  if (value && index < 3) {
     const nextInput = otpInputRefs[index + 1];
     nextInput.current?.focus();
   }
@@ -126,11 +126,12 @@ export default function Login({ navigation }: any) {
 
     setShowLoader(true);
     try {
-      const res = await axios.post("https://api.penpencil.co/v1/users/get-otp?smsType=0", {
+      const res = await axios.post("https://api.penpencil.co/v3/users/get-otp-app?smsType=0", {
         username: phone,
         countryCode: "+91",
         organizationId: "5eb393ee95fab7468a79d189",
-        // "Client-Type": "WEB",
+      }, {
+        headers: { "content-type": "application/json", "client-type": "MOBILE" },
       })
 
       if (res?.data?.success) {
@@ -139,14 +140,15 @@ export default function Login({ navigation }: any) {
 
     }
     catch (err: any) {
-      console.error("Error while sending otp! ", err?.res?.status);
-      if (err?.res?.status === 429) {
+      console.log(err);
+      console.log("Error while sending otp! ", err?.response?.status);
+      if (err?.response?.status === 429) {
         ToastAndroid.showWithGravity(
           "Too many OTP requests, Please try after sometime",
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
-      } else if (err?.response?.status === 400) {
+      } else if (err?.response?.status === 400  ) {  //404 added
         setNewUser(true);
       }
       else {
@@ -185,7 +187,7 @@ export default function Login({ navigation }: any) {
         longitude: 0,
       }, {
         headers: {
-          'client-type': "WEB",
+          "client-type": "MOBILE",
            randomId: randu
         }
       })
@@ -211,8 +213,8 @@ export default function Login({ navigation }: any) {
         }).catch((err) => {
           console.error("School data fetch error", err.response.data);
         });
-        navigation.navigate('Intro');                 //Intro added
-      setOtpDigits(['', '', '', '', '', '']); 
+        navigation.navigate('PendriveBatches');                 
+      setOtpDigits(['', '', '', '']);
       setOtp(''); 
       setOtpSent(false); 
       setOtpReSent(false); 
@@ -248,12 +250,12 @@ export default function Login({ navigation }: any) {
     const lastName = nameArray?.join(' ');
 
     try {
-      const res = await axios.post("https://api.penpencil.co/v1/users/register/5eb393ee95fab7468a79d189", {
+      const res = await axios.post("https://api.penpencil.co/v3/users/register-app/5eb393ee95fab7468a79d189", {
         mobile: phone,
         countryCode: "+91",
         firstName: firstName,
         lastName: lastName
-      })
+      },{ headers: { "content-type": "application/json", "client-type": "MOBILE" }})
 
       if (res?.data?.success) {
         setOtpSent(true);
@@ -277,17 +279,15 @@ export default function Login({ navigation }: any) {
   // const otpInputRef = useRef<TextInput>(null);
   const nameInputRef = useRef<TextInput>(null);
 
-   const otpInputRefs = [                  //new change here
+   const otpInputRefs = [
     useRef<TextInput>(null),
     useRef<TextInput>(null),
     useRef<TextInput>(null),
     useRef<TextInput>(null),
-    useRef<TextInput>(null),
-    useRef<TextInput>(null),
-  ];                                 
+  ];
   
     useEffect(() => {
-    const loadSavedData = async () => {                      //new change here
+    const loadSavedData = async () => {                     
       try {
         const savedRememberMe = await AsyncStorage.getItem("rememberMe");
         const savedPhone = await AsyncStorage.getItem("savedPhone");
@@ -360,7 +360,7 @@ export default function Login({ navigation }: any) {
                 Welcome to
               </Text>
               <Text className="text-gray-900 text-2xl font-semibold text-center mb-1">
-                PhysicsWallah AI-powered
+                PhysicsWallah 
               </Text>
               <View className="flex-row items-center justify-center ">
               <Text className="text-gray-900 text-2xl font-semibold mb-10 ml-48">
@@ -560,7 +560,7 @@ export default function Login({ navigation }: any) {
 
               {/* PRESERVED: Terms & Privacy Notice */}
               <Text className="text-black text-sm text-center leading-5">
-                By logging into PW AI School, you agree to our{' '}
+                By logging into PW Smart Class, you agree to our{' '}
                 <Text className="text-black ">Terms of use</Text>
                 {' '}and{' '}
                 <Text className="text-black ">Privacy Policy</Text>.

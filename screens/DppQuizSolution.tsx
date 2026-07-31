@@ -18,7 +18,7 @@ const DppQuizSolution = ({ route }: any) => {
   const [showLoader, setShowLoader] = useState<boolean>(true);
   const [questionType, setQuestionType] = useState<string>('Single');
   const [smallPlayer, setSmallPlayer] = useState(1);
-  
+
 
   useEffect(() => {
     fetchSolutionData();
@@ -164,10 +164,11 @@ const DppQuizSolution = ({ route }: any) => {
                 questionsData && questionsData.map(
                   (question: any, index: number) => (
                     <Pressable
+                      key={index}
                       onPress={() => handleNumberClick(index)}
                     >
                       <View
-                        key={index}
+
                         className={`w-16 h-16 flex flex-col bg-[#1B2124] rounded-lg items-center justify-center ${currentQuestion?.question?.questionNumber === question?.question?.questionNumber ? 'bg-[#0569FF]' : ''} ${"border-" + getBorderColor(question?.yourResult.status)} border-[1px]`}
                       >
                         <Text className=" text-lg text-white font-medium ">
@@ -267,7 +268,7 @@ const DppQuizSolution = ({ route }: any) => {
           <View
             style={{
               width: '100%',
-              height: 470, 
+              height: 470,
               borderRadius: 16,
               overflow: 'hidden',
               backgroundColor: '#222222',
@@ -278,8 +279,11 @@ const DppQuizSolution = ({ route }: any) => {
             <Image
               source={{
                 uri:
-                  (currentQuestion?.question?.solutionDescription[0]?.imageIds?.en?.baseUrl +
-                  currentQuestion?.question?.solutionDescription[0]?.imageIds?.en?.key) || null,
+                  currentQuestion?.question?.solutionDescription?.[0]?.imageIds?.en?.baseUrl &&
+                    currentQuestion?.question?.solutionDescription?.[0]?.imageIds?.en?.key
+                    ? currentQuestion.question.solutionDescription[0].imageIds.en.baseUrl +
+                    currentQuestion.question.solutionDescription[0].imageIds.en.key
+                    : null,
               }}
               style={{
                 width: '100%',
